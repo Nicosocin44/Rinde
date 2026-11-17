@@ -3,6 +3,7 @@
 import { Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useMemo, useState } from "react";
+import { LIQUIDEZ_OPCION } from "@/components/modules/pesos/etiquetas";
 import { Button } from "@/components/ui/button";
 import { EmptyState, Skeleton } from "@/components/ui/estados";
 import { MoneyInput, NumberField } from "@/components/ui/money-input";
@@ -10,16 +11,59 @@ import { SegmentedControl } from "@/components/ui/segmented";
 import { Sheet } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/components/ui/toast";
-import { diasEntre, evaluarMeta, hoyAR, sumarMeses, type AporteMeta, type ContextoMeta, type EstadoMeta, type InstrumentoMeta, type Meta } from "@/lib/calculos";
-import { dinero, fechaCorta, mesAnio, porcentaje } from "@/lib/format";
+import {
+  caminoMeta,
+  compararAlternativas,
+  construirIndice,
+  d,
+  diasEntre,
+  evaluarMeta,
+  hitosMeta,
+  hoyAR,
+  nivelEnFecha,
+  rendimientoReal,
+  resumenMetas,
+  sumarMeses,
+  tasaPorPeriodo,
+  vencimientos,
+  type AporteMeta,
+  type ContextoMeta,
+  type EstadoMeta,
+  type InstrumentoMeta,
+  type Meta,
+} from "@/lib/calculos";
+import type { PuntoSerie } from "@/lib/data/types";
+import { dinero, fechaCorta, mesAnio, pesosCompacto, porcentaje } from "@/lib/format";
 import { alCambiarMetas, borrarMeta, guardarMeta, listarMetas } from "@/lib/metas/almacen";
-import { aInstrumento, DOLARES_GUARDADOS, SIN_INVERTIR, TIPOS_INSTRUMENTO, type OpcionInstrumento } from "@/lib/metas/instrumentos";
+import { aInstrumento, DOLARES_GUARDADOS, SIN_INVERTIR, TIPOS_INSTRUMENTO, type AlternativaUI, type OpcionInstrumento } from "@/lib/metas/instrumentos";
 import { cn } from "@/lib/cn";
+import { CaminoMeta } from "./camino";
 
 /** La opción en pesos sin plazo que más rinde hoy. Es el supuesto del plan de las metas en pesos. */
 export type ReferenciaMeta = { nombre: string; tea: number } | null;
 
-type Props = { referencia: ReferenciaMeta; inflacionMensual: number | null; opciones: OpcionInstrumento[] };
+type Props = {
+  referencia: ReferenciaMeta;
+  inflacionMensual: number | null;
+  /** IPC mensual (fracción) de los últimos meses, para el rendimiento real. */
+  ipc: PuntoSerie[];
+  /** Dólar MEP de hoy (venta), para mostrar equivalencias. */
+  mep: number | null;
+  opciones: OpcionInstrumento[];
+  /** La mejor opción de cada tipo, para comparar dónde poner lo de cada mes. */
+  alternativas: AlternativaUI[];
+};
+
+/** Todo lo de hoy que necesita una tarjeta, además de la meta. */
+type Datos = {
+  hoy: string;
+  contexto: ContextoMeta;
+  referencia: ReferenciaMeta;
+  mep: number | null;
+  /** Índice de precios a una fecha (null si no hay IPC). */
+  nivel: ((fecha: string) => number | null) | null;
+  alternativas: AlternativaUI[];
+};
 
 const SUGERENCIAS = ["Un viaje", "Un auto", "Un departamento", "Estudios", "Fondo de emergencia"];
 const MOVIMIENTOS_VISIBLES = 5;
@@ -34,12 +78,43 @@ const tarde = (fechaMeta: string, llegada: string) => {
 };
 const simbolo = (m: Meta["moneda"]) => (m === "ARS" ? "$" : "US$");
 
+/** Equivalencia al MEP de hoy: pesos → dólares o dólares → pesos. Solo para mostrar. */
+function alMep(monto: number, moneda: Meta["moneda"], mep: number | null): string | null {
+  if (!mep || mep <= 0 || !Number.isFinite(monto)) return null;
+  return moneda === "ARS" ? dinero(d(monto).div(mep).toNumber(), "USD", 0) : dinero(d(monto).mul(mep).toNumber(), "ARS", 0);
+}
+
+/**
+ * Meta de ejemplo para quien todavía no armó ninguna: un viaje de $ 3 M en un año, con cuatro aportes mensuales (el último hoy) en la
+ * mejor opción sin plazo de hoy. Los montos son de ejemplo; las tasas, la inflación y el dólar son los reales de hoy.
+ */
+function metaDeEjemplo(hoy: string, referencia: ReferenciaMeta, alternativas: AlternativaUI[]): Meta {
+  // La misma opción que usa el plan (la mejor sin plazo con tope de al menos $ 1 M), para que todo cierre.
+  const deLaLista = referencia ? alternativas.find((a) => a.nombre === referencia.nombre) : undefined;
+  const instrumento: InstrumentoMeta = referencia
+    ? { id: deLaLista?.id ?? "ejemplo", nombre: referencia.nombre, tipo: deLaLista?.tipo ?? "fci", tea: referencia.tea }
+    : SIN_INVERTIR;
+  const creada = sumarMeses(hoy, -3);
+  return {
+    id: "ejemplo",
+    nombre: "Viaje a Bariloche",
+    moneda: "ARS",
+    objetivo: 3_000_000,
+    fechaObjetivo: sumarMeses(hoy, 9),
+    aporteMensual: 250_000,
+    teaManual: null,
+    creada,
+    aportes: [0, 1, 2, 3].map((i) => ({ id: `ejemplo-${i}`, fecha: sumarMeses(creada, i), monto: 250_000, instrumento })),
+    ajustes: [],
+  };
+}
+
 /**
  * Metas de ahorro: cada persona arma las suyas (nombre, monto, fecha, cuánto puede poner por mes) y va cargando
- * cuánto pone y en qué instrumento. Ve cuánto vale hoy cada parte, cuánto le dieron sus inversiones, el plan para
- * llegar con las tasas de hoy y, cada 30 días, si va adelantada o atrasada.
+ * cuánto pone y en qué instrumento. Ve cuánto vale hoy cada parte, cuánto le dieron sus inversiones (también contra la
+ * inflación), el camino para llegar con las tasas de hoy, dónde rendiría más lo de cada mes y cuándo vence cada plazo.
  */
-export function Metas({ referencia, inflacionMensual, opciones }: Props) {
+export function Metas({ referencia, inflacionMensual, ipc, mep, opciones, alternativas }: Props) {
   const toast = useToast();
   const [metas, setMetas] = useState<Meta[] | null>(null);
   // La fecha solo se usa después de leer las metas del navegador (nunca en el HTML del servidor).
@@ -59,7 +134,15 @@ export function Metas({ referencia, inflacionMensual, opciones }: Props) {
     };
   }, []);
 
-  const contexto: ContextoMeta = { teaReferencia: referencia?.tea ?? 0, inflacionMensual: inflacionMensual ?? 0 };
+  const contexto: ContextoMeta = useMemo(() => ({ teaReferencia: referencia?.tea ?? 0, inflacionMensual: inflacionMensual ?? 0 }), [referencia, inflacionMensual]);
+  // Índice de precios con el IPC publicado; después del último dato se proyecta con la inflación esperada del REM.
+  const nivel = useMemo(() => {
+    if (ipc.length === 0) return null;
+    const indice = construirIndice(ipc.map((p) => ({ fecha: p.fecha, valor: p.valor * 100 })));
+    const proyectada = inflacionMensual !== null ? inflacionMensual * 100 : undefined;
+    return (fecha: string) => nivelEnFecha(indice, fecha, proyectada)?.toNumber() ?? null;
+  }, [ipc, inflacionMensual]);
+  const datos: Datos = { hoy, contexto, referencia, mep, nivel, alternativas };
 
   if (metas === null) {
     return (
@@ -75,6 +158,9 @@ export function Metas({ referencia, inflacionMensual, opciones }: Props) {
       </div>
     );
   }
+
+  const evaluadas = metas.map((meta) => ({ meta, estado: evaluarMeta(meta, contexto, hoy) }));
+  const ejemplo = metas.length === 0 ? metaDeEjemplo(hoy, referencia, alternativas) : null;
 
   return (
     <>
@@ -97,19 +183,19 @@ export function Metas({ referencia, inflacionMensual, opciones }: Props) {
         />
       ) : (
         <>
+          {metas.length > 1 && <Resumen lista={evaluadas} mep={mep} />}
           <div className="mb-2 flex justify-end">
             <Button variante="primario" onClick={() => setNueva("")}>
               <Plus /> Nueva meta
             </Button>
           </div>
           <ul className="border-t border-border">
-            {metas.map((m) => (
+            {evaluadas.map(({ meta: m, estado }) => (
               <TarjetaMeta
                 key={m.id}
                 meta={m}
-                estado={evaluarMeta(m, contexto, hoy)}
-                referencia={referencia}
-                hoy={hoy}
+                estado={estado}
+                datos={datos}
                 onSumar={() => setMovimientoDe(m)}
                 onValores={() => setValoresDe(m)}
                 onBorrarMovimiento={async (a) => {
@@ -124,6 +210,21 @@ export function Metas({ referencia, inflacionMensual, opciones }: Props) {
             ))}
           </ul>
         </>
+      )}
+
+      {ejemplo && (
+        <section aria-labelledby="titulo-ejemplo" className="mt-6">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-border pb-3">
+            <h2 id="titulo-ejemplo" className="text-label">
+              Así se ve una meta
+            </h2>
+            <span className="rounded-full bg-surface-2 px-2.5 py-0.5 text-micro text-text-2">Datos de ejemplo</span>
+            <span className="text-micro text-text-3">Los montos son inventados; las tasas, la inflación y el dólar son los de hoy.</span>
+          </div>
+          <ul>
+            <TarjetaMeta meta={ejemplo} estado={evaluarMeta(ejemplo, contexto, hoy)} datos={datos} ejemplo />
+          </ul>
+        </section>
       )}
 
       <p className="mt-8 max-w-2xl text-micro">
@@ -182,11 +283,60 @@ export function Metas({ referencia, inflacionMensual, opciones }: Props) {
   );
 }
 
+/** Totales de todas las metas, por moneda: lo juntado, lo que dieron las inversiones y lo que hay que poner por mes. */
+function Resumen({ lista, mep }: { lista: { meta: Meta; estado: EstadoMeta }[]; mep: number | null }) {
+  const resumen = resumenMetas(lista);
+  return (
+    <section aria-label="Resumen de tus metas" className="mb-8 flex flex-col gap-6">
+      {resumen.map((r) => {
+        const $ = (x: number) => dinero(x, r.moneda, 0);
+        const equivalente = alMep(r.saldo, r.moneda, mep);
+        return (
+          <div key={r.moneda} className="flex flex-col gap-3">
+            <p className="text-chico text-text-2">
+              {r.cantidad} {r.cantidad === 1 ? "meta" : "metas"} en {r.moneda === "ARS" ? "pesos" : "dólares"}
+              {r.cumplidas > 0 && <> · {r.cumplidas} cumplida{r.cumplidas === 1 ? "" : "s"}</>}
+              {r.pendientes > 0 && (
+                <>
+                  {" · "}
+                  <span className="font-medium text-text">
+                    {r.pendientes} {r.pendientes === 1 ? "espera" : "esperan"} que cargues lo de este mes
+                  </span>
+                </>
+              )}
+            </p>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-4 md:grid-cols-4">
+              <Dato etiqueta="Juntaste" valor={$(r.saldo)} detalle={equivalente ? `≈ ${equivalente} al MEP` : undefined} />
+              <Dato etiqueta="Pusiste" valor={$(r.aportado)} />
+              <Dato
+                etiqueta="Te dieron tus inversiones"
+                valor={Math.round(r.ganancia) === 0 ? $(0) : `${r.ganancia > 0 ? "+" : "−"}${$(Math.abs(r.ganancia))}`}
+                clase={Math.round(r.ganancia) === 0 ? undefined : r.ganancia > 0 ? "text-gain" : "text-loss"}
+              />
+              <Dato etiqueta={r.cantidad - r.cumplidas > 1 ? "Por mes, para llegar a todas" : "Por mes, para llegar"} valor={$(r.aporteNecesario)} />
+            </dl>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
+function Dato({ etiqueta, valor, detalle, clase }: { etiqueta: string; valor: string; detalle?: string; clase?: string }) {
+  return (
+    <div className="flex min-w-0 flex-col gap-0.5">
+      <dt className="text-label">{etiqueta}</dt>
+      <dd className={cn("tabular text-h3", clase)}>{valor}</dd>
+      {detalle && <dd className="tabular text-micro text-text-3">{detalle}</dd>}
+    </div>
+  );
+}
+
 function TarjetaMeta({
   meta,
   estado: e,
-  referencia,
-  hoy,
+  datos,
+  ejemplo = false,
   onSumar,
   onValores,
   onBorrarMovimiento,
@@ -194,20 +344,47 @@ function TarjetaMeta({
 }: {
   meta: Meta;
   estado: EstadoMeta;
-  referencia: ReferenciaMeta;
-  hoy: string;
-  onSumar: () => void;
-  onValores: () => void;
-  onBorrarMovimiento: (a: AporteMeta) => void;
-  onBorrar: () => void;
+  datos: Datos;
+  /** Meta de ejemplo: solo lectura, sin botones. */
+  ejemplo?: boolean;
+  onSumar?: () => void;
+  onValores?: () => void;
+  onBorrarMovimiento?: (a: AporteMeta) => void;
+  onBorrar?: () => void;
 }) {
+  const { hoy, contexto, referencia, mep, nivel, alternativas } = datos;
   const [verTodo, setVerTodo] = useState(false);
   const $ = (x: number) => dinero(x, meta.moneda, 0);
+  const otra = (x: number) => alMep(x, meta.moneda, mep);
   const marca = e.objetivoHoy > 0 ? Math.min(1, Math.max(0, e.esperadoHoy / e.objetivoHoy)) : 0;
   const ajusta = meta.moneda === "ARS" && Math.round(e.objetivoFinal) !== Math.round(meta.objetivo);
   const movimientos = [...meta.aportes].sort((a, b) => b.fecha.localeCompare(a.fecha));
   const visibles = verTodo ? movimientos : movimientos.slice(0, MOVIMIENTOS_VISIBLES);
   const arranco = meta.aportes.length > 0 || e.esperadoHoy > 0;
+  const faltan = Math.max(0, e.objetivoHoy - e.saldo);
+
+  // Rendimiento real (solo pesos): lo que puso, actualizado por inflación hasta hoy, contra lo que tiene.
+  const real = meta.moneda === "ARS" && nivel ? rendimientoReal(meta.aportes, e.saldo, hoy, nivel) : null;
+  const venc = vencimientos(meta.aportes, hoy);
+
+  // Camino: con lo que planeó poner por mes (o, si no dijo, con lo necesario para llegar en fecha).
+  const aportePlan = meta.aporteMensual > 0 ? meta.aporteMensual : e.aporteNecesario;
+  const base = Math.max(1, e.mesesRestantes);
+  const horizonte = aportePlan > 0 && e.mesesConTuAporte !== null ? Math.min(Math.max(base, e.mesesConTuAporte), base * 2 + 6) : base;
+  const camino = e.cumplida
+    ? []
+    : caminoMeta({
+        saldo: e.saldo,
+        aportado: e.aportado,
+        aporte: aportePlan,
+        tasaSaldo: tasaPorPeriodo(e.teaSaldo, 12),
+        tasaAporte: tasaPorPeriodo(e.teaPlan, 12),
+        objetivoHoy: e.objetivoHoy,
+        inflacionMensual: meta.moneda === "ARS" ? contexto.inflacionMensual : 0,
+        meses: horizonte,
+      });
+  const hitos = hitosMeta(camino).filter((h) => h.mes !== null && h.mes > 0 && h.proporcion > e.avance);
+  const comparadas = meta.moneda === "ARS" && !e.cumplida ? compararAlternativas(meta, contexto, hoy, alternativas) : [];
 
   return (
     <li className="flex flex-col gap-6 border-b border-border py-8">
@@ -217,6 +394,7 @@ function TarjetaMeta({
           <p className="mt-1 text-chico text-text-2">
             {$(meta.objetivo)} para {mesAnio(meta.fechaObjetivo)}
             {ajusta && <> · con la inflación esperada, unos {$(e.objetivoFinal)}</>}
+            {meta.moneda === "USD" && otra(meta.objetivo) && <> · ≈ {otra(meta.objetivo)} al MEP de hoy</>}
           </p>
         </div>
         <p className="tabular shrink-0 text-h2">{porcentaje(e.avance, 0)}</p>
@@ -237,10 +415,12 @@ function TarjetaMeta({
         <div className="mt-2 flex justify-between gap-4 text-chico text-text-3">
           <span>
             Tenés <span className="tabular font-medium text-text">{$(e.saldo)}</span>
+            {otra(e.saldo) && e.saldo > 0 && <span className="tabular block text-micro">≈ {otra(e.saldo)} al MEP</span>}
           </span>
           {!e.cumplida && (
-            <span>
-              Te faltan <span className="tabular font-medium text-text">{$(e.objetivoHoy - e.saldo)}</span>
+            <span className="text-right">
+              Te faltan <span className="tabular font-medium text-text">{$(faltan)}</span>
+              {otra(faltan) && <span className="tabular block text-micro">≈ {otra(faltan)} al MEP</span>}
             </span>
           )}
         </div>
@@ -248,7 +428,7 @@ function TarjetaMeta({
 
       {e.tenencias.length > 0 && (
         <div className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <div className="flex flex-col gap-1">
             <h4 className="text-label">Dónde está tu plata</h4>
             <p className="text-chico text-text-2">
               Pusiste <span className="tabular font-medium text-text">{$(e.aportado)}</span>
@@ -262,6 +442,19 @@ function TarjetaMeta({
                 </>
               )}
             </p>
+            {real && Math.round(real.aportadoHoy) !== Math.round(e.aportado) && (
+              <p className="text-chico text-text-2">
+                Descontando la inflación, lo que pusiste hoy equivale a <span className="tabular">{$(real.aportadoHoy)}</span>:{" "}
+                {Math.abs(real.gananciaReal) < Math.abs(real.aportadoHoy) * 0.005 ? (
+                  <span className="font-medium text-text">quedaste parejo con la inflación</span>
+                ) : real.gananciaReal >= 0 ? (
+                  <span className="font-medium text-gain">le ganaste por +{$(real.gananciaReal)}</span>
+                ) : (
+                  <span className="font-medium text-loss">la inflación se comió −{$(-real.gananciaReal)}</span>
+                )}
+                .
+              </p>
+            )}
           </div>
           <table className="w-full text-[15px]">
             <thead className="sr-only">
@@ -303,6 +496,21 @@ function TarjetaMeta({
               serían <span className="tabular font-medium text-text">{$(e.comparacion.extraPorMes)}</span> más por mes.
             </p>
           )}
+          {venc.length > 0 && (
+            <ul className="flex flex-col gap-1 text-chico" aria-label="Vencimientos">
+              {venc.map((v) => (
+                <li key={v.aporteId} className="text-text-2">
+                  <span className="font-medium text-text">{v.instrumento.nombre}</span> · {$(v.monto)} ·{" "}
+                  {v.vencido ? (
+                    <span className="text-warn">venció el {fechaCorta(v.vence)}</span>
+                  ) : (
+                    <>vence el {fechaCorta(v.vence)}</>
+                  )}
+                  {v.vencido && " — si lo renovaste no hace falta hacer nada; si lo moviste, cargalo con “Sumar plata”."}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
@@ -323,7 +531,8 @@ function TarjetaMeta({
             )}
             <p>
               Para llegar en {mesAnio(meta.fechaObjetivo)} tenés que poner <span className="tabular font-medium text-text">{$(e.aporteNecesario)}</span> por mes
-              {e.mesesRestantes > 0 ? ` durante ${e.mesesRestantes} ${e.mesesRestantes === 1 ? "mes" : "meses"}` : ""}.
+              {e.mesesRestantes > 0 ? ` durante ${e.mesesRestantes} ${e.mesesRestantes === 1 ? "mes" : "meses"}` : ""}
+              {meta.moneda === "USD" && otra(e.aporteNecesario) && e.aporteNecesario > 0 ? ` (≈ ${otra(e.aporteNecesario)} al MEP)` : ""}.
             </p>
             {meta.aporteMensual > 0 && (
               <p>
@@ -349,29 +558,100 @@ function TarjetaMeta({
               : referencia
                 ? `Lo que pongas de acá en adelante, en ${referencia.nombre} (${porcentaje(e.teaPlan, 1)} TEA, la opción sin plazo que más rinde hoy).`
                 : "Sin rendimiento para lo nuevo: hoy no pudimos traer las tasas."}
+          {meta.moneda === "ARS" && contexto.inflacionMensual > 0 && <> Inflación esperada: {porcentaje(contexto.inflacionMensual, 1)} por mes (REM).</>}
         </p>
       </div>
+
+      {camino.length > 1 && aportePlan > 0 && (
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <h4 className="text-label">Camino a la meta, poniendo {$(aportePlan)} por mes</h4>
+            {hitos.length > 0 && (
+              <p className="text-chico text-text-2">
+                {hitos.map((h, i) => (
+                  <span key={h.proporcion}>
+                    {i > 0 && " · "}
+                    {h.proporcion === 1 ? "La meta" : `El ${porcentaje(h.proporcion, 0)}`} en <span className="tabular font-medium text-text">{mesAnio(sumarMeses(hoy, h.mes!))}</span>
+                  </span>
+                ))}
+              </p>
+            )}
+          </div>
+          <CaminoMeta puntos={camino} mesMeta={e.mesesRestantes} formatoY={(v) => pesosCompacto(v, simbolo(meta.moneda))} etiquetaMes={(n) => mesAnio(sumarMeses(hoy, n))} />
+        </div>
+      )}
+
+      {comparadas.length > 1 && (
+        <details className="group">
+          <summary className="cursor-pointer list-none text-[15px] font-medium text-text marker:hidden [&::-webkit-details-marker]:hidden">
+            <span className="underline decoration-border-strong decoration-dotted underline-offset-4 group-open:no-underline">¿Dónde rinde más lo que pongas cada mes?</span>
+            <span aria-hidden className="ml-2 inline-block text-text-3 transition-transform group-open:rotate-90">
+              →
+            </span>
+          </summary>
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full min-w-[520px] text-[14px]">
+              <thead>
+                <tr className="text-left text-micro text-text-3">
+                  <th className="pb-2 font-normal">La mejor de cada tipo hoy</th>
+                  <th className="pb-2 text-right font-normal">TEA</th>
+                  <th className="pb-2 text-right font-normal">Por mes para llegar</th>
+                  {meta.aporteMensual > 0 && <th className="pb-2 text-right font-normal">Con {$(meta.aporteMensual)} llegás</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {comparadas.map((c) => {
+                  const alt = alternativas.find((a) => a.id === c.alternativa.id);
+                  return (
+                    <tr key={c.alternativa.id} className="border-t border-border">
+                      <td className="py-2.5 pr-3">
+                        <span className="block font-medium">{c.alternativa.nombre}</span>
+                        <span className="text-micro text-text-3">
+                          {TIPOS_INSTRUMENTO[c.alternativa.tipo] ?? c.alternativa.tipo}
+                          {alt && <> · {LIQUIDEZ_OPCION[alt.liquidez]}</>}
+                          {alt?.tope ? <> · esa tasa, hasta {dinero(alt.tope, "ARS", 0)}</> : null}
+                        </span>
+                      </td>
+                      <td className="tabular py-2.5 pr-3 text-right">{porcentaje(c.alternativa.tea, 1)}</td>
+                      <td className="tabular py-2.5 pr-3 text-right font-medium">{$(c.aporteNecesario)}</td>
+                      {meta.aporteMensual > 0 && (
+                        <td className="tabular py-2.5 text-right">{c.mesesConTuAporte === null ? "No llegás" : c.llegaEnFecha ? "A tiempo" : mesAnio(sumarMeses(hoy, c.mesesConTuAporte))}</td>
+                      )}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 max-w-2xl text-micro text-text-3">
+            Ordenado solo por tasa. Plazos fijos y letras dejan la plata quieta hasta que vencen y hay que renovarlos; las billeteras y fondos la tienen disponible al instante. Es una comparación,
+            no una recomendación.
+          </p>
+        </details>
+      )}
 
       {movimientos.length > 0 && (
         <div>
           <h4 className="mb-1 text-label">Movimientos</h4>
           <ul className="text-chico">
             {visibles.map((a) => (
-              <li key={a.id} className="flex items-center gap-3 border-b border-border py-1.5 last:border-0">
+              <li key={a.id} className="flex min-h-9 items-center gap-3 border-b border-border py-1.5 last:border-0">
                 <span className="w-16 shrink-0 text-text-3">{fechaCorta(a.fecha)}</span>
                 <span className="min-w-0 flex-1 truncate text-text-2">{a.instrumento.nombre}</span>
                 <span className={cn("tabular font-medium", a.monto < 0 && "text-text-2")}>
                   {a.monto >= 0 ? "+" : "−"}
                   {$(Math.abs(a.monto))}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => onBorrarMovimiento(a)}
-                  aria-label={`Borrar el movimiento del ${fechaCorta(a.fecha)}`}
-                  className="inline-flex size-9 shrink-0 items-center justify-center rounded-(--radius-control) text-text-3 hover:bg-surface-2 hover:text-loss"
-                >
-                  <Trash2 className="size-3.5" />
-                </button>
+                {onBorrarMovimiento && (
+                  <button
+                    type="button"
+                    onClick={() => onBorrarMovimiento(a)}
+                    aria-label={`Borrar el movimiento del ${fechaCorta(a.fecha)}`}
+                    className="inline-flex size-9 shrink-0 items-center justify-center rounded-(--radius-control) text-text-3 hover:bg-surface-2 hover:text-loss"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </button>
+                )}
               </li>
             ))}
           </ul>
@@ -383,35 +663,35 @@ function TarjetaMeta({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-3">
-        {!e.cumplida && (
-          <Button variante={e.controlPendiente || meta.aportes.length === 0 ? "primario" : "secundario"} tamano="sm" onClick={onSumar}>
-            <Plus /> Sumar plata
-          </Button>
-        )}
-        {e.tenencias.some((t) => t.instrumento.tea > 0) && (
-          <Button variante="fantasma" tamano="sm" onClick={onValores}>
-            Actualizar valores
-          </Button>
-        )}
-        {e.controlPendiente && <span className="text-chico text-text-2">Pasaron {e.diasDesdeMovimiento} días: ¿cuánto pusiste este mes?</span>}
-        <button
-          type="button"
-          onClick={onBorrar}
-          aria-label={`Borrar la meta ${meta.nombre}`}
-          className="ml-auto inline-flex size-10 items-center justify-center rounded-(--radius-control) text-text-3 hover:bg-surface-2 hover:text-loss"
-        >
-          <Trash2 className="size-4" />
-        </button>
-      </div>
+      {!ejemplo && (
+        <div className="flex flex-wrap items-center gap-3">
+          {!e.cumplida && onSumar && (
+            <Button variante={e.controlPendiente || meta.aportes.length === 0 ? "primario" : "secundario"} tamano="sm" onClick={onSumar}>
+              <Plus /> Sumar plata
+            </Button>
+          )}
+          {onValores && e.tenencias.some((t) => t.instrumento.tea > 0) && (
+            <Button variante="fantasma" tamano="sm" onClick={onValores}>
+              Actualizar valores
+            </Button>
+          )}
+          {e.controlPendiente && <span className="text-chico text-text-2">Pasaron {e.diasDesdeMovimiento} días: ¿cuánto pusiste este mes?</span>}
+          {onBorrar && (
+            <button
+              type="button"
+              onClick={onBorrar}
+              aria-label={`Borrar la meta ${meta.nombre}`}
+              className="ml-auto inline-flex size-10 items-center justify-center rounded-(--radius-control) text-text-3 hover:bg-surface-2 hover:text-loss"
+            >
+              <Trash2 className="size-4" />
+            </button>
+          )}
+        </div>
+      )}
     </li>
   );
 }
 
-/**
- * Selector de instrumento: primero los que ya usa la meta, después las opciones reales de hoy agrupadas por tipo,
- * y al final "sin invertir" y "otro" (nombre y TEA a mano). En dólares: dólares guardados u otro.
- */
 /** Lo que el selector muestra elegido al abrir: el último instrumento usado, o "sin invertir" / "dólares guardados". */
 function instrumentoInicial(moneda: Meta["moneda"], usados: InstrumentoMeta[], opciones: OpcionInstrumento[]): InstrumentoMeta {
   const u = usados[0];
@@ -421,6 +701,10 @@ function instrumentoInicial(moneda: Meta["moneda"], usados: InstrumentoMeta[], o
   return deHoy ? aInstrumento(deHoy) : u;
 }
 
+/**
+ * Selector de instrumento: primero los que ya usa la meta, después las opciones reales de hoy agrupadas por tipo,
+ * y al final "sin invertir" y "otro" (nombre y TEA a mano). En dólares: dólares guardados u otro.
+ */
 function ElegirInstrumento({
   moneda,
   opciones,

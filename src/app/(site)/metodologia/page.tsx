@@ -248,11 +248,14 @@ Tasa mensual i = (1 + TEA)^(1/12) − 1
   i_plan: la mejor opción sin plazo de hoy, o la que elijas, para lo que pongas de acá en adelante
 Objetivo en el mes n = objetivo de hoy × (1 + π)^n     (π: inflación mensual esperada del REM; solo metas en pesos)
 Aporte por mes = (objetivo en la fecha − saldo × (1 + i_saldo)^n) × i_plan / ((1 + i_plan)^n − 1)     (aportes al final de cada mes)
-Meses para llegar: se simula mes a mes hasta que lo invertido más lo nuevo supera el objetivo de ese mes`}</Formula>
+Meses para llegar: se simula mes a mes hasta que lo invertido más lo nuevo supera el objetivo de ese mes
+Rendimiento real = lo que tenés − Σ aporte × IPC de hoy / IPC del día del aporte     (IPC del INDEC; después del último dato, REM)
+Equivalencia en dólares = monto / dólar MEP de hoy (venta)`}</Formula>
         <p className="mt-3">
           Los valores son estimados: los fondos y billeteras cambian su tasa todos los días, así que conviene corregirlos de vez en cuando con lo que muestra tu app. &quot;Según el plan&quot;
           es lo que tendrías hoy si hubieras puesto lo que planeaste todos los meses, a la tasa del plan. La comparación con la mejor opción de hoy solo aparece si la diferencia es de al menos un
-          punto, y ordena solo por tasa. Las metas en dólares no se ajustan por inflación y, salvo que elijas otro, suponen que los dólares no rinden.
+          punto. &quot;¿Dónde rinde más lo que pongas cada mes?&quot; recalcula el plan con la mejor opción de cada tipo y ordena solo por tasa, sin mirar si es afiliado. Los
+          vencimientos salen de la fecha en que pusiste la plata más el plazo de la opción. Las metas en dólares no se ajustan por inflación y, salvo que elijas otro, suponen que los dólares no rinden.
         </p>
       </>
     ),

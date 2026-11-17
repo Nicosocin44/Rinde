@@ -115,13 +115,22 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - **Dónde está tu plata:** tabla por instrumento con lo que puso, lo que vale hoy (estimado con la TEA del día en que lo puso) y la ganancia total de sus inversiones. "Actualizar valores" reemplaza la estimación por el valor real que muestra su app.
 - **Comparación neutral:** si lo suyo rinde en promedio al menos 1 punto menos que la mejor opción sin plazo de hoy, dice cuánto más por mes daría ese saldo. Sin "pasate a X".
 - **Historial de movimientos** con borrar y "Deshacer".
+- **Resumen arriba** (con 2 metas o más): lo juntado, lo puesto, lo que dieron las inversiones y lo que hay que poner por mes entre todas, separado por moneda, y cuántas esperan la carga del mes.
+- **Rendimiento real** (metas en pesos): cada aporte actualizado por IPC hasta hoy contra lo que vale: "le ganaste por +$ X", "la inflación se comió −$ X" o "quedaste parejo" (menos de 0,5 %).
+- **Camino a la meta:** gráfico mes a mes de lo que pone, lo que rinde y lo que va a costar (sube con la inflación), con la fecha elegida marcada y los hitos ("el 50 % en mar 2027 · la meta en sep 2027").
+- **¿Dónde rinde más lo que pongas cada mes?:** la mejor opción de cada tipo (mismo ranking neutral de la home) con cuánto poner por mes y cuándo llega con lo planeado; con liquidez y tope de cada una.
+- **Vencimientos:** cuándo vence cada plazo fijo, LECAP o caución cargado; si ya venció, avisa.
+- **Dólar MEP:** las metas en pesos muestran su equivalente en dólares y las en dólares, en pesos.
+- **Meta de ejemplo** cuando no hay ninguna: un viaje de $ 3 M con cuatro aportes, rotulada "Datos de ejemplo" (montos inventados; tasas, inflación y dólar reales).
 - **Cada 30 días** "Sumar plata" se resalta: "Pasaron 33 días: ¿cuánto pusiste este mes?". El plan se recalcula con lo que hay y las tasas de ese día.
 - Varias metas a la vez. Borrar con "Deshacer".
 - Se guarda **solo en el navegador** (IndexedDB, `rinde-metas`), igual que la cartera y las alertas.
 
 **Datos:** la tasa es la **mejor opción sin plazo de hoy** (`mejoresDelDia().liquida`, la misma que usa interés compuesto) y la inflación es la esperada del REM a 12 meses, pasada a mensual. Fuente y hora en la nota de abajo, fórmula en `/metodologia#metas`.
 
-**Cálculo:** `src/lib/calculos/metas.ts` (puro, decimal.js), 18 tests en `tests/metas.test.ts`: valuación por instrumento (aportes, retiros, ajustes, orden de carga en un mismo día), TEA promedio, plan con dos tasas (lo invertido y lo nuevo), y que tener más plata nunca atrasa la fecha de llegada.
+**Cálculo:** `src/lib/calculos/metas.ts` (puro, decimal.js), 24 tests en `tests/metas.test.ts`: valuación por instrumento (aportes, retiros, ajustes, orden de carga en un mismo día), TEA promedio, plan con dos tasas (lo invertido y lo nuevo), que tener más plata nunca atrasa la fecha de llegada, camino e hitos, rendimiento real, vencimientos, alternativas (neutrales: solo por TEA) y resumen por moneda.
+
+**Datos que usa:** opciones en pesos (ArgentinaDatos, CNV, data912), inflación esperada (REM del BCRA), IPC mensual (INDEC vía ArgentinaDatos, últimos 36 meses) y dólar MEP (DolarAPI).
 
 **Guardado:** IndexedDB `rinde-metas` v2. Las metas creadas con la primera versión (un saldo total por fecha) se convierten solas: cada diferencia entre controles pasa a ser un movimiento "sin invertir" (o "dólares guardados").
 
@@ -135,7 +144,9 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 6. **Valores estimados:** cada instrumento crece con la TEA del día en que se puso la plata (si vuelve a poner, pasa a la TEA de ese día) y se supone que se renueva (un plazo fijo vencido sigue rindiendo igual). Los fondos y billeteras cambian de tasa todos los días: por eso está "Actualizar valores".
 7. **Lo ya invertido y lo nuevo rinden distinto en el plan:** lo que tiene, a su TEA promedio; lo que ponga, a la mejor opción sin plazo de hoy.
 8. **No se conecta con la cartera.** Las metas llevan su propio registro de movimientos. Se podría vincular una meta a posiciones de la cartera, pero duplicaría la carga o mezclaría plata que no es para la meta.
-9. **Sin aviso con la app cerrada:** el recordatorio de los 30 días aparece cuando la persona entra. Avisar por push o email necesita las cuentas de la fase 2.
+9. **Las alternativas no miran el tope ni la liquidez para ordenar:** se ordenan solo por tasa y se muestran la liquidez y el tope al lado. Una LECAP puede quedar primera aunque no sirva para plata que entra todos los meses.
+10. **El rendimiento real se calcula solo en pesos.** En dólares haría falta la inflación de EE.UU.
+11. **Sin aviso con la app cerrada:** el recordatorio de los 30 días aparece cuando la persona entra. Avisar por push o email necesita las cuentas de la fase 2.
 
 ---
 

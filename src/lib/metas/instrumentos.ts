@@ -1,5 +1,6 @@
-import type { InstrumentoMeta } from "@/lib/calculos/metas";
+import type { AlternativaMeta, InstrumentoMeta } from "@/lib/calculos/metas";
 import type { OpcionPesos } from "@/lib/data/types";
+import { mejorDeCadaTipo } from "@/lib/rankings/pesos";
 
 /**
  * Dónde puede estar la plata de una meta. En pesos: las opciones reales del comparador (con la TEA de hoy), más
@@ -38,7 +39,19 @@ export function opcionesParaMetas(opciones: OpcionPesos[]): OpcionInstrumento[] 
   return [...porTipo.values()].flat();
 }
 
+/** Tipos con vencimiento: la plata queda hasta el plazo (se muestra cuándo vence). */
+const CON_VENCIMIENTO = new Set(["plazo_fijo", "lecap", "caucion"]);
+
 export function aInstrumento(o: OpcionInstrumento): InstrumentoMeta {
   const plazo = o.tipo === "plazo_fijo" && o.plazoDias ? ` a ${o.plazoDias} días` : "";
-  return { id: o.id, nombre: `${o.nombre}${plazo}`, tipo: o.tipo, tea: o.tea };
+  const plazoDias = CON_VENCIMIENTO.has(o.tipo) && o.plazoDias ? o.plazoDias : null;
+  return { id: o.id, nombre: `${o.nombre}${plazo}`, tipo: o.tipo, tea: o.tea, plazoDias };
+}
+
+/** Una alternativa para "¿dónde rinde más lo de cada mes?", con su liquidez para que se entienda qué implica. */
+export type AlternativaUI = AlternativaMeta & { liquidez: OpcionPesos["liquidez"]; plazoDias: number | null; tope: number | null };
+
+/** La mejor opción comparable de cada tipo (el mismo ranking neutral de la home: solo lee la tasa). */
+export function alternativasParaMetas(opciones: OpcionPesos[]): AlternativaUI[] {
+  return mejorDeCadaTipo(opciones).map((o) => ({ id: o.id, nombre: aInstrumento(o).nombre, tipo: o.tipo, tea: o.tea, liquidez: o.liquidez, plazoDias: o.plazoDias, tope: o.tope }));
 }

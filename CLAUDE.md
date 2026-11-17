@@ -113,7 +113,7 @@ tests/
   - **"Decisiones para revisar"**: las decisiones de producto o diseño que tomaste solo, para que los fundadores las validen.
 - **Verificá antes de suponer.** Si la documentación de una API no coincide con lo que responde, hacé un request real, mirá la forma y adaptá. Anotalo en PROGRESO.md.
 - **Ante una ambigüedad de producto,** elegí la opción más razonable para un usuario argentino común, anotala en "Decisiones para revisar" y seguí. Frená solo ante un bloqueo real (credenciales, pagos, cuentas de terceros).
-- **Git:** commits chicos y descriptivos, uno por avance coherente.
+- **Git:** commits chicos y descriptivos, uno por avance coherente. Seguí `COMO_TRABAJAMOS.md`: los cambios importantes (cálculos, datos, rankings, afiliados, reglas del proyecto, dependencias, legales, borrados o cambios grandes) van en una rama con Pull Request para que el otro socio los revise. Nunca los subas directo a `main` ni hagas `push --force`.
 - **Las correcciones de los fundadores** llegan como capturas o frases ("en /dolar la tabla se ve apretada en mobile"). Aplicalas y, si cambian una regla, actualizá el doc correspondiente.
 
 ---

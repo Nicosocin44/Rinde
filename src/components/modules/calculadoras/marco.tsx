@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
 export function MarcoCalculadora({ entradas, resultado, pie, ancla }: { entradas: ReactNode; resultado: ReactNode; pie?: ReactNode; ancla: string }) {
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-16">
-      <div className="flex flex-col gap-5 lg:sticky lg:top-[132px] lg:self-start">{entradas}</div>
+      <div className="flex flex-col gap-5 lg:sticky lg:top-[156px] lg:self-start">{entradas}</div>
       <div className="flex min-w-0 flex-col gap-6">
         {resultado}
         <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">

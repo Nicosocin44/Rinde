@@ -38,7 +38,7 @@ export default function Aprender() {
       <PageHeader titulo="Aprender" bajada="Los términos que vas a ver en el sitio, explicados en una línea. Sin jerga." />
       <dl className="mt-10 grid border-t border-border lg:mt-14 lg:grid-cols-2 lg:gap-x-16">
         {TERMINOS.map((x) => (
-          <div key={x.t} id={x.t.toLowerCase().replace(/\s+/g, "-")} className="scroll-mt-[120px] border-b border-border py-6">
+          <div key={x.t} id={x.t.toLowerCase().replace(/\s+/g, "-")} className="scroll-mt-[112px] border-b border-border py-6">
             <dt className="text-h3">{x.t}</dt>
             <dd className="mt-2 text-[16px] leading-[25px]">
               <span className="font-medium">{x.corto}</span> <span className="text-text-2">{x.largo}</span>

@@ -39,7 +39,7 @@ export function DataTable<T>({
   resaltada,
   onResaltar,
   className,
-  topSticky = "top-[104px] lg:top-[116px]",
+  topSticky = "top-[132px] lg:top-[148px]",
 }: {
   filas: T[];
   columnas: Columna<T>[];
@@ -111,7 +111,7 @@ export function DataTable<T>({
                     <button
                       type="button"
                       onClick={() => ordenar(c)}
-                      className={cn("inline-flex items-center gap-1 uppercase transition-colors hover:text-text-2", activa && "text-text-2", c.alineacion === "derecha" && "flex-row-reverse")}
+                      className={cn("inline-flex items-center gap-1 transition-colors hover:text-text-2", activa && "text-text-2", c.alineacion === "derecha" && "flex-row-reverse")}
                     >
                       {c.encabezado}
                       <ArrowDown

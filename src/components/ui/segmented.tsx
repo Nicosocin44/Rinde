@@ -51,9 +51,9 @@ export function SegmentedControl<T extends string>({
         aria-label={etiqueta}
         onKeyDown={mover}
         className={cn(
-          "relative inline-flex items-stretch rounded-(--radius-control) bg-surface-2 p-[3px]",
+          "relative inline-flex items-stretch rounded-full bg-surface-2 p-1",
           ancho === "lleno" && "flex w-full",
-          tamano === "sm" ? "h-8" : "h-9",
+          tamano === "sm" ? "h-9" : "h-11",
           className,
         )}
       >
@@ -72,17 +72,17 @@ export function SegmentedControl<T extends string>({
               tabIndex={activo ? 0 : -1}
               onClick={() => onChange(o.valor)}
               className={cn(
-                "relative z-0 flex items-center justify-center rounded-[7px] font-medium whitespace-nowrap",
+                "relative z-0 flex items-center justify-center rounded-full font-semibold whitespace-nowrap",
                 ancho === "lleno" && "min-w-0 flex-1",
                 "transition-colors duration-(--duration-short) ease-(--ease-standard) focus-visible:outline-offset-0",
-                tamano === "sm" ? "px-2.5 text-[13px]" : ancho === "lleno" ? "px-2 text-[14px] sm:px-3.5" : "px-3.5 text-[14px]",
-                activo ? "text-text" : "text-text-2 hover:text-text",
+                tamano === "sm" ? "px-3 text-[13px]" : ancho === "lleno" ? "px-2 text-[14px] sm:px-4" : "px-4 text-[14px]",
+                activo ? "text-on-inverse" : "text-text-2 hover:text-text",
               )}
             >
               {activo && (
                 <m.span
                   layoutId="thumb"
-                  className="absolute inset-0 -z-10 rounded-[7px] bg-surface shadow-(--shadow-thumb) dark:bg-[#2a2e35]"
+                  className="absolute inset-0 -z-10 rounded-full bg-inverse"
                   transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}
                 />
               )}

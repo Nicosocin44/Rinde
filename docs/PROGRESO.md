@@ -12,6 +12,39 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Rediseño en curso: la home como una historia (rama `rediseno`)
+
+> Pedido de los fundadores (17/11/2026): llevar el diseño al nivel de moahu.com.ar, Apple y Whoop. La parte de producto de la home se cuenta como una historia por secciones, con una idea por sección y componentes reales en modo demo.
+
+**Regla de movimiento:** cada animación empieza con algo que pasa (scrolleás o tocás), llega a su lugar y frena. Nada se mueve en loop.
+
+**Técnica:**
+- GSAP + ScrollTrigger para todo lo atado al scroll, y Motion para los botones y las solapas.
+- Lenis (scroll suave) solo en la home.
+- Las escenas largas usan `position: sticky` dentro de un contenedor alto, en vez del *pin* de GSAP, así no hay saltos de layout.
+- Solo se animan `transform` y `opacity`.
+- Con movimiento reducido, cada escena aparece ya armada, con un fundido.
+
+### Cómo se lee la home de arriba a abajo
+
+| # | Sección | La idea en una frase | Qué componente real usa | Coreografía (qué entra, desde dónde, cuándo y dónde frena) |
+|---|---|---|---|---|
+| 0 | **La foto de hoy** (portada) | Hoy el dólar está a tanto y tu plata rinde hasta tanto | Cotización MEP, mejor tasa sin plazo y resumen del día (reales) | **Al cargar:** el titular sube palabra por palabra (70 ms entre palabras), después entran las tres tarjetas, cada una 60 ms después de la anterior. Frena y queda quieto. **Es lo único que se mueve sin que hagas nada.** |
+| — | **Cinta de cotizaciones** | Los números del día, de un vistazo | Las cotizaciones reales | Una banda amarilla inclinada. **Solo avanza mientras scrolleás** (hacia la izquierda si bajás, hacia la derecha si subís) y frena cuando parás. |
+| — | **¿Dónde rinde más tu plata?** | La herramienta | El comparador real (`DondeRinde`) | Sin coreografía: es una herramienta y tiene que estar quieta y lista. Va sobre una lámina oscura con esquinas grandes. |
+| 1 | **El problema** | "Tu plata está repartida y no sabés si rinde." | 5 lugares de la cartera de ejemplo (billetera, plazo fijo, dólares, CEDEARs, LECAP), con su monto | Escena fija de 1,5 pantallas. Las 5 fichas **entran desde los bordes** a posiciones desordenadas e inclinadas, cada una con un "¿rinde?" en lugar de la tasa. La última frena a la mitad del recorrido; el resto del scroll lo usa el texto. |
+| 2 | **La respuesta** | "Todas las tasas en un solo lugar, comparadas en serio." | Las mejores opciones reales del día (billetera, fondo, plazo fijo, caución, LECAP), en TEA | Escena fija de 2 pantallas. Las barras **crecen desde cero hasta su TEA** atadas al scroll, se ordenan de mayor a menor y aparece el número de cada una. Frenan al 70 % de la escena con el ranking completo y la línea "el orden lo decide la tasa". |
+| 3 | **El dólar** | "Dónde comprarlo más barato, app por app." | Ranking real de proveedores para USD | Una regla de precios horizontal. Cada proveedor **llega desde la derecha a su precio** (más barato a la izquierda) mientras scrolleás. Cuando llegó el último, el más barato se marca y la diferencia contra el más caro **se arma dígito por dígito**. Frena. |
+| 4 | **Tu cartera** | "¿Le ganaste a la inflación y al dólar?" | Análisis real de la cartera de ejemplo (rotulada) contra IPC y MEP | Tres líneas (tu cartera, la inflación y el dólar) **se dibujan de izquierda a derecha** con el scroll. Al terminar aparecen los veredictos ("Sí, por 4,1 pp"). Frena con el gráfico completo. |
+| 5 | **Alertas** | "Te avisamos antes." | 3 alertas de ejemplo evaluadas con los datos de hoy | Las alertas **bajan una por una como notificaciones**, una por cada tercio de pantalla scrolleada. La que se cumple hoy se marca. Frenan apiladas. |
+| 6 | **Macizo o hueco** | "La misma plata, dos destinos." $ 1.000.000 por 12 meses: quieta en la cuenta contra puesta en la mejor tasa sin plazo, ajustada por la inflación esperada (REM) | Cálculo real con `valorFuturo` y `valorReal` | Escena fija de 2,5 pantallas. **El scroll es el tiempo:** un contador de meses va del 0 al 12. La columna "puesta a rendir" se llena (maciza) y la "quieta" queda como un contorno que pierde poder de compra (hueca). Los dos montos se arman mes a mes. Frena en el mes 12 con la diferencia en pesos de hoy. |
+| 7 | **Confianza** | "Ningún número sin su fuente." | Las fuentes reales con su hora y estado | Las fuentes **entran como filas de una tabla**, escalonadas, y cada una prende su estado ("En vivo", "Cierre"). Al lado, tres reglas: neutralidad, metodología abierta y sin datos inventados. Frena. |
+| 8 | **Cierre** | "Empezá gratis." | Botones reales a Cartera y Alertas | Una lámina amarilla que **sube desde abajo y tapa** la sección anterior; el titular gigante se asienta (de 0,92 a 1 de escala) cuando la lámina llega arriba. Frena. |
+
+**Qué sale de la home:** el bento "El mercado de un vistazo". Su contenido queda repartido en la historia (el ranking del dólar en la 3 y las tasas en la 2), y el riesgo país y los eventos siguen en /bonos y en la barra de pulso.
+
+---
+
 ## Qué está hecho, por sección
 
 Todo funciona con **datos reales** salvo donde se indica. Cada número muestra su fuente, su hora y su estado.

@@ -11,7 +11,7 @@ const ETIQUETA: Record<EstadoDato, string> = {
   sample: "Datos de ejemplo",
 };
 
-/** Interacción firma 9: punto de 6 px con un halo que late cada 2 s (solo "En vivo"). */
+/** Interacción firma 9: punto de 6 px; el halo late una sola vez cuando el punto aparece o llega un dato nuevo (regla: nada en loop). */
 export function PuntoVivo({ estado = "live", className }: { estado?: EstadoDato; className?: string }) {
   const color = estado === "live" ? "bg-gain" : estado === "delayed" || estado === "sample" || estado === "stale" ? "bg-warn" : "bg-text-3";
   return (

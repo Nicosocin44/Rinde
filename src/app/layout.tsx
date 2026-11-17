@@ -1,17 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Inter } from "next/font/google";
-import localFont from "next/font/local";
+import { Bricolage_Grotesque, Geist_Mono, Instrument_Sans } from "next/font/google";
 import { MotionProvider } from "@/components/motion-provider";
 import { RegistroSW } from "@/components/shell/registro-sw";
 import { site } from "@/config/site";
 import { SCRIPT_PREFERENCIAS } from "@/lib/preferencias";
 import "./globals.css";
 
-// "optional": si Inter no llegó al primer pintado, se queda la de respaldo (ajustada) y no hay un segundo
-// pintado que retrase el LCP. Medido: el LCP en mobile pasaba de 1 s a 3,7 s solo por el cambio de fuente.
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "optional" });
+// Bricolage Grotesque: titulares y cifras (pesada, con carácter, cifras tabulares).
+// Instrument Sans: texto e interfaz. "optional" en el texto evita un segundo pintado que retrase el LCP.
+const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-bricolage", display: "swap" });
+const instrument = Instrument_Sans({ subsets: ["latin"], variable: "--font-instrument", display: "optional" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
-const satoshi = localFont({ src: "../fonts/Satoshi-Variable.woff2", variable: "--font-satoshi", weight: "300 900", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -36,7 +35,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-AR" data-theme="dark" data-modo="simple" className={`${inter.variable} ${geistMono.variable} ${satoshi.variable}`} suppressHydrationWarning>
+    <html lang="es-AR" data-theme="dark" data-modo="simple" className={`${bricolage.variable} ${instrument.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         {/* Aplica tema y modo antes del primer pintado: sin parpadeo. */}
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_PREFERENCIAS }} />

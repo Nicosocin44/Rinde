@@ -2,17 +2,20 @@ import Link from "next/link";
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
 
-/** Wordmark tipográfico. El nombre sale de config/site.ts. */
-export function Wordmark({ className }: { className?: string }) {
+/** Logotipo: el nombre en Bricolage extra negrita, en minúscula, con un punto de sol que late al pasar el mouse. */
+export function Wordmark({ className, tamano = "md" }: { className?: string; tamano?: "md" | "lg" }) {
   return (
-    <Link href="/" aria-label={`${site.name}, inicio`} className={cn("group inline-flex items-center gap-[7px] rounded-md", className)}>
-      <span aria-hidden className="relative inline-flex size-[18px] items-end gap-[2px]">
-        {/* Tres barras crecientes: el "rinde" mínimo. La última, en el color de marca. */}
-        <span className="h-[7px] w-[4px] rounded-[1.5px] bg-text-3" />
-        <span className="h-[11px] w-[4px] rounded-[1.5px] bg-text-2" />
-        <span className="h-[16px] w-[4px] rounded-[1.5px] bg-accent transition-[height] duration-(--duration-base) ease-(--ease-standard) group-hover:h-[18px]" />
+    <Link href="/" aria-label={`${site.name}, inicio`} className={cn("group inline-flex items-baseline rounded-full", className)}>
+      <span className={cn("font-display leading-none font-extrabold tracking-[-0.06em] text-text", tamano === "lg" ? "text-[44px]" : "text-[24px]")}>
+        {site.name.toLowerCase()}
       </span>
-      <span className="font-display text-[19px] leading-none font-bold tracking-[-0.035em] text-text">{site.name}</span>
+      <span
+        aria-hidden
+        className={cn(
+          "ml-[0.06em] inline-block rounded-full bg-sol transition-transform duration-(--duration-base) ease-(--ease-rebote) group-hover:scale-150",
+          tamano === "lg" ? "size-[11px]" : "size-[7px]",
+        )}
+      />
     </Link>
   );
 }

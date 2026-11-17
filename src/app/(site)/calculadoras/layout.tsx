@@ -10,7 +10,6 @@ export default function CalculadorasLayout({ children }: { children: React.React
         solapas={[
           { href: "/calculadoras", label: "Todas" },
           { href: "/calculadoras/interes-compuesto", label: "Interés compuesto" },
-          { href: "/calculadoras/metas", label: "Metas" },
           { href: "/calculadoras/jubilacion", label: "Jubilación" },
           { href: "/calculadoras/plazo-fijo", label: "Plazo fijo" },
           { href: "/calculadoras/tasas", label: "Tasas" },

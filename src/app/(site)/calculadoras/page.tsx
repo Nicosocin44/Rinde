@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Calculadoras financieras", descripti
 
 const CALCULADORAS = [
   { href: "/calculadoras/interes-compuesto", titulo: "Interés compuesto", pregunta: "¿Cuánto junto si ahorro todos los meses?", ejemplo: "$ 100.000 por mes durante 10 años" },
-  { href: "/calculadoras/metas", titulo: "Metas de ahorro", pregunta: "¿Cuánto tengo que juntar por mes para mi meta?", ejemplo: "Un viaje de US$ 800 en 8 meses" },
+  { href: "/metas", titulo: "Metas de ahorro", pregunta: "¿Cuánto tengo que juntar por mes para mi meta?", ejemplo: "Un viaje de US$ 800 en 8 meses" },
   { href: "/calculadoras/jubilacion", titulo: "Jubilación", pregunta: "¿Cuánto tengo que ahorrar para jubilarme?", ejemplo: "Gastar US$ 1.500 por mes al jubilarte" },
   { href: "/calculadoras/plazo-fijo", titulo: "Plazo fijo", pregunta: "¿Cuánto cobro y le gano a la inflación?", ejemplo: "$ 1.000.000 a 30 días" },
   { href: "/calculadoras/tasas", titulo: "Conversor de tasas", pregunta: "¿Cuánto es esta TNA en TEA y TEM?", ejemplo: "24 % TNA a 30 días" },

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Metas } from "@/components/modules/calculadoras/metas";
+import { Metas } from "@/components/modules/metas/metas";
+import { PageHeader } from "@/components/shell/page-header";
 import { SourceNote } from "@/components/ui/frescura";
 import { obtenerMacro, obtenerPesos } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
@@ -18,10 +19,11 @@ export default async function Page() {
   const inflacionMensual = inflacionAnual ? (1 + inflacionAnual) ** (1 / 12) - 1 : null;
   return (
     <>
-      <div className="mb-8 flex flex-col gap-2">
-        <h2 className="text-h2">¿Cuánto tengo que juntar por mes para llegar?</h2>
-        <p className="max-w-2xl text-text-2">Ponele nombre a lo que querés, cuánto cuesta y para cuándo. Cada 30 días volvés, cargás cuánto tenés y te decimos cómo venís.</p>
-      </div>
+      <PageHeader
+        titulo="Tus metas"
+        bajada="Un viaje, un auto, un depto: ponele nombre a lo que querés, cuánto cuesta y para cuándo. Te decimos cuánto juntar por mes y, cada 30 días, cómo venís."
+        className="mb-10 lg:mb-14"
+      />
       <Metas referencia={mejor ? { nombre: mejor.nombre, tea: mejor.tea } : null} inflacionMensual={inflacionMensual} />
       <SourceNote className="mt-8" fuentes={[FUENTES.argentinadatos, FUENTES.cnv, FUENTES.bcra]} actualizado={p.ok ? p.asOf : null} estado={p.ok ? p.status : "stale"} metodologia="/metodologia#metas">
         <span aria-hidden>·</span>

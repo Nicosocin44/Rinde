@@ -12,7 +12,7 @@ import { MarcoCalculadora, Resultado } from "./marco";
 
 /**
  * Jubilación, en dólares y con tasa REAL (descontada la inflación en dólares): así la meta no se "achica" sola.
- * Capital necesario = gasto anual / tasa de retiro (regla del 4 %). Las metas de ahorro tienen su propia pantalla (/calculadoras/metas).
+ * Capital necesario = gasto anual / tasa de retiro (regla del 4 %). Las metas de ahorro tienen su propia pantalla (/metas).
  */
 export function Jubilacion() {
   const [gastoMensual, setGastoMensual] = useState(1500);

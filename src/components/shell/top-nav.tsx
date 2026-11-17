@@ -65,12 +65,13 @@ export function TopNav() {
                 {navPrincipal.map((item) => {
                   const activo = rutaActiva(pathname, item.href);
                   return (
-                    <li key={item.href}>
+                    // En pantallas medianas "Inicio" se esconde (el logo ya lleva al inicio) para que entren todas las secciones.
+                    <li key={item.href} className={item.href === "/" ? "hidden xl:block" : undefined}>
                       <Link
                         href={item.href}
                         aria-current={activo ? "page" : undefined}
                         className={cn(
-                          "relative z-0 flex h-10 items-center rounded-full px-4 text-[15px] font-medium transition-colors duration-(--duration-short)",
+                          "relative z-0 flex h-10 items-center rounded-full px-3 text-[15px] xl:px-4 font-medium transition-colors duration-(--duration-short)",
                           activo ? "text-on-inverse" : "text-text-2 hover:text-text",
                         )}
                       >

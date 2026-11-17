@@ -105,7 +105,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 > Idea de los fundadores (audios del 17/11): separar las metas de la jubilación y hacerlas un plan fácil para quien no conoce el mercado de capitales: "quiero un auto", "un viaje de US$ 800", "un departamento", "estudios".
 
-**Dónde está:** `/calculadoras/metas` (nueva solapa). La de jubilación quedó solo para jubilación.
+**Dónde está:** `/metas`, sección propia en el menú principal (entre Pesos y Bonos), en "Tus herramientas" del pie, en el buscador y como acceso directo de la app instalada. En el celular entra por "Más". Calculadoras tiene un link. La de jubilación quedó solo para jubilación.
 
 **Qué hace:**
 - Cada persona arma sus metas: nombre libre, pesos o dólares, cuánto cuesta, cuánto ya tiene, para cuándo (1 a 120 meses) y cuánto puede poner por mes (opcional). Botones de arranque rápido: "Un viaje", "Un auto", "Un departamento", "Estudios", "Fondo de emergencia".

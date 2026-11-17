@@ -95,7 +95,7 @@ Los tokens se definen como CSS variables (`--color-*`) y se exponen en Tailwind 
 | `border-strong` | `rgba(12,14,18,0.16)` |
 | `text` | `#0E1013` |
 | `text-2` | `#565C66` |
-| `text-3` | `#6B717A` |
+| `text-3` | `#61676F` (era `#6B717A`; se oscureció el 17/11/2026 porque no llegaba a 4,5:1 sobre `accent-soft`) |
 | `accent` | `#1766C2` |
 | `accent-soft` | `rgba(23,102,194,0.08)` |
 | `gain` | `#0B7A48` |

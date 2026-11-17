@@ -158,7 +158,7 @@ function Interactivos() {
           <Sparkline valores={[1, 3, 2, 4, 3, 5, 6, 5, 7]} />
           <Sparkline valores={[7, 5, 6, 4, 5, 3, 2]} />
         </div>
-        <SourceNote fuentes={[FUENTES.bcra, FUENTES.argentinadatos]} actualizado={new Date().toISOString()} estado="live" />
+        <SourceNote fuentes={[FUENTES.bcra, FUENTES.argentinadatos]} actualizado="2026-11-16T21:41:00.000Z" estado="live" />
         <DataTable
           etiqueta="Ejemplo"
           filas={[

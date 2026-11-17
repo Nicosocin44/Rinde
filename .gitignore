@@ -10,9 +10,8 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
-# capturas de trabajo (las finales sí se versionan)
-.shots/*
-!.shots/final
+# capturas (quedan en la carpeta, fuera de git)
+.shots/
 
 # Playwright
 test-results

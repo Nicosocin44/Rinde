@@ -45,7 +45,10 @@ export function PriceChart({
   acciones,
   variacionEn = "porcentaje",
   tono = "direccion",
+  compacto = false,
 }: {
+  /** Sin cifra ni variación en el encabezado (cuando la serie no es un precio, como el valor de una cartera con aportes). */
+  compacto?: boolean;
   /** "puntos": la variación es una diferencia en pp (para series que ya son porcentajes, como la brecha). */
   variacionEn?: "porcentaje" | "puntos";
   /** "direccion": verde o rojo según el período. "neutro": color de marca (cuando subir no es bueno ni malo). */
@@ -148,14 +151,29 @@ export function PriceChart({
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div className="flex flex-col gap-1">
-          <div className="text-label">{titulo}</div>
-          {formato ? <span className="tabular text-cifra">{mostrado !== null ? formato(mostrado) : "—"}</span> : <Cifra valor={mostrado} moneda={moneda} decimales={decimales} className="text-cifra" />}
-          <p className="flex items-center gap-2 text-chico text-text-2">
-            <Delta valor={variacionMostrada} tipo={variacionEn === "puntos" ? "puntos" : "porcentaje"} className={tono === "neutro" ? "!text-text-2" : undefined} />
-            <span>{scrub ? `al ${fechaCorta(scrub.fecha, true)}` : `en ${RANGOS.find((r) => r.valor === rango)?.etiqueta === "Máx" ? "toda la serie" : nombreRango(rango)}`}</span>
-          </p>
-        </div>
+        {compacto ? (
+          <div className="flex flex-col gap-1">
+            <div className="text-label">{titulo}</div>
+            <p className="tabular h-5 text-chico text-text-2">
+              {scrub ? (
+                <>
+                  {fechaCorta(scrub.fecha, true)}: <span className="font-medium text-text">{formato ? formato(scrub.valor) : `${moneda ?? ""} ${numero(scrub.valor, decimales)}`}</span>
+                </>
+              ) : (
+                "Pasá el cursor para ver cada fecha"
+              )}
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1">
+            <div className="text-label">{titulo}</div>
+            {formato ? <span className="tabular text-cifra">{mostrado !== null ? formato(mostrado) : "—"}</span> : <Cifra valor={mostrado} moneda={moneda} decimales={decimales} className="text-cifra" />}
+            <p className="flex items-center gap-2 text-chico text-text-2">
+              <Delta valor={variacionMostrada} tipo={variacionEn === "puntos" ? "puntos" : "porcentaje"} className={tono === "neutro" ? "!text-text-2" : undefined} />
+              <span>{scrub ? `al ${fechaCorta(scrub.fecha, true)}` : `en ${RANGOS.find((r) => r.valor === rango)?.etiqueta === "Máx" ? "toda la serie" : nombreRango(rango)}`}</span>
+            </p>
+          </div>
+        )}
         <div className="flex items-center gap-2">
           {acciones}
           <SegmentedControl etiqueta="Rango" tamano="sm" valor={rango} onChange={setRango} opciones={RANGOS} />

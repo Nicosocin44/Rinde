@@ -57,9 +57,9 @@ export function divisorPrecio(tipo: TipoActivo): number {
   return tipo === "lecap" || tipo === "bono" || tipo === "on" ? 100 : 1;
 }
 
-/** Activos tipo cuenta: su "cantidad" es un saldo y su precio es 1. */
+/** Activos tipo cuenta: su precio no viene del mercado sino de su tasa (o vale 1). */
 export function esCuenta(tipo: TipoActivo): boolean {
-  return tipo === "billetera" || tipo === "efectivo_usd" || tipo === "plazo_fijo";
+  return tipo === "billetera" || tipo === "efectivo_usd" || tipo === "plazo_fijo" || tipo === "fci";
 }
 
 /**
@@ -169,14 +169,24 @@ export function derivarPosiciones(
 }
 
 /**
- * Precio de una cuenta a una fecha. Billeteras y efectivo valen 1 por unidad.
- * Un plazo fijo devenga interés simple hasta su vencimiento: 1 + TNA × días/365.
+ * Precio de una cuenta a una fecha (funciona como una "cuotaparte" que arranca en 1 el día de inicio):
+ *  - plazo fijo: interés simple hasta el vencimiento, 1 + TNA × días/365;
+ *  - billetera o fondo con TNA informada: capitalización diaria, (1 + TNA/365)^días (estimación);
+ *  - sin tasa, o efectivo: 1.
+ * Un depósito de $X en la fecha f compra X / precio(f) unidades.
  */
 export function precioCuenta(activo: Activo, fecha: FechaISO): Dec {
-  if (activo.tipo !== "plazo_fijo" || !activo.tna || !activo.inicio) return UNO;
-  const tope = activo.vencimiento && fecha > activo.vencimiento ? activo.vencimiento : fecha;
-  const dias = Math.max(0, diasEntre(activo.inicio, tope));
-  return UNO.plus(d(activo.tna).mul(dias).div(DIAS_ANIO));
+  if (!activo.tna || !activo.inicio) return UNO;
+  if (activo.tipo === "plazo_fijo") {
+    const tope = activo.vencimiento && fecha > activo.vencimiento ? activo.vencimiento : fecha;
+    const dias = Math.max(0, diasEntre(activo.inicio, tope));
+    return UNO.plus(d(activo.tna).mul(dias).div(DIAS_ANIO));
+  }
+  if (activo.tipo === "billetera" || activo.tipo === "fci") {
+    const dias = Math.max(0, diasEntre(activo.inicio, fecha));
+    return UNO.plus(d(activo.tna).div(DIAS_ANIO)).pow(dias);
+  }
+  return UNO;
 }
 
 export type ContextoValuacion = {

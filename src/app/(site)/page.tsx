@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { Bento } from "@/components/modules/inicio/bento";
+import { SeccionProducto } from "@/components/modules/inicio/producto";
 import { FotoDeHoy } from "@/components/modules/inicio/foto-de-hoy";
 import { DondeRinde } from "@/components/modules/pesos/donde-rinde";
 import { ErrorState } from "@/components/ui/estados";
@@ -72,6 +74,10 @@ export default async function Inicio() {
         </h2>
         <Bento ranking={ranking} curva={curva} macro={macro} eventos={proximosEventos(feriados, hoy, 5)} hoy={hoy} />
       </section>
+
+      <Suspense fallback={<div className="h-[600px]" />}>
+        <SeccionProducto />
+      </Suspense>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { VigiaAlertas } from "@/components/modules/alertas/vigia";
 import { BottomBar } from "@/components/shell/bottom-bar";
 import { CommandPalette } from "@/components/shell/command-palette";
 import { Footer } from "@/components/shell/footer";
@@ -23,6 +24,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         <Footer />
         <BottomBar />
         <CommandPalette />
+        <VigiaAlertas />
       </ToastProvider>
     </ShellProvider>
   );

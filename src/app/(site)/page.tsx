@@ -4,6 +4,7 @@ import { ScrollSuave } from "@/components/escenas/scroll-suave";
 import { CintaCotizaciones } from "@/components/modules/inicio/cinta";
 import { Hero } from "@/components/modules/inicio/hero";
 import { armarHistoria } from "@/components/modules/inicio/historia/datos";
+import { EscenaCartera } from "@/components/modules/inicio/historia/cartera";
 import { EscenaDolar } from "@/components/modules/inicio/historia/dolar";
 import { EscenaProblema } from "@/components/modules/inicio/historia/problema";
 import { EscenaRespuesta } from "@/components/modules/inicio/historia/respuesta";
@@ -83,6 +84,11 @@ export default async function Inicio() {
       {historia.dolar && historia.dolar.proveedores.length >= 3 && (
         <LimiteError nombre="El dólar">
           <EscenaDolar proveedores={historia.dolar.proveedores} asOf={historia.dolar.asOf} estado={historia.dolar.estado} />
+        </LimiteError>
+      )}
+      {historia.cartera && (
+        <LimiteError nombre="Tu cartera">
+          <EscenaCartera serie={historia.cartera.serie} inicio={historia.cartera.inicio} vsInflacion={historia.cartera.vsInflacion} vsDolar={historia.cartera.vsDolar} />
         </LimiteError>
       )}
     </div>

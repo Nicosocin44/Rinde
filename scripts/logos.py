@@ -5,6 +5,8 @@ Fuente: el ícono oficial de cada sitio, vía el servicio de íconos de Google (
 vuelven chicos (< 32 px) o el ícono genérico: en esos casos la web sigue mostrando el monograma.
 Genera src/config/logos.ts con la lista de los que existen.
 
+Al final suma los logos manuales de assets/logos-fuente/ (ver scripts/logos_manuales.py), que tienen prioridad.
+
 uso: python scripts/logos.py
 """
 import io
@@ -12,7 +14,7 @@ import json
 import urllib.request
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 PROVEEDORES = {
     "bna": "bna.com.ar", "galicia": "galicia.ar", "bbva": "bbva.com.ar", "santander": "santander.com.ar",
@@ -69,8 +71,40 @@ ACTIVOS = {
     "BTC": "bitcoin.org", "ETH": "ethereum.org", "USDT": "tether.to", "USDC": "circle.com",
 }
 
+# Logos manuales (bajados de Wikimedia Commons con scripts/logos_manuales.py, revisados a ojo). Tienen prioridad
+# sobre el ícono automático. Si el logo es ancho (marca + texto), se recorta solo el símbolo:
+# (izquierda, arriba, derecha, abajo) en fracciones del logo ya sin márgenes.
+RECORTE = {
+    "proveedores/macro": (0, 0, 0.33, 1), "activos/BMA": (0, 0, 0.33, 1),
+    "proveedores/bapro": (0, 0, 0.16, 1), "proveedores/ciudad": (0, 0, 0.13, 1), "proveedores/icbc": (0.63, 0, 1, 1),
+    "activos/LOMA": (0, 0, 0.36, 1), "activos/MOLI": (0, 0, 1, 0.46), "activos/MORI": (0, 0, 1, 0.42),
+    "activos/AMD": (0.79, 0, 1, 1), "activos/BA": (0, 0, 0.17, 1), "activos/COME": (0, 0, 0.42, 1),
+}
+
 RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "public" / "logos"
+FUENTE_MANUAL = RAIZ / "assets" / "logos-fuente"
+
+
+def normalizar_manual(origen: Path, recorte: tuple[float, float, float, float] | None) -> Image.Image:
+    """Saca los márgenes, recorta el símbolo si hace falta y lo centra en un cuadrado blanco de 96 px."""
+    im = Image.open(origen).convert("RGBA")
+    fondo = Image.new("RGBA", im.size, "white")
+    plano = Image.alpha_composite(fondo, im).convert("RGB")
+    caja = ImageOps.invert(plano).getbbox()  # lo que no es blanco
+    if caja:
+        im = im.crop(caja)
+    if recorte:
+        l, t, r, b = recorte
+        im = im.crop((int(im.width * l), int(im.height * t), int(im.width * r), int(im.height * b)))
+        caja = ImageOps.invert(Image.alpha_composite(Image.new("RGBA", im.size, "white"), im).convert("RGB")).getbbox()
+        if caja:
+            im = im.crop(caja)
+    lado = 96
+    im.thumbnail((lado - 12, lado - 12), Image.LANCZOS)
+    salida = Image.new("RGBA", (lado, lado), "white")
+    salida.paste(im, ((lado - im.width) // 2, (lado - im.height) // 2), im)
+    return salida
 
 
 def _probar(url: str) -> Image.Image | None:
@@ -112,6 +146,13 @@ def main() -> None:
             im.resize((64, 64), Image.LANCZOS).save(SALIDA / grupo / f"{clave}.png", optimize=True)
             hay[grupo].append(clave)
         print(grupo, len(hay[grupo]), "de", len(mapa))
+        manuales = sorted((FUENTE_MANUAL / grupo).glob("*.png")) if (FUENTE_MANUAL / grupo).exists() else []
+        for origen in manuales:
+            clave = origen.stem
+            normalizar_manual(origen, RECORTE.get(f"{grupo}/{clave}")).save(SALIDA / grupo / f"{clave}.png", optimize=True)
+            if clave not in hay[grupo]:
+                hay[grupo].append(clave)
+        print(grupo, "con manuales:", len(hay[grupo]))
     ts = (
         "/**\n * Logos disponibles en public/logos/ (generado por scripts/logos.py; no editar a mano).\n"
         " * Si un id no está acá, se muestra el monograma.\n */\n"

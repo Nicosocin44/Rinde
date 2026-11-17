@@ -20,3 +20,6 @@ playwright-report
 
 # el zip original del kit
 kit-claude-code-rinde.zip
+
+# Caché de Python (scripts de logos)
+__pycache__/

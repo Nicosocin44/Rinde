@@ -2,7 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
   aporteParaLlegar,
   avance,
+  caminoMeta,
+  compararAlternativas,
   crecer,
+  hitosMeta,
+  rendimientoReal,
+  resumenMetas,
+  vencimientos,
   evaluarMeta,
   mesesEntre,
   mesesFraccion,
@@ -207,5 +213,77 @@ describe("metas: evaluarMeta", () => {
     expect(e.cumplida).toBe(true);
     expect(e.avance).toBe(1);
     expect(e.controlPendiente).toBe(false);
+  });
+});
+
+describe("metas: más datos", () => {
+  it("camino mes a mes: lo invertido, lo nuevo y el objetivo con inflación", () => {
+    const plano = caminoMeta({ saldo: 1000, aportado: 1000, aporte: 100, tasaSaldo: 0, tasaAporte: 0, objetivoHoy: 2000, inflacionMensual: 0, meses: 3 });
+    expect(plano.map((p) => p.total)).toEqual([1000, 1100, 1200, 1300]);
+    expect(plano.every((p) => p.ganancia === 0 && p.objetivo === 2000)).toBe(true);
+    const rinde = caminoMeta({ saldo: 1000, aportado: 1000, aporte: 0, tasaSaldo: 0.01, tasaAporte: 0, objetivoHoy: 2000, inflacionMensual: 0.1, meses: 12 });
+    cerca(rinde[12]!.total, 1126.825030131969, 8);
+    cerca(rinde[12]!.ganancia, 126.825030131969, 8);
+    cerca(rinde[2]!.objetivo, 2420, 8);
+  });
+
+  it("hitos: primer mes en que llega al 25, 50, 75 y 100 %", () => {
+    const camino = caminoMeta({ saldo: 0, aportado: 0, aporte: 250, tasaSaldo: 0, tasaAporte: 0, objetivoHoy: 1000, inflacionMensual: 0, meses: 4 });
+    expect(hitosMeta(camino).map((h) => h.mes)).toEqual([1, 2, 3, 4]);
+    expect(hitosMeta(camino.slice(0, 4)).map((h) => h.mes)).toEqual([1, 2, 3, null]);
+  });
+
+  it("rendimiento real: cada aporte se actualiza por IPC desde su fecha", () => {
+    const indice: Record<string, number> = { "2026-01-01": 1, "2026-07-01": 1.1, "2027-01-01": 1.21 };
+    const nivel = (f: string) => indice[f] ?? null;
+    const aportes = [aporte("2026-01-01", 1000, billetera), aporte("2026-07-01", 500, billetera)];
+    // 1.000 × 1,21 + 500 × 1,21 / 1,1 = 1.760 en pesos de hoy; tiene 2.000 → ganó 240 por encima de la inflación.
+    const r = rendimientoReal(aportes, 2000, "2027-01-01", nivel)!;
+    cerca(r.aportadoHoy, 1760, 8);
+    cerca(r.gananciaReal, 240, 8);
+    expect(rendimientoReal([aporte("2025-01-01", 1, billetera)], 2000, "2027-01-01", nivel)).toBeNull();
+    expect(rendimientoReal([], 2000, "2027-01-01", nivel)).toBeNull();
+  });
+
+  it("vencimientos: plazos fijos y letras, desde hace 30 días, ordenados", () => {
+    const pf = { id: "pf", nombre: "Plazo fijo", tipo: "plazo_fijo", tea: 0.25, plazoDias: 30 };
+    const lista = vencimientos(
+      [aporte("2026-11-10", 500, pf), aporte("2026-10-01", 1000, pf), aporte("2026-08-01", 1000, pf), aporte("2026-10-01", 1000, billetera), aporte("2026-10-05", -100, pf)],
+      "2026-11-17",
+    );
+    expect(lista.map((v) => [v.vence, v.vencido])).toEqual([
+      ["2026-10-31", true],
+      ["2026-12-10", false],
+    ]);
+  });
+
+  it("alternativas: neutral, ordena solo por TEA; más tasa, menos aporte por mes", () => {
+    const meta: Meta = { id: "m", nombre: "M", moneda: "ARS", objetivo: 1200, fechaObjetivo: "2027-01-01", aporteMensual: 100, teaManual: null, creada: "2026-01-01", aportes: [], ajustes: [] };
+    const alternativas = [
+      { id: "b", nombre: "B", tipo: "fci", tea: 0 },
+      { id: "a", nombre: "A", tipo: "billetera", tea: 0.3 },
+    ];
+    const r = compararAlternativas(meta, { teaReferencia: 0.2, inflacionMensual: 0 }, "2026-01-01", alternativas);
+    expect(r.map((x) => x.alternativa.id)).toEqual(["a", "b"]);
+    cerca(r[1]!.aporteNecesario, 100, 10);
+    expect(r[0]!.aporteNecesario).toBeLessThan(r[1]!.aporteNecesario);
+    // El orden no depende del orden de entrada.
+    expect(compararAlternativas(meta, { teaReferencia: 0.2, inflacionMensual: 0 }, "2026-01-01", [...alternativas].reverse()).map((x) => x.alternativa.id)).toEqual(["a", "b"]);
+  });
+
+  it("resumen: suma por moneda, sin mezclar pesos con dólares", () => {
+    const contexto = { teaReferencia: 0, inflacionMensual: 0 };
+    const base: Meta = { id: "x", nombre: "X", moneda: "ARS", objetivo: 1200, fechaObjetivo: "2027-01-01", aporteMensual: 100, teaManual: null, creada: "2026-01-01", aportes: [], ajustes: [] };
+    const metas: Meta[] = [
+      { ...base, id: "1", aportes: [aporte("2026-01-01", 600, dolares)] },
+      { ...base, id: "2", aportes: [aporte("2026-01-01", 1200, dolares)] },
+      { ...base, id: "3", moneda: "USD", aportes: [aporte("2026-01-01", 100, dolares)] },
+    ];
+    const r = resumenMetas(metas.map((meta) => ({ meta, estado: evaluarMeta(meta, contexto, "2026-01-01") })));
+    expect(r.map((x) => x.moneda)).toEqual(["ARS", "USD"]);
+    expect(r[0]).toMatchObject({ cantidad: 2, saldo: 1800, cumplidas: 1 });
+    // Solo la meta sin cumplir suma: le faltan 600 en 12 meses = 50 por mes.
+    cerca(r[0]!.aporteNecesario, 50, 10);
+    expect(r[1]).toMatchObject({ cantidad: 1, saldo: 100 });
   });
 });

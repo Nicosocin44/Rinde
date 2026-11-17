@@ -1,5 +1,5 @@
 import { d, CERO, UNO, DIAS_ANIO, type Dec, type Num } from "./decimal";
-import { diasEntre, type FechaISO } from "./fechas";
+import { diasEntre, sumarDias, type FechaISO } from "./fechas";
 import { tasaPorPeriodo, valorFuturo } from "./interes-compuesto";
 
 /**
@@ -26,6 +26,8 @@ export type InstrumentoMeta = {
   tipo: string;
   /** TEA como fracción, la del día en que se cargó. */
   tea: number;
+  /** Plazo en días desde que se pone la plata (plazo fijo, LECAP, caución). null o ausente = sin vencimiento. */
+  plazoDias?: number | null;
 };
 
 /** Plata que entra (monto > 0) o sale (monto < 0) de un instrumento de la meta. */
@@ -310,4 +312,136 @@ export function evaluarMeta(meta: Meta, contexto: ContextoMeta, hoy: FechaISO): 
     controlPendiente: !cumplida && diasDesdeMovimiento >= DIAS_ENTRE_CONTROLES,
     comparacion,
   };
+}
+
+// ───────────────────────── Más datos de cada meta ─────────────────────────
+
+export type PuntoCamino = {
+  /** Meses desde hoy. */
+  mes: number;
+  /** Lo que la persona puso hasta ese mes (lo de hoy + los aportes futuros). */
+  puesto: number;
+  /** Lo que rindió todo (puede ser negativo si hoy vale menos de lo que puso). */
+  ganancia: number;
+  total: number;
+  /** Lo que va a costar la meta ese mes (sube con la inflación en pesos). */
+  objetivo: number;
+};
+
+/**
+ * El camino mes a mes desde hoy: lo invertido crece a su tasa, lo nuevo a la del plan, y el objetivo con la inflación.
+ * Es la serie del gráfico "Camino a la meta".
+ */
+export function caminoMeta(p: {
+  saldo: Num;
+  aportado: Num;
+  aporte: Num;
+  tasaSaldo: Num;
+  tasaAporte: Num;
+  objetivoHoy: Num;
+  inflacionMensual: Num;
+  meses: number;
+}): PuntoCamino[] {
+  const iS = UNO.plus(p.tasaSaldo);
+  const iA = UNO.plus(p.tasaAporte);
+  const pi = UNO.plus(p.inflacionMensual);
+  const a = d(p.aporte);
+  let invertido = d(p.saldo);
+  let nuevo = CERO;
+  let objetivo = d(p.objetivoHoy);
+  const serie: PuntoCamino[] = [];
+  for (let n = 0; n <= Math.max(0, p.meses); n++) {
+    if (n > 0) {
+      invertido = invertido.mul(iS);
+      nuevo = nuevo.mul(iA).plus(a);
+      objetivo = objetivo.mul(pi);
+    }
+    const total = invertido.plus(nuevo);
+    const puesto = d(p.aportado).plus(a.mul(n));
+    serie.push({ mes: n, puesto: puesto.toNumber(), ganancia: total.minus(puesto).toNumber(), total: total.toNumber(), objetivo: objetivo.toNumber() });
+  }
+  return serie;
+}
+
+/** Primer mes del camino en que se llega al 25, 50, 75 y 100 % del objetivo de ese mes (null si no llega en la serie). */
+export function hitosMeta(camino: PuntoCamino[]): { proporcion: number; mes: number | null }[] {
+  return [0.25, 0.5, 0.75, 1].map((proporcion) => ({
+    proporcion,
+    mes: camino.find((p) => p.objetivo > 0 && d(p.total).gte(d(p.objetivo).mul(proporcion)))?.mes ?? null,
+  }));
+}
+
+/**
+ * Rendimiento real: cuánto valen hoy, en pesos de hoy, los pesos que la persona fue poniendo (cada aporte actualizado
+ * por el IPC desde su fecha), contra lo que tiene. `nivel` devuelve el índice de precios a una fecha.
+ * null si falta el índice para alguna fecha.
+ */
+export function rendimientoReal(aportes: AporteMeta[], saldo: Num, hoy: FechaISO, nivel: (fecha: FechaISO) => Num | null): { aportadoHoy: number; gananciaReal: number } | null {
+  const nivelHoy = nivel(hoy);
+  if (nivelHoy === null || aportes.length === 0) return null;
+  let aportadoHoy = CERO;
+  for (const a of aportes) {
+    const n = nivel(a.fecha);
+    if (n === null || d(n).lte(0)) return null;
+    aportadoHoy = aportadoHoy.plus(d(a.monto).mul(nivelHoy).div(n));
+  }
+  return { aportadoHoy: aportadoHoy.toNumber(), gananciaReal: d(saldo).minus(aportadoHoy).toNumber() };
+}
+
+export type Vencimiento = { aporteId: string; instrumento: InstrumentoMeta; monto: number; vence: FechaISO; vencido: boolean };
+
+/** Plazos fijos, LECAPs y cauciones de la meta que vencen desde hace `diasAtras` en adelante, por fecha. */
+export function vencimientos(aportes: AporteMeta[], hoy: FechaISO, diasAtras = 30): Vencimiento[] {
+  return aportes
+    .filter((a) => a.monto > 0 && (a.instrumento.plazoDias ?? 0) > 0)
+    .map((a) => {
+      const vence = sumarDias(a.fecha, a.instrumento.plazoDias!);
+      return { aporteId: a.id, instrumento: a.instrumento, monto: a.monto, vence, vencido: vence < hoy };
+    })
+    .filter((v) => diasEntre(v.vence, hoy) <= diasAtras)
+    .sort((a, b) => a.vence.localeCompare(b.vence));
+}
+
+export type AlternativaMeta = { id: string; nombre: string; tipo: string; tea: number };
+
+/**
+ * "¿Dónde rinde más lo que pongas cada mes?": el plan de la meta con la TEA de cada alternativa.
+ * REGLA DE NEUTRALIDAD: ordena solo por TEA (desempate por nombre). No conoce a los afiliados.
+ */
+export function compararAlternativas(meta: Meta, contexto: ContextoMeta, hoy: FechaISO, alternativas: AlternativaMeta[]) {
+  return [...alternativas]
+    .sort((a, b) => b.tea - a.tea || a.nombre.localeCompare(b.nombre, "es"))
+    .map((alternativa) => {
+      const e = evaluarMeta({ ...meta, teaManual: alternativa.tea }, contexto, hoy);
+      return { alternativa, aporteNecesario: e.aporteNecesario, mesesConTuAporte: e.mesesConTuAporte, llegaEnFecha: e.llegaEnFecha };
+    });
+}
+
+export type ResumenMetas = {
+  moneda: Meta["moneda"];
+  cantidad: number;
+  saldo: number;
+  aportado: number;
+  ganancia: number;
+  /** Suma de lo que hay que poner por mes en las metas sin cumplir. */
+  aporteNecesario: number;
+  cumplidas: number;
+  pendientes: number;
+};
+
+/** Totales de todas las metas, separados por moneda (no se suman pesos con dólares). */
+export function resumenMetas(lista: { meta: Meta; estado: EstadoMeta }[]): ResumenMetas[] {
+  const porMoneda = new Map<Meta["moneda"], ResumenMetas>();
+  for (const { meta, estado: e } of lista) {
+    const r = porMoneda.get(meta.moneda) ?? { moneda: meta.moneda, cantidad: 0, saldo: 0, aportado: 0, ganancia: 0, aporteNecesario: 0, cumplidas: 0, pendientes: 0 };
+    r.cantidad += 1;
+    r.saldo = d(r.saldo).plus(e.saldo).toNumber();
+    r.aportado = d(r.aportado).plus(e.aportado).toNumber();
+    r.ganancia = d(r.ganancia).plus(e.ganancia).toNumber();
+    if (!e.cumplida) r.aporteNecesario = d(r.aporteNecesario).plus(e.aporteNecesario).toNumber();
+    if (e.cumplida) r.cumplidas += 1;
+    if (e.controlPendiente) r.pendientes += 1;
+    porMoneda.set(meta.moneda, r);
+  }
+  return [...porMoneda.values()].sort((a, b) => (a.moneda === "ARS" ? -1 : b.moneda === "ARS" ? 1 : 0));
 }

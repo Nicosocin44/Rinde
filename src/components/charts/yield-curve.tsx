@@ -8,7 +8,7 @@ import { useAncho } from "@/lib/use-ancho";
 import { cn } from "@/lib/cn";
 import { conMargen, escalaLineal, ticksLindos } from "./escalas";
 
-export type PuntoCurva = { id: string; x: number; y: number; etiqueta: string; fechaX?: string };
+export type PuntoCurva = { id: string; x: number; y: number; etiqueta: string; fechaX?: string; color?: string };
 
 /**
  * Curva de rendimiento: puntos de 6 px + curva ajustada suave, con el ticker visible al hacer hover.
@@ -26,9 +26,12 @@ export function YieldCurve({
   formatoX,
   etiquetaEjeX = "días",
   className,
+  ajustesExtra = [],
 }: {
   puntos: PuntoCurva[];
   ajuste: { x: number; y: number }[];
+  /** Curvas adicionales (por ejemplo, bonos ley NY y ley local), cada una con su color. */
+  ajustesExtra?: { puntos: { x: number; y: number }[]; color: string }[];
   seleccionado?: string | null;
   onSeleccionar?: (id: string | null) => void;
   alto?: number;
@@ -46,7 +49,7 @@ export function YieldCurve({
 
   const m = mini ? { t: 22, r: 12, b: 12, l: 12 } : { t: 28, r: 48, b: 28, l: 8 };
   const xs = puntos.map((p) => p.x);
-  const ys = [...puntos.map((p) => p.y), ...ajuste.map((p) => p.y)];
+  const ys = [...puntos.map((p) => p.y), ...ajuste.map((p) => p.y), ...ajustesExtra.flatMap((a) => a.puntos.map((p) => p.y))];
   const dx = conMargen([Math.min(...xs), Math.max(...xs)], 0.06);
   const dy = conMargen([Math.min(...ys), Math.max(...ys)], mini ? 0.25 : 0.18);
   const x = escalaLineal(dx, [m.l, ancho - m.r]);
@@ -100,6 +103,26 @@ export function YieldCurve({
           />
         )}
 
+        {ajustesExtra.map((a, k) => {
+          const d = line<{ x: number; y: number }>()
+            .x((p) => x(p.x))
+            .y((p) => y(p.y))
+            .curve(curveMonotoneX)(a.puntos);
+          return d ? (
+            <motion.path
+              key={k}
+              d={d}
+              fill="none"
+              stroke={a.color}
+              strokeOpacity={0.55}
+              strokeWidth={1.5}
+              initial={{ pathLength: 0 }}
+              animate={enVista ? { pathLength: 1 } : { pathLength: 0 }}
+              transition={{ duration: 0.6, ease: [0.2, 0, 0, 1] }}
+            />
+          ) : null;
+        })}
+
         {puntos.map((p, i) => {
           const activo = p.id === seleccionado;
           return (
@@ -112,7 +135,7 @@ export function YieldCurve({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: enVista ? 1 : 0, r: activo ? 6 : 3.5 }}
                 transition={{ opacity: { delay: 0.35 + i * 0.03, duration: 0.2 }, r: { type: "spring", stiffness: 420, damping: 30 } }}
-                fill={activo ? "var(--c-accent)" : "var(--c-text)"}
+                fill={activo ? "var(--c-accent)" : (p.color ?? "var(--c-text)")}
                 stroke="var(--c-surface)"
                 strokeWidth={activo ? 2 : 1.5}
               />

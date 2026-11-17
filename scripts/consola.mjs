@@ -9,7 +9,7 @@ let actual = "";
 pagina.on("console", (m) => {
   if (m.type() === "error" || m.type() === "warning") console.log(`[${actual}] ${m.type()}: ${m.text().slice(0, Number(process.env.LARGO ?? 600))}`);
 });
-pagina.on("pageerror", (e) => console.log(`[${actual}] pageerror: ${e.message.slice(0, 600)}`));
+pagina.on("pageerror", (e) => console.log(`[${actual}] pageerror: ${e.message.slice(0, Number(process.env.LARGO ?? 600))}`));
 for (const r of rutas) {
   actual = r;
   await pagina.goto(BASE + r, { waitUntil: "networkidle", timeout: 90_000 });

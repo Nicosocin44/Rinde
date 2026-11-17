@@ -98,6 +98,23 @@ function resolver3(m: number[][], v: number[]): [number, number, number] | null 
 }
 
 /**
+ * Ajuste y = a + b·ln(x): monótono y robusto con pocos puntos (curva de bonos por ley, 5 o 6 bonos).
+ */
+export function ajusteLogaritmico(puntos: { x: number; y: number }[]): ((x: number) => number) | null {
+  const validos = puntos.filter((p) => p.x > 0 && Number.isFinite(p.y));
+  const n = validos.length;
+  if (n < 2) return null;
+  const lx = validos.map((p) => Math.log(p.x));
+  const mx = lx.reduce((s, v) => s + v, 0) / n;
+  const my = validos.reduce((s, p) => s + p.y, 0) / n;
+  const sxx = lx.reduce((s, v) => s + (v - mx) ** 2, 0);
+  if (sxx === 0) return null;
+  const b = lx.reduce((s, v, i) => s + (v - mx) * (validos[i]!.y - my), 0) / sxx;
+  const a = my - b * mx;
+  return (x: number) => a + b * Math.log(x);
+}
+
+/**
  * Ajuste por mínimos cuadrados de y = a + b·x + c·x² (respaldo de la curva cuando hay solo 3 puntos).
  * Devuelve la función ajustada y el desvío estándar de los residuos. Con menos de 3 puntos, null.
  */

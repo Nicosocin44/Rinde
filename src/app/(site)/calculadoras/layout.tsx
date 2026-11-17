@@ -4,7 +4,7 @@ import { SectionTabs } from "@/components/shell/section-tabs";
 export default function CalculadorasLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <PageHeader titulo="Calculadoras" bajada="Hacé la cuenta con tus números. Cada resultado se puede compartir y cada fórmula está a la vista." />
+      <PageHeader tema="sol" titulo="Calculadoras" bajada="Hacé la cuenta con tus números. Cada resultado se puede compartir y cada fórmula está a la vista." />
       <SectionTabs
         etiqueta="Calculadoras"
         solapas={[

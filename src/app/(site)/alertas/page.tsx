@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Alertas", description: "Avisos cuand
 export default function Alertas() {
   return (
     <>
-      <PageHeader titulo="Te avisamos antes" bajada="Del dólar, de las tasas y de lo que vence en tu cartera. Sin mirar la pantalla todo el día." className="mb-10 lg:mb-14" />
+      <PageHeader tema="tinta" titulo="Te avisamos antes" bajada="Del dólar, de las tasas y de lo que vence en tu cartera. Sin mirar la pantalla todo el día." className="mb-10 lg:mb-14" />
       <Suspense fallback={null}>
         <AlertasVista />
       </Suspense>

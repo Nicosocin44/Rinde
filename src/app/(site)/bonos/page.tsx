@@ -31,7 +31,7 @@ export default async function BonosPage() {
   const [r, m] = await Promise.all([obtenerBonos(), obtenerMacro()]);
   return (
     <>
-      <PageHeader titulo="Bonos y ONs" bajada="Los bonos del Estado en dólares, con cuánto rinden si los tenés hasta el final y qué cobrás en cada fecha." />
+      <PageHeader tema="tinta" titulo="Bonos y ONs" bajada="Los bonos del Estado en dólares, con cuánto rinden si los tenés hasta el final y qué cobrás en cada fecha." />
       <div className="pt-10 lg:pt-14">
         {!r.ok ? (
           <ErrorState titulo="No pudimos traer los bonos." detalle={r.error} />

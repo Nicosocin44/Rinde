@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/shell/page-header";
 export default function DolarLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <PageHeader titulo="Dólar hoy" bajada="Todos los dólares, dónde conviene comprarlos según la app y cuánto te cuesta de verdad." />
+      <PageHeader tema="verde" titulo="Dólar hoy" bajada="Todos los dólares, dónde conviene comprarlos según la app y cuánto te cuesta de verdad." />
       <SectionTabs
         etiqueta="Secciones del dólar"
         solapas={[

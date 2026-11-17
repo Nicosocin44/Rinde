@@ -4,7 +4,7 @@ import { SectionTabs } from "@/components/shell/section-tabs";
 export default function MercadosLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <PageHeader titulo="Mercados" bajada="CEDEARs, acciones argentinas y cripto, con el dólar implícito de cada uno." />
+      <PageHeader tema="tinta" titulo="Mercados" bajada="CEDEARs, acciones argentinas y cripto, con el dólar implícito de cada uno." />
       <SectionTabs
         etiqueta="Mercados"
         solapas={[

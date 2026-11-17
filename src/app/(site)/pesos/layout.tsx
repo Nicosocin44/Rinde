@@ -4,7 +4,7 @@ import { SectionTabs } from "@/components/shell/section-tabs";
 export default function PesosLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <PageHeader titulo="Tus pesos" bajada="Dónde rinden más, comparados en la misma tasa. Billeteras, fondos, plazos fijos, caución y letras del Tesoro." />
+      <PageHeader tema="celeste" titulo="Tus pesos" bajada="Dónde rinden más, comparados en la misma tasa. Billeteras, fondos, plazos fijos, caución y letras del Tesoro." />
       <SectionTabs
         etiqueta="Secciones de pesos"
         solapas={[

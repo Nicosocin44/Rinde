@@ -1,7 +1,7 @@
 import { CARTERA_DEMO } from "@data/samples/cartera-demo";
 import { hoyAR } from "@/lib/calculos/fechas";
 import { tasaPorPeriodo, valorFuturo, valorReal } from "@/lib/calculos/interes-compuesto";
-import { gananciaPeriodo } from "@/lib/calculos/tasas";
+import { gananciaConTope } from "@/lib/calculos/tasas";
 import { describir, evaluar, type Alerta } from "@/lib/alertas/evaluar";
 import { analizarCartera, valorEn } from "@/lib/cartera/valuacion";
 import { obtenerCotizaciones, obtenerMacro, obtenerPesos, obtenerRanking } from "@/lib/data";
@@ -9,6 +9,7 @@ import { cargarPreciosCartera } from "@/lib/data/servicios/cartera";
 import { fotoMercado } from "@/lib/data/servicios/alertas";
 import type { Cargado, EstadoDato, OpcionPesos, TipoOpcionPesos } from "@/lib/data/types";
 import { ordenarProveedores } from "@/lib/rankings/dolar";
+import { mejorDeCadaTipo, mejoresDelDia } from "@/lib/rankings/pesos";
 
 /**
  * Todo lo que necesita la historia de la home, calculado en el servidor con los mismos servicios y
@@ -17,8 +18,8 @@ import { ordenarProveedores } from "@/lib/rankings/dolar";
  */
 
 export type Pieza = { id: string; nombre: string; tipo: string; proveedorId?: string; valorArs: number | null };
-/** `ganancia30`: lo que ganás en 30 días con $ 1.000.000 a esa TEA (decimal.js). */
-export type OpcionTasa = { id: string; nombre: string; tipo: TipoOpcionPesos; etiquetaTipo: string; tea: number; tna: number; plazoDias: number | null; ganancia30: number };
+/** `ganancia30`: lo que ganás en 30 días con $ 1.000.000 a esa TEA, respetando el tope (decimal.js). */
+export type OpcionTasa = { id: string; nombre: string; tipo: TipoOpcionPesos; etiquetaTipo: string; tea: number; tna: number; plazoDias: number | null; tope: number | null; ganancia30: number };
 export type ProveedorPrecio = { id: string; nombre: string; compras: number; costoMil: number };
 export type PuntoComparacion = { fecha: string; cartera: number; inflacion: number; dolar: number };
 export type AlertaDemo = { id: string; texto: string; cumplida: boolean; actual: string | null };
@@ -44,27 +45,18 @@ const ETIQUETA_TIPO: Record<TipoOpcionPesos, string> = {
   lecap: "Letra del Tesoro",
 };
 
-/** La mejor opción comparable de cada tipo, por TEA. Neutral: no lee nada de afiliados. */
-function mejorPorTipo(opciones: OpcionPesos[]): OpcionTasa[] {
-  const mejor = new Map<TipoOpcionPesos, OpcionPesos>();
-  for (const o of opciones) {
-    if (o.condicionEspecial) continue;
-    if (o.tipo === "plazo_fijo" && o.plazoDias !== 30) continue;
-    const actual = mejor.get(o.tipo);
-    if (!actual || o.tea > actual.tea) mejor.set(o.tipo, o);
-  }
-  return [...mejor.values()]
-    .sort((a, b) => b.tea - a.tea)
-    .map((o) => ({
-      id: o.id,
-      nombre: o.nombre,
-      tipo: o.tipo,
-      etiquetaTipo: ETIQUETA_TIPO[o.tipo],
-      tea: o.tea,
-      tna: o.tna,
-      plazoDias: o.plazoDias,
-      ganancia30: gananciaPeriodo(1_000_000, o.tea, 30).toNumber(),
-    }));
+function aTasa(o: OpcionPesos): OpcionTasa {
+  return {
+    id: o.id,
+    nombre: o.nombre,
+    tipo: o.tipo,
+    etiquetaTipo: ETIQUETA_TIPO[o.tipo],
+    tea: o.tea,
+    tna: o.tna,
+    plazoDias: o.plazoDias,
+    tope: o.tope,
+    ganancia30: gananciaConTope(1_000_000, o.tea, 30, o.tope).toNumber(),
+  };
 }
 
 function estadoDe<T>(c: Cargado<T>): { estado: EstadoDato | "error"; asOf: string | null } {
@@ -94,7 +86,7 @@ export async function armarHistoria(): Promise<DatosHistoria> {
   });
 
   // 2 · La respuesta: la mejor de cada tipo, en la misma tasa (TEA).
-  const tasas = pesos.ok ? { opciones: mejorPorTipo(pesos.data.opciones), asOf: pesos.asOf, estado: pesos.status } : null;
+  const tasas = pesos.ok ? { opciones: mejorDeCadaTipo(pesos.data.opciones).map(aTasa), asOf: pesos.asOf, estado: pesos.status } : null;
 
   // 3 · El dólar: precio final para comprar, de más barato a más caro.
   const dolar = ranking.ok
@@ -152,8 +144,9 @@ export async function armarHistoria(): Promise<DatosHistoria> {
       })
     : null;
 
-  // 6 · Macizo o hueco: $ 1.000.000 quieto contra puesto en la mejor tasa sin plazo, 12 meses, con la inflación del REM.
-  const mejorLiquida = tasas?.opciones.filter((o) => o.plazoDias === null).sort((a, b) => b.tea - a.tea)[0] ?? null;
+  // 6 · Macizo o hueco: $ 1.000.000 quieto contra puesto en la mejor tasa sin plazo (la misma regla que la
+  // portada: liquidez inmediata y sin tope por debajo del monto), 12 meses, con la inflación del REM.
+  const mejorLiquida = pesos.ok ? mejoresDelDia(pesos.data.opciones).liquida : null;
   const inflacion = macro.ok ? macro.data.rem?.proximos12m ?? null : null;
   const monto = 1_000_000;
   const macizo =

@@ -3,7 +3,7 @@
 import { Escena } from "@/components/escenas/escena";
 import { FreshnessBadge } from "@/components/ui/frescura";
 import type { EstadoDato } from "@/lib/data/types";
-import { pesos, porcentaje, plazo } from "@/lib/format";
+import { pesos, pesosCompacto, porcentaje, plazo } from "@/lib/format";
 import type { OpcionTasa } from "./datos";
 
 /** Orden en el que aparecen antes de compararse: el mismo desorden de la escena anterior. */
@@ -74,7 +74,8 @@ export function EscenaRespuesta({ opciones, asOf, estado }: { opciones: OpcionTa
                     )}
                   </p>
                   <p className="truncate text-[13px] text-text-2 md:text-[14px]">
-                    {o.etiquetaTipo} · {o.plazoDias === null ? "sin plazo" : plazo(o.plazoDias)}
+                    {o.etiquetaTipo}, {o.plazoDias === null ? "sin plazo" : `a ${plazo(o.plazoDias)}`}
+                    {o.tope !== null && <>, hasta {pesosCompacto(o.tope)}</>}
                   </p>
                 </div>
                 <div className="col-span-2 row-start-2 h-2.5 overflow-hidden rounded-full bg-tinta/10 md:col-span-1 md:col-start-2 md:row-start-1 md:h-3.5">

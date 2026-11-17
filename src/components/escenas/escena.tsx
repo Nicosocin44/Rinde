@@ -21,6 +21,7 @@ export function Escena({
   alto = 220,
   altoMobile,
   comienzo = "top 70%",
+  fluidoMobile = false,
   armar,
   className,
   claseInterior,
@@ -33,6 +34,8 @@ export function Escena({
   altoMobile?: number;
   /** Cuándo empieza la línea de tiempo (sintaxis de ScrollTrigger). */
   comienzo?: string;
+  /** En mobile, sin interior pegajoso: el contenido fluye y la coreografía se reparte en su recorrido. */
+  fluidoMobile?: boolean;
   armar: (tl: gsap.core.Timeline, q: Selector, esMobile: boolean) => void;
   className?: string;
   claseInterior?: string;
@@ -47,9 +50,10 @@ export function Escena({
       const mm = gsap.matchMedia();
       mm.add({ movimiento: CON_MOVIMIENTO, mobile: "(max-width: 767px)" }, (ctx) => {
         if (!ctx.conditions?.movimiento) return;
+        const fluido = fluidoMobile && Boolean(ctx.conditions.mobile);
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: el, start: comienzo, end: "bottom bottom", scrub: 0.6, invalidateOnRefresh: true },
+          scrollTrigger: { trigger: el, start: fluido ? "top 85%" : comienzo, end: fluido ? "bottom 75%" : "bottom bottom", scrub: 0.6, invalidateOnRefresh: true },
         });
         armar(tl, q, Boolean(ctx.conditions.mobile));
         // Completa hasta 1: el resto del recorrido es la pausa.
@@ -68,10 +72,10 @@ export function Escena({
       ref={ref}
       id={id}
       aria-label={etiqueta}
-      className={cn("escena h-(--alto-m) md:h-(--alto)", className)}
+      className={cn("escena h-(--alto-m) md:h-(--alto)", fluidoMobile && "max-md:h-auto", className)}
       style={{ "--alto": `${alto}svh`, "--alto-m": `${altoMobile ?? alto}svh` } as React.CSSProperties}
     >
-      <div className={cn("escena-interior", claseInterior)}>{children}</div>
+      <div className={cn("escena-interior", fluidoMobile && "max-md:static max-md:h-auto max-md:overflow-visible", claseInterior)}>{children}</div>
     </section>
   );
 }

@@ -22,7 +22,7 @@ const ITEMS = [
   { href: "/cartera", label: "Cartera", Icono: ChartPie },
 ] as const;
 
-/** Barra inferior mobile, translúcida: Inicio, Dólar, Pesos, Cartera y Más. Íconos de 22 px, trazo 1,5, label de 10 px. */
+/** Barra inferior mobile: una cápsula flotante. La sección activa se marca con una píldora tinta/papel. */
 export function BottomBar() {
   const pathname = usePathname();
   const { masAbierto, setMasAbierto } = useShell();
@@ -34,10 +34,10 @@ export function BottomBar() {
     <>
       <nav
         aria-label="Principal"
-        className="vidrio fixed inset-x-0 bottom-0 z-40 border-t border-border pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className="fixed inset-x-3 bottom-[calc(10px+env(safe-area-inset-bottom))] z-40 lg:hidden"
         style={{ viewTransitionName: "barra-inferior" }}
       >
-        <ul className="mx-auto grid h-[60px] max-w-md grid-cols-5">
+        <ul className="vidrio mx-auto grid h-16 max-w-md grid-cols-5 rounded-full border border-border p-1.5 shadow-(--shadow-overlay)">
           {ITEMS.map(({ href, label, Icono }) => {
             const activo = rutaActiva(pathname, href);
             return (
@@ -45,10 +45,13 @@ export function BottomBar() {
                 <Link
                   href={href}
                   aria-current={activo ? "page" : undefined}
-                  className={cn("presionable flex h-full flex-col items-center justify-center gap-1 transition-colors", activo ? "text-text" : "text-text-3")}
+                  className={cn(
+                    "presionable flex h-full flex-col items-center justify-center gap-0.5 rounded-full transition-colors duration-(--duration-short)",
+                    activo ? "bg-inverse text-on-inverse" : "text-text-3",
+                  )}
                 >
-                  <Icono className="size-[22px]" strokeWidth={1.5} />
-                  <span className="text-[10px] leading-none font-medium">{label}</span>
+                  <Icono className="size-5" strokeWidth={1.75} />
+                  <span className="text-[10px] leading-none font-semibold">{label}</span>
                 </Link>
               </li>
             );
@@ -58,10 +61,13 @@ export function BottomBar() {
               type="button"
               onClick={() => setMasAbierto(true)}
               aria-haspopup="dialog"
-              className={cn("presionable flex h-full w-full flex-col items-center justify-center gap-1 transition-colors", enMas ? "text-text" : "text-text-3")}
+              className={cn(
+                "presionable flex h-full w-full flex-col items-center justify-center gap-0.5 rounded-full transition-colors duration-(--duration-short)",
+                enMas ? "bg-inverse text-on-inverse" : "text-text-3",
+              )}
             >
-              <LayoutGrid className="size-[22px]" strokeWidth={1.5} />
-              <span className="text-[10px] leading-none font-medium">Más</span>
+              <LayoutGrid className="size-5" strokeWidth={1.75} />
+              <span className="text-[10px] leading-none font-semibold">Más</span>
             </button>
           </li>
         </ul>

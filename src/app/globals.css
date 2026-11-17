@@ -9,77 +9,115 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @custom-variant pro (&:where([data-modo="pro"], [data-modo="pro"] *));
 
-/* ─────────── Light: el modo "día" ─────────── */
+/* ─────────── Light: "papel" ─────────── */
 :root,
 [data-theme="light"] {
   color-scheme: light;
-  --c-bg: #f7f7f4;
-  --c-bg-raised: #f0f0ec;
+  --c-bg: #f4f3ef;
+  --c-bg-raised: #ecebe5;
   --c-surface: #ffffff;
-  --c-surface-2: #f2f2ee;
-  --c-border: rgba(12, 14, 18, 0.08);
-  --c-border-strong: rgba(12, 14, 18, 0.16);
-  --c-text: #0e1013;
-  --c-text-2: #565c66;
-  /* #6B717A en DISENO.md; oscurecido a #61676F para pasar AA (4,5:1) también sobre accent-soft. */
-  --c-text-3: #61676f;
+  --c-surface-2: #eae9e3;
+  --c-border: rgba(17, 17, 15, 0.09);
+  --c-border-strong: rgba(17, 17, 15, 0.18);
+  --c-text: #111110;
+  --c-text-2: #4d4c48;
+  --c-text-3: #66655f;
   --c-accent: #1766c2;
-  --c-accent-soft: rgba(23, 102, 194, 0.08);
+  --c-accent-soft: rgba(23, 102, 194, 0.1);
   --c-gain: #0b7a48;
   --c-loss: #c2353a;
   --c-warn: #8f5e07;
-  --c-inverse: #0e1013;
-  --c-on-inverse: #f7f7f4;
-  --c-glass: rgba(247, 247, 244, 0.72);
-  --c-scrim: rgba(14, 16, 19, 0.28);
+  --c-inverse: #111110;
+  --c-on-inverse: #f4f3ef;
+  --c-glass: rgba(244, 243, 239, 0.72);
+  --c-scrim: rgba(17, 17, 16, 0.32);
   --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --shadow-overlay: 0 24px 64px -16px rgba(14, 16, 19, 0.22), 0 2px 8px rgba(14, 16, 19, 0.06);
-  --shadow-thumb: 0 1px 2px rgba(14, 16, 19, 0.12), 0 0 0 0.5px rgba(14, 16, 19, 0.06);
-  --skeleton-a: rgba(12, 14, 18, 0.04);
-  --skeleton-b: rgba(12, 14, 18, 0.08);
+  --shadow-overlay: 0 30px 80px -20px rgba(17, 17, 16, 0.28), 0 2px 8px rgba(17, 17, 16, 0.06);
+  --shadow-thumb: 0 1px 3px rgba(17, 17, 16, 0.14), 0 0 0 0.5px rgba(17, 17, 16, 0.06);
+  --skeleton-a: rgba(17, 17, 15, 0.05);
+  --skeleton-b: rgba(17, 17, 15, 0.1);
 
-  /* Paleta categórica apagada (distribución de cartera) */
-  --cat-1: #4f8fd1;
-  --cat-2: #5f9f7a;
-  --cat-3: #b8904f;
-  --cat-4: #827cc0;
-  --cat-5: #c46d5a;
-  --cat-6: #7d838c;
+  --cat-1: #3d8fe0;
+  --cat-2: #2bb673;
+  --cat-3: #e5a800;
+  --cat-4: #9a83f0;
+  --cat-5: #ef7350;
+  --cat-6: #8a8984;
 }
 
-/* ─────────── Dark: el modo "vitrina" ─────────── */
+/* ─────────── Dark: "tinta" ─────────── */
 [data-theme="dark"] {
   color-scheme: dark;
-  --c-bg: #0b0c0e;
-  --c-bg-raised: #111215;
-  --c-surface: #16181c;
-  --c-surface-2: #1d2025;
-  --c-border: rgba(255, 255, 255, 0.07);
-  --c-border-strong: rgba(255, 255, 255, 0.13);
-  --c-text: #f3f4f6;
-  --c-text-2: #a3a8b1;
-  --c-text-3: #80868f;
-  --c-accent: #7ab8f5;
-  --c-accent-soft: rgba(122, 184, 245, 0.12);
-  --c-gain: #3ccb7f;
-  --c-loss: #f2555a;
-  --c-warn: #f2b544;
-  --c-inverse: #f3f4f6;
-  --c-on-inverse: #0b0c0e;
-  --c-glass: rgba(11, 12, 14, 0.7);
-  --c-scrim: rgba(0, 0, 0, 0.5);
-  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  --shadow-overlay: 0 24px 80px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  --shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.08);
-  --skeleton-a: rgba(255, 255, 255, 0.04);
-  --skeleton-b: rgba(255, 255, 255, 0.08);
+  --c-bg: #0d0d0c;
+  --c-bg-raised: #141413;
+  --c-surface: #191917;
+  --c-surface-2: #23231f;
+  --c-border: rgba(255, 255, 255, 0.08);
+  --c-border-strong: rgba(255, 255, 255, 0.16);
+  --c-text: #f4f3ef;
+  --c-text-2: #aaa9a2;
+  --c-text-3: #8b8a84;
+  --c-accent: #7dc1ff;
+  --c-accent-soft: rgba(125, 193, 255, 0.14);
+  --c-gain: #3ddc84;
+  --c-loss: #ff5a5f;
+  --c-warn: #ffc93c;
+  --c-inverse: #f4f3ef;
+  --c-on-inverse: #0d0d0c;
+  --c-glass: rgba(20, 20, 19, 0.72);
+  --c-scrim: rgba(0, 0, 0, 0.55);
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-overlay: 0 30px 90px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --shadow-thumb: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  --skeleton-a: rgba(255, 255, 255, 0.05);
+  --skeleton-b: rgba(255, 255, 255, 0.1);
 
-  --cat-1: #7ab8f5;
-  --cat-2: #8cc5a3;
-  --cat-3: #d8b47a;
-  --cat-4: #a9a3d9;
-  --cat-5: #d98c7a;
-  --cat-6: #8a9099;
+  --cat-1: #7dc1ff;
+  --cat-2: #3ddc84;
+  --cat-3: #ffc93c;
+  --cat-4: #c3b1ff;
+  --cat-5: #ff8a65;
+  --cat-6: #8b8a84;
+}
+
+/* Lámina invertida: una sección oscura en el tema claro y clara en el oscuro (como Moahu). */
+.inversa {
+  color-scheme: dark;
+  --c-bg: #0d0d0c;
+  --c-bg-raised: #141413;
+  --c-surface: #191917;
+  --c-surface-2: #23231f;
+  --c-border: rgba(255, 255, 255, 0.08);
+  --c-border-strong: rgba(255, 255, 255, 0.16);
+  --c-text: #f4f3ef;
+  --c-text-2: #aaa9a2;
+  --c-text-3: #8b8a84;
+  --c-accent: #7dc1ff;
+  --c-accent-soft: rgba(125, 193, 255, 0.14);
+  --c-gain: #3ddc84;
+  --c-loss: #ff5a5f;
+  --c-inverse: #f4f3ef;
+  --c-on-inverse: #0d0d0c;
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+[data-theme="dark"] .inversa {
+  color-scheme: light;
+  --c-bg: #f4f3ef;
+  --c-bg-raised: #ecebe5;
+  --c-surface: #ffffff;
+  --c-surface-2: #eae9e3;
+  --c-border: rgba(17, 17, 15, 0.09);
+  --c-border-strong: rgba(17, 17, 15, 0.18);
+  --c-text: #111110;
+  --c-text-2: #4d4c48;
+  --c-text-3: #66655f;
+  --c-accent: #1766c2;
+  --c-accent-soft: rgba(23, 102, 194, 0.1);
+  --c-gain: #0b7a48;
+  --c-loss: #c2353a;
+  --c-inverse: #111110;
+  --c-on-inverse: #f4f3ef;
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 /* Colores alternativos para daltonismo: suba en azul, baja en naranja. */
@@ -112,21 +150,32 @@
   --color-glass: var(--c-glass);
   --color-scrim: var(--c-scrim);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-satoshi), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 @theme {
-  /* Radios: 6 chips · 10 botones/inputs · 14 cards · 20 paneles y sheets */
-  --radius-chip: 6px;
-  --radius-control: 10px;
-  --radius-card: 14px;
-  --radius-panel: 20px;
+  /* Colores de sección: plenos, iguales en los dos temas. Siempre con texto tinta encima. */
+  --color-tinta: #111110;
+  --color-papel: #f4f3ef;
+  --color-sol: #ffc93c;
+  --color-verde: #3ddc84;
+  --color-celeste: #7dc1ff;
+  --color-coral: #ff8a65;
+  --color-lila: #c3b1ff;
+
+  /* Radios: píldora para botones y chips; 16 inputs; 24 cards; 32 paneles; 44 láminas */
+  --radius-chip: 999px;
+  --radius-control: 16px;
+  --radius-card: 24px;
+  --radius-panel: 32px;
+  --radius-lamina: 44px;
 
   /* Motion */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-rebote: cubic-bezier(0.34, 1.4, 0.64, 1);
   --duration-micro: 120ms;
   --duration-short: 200ms;
   --duration-base: 320ms;
@@ -134,8 +183,8 @@
 
   --breakpoint-xs: 23.4375rem; /* 375 */
 
-  --animate-pulso: pulso 2s var(--ease-standard) infinite;
-  --animate-brillo: brillo 1.6s ease-in-out infinite;
+  --animate-pulso: pulso 1.4s var(--ease-standard) 1 both;
+  --animate-brillo: brillo 900ms ease-out 1 both;
 
   @keyframes pulso {
     0% { transform: scale(1); opacity: 0.55; }
@@ -156,6 +205,8 @@
     font-feature-settings: "cv11", "ss01";
   }
   body {
+    /* La cinta inclinada sobresale: se recorta sin romper los elementos pegajosos. */
+    overflow-x: clip;
     background: var(--c-bg);
     color: var(--c-text);
     font-family: var(--font-sans);
@@ -190,70 +241,83 @@
 /* ─────────── Tipografía (DISENO §4) ─────────── */
 @utility text-display {
   font-family: var(--font-display);
-  font-size: 44px;
-  line-height: 48px;
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  @media (width >= 64rem) {
-    font-size: 72px;
-    line-height: 76px;
+  font-size: 54px;
+  line-height: 0.95;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  @media (width >= 48rem) {
+    font-size: 88px;
+  }
+  @media (width >= 80rem) {
+    font-size: 120px;
+    line-height: 0.92;
   }
 }
 @utility text-h1 {
   font-family: var(--font-display);
-  font-size: 34px;
-  line-height: 38px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font-size: 44px;
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: -0.042em;
   @media (width >= 64rem) {
-    font-size: 48px;
-    line-height: 52px;
+    font-size: 76px;
+    line-height: 0.95;
   }
 }
 @utility text-h2 {
   font-family: var(--font-display);
-  font-size: 26px;
-  line-height: 32px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-size: 34px;
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.035em;
   @media (width >= 64rem) {
-    font-size: 32px;
-    line-height: 38px;
+    font-size: 54px;
+    line-height: 1;
   }
 }
 @utility text-h3 {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 22px;
   line-height: 26px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   @media (width >= 64rem) {
-    font-size: 22px;
-    line-height: 28px;
+    font-size: 26px;
+    line-height: 30px;
   }
 }
 @utility text-hero {
-  font-size: 44px;
-  line-height: 44px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
+  font-family: var(--font-display);
+  font-size: 60px;
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: -0.045em;
   font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum", "cv11", "ss01";
   @media (width >= 64rem) {
-    font-size: 64px;
-    line-height: 64px;
+    font-size: 96px;
+    line-height: 0.92;
+  }
+}
+@utility text-gigante {
+  font-family: var(--font-display);
+  font-size: 96px;
+  line-height: 0.85;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  @media (width >= 64rem) {
+    font-size: 200px;
   }
 }
 @utility text-cifra {
-  font-size: 28px;
-  line-height: 32px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.035em;
   font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum", "cv11", "ss01";
   @media (width >= 64rem) {
-    font-size: 32px;
-    line-height: 36px;
+    font-size: 40px;
   }
 }
 @utility text-chico {
@@ -261,11 +325,10 @@
   line-height: 20px;
 }
 @utility text-label {
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  letter-spacing: 0.005em;
   color: var(--c-text-3);
 }
 @utility text-micro {
@@ -296,7 +359,7 @@
 }
 @utility contenedor {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1320px;
   margin-inline: auto;
   padding-inline: 16px;
   @media (width >= 48rem) {
@@ -394,6 +457,121 @@
 .rinde-slider:focus-visible::-webkit-slider-thumb {
   outline: 2px solid var(--c-accent);
   outline-offset: 2px;
+}
+
+/* ─────────── Composición y movimiento (rediseño "Moahu") ─────────── */
+
+/* Sale del contenedor hasta el borde de la pantalla (mobile) o hasta el margen (desktop). */
+@utility sangrado {
+  margin-inline: -16px;
+  padding-inline: 16px;
+  @media (width >= 48rem) {
+    margin-inline: -40px;
+    padding-inline: 40px;
+  }
+  @media (width >= 90rem) {
+    margin-inline: -64px;
+    padding-inline: 64px;
+  }
+}
+
+/* Sale del contenedor hasta casi el borde de la ventana (deja un hueco chico), y el contenido
+   interior queda alineado con el resto de la página. */
+@utility a-lo-ancho {
+  --hueco: 8px;
+  margin-inline: calc(50% - 50vw + var(--hueco));
+  padding-inline: calc(50vw - 50% - var(--hueco));
+  @media (width >= 64rem) {
+    --hueco: 14px;
+  }
+}
+
+/* Lámina: sección con esquinas muy redondeadas que se apoya sobre la anterior. */
+.lamina {
+  position: relative;
+  border-radius: var(--radius-lamina) var(--radius-lamina) 0 0;
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+.lamina-cerrada {
+  border-radius: var(--radius-lamina);
+}
+
+/* Texto sobre tarjetas de color pleno: todo pasa a tinta. */
+.sobre-color {
+  --c-text: #111110;
+  --c-text-2: rgba(17, 17, 16, 0.8);
+  --c-text-3: rgba(17, 17, 16, 0.72);
+  --c-border: rgba(17, 17, 16, 0.14);
+  --c-border-strong: rgba(17, 17, 16, 0.28);
+  --c-surface: rgba(255, 255, 255, 0.35);
+  --c-surface-2: rgba(17, 17, 16, 0.08);
+  --c-accent: #111110;
+  --c-accent-soft: rgba(17, 17, 16, 0.08);
+  --c-gain: #0a5c35;
+  --c-loss: #9c1d22;
+  --c-inverse: #111110;
+  --c-on-inverse: #f4f3ef;
+  color: var(--c-text);
+}
+
+/* Cinta de cotizaciones: la mueve el scroll (GSAP), no un loop. Solo layout acá. */
+.cinta {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Titular que sube palabra por palabra al cargar (el único movimiento que no dispara el usuario). */
+.palabra {
+  display: inline-block;
+  animation: palabra 900ms var(--ease-standard) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+}
+/* Arranca apenas visible (no en 0) para que el navegador cuente el titular como pintado desde el
+   primer cuadro: si arrancara invisible, el LCP esperaría a que termine la animación. */
+@keyframes palabra {
+  from { opacity: 0.02; transform: translateY(0.45em) rotate(2deg); }
+}
+/* Lo que entra después del titular, escalonado con --i. */
+.llegar {
+  animation: llegar 800ms var(--ease-standard) both;
+  animation-delay: calc(var(--i, 0) * 60ms + 420ms);
+}
+@keyframes llegar {
+  from { opacity: 0; transform: translateY(28px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .palabra, .llegar { animation: fundido 120ms linear both !important; }
+}
+@keyframes fundido {
+  from { opacity: 0; }
+}
+
+/* Escenas de la home: contenedor alto + interior pegajoso. GSAP lee el progreso del contenedor. */
+.escena {
+  position: relative;
+  /* Fuera de pantalla, el navegador no calcula su layout ni la pinta (menos trabajo al cargar). */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100svh;
+}
+.escena-interior {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+/* Con movimiento reducido no hay coreografía: cada escena ocupa solo su alto natural. */
+@media (prefers-reduced-motion: reduce) {
+  .escena {
+    height: auto !important;
+  }
+  .escena-interior {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
 }
 
 /* Texto largo (metodología, aprender, legal). */

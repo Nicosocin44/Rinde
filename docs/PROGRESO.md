@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 17/11/2026, al cierre de la sesión 1.
+> Escrito para los fundadores. Última actualización: martes 17/11/2026, rediseño de la home (rama `rediseno`).
 
 ## Cómo verlo
 
@@ -12,6 +12,69 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Rediseño: la home como una historia (rama `rediseno`, sin subir todavía)
+
+> Pedido de los fundadores (17/11/2026): llevar el diseño al nivel de moahu.com.ar, Apple y Whoop. La parte de producto de la home se cuenta como una historia por secciones, con una idea por sección y componentes reales en modo demo.
+
+**Estado:** la home completa está hecha.
+- La portada, la cinta, el comparador y las 8 escenas, cada una con dos rondas de revisión con capturas en 375 y 1440 px, dark y light.
+- El resto de las páginas ya tiene la base nueva (tipografías, colores, botones, nav y solapas), pero todavía no su rediseño de composición.
+- Capturas y videos de cada escena: `.shots/narrativa/`.
+
+**Regla de movimiento:** cada animación empieza con algo que pasa (scrolleás o tocás), llega a su lugar y frena. Nada se mueve en loop. Está en DISENO.md §7.
+
+**Técnica:**
+- GSAP + ScrollTrigger para todo lo atado al scroll, y Motion para los botones y las solapas.
+- Lenis (scroll suave) solo en la home.
+- Las escenas son HTML de servidor. Un "director" de cliente muy chico les conecta la coreografía, y GSAP se carga cuando el navegador queda libre, así no compite con la carga de la portada.
+- Las escenas largas usan `position: sticky` dentro de un contenedor alto (no el *pin* de GSAP), así no hay saltos de layout.
+- Solo se animan `transform` y `opacity`, y las escenas fuera de pantalla no se dibujan (`content-visibility`).
+- Con movimiento reducido, cada escena ocupa su alto natural y aparece con un fundido de 120 ms.
+- Sin JavaScript se ve todo en su estado final.
+
+### Cómo se lee la home de arriba a abajo
+
+| # | Sección | La idea en una frase | Qué componente real usa | Coreografía (qué entra, desde dónde, cuándo y dónde frena) |
+|---|---|---|---|---|
+| 0 | **La foto de hoy** (portada) | "Hoy el dólar MEP está a **$ X** y tu plata rinde hasta **Y %** sin plazo." El titular es la respuesta | Cotización MEP y mejor tasa sin plazo (en píldoras verde y celeste dentro del titular), oficial y brecha, tasa a 30 días y "qué pasó hoy" (todo real) | **Al cargar:** el titular sube palabra por palabra (70 ms entre palabras) y después llegan los tres datos de abajo. Frena. **Es lo único que se mueve sin que hagas nada.** |
+| — | **Cinta de cotizaciones** | Los números del día, de un vistazo | Las cotizaciones reales | Banda amarilla inclinada. **Solo avanza mientras scrolleás** y frena cuando parás. |
+| — | **¿Dónde rinde más tu plata?** | La herramienta | El comparador real | Sin coreografía: es una herramienta y tiene que estar quieta y lista. Va sobre una lámina invertida. |
+| 1 | **El problema** | "Tu plata está repartida y no sabés si rinde." | 6 lugares de la cartera de ejemplo con su monto (rotulado) | Las fichas **entran desde los bordes** a posiciones desordenadas e inclinadas, con un "¿rinde?" donde iría la tasa. Al 50 % aparece el total. Frena. |
+| 2 | **La respuesta** | "Todas las tasas, en la misma cuenta." | La mejor opción real de cada tipo, en TEA y en pesos por mes | Lámina celeste. Las barras **crecen hasta su TEA en desorden** y los números cuentan con ellas. Al 42 % las filas **se reordenan de mayor a menor** y aparece "La más alta". Frena al 75 %. |
+| 3 | **El dólar** | "El dólar más barato, app por app." | Ranking real de USD con comisiones | Cada proveedor **llega desde la derecha a su precio** sobre una regla común. Después aparece la guía del más barato y el ahorro contra el más caro **se arma número por número**. Frena. |
+| 4 | **Tu cartera** | "¿Le ganaste a la inflación y al dólar?" | Análisis real de la cartera de ejemplo contra IPC y MEP, en base 100 (rotulado) | Lámina lila. Las tres líneas **se dibujan de izquierda a derecha**; al 52 % aparecen las etiquetas y al 62 % los veredictos, que cuentan hasta su valor. Frena. |
+| 5 | **Alertas** | "Te avisamos antes." | 3 alertas de ejemplo evaluadas con los datos de este momento | Las alertas **bajan una por una como notificaciones** (al 14, 30 y 46 %). La que se cumple hoy es verde y marca "Se cumple hoy". Frena. |
+| 6 | **Macizo o hueco** | "La misma plata, dos destinos." | $ 1.000.000 por 12 meses: quieta contra puesta en la mejor tasa sin plazo, con la inflación del REM, en pesos de hoy (decimal.js) | Lámina invertida. **El scroll es el tiempo:** el contador va del mes 0 al 12; la "quieta" es un contorno que se achica (hueca) y la "puesta a rendir" se llena (maciza). La línea punteada marca lo que pusiste. Frena en el mes 12 con la diferencia. |
+| 7 | **Confianza** | "Ningún número sin su fuente." | Las 6 fuentes con su estado real ahora (En vivo, Demorado, Cierre, Sin respuesta) | Las filas entran escalonadas y cada una prende su estado. Al lado, tres reglas. En mobile la escena fluye (no es pegajosa) porque no entra en una pantalla. Frena. |
+| 8 | **Cierre** | "Empezá gratis." | Botones reales a Cartera y Alertas | Lámina sol que **sube** mientras entra; el titular gigante se asienta (0,9 → 1) y llegan los botones. Frena. |
+
+**Qué salió de la home:** el bento "El mercado de un vistazo". Su contenido quedó repartido en la historia: el ranking del dólar en la 3 y las tasas en la 2. El riesgo país y los eventos siguen en /bonos y en la barra de pulso.
+
+### Rendimiento medido (build de producción, 17/11/2026)
+
+- **Scroll en un celular medio** (CPU 4× más lenta, 375 px): **60 fps de mediana en las 8 escenas**. Entre el 2 % y el 8 % de los cuadros tarda más de 33 ms, y "La respuesta" es la más pesada porque cuenta cinco números a la vez. Hay que confirmarlo en un teléfono real: el navegador de prueba dibuja sin placa de video.
+- **Saltos de layout (CLS): 0** en todas las escenas (0,0006 en "La respuesta").
+- **Lighthouse mobile** (tres corridas): performance **76–81**, accesibilidad **100**, LCP simulado 3,7–3,9 s, TBT 330–490 ms. Antes del rediseño era 76–84: quedamos igual. El LCP sigue arriba de la meta de 2,5 s. Lo que más pesa es hidratar el comparador y la nav en un celular lento.
+
+### Decisiones del rediseño para revisar
+
+1. **El titular de la portada es la respuesta del día con los números adentro**, en vez de un eslogan. Si el dato falla, la frase se adapta ("mirá dónde rinde más tu plata").
+2. **Cada color de tarjeta tiene un tema fijo:** verde para el dólar, celeste para las tasas, lila para la cartera, sol para lo del día y coral para la inflación. Está en DISENO.md §1 y §3.
+3. **Las etiquetas dejaron de ir en mayúsculas** en todo el sitio, y no resaltamos una sola palabra del titular en otro color. Son dos marcas típicas de "hecho por IA".
+4. **El punto "En vivo" late una sola vez** y queda quieto, por la regla de nada en loop.
+5. **"Macizo o hueco" compara contra la plata quieta en la cuenta** (0 %), no contra el plazo fijo. Es el caso más común y el más claro.
+6. **La escena de la cartera muestra el resultado real de la cartera de ejemplo aunque pierda contra la inflación** (hoy: −11,6 %). No la maquillamos.
+7. **"Empezá gratis":** hoy no hay planes pagos activos. Si se lanza un plan pago, hay que revisar ese texto.
+8. **El plugin `frontend-design` no se pudo instalar desde la terminal** (la CLI responde "not found" aunque está en el catálogo). Seguí la guía de la skill leyéndola directo del catálogo descargado.
+
+### Lo que falta del rediseño
+
+- Llevar la composición nueva (láminas, titulares grandes, colores con tema) a /dolar, /pesos, /bonos, /mercados, /calculadoras y /cartera.
+- Actualizar las imágenes de compartir (OG) a Bricolage.
+- Probar el scroll en un teléfono real (Android de gama media) y bajar el LCP: diferir la hidratación del comparador.
+
+---
+
 ## Qué está hecho, por sección
 
 Todo funciona con **datos reales** salvo donde se indica. Cada número muestra su fuente, su hora y su estado.
@@ -19,7 +82,7 @@ Todo funciona con **datos reales** salvo donde se indica. Cada número muestra s
 | Sección | Qué tiene | Estado |
 |---|---|---|
 | **Cimientos** | Sistema de diseño (colores dark y light, tipografía, movimiento), barra superior con punto que se desliza, barra de pulso (MEP, oficial, riesgo país, mejor tasa, se actualiza cada minuto), barra inferior en el celular, buscador ⌘K, modo Simple/Pro, tema claro/oscuro, colores alternativos para daltonismo. Página **/sistema** para revisar cada pieza. | ✅ |
-| **Inicio** | "La foto de hoy" (dólar MEP, dónde rinde más hoy, qué pasó hoy en dos líneas), **"¿Dónde rinde más tu plata?"** con monto, plazo y liquidez, el mercado de un vistazo (ranking del dólar, curva de LECAPs, inflación con expectativa del REM, riesgo país, próximos eventos) y la sección de producto con la cartera y las alertas de ejemplo calculadas con datos de hoy. | ✅ |
+| **Inicio** | "La foto de hoy" (dólar MEP, dónde rinde más hoy, qué pasó hoy en dos líneas), **"¿Dónde rinde más tu plata?"** con monto, plazo y liquidez, y la historia del producto en 8 escenas (ver "Rediseño" arriba). | ✅ |
 | **Dólar** | Cotizaciones de los 7 dólares con variación, brecha y gráfico de 30 días · **Dónde comprar** USD, USDT y USDC: ranking por precio final con comisiones, costo de USD 1.000, filtro 24/7, orden para comprar/vender/spread, precios con condiciones especiales aparte y cotizaciones excluidas con su motivo · **Histórico** de MEP, oficial y blue (hasta 2018) y de la brecha, con el número del encabezado que sigue al cursor · **Conversor** con todos los tipos de cambio. | ✅ |
 | **Pesos** | **Comparador** de 120+ opciones normalizadas a TEA, sin duplicados · **Plazo fijo** por banco a 30/60/90/180/365 días · **Billeteras y cuentas** (incluye Mercado Pago y Ualá a través de sus fondos) · **Fondos money market** con la TNA calculada desde la cuotaparte · **Caución** · **LECAPs y BONCAPs** con curva, tabla sincronizada y calculadora por letra · **Simulador** a N días con escenarios de inflación (baja, REM, alta) y resultado real. | ✅ (CER pendiente) |
 | **Calculadoras** | Interés compuesto, jubilación y metas (en dólares, con la regla del 4 % explicada), plazo fijo, conversor TNA/TEA/TEM e inflación ("¿cuánto valen hoy?"). Todas con **"Compartir resultado"** (genera una imagen para historias y WhatsApp) y link a la fórmula. | ✅ (falta "sueldo en dólares") |
@@ -101,7 +164,7 @@ Capturas finales: `.shots/final/` (29 pantallas × celular y escritorio × dark 
 7. **Valor final de las LECAPs estimado** desde el precio y la TEA de ArgentinaDatos (y rotulado), hasta cargar los comunicados oficiales.
 8. **Bonos:** tomamos el precio de la especie en dólares (D) como precio sucio (con cupón corrido), que es como cotiza BYMA. Solo cargué los bonos del canje 2020; faltan AN29, AO27/28/29 y BOPREAL.
 9. **Cartera:** las billeteras y plazos fijos se valúan con la TNA que carga la persona (estimación); las letras sin histórico, a la tasa de compra. Si un CEDEAR tuvo cambio de ratio, usamos solo la historia posterior.
-10. **Diseño:** el wordmark son tres barras crecientes + "Rinde" en Satoshi; el gris terciario del modo claro lo oscurecí (de `#6B717A` a `#61676F`) para cumplir contraste, y lo actualicé en DISENO.md.
+10. **Diseño** (reemplazado por el rediseño del 17/11: ahora el wordmark es "rinde" en minúscula con un punto sol, en Bricolage Grotesque): el wordmark eran tres barras crecientes + "Rinde" en Satoshi; el gris terciario del modo claro lo oscurecí (de `#6B717A` a `#61676F`) para cumplir contraste, y lo actualicé en DISENO.md.
 
 Otras más chicas: el límite gratuito de alertas es 3 activas; los escenarios de inflación del simulador son REM, REM − 0,5 pp y REM + 1 pp por mes; la fuente Inter usa `display: optional` (en una primera visita muy lenta puede verse la fuente de respaldo); el service worker es propio (no Serwist) para no complicar el build; TypeScript 6 en vez de 7 porque el linter todavía no soporta la 7.
 

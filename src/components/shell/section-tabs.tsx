@@ -24,11 +24,11 @@ export function SectionTabs({ solapas, etiqueta }: { solapas: Solapa[]; etiqueta
   }, [activa]);
 
   return (
-    <div className="vidrio sticky top-[52px] z-30 -mx-4 mt-6 px-4 py-2 md:-mx-10 md:px-10 lg:top-16 lg:mx-0 lg:mt-8 lg:bg-transparent lg:px-0 lg:backdrop-filter-none">
+    <div className="sticky top-[76px] z-30 -mx-4 mt-8 px-4 py-1 md:-mx-10 md:px-10 lg:top-[92px] lg:mx-0 lg:mt-10 lg:px-0">
       <LayoutGroup id={`tabs-${etiqueta}`}>
         <nav aria-label={etiqueta}>
           <div ref={contenedor} className="sin-scrollbar -mx-1 overflow-x-auto px-1">
-            <ul className="inline-flex h-9 min-w-max items-stretch rounded-(--radius-control) bg-surface-2 p-[3px]">
+            <ul className="inline-flex h-12 min-w-max items-stretch rounded-full bg-surface-2 p-1">
               {solapas.map((s) => {
                 const activo = s.href === activa;
                 return (
@@ -38,14 +38,14 @@ export function SectionTabs({ solapas, etiqueta }: { solapas: Solapa[]; etiqueta
                       scroll={false}
                       aria-current={activo ? "page" : undefined}
                       className={cn(
-                        "relative z-0 flex items-center rounded-[7px] px-3.5 text-[14px] font-medium whitespace-nowrap transition-colors duration-(--duration-short)",
-                        activo ? "text-text" : "text-text-2 hover:text-text",
+                        "relative z-0 flex items-center rounded-full px-5 text-[15px] font-semibold whitespace-nowrap transition-colors duration-(--duration-short)",
+                        activo ? "text-on-inverse" : "text-text-2 hover:text-text",
                       )}
                     >
                       {activo && (
                         <m.span
                           layoutId="thumb-solapa"
-                          className="absolute inset-0 -z-10 rounded-[7px] bg-surface shadow-(--shadow-thumb) dark:bg-[#2a2e35]"
+                          className="absolute inset-0 -z-10 rounded-full bg-inverse"
                           transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}
                         />
                       )}

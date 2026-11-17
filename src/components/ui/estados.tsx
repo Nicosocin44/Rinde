@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** Skeleton con la misma forma que el contenido final; brillo muy sutil (4 % → 8 %). Nunca spinners. */
+/** Skeleton con la misma forma que el contenido final; un único fundido al aparecer y después quieto (regla: nada en loop). Nunca spinners. */
 export function Skeleton({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return <span aria-hidden className={cn("block rounded-(--radius-chip) animate-brillo bg-(--skeleton-a)", className)} style={style} />;
 }

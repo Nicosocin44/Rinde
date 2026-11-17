@@ -93,6 +93,21 @@ export function ordenarOpciones(opciones: OpcionPesos[], criterio: CriterioPesos
   });
 }
 
+/**
+ * La mejor opción comparable de cada tipo (billetera, cuenta, fondo, plazo fijo a 30 días, caución, LECAP),
+ * ordenadas por TEA. Es el ranking de la historia de la home. Neutral: solo lee la tasa.
+ */
+export function mejorDeCadaTipo(opciones: OpcionPesos[]): OpcionPesos[] {
+  const mejor = new Map<OpcionPesos["tipo"], OpcionPesos>();
+  for (const o of opciones) {
+    if (o.condicionEspecial) continue;
+    if (o.tipo === "plazo_fijo" && o.plazoDias !== 30) continue;
+    const actual = mejor.get(o.tipo);
+    if (!actual || o.tea > actual.tea || (o.tea === actual.tea && o.nombre.localeCompare(actual.nombre, "es") < 0)) mejor.set(o.tipo, o);
+  }
+  return ordenarOpciones([...mejor.values()]);
+}
+
 /** Mejor opción con liquidez inmediata y mejor opción a ~30 días (para "La foto de hoy" y el pulso). */
 export function mejoresDelDia(opciones: OpcionPesos[]): { liquida: OpcionPesos | null; a30: OpcionPesos | null } {
   const comparables = opciones.filter((o) => !o.condicionEspecial);

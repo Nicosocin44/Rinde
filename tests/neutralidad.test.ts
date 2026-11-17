@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { ordenarProveedores, type CriterioDolar } from "@/lib/rankings/dolar";
-import { dondeRindeMas } from "@/lib/rankings/pesos";
+import { dondeRindeMas, mejorDeCadaTipo } from "@/lib/rankings/pesos";
 import type { OpcionPesos, ProveedorDolar } from "@/lib/data/types";
 
 /** 10. Ranking del dólar: el orden NO cambia al marcar un proveedor como afiliado. */
@@ -67,6 +67,39 @@ describe("10. neutralidad de los rankings", () => {
     const despues = dondeRindeMas(opciones.map((o) => (o.id === "x" ? { ...o, afiliado: true } : o)), consulta).map((r) => r.opcion.id);
     expect(despues).toEqual(antes);
     expect(antes).toEqual(["y", "z", "x"]);
+  });
+
+  it("la mejor de cada tipo (historia de la home): marcar afiliados no cambia ni la elegida ni el orden", () => {
+    const opcion = (id: string, tea: number, tipo: OpcionPesos["tipo"], extra: Partial<OpcionPesos> = {}): OpcionPesos => ({
+      id,
+      nombre: id,
+      proveedorId: id,
+      tipo,
+      tna: tea,
+      tea,
+      tem: tea / 12,
+      plazoDias: null,
+      liquidez: "inmediata",
+      tope: null,
+      condicionEspecial: false,
+      garantia: "Sin garantía",
+      riesgo: "bajo",
+      asOf: "2026-11-16",
+      fuenteId: "argentinadatos",
+      ...extra,
+    });
+    const opciones = [
+      opcion("b1", 0.2, "billetera"),
+      opcion("b2", 0.24, "billetera"),
+      opcion("f1", 0.23, "fci"),
+      opcion("p1", 0.27, "plazo_fijo", { plazoDias: 30, liquidez: "al_vencimiento" }),
+      opcion("p2", 0.3, "plazo_fijo", { plazoDias: 90, liquidez: "al_vencimiento" }),
+      opcion("c1", 0.4, "cuenta", { condicionEspecial: true }),
+    ];
+    const antes = mejorDeCadaTipo(opciones).map((o) => o.id);
+    expect(antes).toEqual(["p1", "b2", "f1"]);
+    const despues = mejorDeCadaTipo(opciones.map((o) => (o.id === "b1" || o.id === "f1" ? { ...o, afiliado: true, patrocinado: true, comision: 999 } : o))).map((o) => o.id);
+    expect(despues).toEqual(antes);
   });
 
   it("ningún archivo de rankings, datos, insights ni cálculos importa el registro de afiliados", () => {

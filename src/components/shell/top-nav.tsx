@@ -19,8 +19,8 @@ export function rutaActiva(pathname: string, href: string): boolean {
 }
 
 /**
- * Barra superior de 64 px, translúcida. La hairline inferior aparece recién al scrollear.
- * En mobile: wordmark (o el título compacto de la página) y buscador.
+ * Barra superior: una cápsula flotante y translúcida, separada de los bordes. La sección activa tiene una
+ * píldora de fondo que se desliza entre ítems. Al scrollear, la cápsula se compacta y gana sombra.
  */
 export function TopNav() {
   const pathname = usePathname();
@@ -30,28 +30,27 @@ export function TopNav() {
   const [scrolleado, setScrolleado] = useState(false);
 
   useEffect(() => {
-    const alScrollear = () => setScrolleado(window.scrollY > 4);
+    const alScrollear = () => setScrolleado(window.scrollY > 8);
     alScrollear();
     window.addEventListener("scroll", alScrollear, { passive: true });
     return () => window.removeEventListener("scroll", alScrollear);
   }, []);
 
   return (
-    <header
-      className={cn(
-        "vidrio sticky top-0 z-40 transition-[box-shadow] duration-(--duration-short)",
-        scrolleado ? "shadow-[inset_0_-1px_0_var(--c-border)]" : "shadow-[inset_0_-1px_0_transparent]",
-      )}
-      style={{ viewTransitionName: "barra-superior" }}
-    >
-      <div className="contenedor flex h-[52px] items-center justify-between gap-6 lg:h-16">
+    <header className="sticky top-0 z-40 px-3 pt-3 lg:px-6 lg:pt-4" style={{ viewTransitionName: "barra-superior" }}>
+      <div
+        className={cn(
+          "vidrio mx-auto flex max-w-[1240px] items-center justify-between gap-4 rounded-full border border-border pr-2 pl-5 transition-[height,box-shadow,background-color] duration-(--duration-base) ease-(--ease-standard)",
+          scrolleado ? "h-14 shadow-(--shadow-overlay)" : "h-14 lg:h-16",
+        )}
+      >
         <div className="relative flex min-w-0 flex-1 items-center lg:flex-none">
           <Wordmark className={cn("transition-opacity duration-(--duration-short) lg:opacity-100", tituloCompacto && "opacity-0 lg:opacity-100")} />
           {/* Título compacto estilo iOS: aparece cuando el título grande sale de pantalla (solo mobile). */}
           <span
             aria-hidden={!tituloCompacto}
             className={cn(
-              "pointer-events-none absolute inset-y-0 left-0 flex items-center truncate text-[17px] font-semibold tracking-[-0.01em] transition-[opacity,transform] duration-(--duration-short) lg:hidden",
+              "pointer-events-none absolute inset-y-0 left-0 flex items-center truncate font-display text-[18px] font-bold tracking-[-0.02em] transition-[opacity,transform] duration-(--duration-short) lg:hidden",
               tituloCompacto ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0",
             )}
           >
@@ -60,53 +59,53 @@ export function TopNav() {
         </div>
 
         {esDesktop && (
-        <nav aria-label="Principal" className="hidden lg:block">
-          <LayoutGroup id="nav">
-            <ul className="flex items-center gap-1">
-              {navPrincipal.map((item) => {
-                const activo = rutaActiva(pathname, item.href);
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      aria-current={activo ? "page" : undefined}
-                      className={cn(
-                        "relative flex h-10 items-center px-3 text-[14px] font-medium transition-colors duration-(--duration-micro)",
-                        activo ? "text-text" : "text-text-2 hover:text-text",
-                      )}
-                    >
-                      {item.label}
-                      {activo && (
-                        <m.span
-                          layoutId="punto-nav"
-                          className="absolute bottom-0.5 left-1/2 size-1 -translate-x-1/2 rounded-full bg-text"
-                          transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}
-                        />
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </LayoutGroup>
-        </nav>
+          <nav aria-label="Principal" className="hidden lg:block">
+            <LayoutGroup id="nav">
+              <ul className="flex items-center">
+                {navPrincipal.map((item) => {
+                  const activo = rutaActiva(pathname, item.href);
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        aria-current={activo ? "page" : undefined}
+                        className={cn(
+                          "relative z-0 flex h-10 items-center rounded-full px-4 text-[15px] font-medium transition-colors duration-(--duration-short)",
+                          activo ? "text-on-inverse" : "text-text-2 hover:text-text",
+                        )}
+                      >
+                        {activo && (
+                          <m.span
+                            layoutId="pildora-nav"
+                            className="absolute inset-0 -z-10 rounded-full bg-inverse"
+                            transition={{ type: "spring", stiffness: 420, damping: 34, mass: 1 }}
+                          />
+                        )}
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </LayoutGroup>
+          </nav>
         )}
 
-        <div className="flex items-center justify-end gap-1.5 lg:flex-1 lg:gap-2">
+        <div className="flex items-center justify-end gap-1 lg:flex-1 lg:gap-1.5">
           <button
             type="button"
             onClick={() => setPaletaAbierta(true)}
-            className="hidden h-9 items-center gap-2 rounded-(--radius-control) border border-border pr-1.5 pl-3 text-[13px] text-text-3 transition-colors hover:border-border-strong hover:text-text-2 xl:flex"
+            className="hidden h-10 items-center gap-2 rounded-full pr-2 pl-3.5 text-[14px] text-text-3 transition-colors hover:bg-surface-2 hover:text-text-2 xl:flex"
           >
             <Search className="size-[15px]" />
-            <span className="pr-6">Buscar</span>
-            <kbd className="rounded-[5px] border border-border bg-surface-2 px-1.5 py-0.5 font-sans text-[11px] text-text-3">⌘K</kbd>
+            <span className="pr-3">Buscar</span>
+            <kbd className="rounded-full bg-surface-2 px-2 py-0.5 font-sans text-[11px] text-text-3">⌘K</kbd>
           </button>
           <button
             type="button"
             aria-label="Buscar"
             onClick={() => setPaletaAbierta(true)}
-            className="inline-flex size-10 items-center justify-center rounded-(--radius-control) text-text-2 hover:bg-surface-2 hover:text-text xl:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-full text-text-2 hover:bg-surface-2 hover:text-text xl:hidden"
           >
             <Search className="size-[18px]" />
           </button>
@@ -117,7 +116,7 @@ export function TopNav() {
           )}
           <ToggleTema />
           <div className="hidden lg:block">
-            <ButtonLink href="/cartera" variante="primario" tamano="sm">
+            <ButtonLink href="/cartera" variante="primario" tamano="sm" flecha>
               Mi cartera
             </ButtonLink>
           </div>

@@ -4,6 +4,16 @@
 
 La idea en una línea: **calma con pulso.** Un fondo sereno y ordenado, donde los números están vivos. Como entrar a una tienda de Apple: nada grita, todo está en su lugar y cada detalle responde al tacto.
 
+> **Rediseño del 17/11/2026 (rama `rediseno`).** Los fundadores sintieron que la primera versión era "muy clásica de IA" y pidieron el nivel de moahu.com.ar, Apple y Whoop. Lo que cambia:
+> - **Tipografía con carácter:** Bricolage Grotesque para títulos y cifras, Instrument Sans para el texto (§4).
+> - **Láminas:** secciones con esquinas de 44 px que alternan papel y tinta.
+> - **Tarjetas de color pleno** con significado fijo (§3).
+> - **Botones en píldora** con relleno que sube al pasar el mouse.
+> - **Navegación en cápsula flotante.**
+> - **La home como una historia por escenas** (§7).
+>
+> Donde este documento y el rediseño se contradecían, ganó el rediseño y se corrigió acá.
+
 ---
 
 ## 0. La vara: qué tomamos de cada referente
@@ -22,7 +32,9 @@ La idea en una línea: **calma con pulso.** Un fondo sereno y ordenado, donde lo
 ## 1. Principios
 
 1. **Una pregunta, una respuesta grande.** Cada pantalla abre respondiendo algo concreto ("¿Dónde rinde más tu plata hoy?") con un número protagonista. El detalle vive abajo o a un click.
-2. **El color es información.** La interfaz es casi monocromática. El color aparece para decir algo: sube (verde), baja (rojo), atención (ámbar), selección y foco (celeste). Nada de color decorativo.
+2. **El color es información.** El texto y los datos son monocromáticos, y el color aparece para decir algo:
+   - **Señales chicas:** sube (verde), baja (rojo), atención (ámbar), selección y foco (celeste).
+   - **Tarjetas de color pleno:** cada color tiene un tema fijo en todo el sitio. Verde para el dólar, celeste para las tasas en pesos, sol para lo del día (cinta y cierre), coral para la inflación y lila para la cartera. El color de una tarjeta te dice de qué habla antes de leerla.
 3. **Los números son el héroe.** Cifras tabulares, alineadas, grandes y con buena tipografía. Una cifra bien compuesta vale más que cualquier ilustración.
 4. **Aire antes que bordes.** Se separa con espacio y jerarquía, no con cajas dentro de cajas. Los bordes son líneas finas (*hairlines*), casi invisibles.
 5. **Movimiento con propósito.** Toda animación explica algo: de dónde viene un panel, qué cambió, adónde fuiste. Corta, suave y nunca bloquea.
@@ -104,6 +116,28 @@ Los tokens se definen como CSS variables (`--color-*`) y se exponen en Tailwind 
 
 Los valores ya están verificados con contraste AA (≥ 4,5:1) para texto chico sobre `bg` y `surface`, en ambos modos. Si se ajusta un color, se vuelve a verificar.
 
+### Tokens vigentes desde el rediseño (17/11/2026)
+
+Reemplazan las tablas de arriba, que quedan como referencia histórica.
+
+| Token | Papel (light) | Tinta (dark) |
+|---|---|---|
+| `bg` | `#F4F3EF` | `#0D0D0C` |
+| `text` | `#111110` | `#F4F3EF` |
+| `text-3` | `#66655F` | — |
+| `accent` | `#1766C2` | `#7DC1FF` |
+| `gain` / `loss` / `warn` | — | `#3DDC84` / `#FF5A5F` / `#FFC93C` |
+
+**Colores plenos de tarjeta** (iguales en los dos temas, siempre con texto en tinta `#111110` vía `.sobre-color`):
+
+| Color | Valor | Tema |
+|---|---|---|
+| verde | `#3DDC84` | Dólar |
+| celeste | `#7DC1FF` | Tasas en pesos |
+| sol | `#FFC93C` | Lo del día (cinta, cierre) |
+| coral | `#FF8A65` | Inflación |
+| lila | `#C3B1FF` | Cartera |
+
 **Por qué celeste:** es un guiño argentino sutil, se distingue bien del verde y del rojo (no compite con suba y baja) y sobre grafito se ve premium.
 
 **Accesibilidad:** verificar contraste AA de cada combinación texto/fondo. Para daltonismo, el cambio nunca se comunica solo con color: siempre va con signo (+/−) o flecha (▲/▼). En ajustes hay una opción "colores alternativos" (azul/naranja).
@@ -120,27 +154,30 @@ Los valores ya están verificados con contraste AA (≥ 4,5:1) para texto chico 
 
 | Rol | Fuente | Notas |
 |---|---|---|
-| Display y títulos | **Satoshi** (Fontshare, licencia gratuita también para uso comercial; verificarla) | Self-hosted con `next/font/local`. Alternativa si no está disponible: **Hanken Grotesk** (Google Fonts) |
-| UI, cuerpo y **números** | **Inter** (variable) | Con `font-feature-settings: "tnum", "cv11", "ss01"` en todo lo numérico. `Inter Display` para cifras ≥ 40 px |
-| Mono (solo tickers y códigos) | **Geist Mono** o **JetBrains Mono** | Muy dosificado. No es la estética del sitio |
+| Display, títulos y **cifras** | **Bricolage Grotesque** (Google Fonts, OFL, vía `next/font`) | Grotesca con carácter, de trazo levemente irregular. Tiene cifras tabulares (`tnum`), que se verificaron. Se probó Poppins (la de Moahu) y se descartó porque no tiene cifras tabulares |
+| UI y cuerpo | **Instrument Sans** (Google Fonts, OFL) | Neutra y legible en 14–17 px. Contrasta con la display sin pelearse |
+| Mono (solo tickers y códigos) | **Geist Mono** | Muy dosificado. No es la estética del sitio |
 
-### Escala (desktop · mobile)
+### Escala (mobile · desktop)
 
-| Estilo | Tamaño / interlineado | Peso | Tracking |
+| Estilo | Tamaño | Peso | Tracking |
 |---|---|---|---|
-| Display | 72/76 · 44/48 | 600 | −0,035em |
-| H1 | 48/52 · 34/38 | 600 | −0,03em |
-| H2 | 32/38 · 26/32 | 600 | −0,02em |
-| H3 | 22/28 · 20/26 | 600 | −0,01em |
-| Cifra héroe | 64/64 · 44/44 | 500 | −0,03em, tabular |
-| Cifra card | 32/36 · 28/32 | 500 | −0,02em, tabular |
-| Cuerpo | 16/24 | 400 | 0 |
+| Display (portada) | 54 · 88 · 120 px | 800 | −0,045em |
+| H1 | 44 · 76 | 800 | −0,042em |
+| H2 | 34 · 54 | 800 | −0,035em |
+| H3 | 22 · 26 | 700 | −0,02em |
+| Cifra gigante (escenas) | 96 · 200 | 800 | −0,06em, tabular |
+| Cifra héroe | 60 · 96 | 700 | −0,045em, tabular |
+| Cifra card | 32 · 40 | 700 | −0,035em, tabular |
+| Cuerpo | 16/24 (17–21 en la portada) | 400 | 0 |
 | Chico | 14/20 | 400/500 | 0 |
-| Label | 12/16, **mayúsculas** | 500 | +0,06em, color `text-3` |
+| Label | 12/16, **en minúscula normal** (no mayúsculas) | 600 | +0,01em, color `text-3` |
 | Micro (fuente, hora) | 11/14 | 400 | +0,02em, `text-3` |
 
 **Reglas:**
-- Las cifras grandes van en peso 500, no 800. La elegancia está en el tamaño, no en el grosor.
+- Los títulos van en peso 800 con tracking negativo: el titular es parte del diseño, no un contenedor neutro.
+- **No se resalta una sola palabra del titular** con otro color o en itálica: es una de las marcas más claras de "hecho por IA".
+- **Las etiquetas no van en mayúsculas** ni hay etiquetas decorativas arriba de cada título. Si una etiqueta no informa algo, se saca.
 - Signo de moneda más chico y en `text-2`: `$` al 60 % del tamaño de la cifra, alineado arriba. Los decimales, en `text-2` también. Ejemplo: **1.584**<span>,99</span>.
 - Números siempre alineados a la derecha en tablas.
 - Formato `es-AR` en todos lados: `$ 1.234,56`, `24,5 %`, `+0,25 %`, `16 nov`, `hace 2 min`.
@@ -151,7 +188,8 @@ Los valores ya están verificados con contraste AA (≥ 4,5:1) para texto chico 
 
 - **Grilla:** 12 columnas, máximo 1280 px de contenido (1440 en tablas anchas), gutter de 24 px (16 en mobile), márgenes laterales de 24 / 40 / 64 px según el ancho.
 - **Escala de espacio:** 4, 8, 12, 16, 24, 32, 48, 64, 96, 128. Entre secciones grandes: 96–128 px en desktop.
-- **Radios:** 6 (chips, badges), 10 (botones, inputs), 14 (cards), 20 (paneles grandes, sheets). Nunca mezclar radios dentro de un mismo componente.
+- **Radios (la jerarquía se nota en el radio):** píldora completa (botones, chips, controles segmentados y nav), 16 (inputs), 24 (cards), 32 (tarjetas de color y paneles), 44 (láminas: secciones enteras de la home). Nunca mezclar radios dentro de un mismo componente.
+- **Láminas:** secciones de ancho casi completo (con un hueco de 8–14 px a los costados), con esquinas de 44 px, que alternan papel y tinta (`.inversa` invierte los tokens dentro de la lámina).
 - **Profundidad:** casi no hay sombras. Las cards se separan con `surface` sobre `bg` + hairline. En dark, un brillo interno de 1 px arriba (`inset 0 1px 0 rgba(255,255,255,0.04)`). Sombra real solo en overlays (popover, sheet, palette).
 - **Blur:** `backdrop-filter: blur(20px) saturate(160%)` solo en la nav, la barra inferior mobile y los overlays.
 
@@ -160,9 +198,9 @@ Los valores ya están verificados con contraste AA (≥ 4,5:1) para texto chico 
 ## 6. Navegación y layout
 
 ### Desktop
-- **Barra superior** de 64 px, translúcida. La hairline inferior aparece recién al scrollear.
-  - Izquierda: wordmark.
-  - Centro: Inicio · Dólar · Pesos · Bonos · Mercados · Calculadoras. El ítem activo se marca con texto `text` y un punto de 4 px debajo, que se **desliza** entre ítems (layout animation).
+- **Barra superior:** una cápsula flotante de 64 px, translúcida, separada 16 px del borde, que toma sombra al scrollear.
+  - Izquierda: wordmark en minúscula con un punto sol.
+  - Centro: Inicio · Dólar · Pesos · Bonos · Mercados · Calculadoras. El ítem activo es una píldora invertida que se **desliza** entre ítems (layout animation).
   - Derecha: buscador ⌘K, toggle Simple/Pro, tema, y el botón "Mi cartera" (primario).
 - **Barra de pulso** (debajo de la nav, 36 px, solo en desktop): MEP, oficial, riesgo país y la mejor tasa, con *number ticker*. **No es un marquee que se desplaza**: son cuatro valores quietos que se actualizan.
 - **Solapas de sección** (ej. /pesos): control segmentado tipo Apple, pegajoso (*sticky*) debajo de la nav, con indicador que se desliza.
@@ -189,6 +227,22 @@ Los valores ya están verificados con contraste AA (≥ 4,5:1) para texto chico 
 
 ## 7. Movimiento
 
+### La regla (no negociable, 17/11/2026)
+
+**Acción → llegada → pausa.** Nada se mueve en loop.
+- Cada animación arranca por algo que hace el usuario: scrollear, tocar, pasar el mouse o cargar la página.
+- Llega a su lugar y queda quieta.
+- Nada de efectos decorativos que no cuenten algo.
+
+Consecuencias concretas:
+- **Cinta de cotizaciones:** avanza solo mientras scrolleás y frena cuando parás. No es un marquee automático.
+- **Punto "En vivo":** late **una vez** cuando llega un dato nuevo y después queda quieto (antes latía cada 2 s).
+- **Prohibido:** elementos que flotan, gradientes que giran, brillos que recorren bordes y skeletons con barrido infinito. Los skeletons quedan quietos con opacidad fija.
+- **Herramientas:** todo lo atado al scroll se hace con **GSAP + ScrollTrigger**. Motion queda para las microinteracciones (botones, solapas, sheets, indicadores que se deslizan). **Lenis** (scroll suave) va solo en la home, nunca en tablas ni en la app.
+- **Escenas largas:** `position: sticky` dentro de un contenedor alto, con GSAP leyendo el progreso. No se usa `pin` de GSAP, para evitar saltos de layout. Solo se animan `transform` y `opacity`.
+- **Efectos pesados** (partículas, texturas, 3D), solo si cuentan algo, y en `<canvas>` (o OffscreenCanvas en un worker).
+- **`prefers-reduced-motion`:** todo pasa a fundidos simples de 120 ms, y las escenas aparecen ya armadas.
+
 ### Tokens
 
 | Token | Valor | Uso |
@@ -212,9 +266,9 @@ Los valores ya están verificados con contraste AA (≥ 4,5:1) para texto chico 
 4. **Card → detalle (elemento compartido):** al tocar la card del MEP en Inicio, la card se transforma en el encabezado de /dolar (View Transitions API, con Motion como fallback).
 5. **Dibujo de gráficos:** la primera vez que un gráfico entra en pantalla, la línea se dibuja en 600 ms (`pathLength`) y el relleno aparece después con un fundido.
 6. **Ranking que se reordena:** al cambiar "mejor para comprar" ↔ "mejor para vender", las filas se mueven a su nueva posición (FLIP / layout animation), no saltan.
-7. **Revelado al scrollear** (secciones de producto): fundido + 12 px hacia arriba, escalonado cada 40 ms. Una sola vez por elemento.
+7. **Escenas al scrollear** (la historia de la home): cada sección cuenta una idea, y el movimiento es parte del argumento (barras que crecen hasta su tasa, precios que llegan a su lugar en una regla, montos que se arman mes a mes). La narrativa y la coreografía de cada escena están en `docs/PROGRESO.md`. El fundido genérico de "aparecer" se usa poco: si todo aparece igual, nada se destaca.
 8. **Sheet y paleta ⌘K:** entrada con `spring-ui` desde abajo o con un escalado de 0,98 → 1, y el fondo se oscurece con blur.
-9. **Punto "En vivo":** un punto de 6 px con un halo que late suave cada 2 s. Nada más.
+9. **Punto "En vivo":** un punto de 6 px. Cuando llega un dato nuevo, el halo late una vez. Nada más.
 10. **Press:** los botones y cards táctiles bajan a `scale(0.98)` en 120 ms.
 
 ---
@@ -223,8 +277,8 @@ Los valores ya están verificados con contraste AA (≥ 4,5:1) para texto chico 
 
 | Componente | Especificación |
 |---|---|
-| **Button** | Primario: sólido con el color de texto invertido (blanco sobre grafito en dark, casi negro sobre papel en light), con forma de píldora. Secundario: `surface-2` + hairline. Fantasma: solo texto. Alturas 36 / 40 / 44 (mobile). Íconos de 16 px |
-| **SegmentedControl** | Contenedor `surface-2` con radio 10 y un "thumb" `surface` (o `text` invertido) que se desliza. Teclado: flechas |
+| **Button** | Píldora en Bricolage semibold, en alturas 40 / 48 / 56. Al pasar el mouse, un relleno sube desde abajo (primario: tinta → sol; sol: sol → tinta; secundario: borde → relleno invertido). Si lleva `flecha`, la flecha dentro de un círculo sale en diagonal y entra una nueva. Al presionar baja a `scale(0.97)` |
+| **SegmentedControl** | Riel en píldora `surface-2` y un "thumb" en píldora `inverse` que se desliza. Teclado: flechas |
 | **Card** | `surface` + hairline + radio 14 + padding 20/24. Sin sombra. Hover (si es clickeable): borde `border-strong` y press |
 | **Stat** | Label (mayúsculas, `text-3`) → cifra → delta + contexto en una línea → sparkline opcional |
 | **Delta** | `+0,25 %` con ▲ en `gain`, `−0,10 %` con ▼ en `loss`. Fondo `gain`/`loss` al 10 % solo en tablas |
@@ -267,6 +321,8 @@ Los valores ya están verificados con contraste AA (≥ 4,5:1) para texto chico 
 > Las cifras son ilustrativas. Siempre salen de los datos.
 
 ### Inicio (desktop)
+
+> Reemplazado el 17/11/2026: la home ahora es la portada ("la foto de hoy" en una frase), la cinta, el comparador y una historia en 8 escenas. La narrativa y la coreografía están en `docs/PROGRESO.md`. El wireframe de abajo queda como referencia histórica.
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ Rinde    Inicio  Dólar  Pesos  Bonos  Mercados  Calculadoras   ⌘K  Simple|Pro  [Mi cartera] │

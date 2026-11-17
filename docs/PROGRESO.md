@@ -70,7 +70,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 ### Segunda tanda (rama `rediseno-2`)
 
 - **Imágenes de compartir rediseñadas:** fondo tinta, wordmark nuevo y la cifra en una píldora del color de su tema. Aplica a Inicio, Dólar, Pesos y los resultados de las calculadoras.
-- **Encabezados de todas las secciones como láminas de color**, con el tema de cada una: dólar verde, pesos celeste, cartera lila, calculadoras sol; bonos, mercados y alertas en tinta.
+- **Encabezados de color en las demás páginas:** se probaron (láminas con el color de cada sección) y **se descartaron** por pedido de los fundadores. Las páginas internas quedan con su encabezado anterior.
 - **LCP:**
   - El LCP **real** medido en la home es **0,38–0,48 s**.
   - El de 3,5–3,7 s es la estimación de Lighthouse para un celular lento con 4G lenta.

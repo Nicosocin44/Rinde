@@ -75,7 +75,7 @@ export function SegmentedControl<T extends string>({
                 "relative z-0 flex items-center justify-center rounded-[7px] font-medium whitespace-nowrap",
                 ancho === "lleno" && "min-w-0 flex-1",
                 "transition-colors duration-(--duration-short) ease-(--ease-standard) focus-visible:outline-offset-0",
-                tamano === "sm" ? "px-2.5 text-[13px]" : "px-3.5 text-[14px]",
+                tamano === "sm" ? "px-2.5 text-[13px]" : ancho === "lleno" ? "px-2 text-[14px] sm:px-3.5" : "px-3.5 text-[14px]",
                 activo ? "text-text" : "text-text-2 hover:text-text",
               )}
             >

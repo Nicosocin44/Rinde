@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { RegistroSW } from "@/components/shell/registro-sw";
 import { site } from "@/config/site";
 import { SCRIPT_PREFERENCIAS } from "@/lib/preferencias";
 import "./globals.css";
@@ -37,7 +38,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Aplica tema y modo antes del primer pintado: sin parpadeo. */}
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_PREFERENCIAS }} />
       </head>
-      <body className="min-h-dvh">{children}</body>
+      <body className="min-h-dvh">
+        {children}
+        <RegistroSW />
+      </body>
     </html>
   );
 }

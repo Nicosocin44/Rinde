@@ -67,11 +67,21 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 7. **"Empezá gratis":** hoy no hay planes pagos activos. Si se lanza un plan pago, hay que revisar ese texto.
 8. **El plugin `frontend-design` no se pudo instalar desde la terminal** (la CLI responde "not found" aunque está en el catálogo). Seguí la guía de la skill leyéndola directo del catálogo descargado.
 
+### Segunda tanda (rama `rediseno-2`)
+
+- **Imágenes de compartir rediseñadas:** fondo tinta, wordmark nuevo y la cifra en una píldora del color de su tema. Aplica a Inicio, Dólar, Pesos y los resultados de las calculadoras.
+- **Encabezados de todas las secciones como láminas de color**, con el tema de cada una: dólar verde, pesos celeste, cartera lila, calculadoras sol; bonos, mercados y alertas en tinta.
+- **LCP:**
+  - El LCP **real** medido en la home es **0,38–0,48 s**.
+  - El de 3,5–3,7 s es la estimación de Lighthouse para un celular lento con 4G lenta.
+  - Se probó apagar la animación del titular y no cambia nada.
+  - Se achicaron los datos que viajan al comparador; performance quedó en 76–83.
+  - Lo que queda es el costo de hidratar React en ese celular simulado.
+
 ### Lo que falta del rediseño
 
-- Llevar la composición nueva (láminas, titulares grandes, colores con tema) a /dolar, /pesos, /bonos, /mercados, /calculadoras y /cartera.
-- Actualizar las imágenes de compartir (OG) a Bricolage.
-- Probar el scroll en un teléfono real (Android de gama media) y bajar el LCP: diferir la hidratación del comparador.
+- Rediseñar el cuerpo de cada página (cifra héroe, tablas y gráficos) con la misma profundidad que la home, empezando por /dolar.
+- Probar el scroll en un teléfono real (Android de gama media).
 
 ---
 

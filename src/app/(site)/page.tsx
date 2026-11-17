@@ -7,6 +7,7 @@ import { armarHistoria } from "@/components/modules/inicio/historia/datos";
 import { EscenaAlertas } from "@/components/modules/inicio/historia/alertas";
 import { EscenaCartera } from "@/components/modules/inicio/historia/cartera";
 import { EscenaDolar } from "@/components/modules/inicio/historia/dolar";
+import { EscenaMacizo } from "@/components/modules/inicio/historia/macizo";
 import { EscenaProblema } from "@/components/modules/inicio/historia/problema";
 import { EscenaRespuesta } from "@/components/modules/inicio/historia/respuesta";
 import { DondeRinde } from "@/components/modules/pesos/donde-rinde";
@@ -95,6 +96,11 @@ export default async function Inicio() {
       {historia.alertas && (
         <LimiteError nombre="Alertas">
           <EscenaAlertas alertas={historia.alertas} />
+        </LimiteError>
+      )}
+      {historia.macizo && (
+        <LimiteError nombre="Macizo o hueco">
+          <EscenaMacizo {...historia.macizo} />
         </LimiteError>
       )}
     </div>

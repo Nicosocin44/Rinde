@@ -229,11 +229,27 @@ XIRR: resolver Σ flujo_i / (1 + r)^((d_i − d_0) / 365) = 0   (rendimiento de 
   },
   {
     id: "interes-compuesto",
-    titulo: "Interés compuesto y metas",
+    titulo: "Interés compuesto",
     contenido: (
       <Formula>{`Tasa mensual i = (1 + TEA)^(1/12) − 1
 Valor futuro = C0 × (1 + i)^n + A × ((1 + i)^n − 1) / i × (1 + i × k)    (k = 1 si aportás al inicio del mes)
 Aporte para una meta = (meta − C0 × (1 + i)^n) × i / (((1 + i)^n − 1) × (1 + i × k))`}</Formula>
+    ),
+  },
+  {
+    id: "metas",
+    titulo: "Metas de ahorro",
+    contenido: (
+      <>
+        <Formula>{`Tasa mensual i = (1 + TEA)^(1/12) − 1     (TEA: la mejor opción sin plazo de hoy, o la que elijas)
+Objetivo en el mes n = objetivo de hoy × (1 + π)^n     (π: inflación mensual esperada del REM; solo metas en pesos)
+Aporte por mes = (objetivo en la fecha − saldo × (1 + i)^n) × i / ((1 + i)^n − 1)     (aportes al final de cada mes)
+Meses para llegar: se simula mes a mes, saldo × (1 + i) + aporte, hasta superar el objetivo de ese mes`}</Formula>
+        <p className="mt-3">
+          Cada vez que cargás cuánto tenés, el plan se recalcula desde ese saldo con las tasas de ese día. &quot;Según el plan&quot; es lo que tendrías hoy si hubieras puesto lo que planeaste
+          todos los meses, a la tasa de hoy. Las metas en dólares no se ajustan por inflación y, salvo que elijas otro, suponen que los dólares no rinden.
+        </p>
+      </>
     ),
   },
   {

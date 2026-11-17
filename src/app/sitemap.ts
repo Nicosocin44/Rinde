@@ -20,6 +20,7 @@ const RUTAS = [
   "/mercados/cripto",
   "/calculadoras",
   "/calculadoras/interes-compuesto",
+  "/calculadoras/metas",
   "/calculadoras/jubilacion",
   "/calculadoras/plazo-fijo",
   "/calculadoras/tasas",

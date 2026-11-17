@@ -500,8 +500,8 @@
 /* Texto sobre tarjetas de color pleno: todo pasa a tinta. */
 .sobre-color {
   --c-text: #111110;
-  --c-text-2: rgba(17, 17, 16, 0.74);
-  --c-text-3: rgba(17, 17, 16, 0.62);
+  --c-text-2: rgba(17, 17, 16, 0.8);
+  --c-text-3: rgba(17, 17, 16, 0.72);
   --c-border: rgba(17, 17, 16, 0.14);
   --c-border-strong: rgba(17, 17, 16, 0.28);
   --c-surface: rgba(255, 255, 255, 0.35);
@@ -528,8 +528,10 @@
   animation: palabra 900ms var(--ease-standard) both;
   animation-delay: calc(var(--i, 0) * 70ms + 80ms);
 }
+/* Arranca apenas visible (no en 0) para que el navegador cuente el titular como pintado desde el
+   primer cuadro: si arrancara invisible, el LCP esperaría a que termine la animación. */
 @keyframes palabra {
-  from { opacity: 0; transform: translateY(0.45em) rotate(2deg); filter: blur(6px); }
+  from { opacity: 0.02; transform: translateY(0.45em) rotate(2deg); }
 }
 /* Lo que entra después del titular, escalonado con --i. */
 .llegar {
@@ -550,12 +552,26 @@
 /* Escenas de la home: contenedor alto + interior pegajoso. GSAP lee el progreso del contenedor. */
 .escena {
   position: relative;
+  /* Fuera de pantalla, el navegador no calcula su layout ni la pinta (menos trabajo al cargar). */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100svh;
 }
 .escena-interior {
   position: sticky;
   top: 0;
   height: 100svh;
   overflow: hidden;
+}
+/* Con movimiento reducido no hay coreografía: cada escena ocupa solo su alto natural. */
+@media (prefers-reduced-motion: reduce) {
+  .escena {
+    height: auto !important;
+  }
+  .escena-interior {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
 }
 
 /* Texto largo (metodología, aprender, legal). */

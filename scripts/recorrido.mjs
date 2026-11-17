@@ -14,6 +14,7 @@
  *   PASOS    cuadros por escena (por defecto 7)
  *   SALIDA   por defecto .shots/narrativa
  *   VIDEO    "0" para no grabar
+ *   SIN_BLUR "1" para apagar el desenfoque de la nav (diagnóstico de rendimiento)
  */
 import { chromium } from "@playwright/test";
 import { mkdirSync, renameSync } from "node:fs";
@@ -45,6 +46,8 @@ async function abrir(ancho, tema, video) {
   });
   const pagina = await contexto.newPage();
   await pagina.goto(`${BASE}/?tema=${tema}`, { waitUntil: "networkidle", timeout: 120_000 });
+  // Diagnóstico: SIN_BLUR=1 apaga el desenfoque de la nav para medir cuánto cuesta.
+  if (process.env.SIN_BLUR === "1") await pagina.addStyleTag({ content: ".vidrio{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}" });
   await pagina.waitForTimeout(1200);
   return { contexto, pagina };
 }

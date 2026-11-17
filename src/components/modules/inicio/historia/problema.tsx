@@ -1,6 +1,5 @@
-"use client";
-
 import { Escena } from "@/components/escenas/escena";
+import { Director } from "./director";
 import { FreshnessBadge } from "@/components/ui/frescura";
 import { pesosCompacto } from "@/lib/format";
 import type { Pieza } from "./datos";
@@ -37,26 +36,7 @@ export function EscenaProblema({ piezas }: { piezas: Pieza[] }) {
       etiqueta="El problema"
       alto={190}
       altoMobile={170}
-      comienzo="top 85%"
-      armar={(tl, q, mobile) => {
-        const fichas = q("[data-ficha]");
-        fichas.forEach((f, i) => {
-          const l = LUGARES[i % LUGARES.length]!;
-          tl.from(
-            f,
-            {
-              xPercent: l.dx * (mobile ? 110 : 160),
-              yPercent: l.dy * (mobile ? 120 : 160) + 40,
-              rotation: l.r * 4,
-              opacity: 0,
-              duration: 0.3,
-              ease: "power2.out",
-            },
-            0.04 + i * 0.05,
-          );
-        });
-        tl.from(q("[data-cierre]"), { opacity: 0, y: 24, duration: 0.12, ease: "power1.out" }, 0.5);
-      }}
+      director={<Director coreografia="problema" comienzo="top 85%" />}
       claseInterior="flex flex-col"
     >
       <div className="flex h-full flex-col gap-5 pt-24 pb-28 md:grid md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:items-center md:gap-12 md:pt-20 md:pb-12">

@@ -1,16 +1,14 @@
-"use client";
-
-import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
- * Punto único de entrada a GSAP: registra los plugins una sola vez.
+ * Motor de movimiento (GSAP + ScrollTrigger). No se importa de forma estática: se carga con
+ * `cuandoEsteLibre()` para que no compita con la carga de la página.
  * Regla de movimiento (DISENO.md §7): acción → llegada → pausa. Nada en loop.
  */
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
-export { gsap, ScrollTrigger, useGSAP };
+export { gsap, ScrollTrigger };
 
 /** Media queries para `gsap.matchMedia()`: la coreografía completa, o fundidos simples. */
 export const CON_MOVIMIENTO = "(prefers-reduced-motion: no-preference)";

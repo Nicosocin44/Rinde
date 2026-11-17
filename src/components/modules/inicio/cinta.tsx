@@ -30,7 +30,7 @@ export function CintaCotizaciones({ cotizaciones, pulso, className }: { cotizaci
   );
   return (
     <div className={cn("sangrado relative z-10 overflow-x-clip py-8", className)} aria-label="Cotizaciones de hoy" role="region">
-      <div className="sobre-color -mx-[8vw] -rotate-2 bg-sol py-4 lg:py-5">
+      <div className="sobre-color -mx-[8vw] -rotate-2 overflow-hidden bg-sol py-4 lg:py-5">
         <CintaMovil>
           {fila(0)}
           {fila(1)}

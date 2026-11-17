@@ -86,7 +86,8 @@ for (const tema of temas) {
           document.querySelectorAll(".revelar").forEach((el) => (el.dataset.visible = "true"));
         });
         // En página completa, las barras fijas se dibujarían en el medio: las anclamos al final.
-        await pagina.addStyleTag({ content: "body{position:relative} nav.fixed{position:absolute!important}" });
+        // content-visibility no pinta lo que está fuera de pantalla: en la captura de página completa, sí.
+        await pagina.addStyleTag({ content: "body{position:relative} nav.fixed{position:absolute!important} .escena{content-visibility:visible!important}" });
         await pagina.waitForTimeout(400);
         const archivo = join(salida, `${nombre(ruta)}__${ancho}__${tema}.png`);
         if (process.env.TROZOS === "1" && !soloPantalla) {

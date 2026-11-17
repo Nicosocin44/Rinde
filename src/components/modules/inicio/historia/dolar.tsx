@@ -1,6 +1,5 @@
-"use client";
-
 import { Escena } from "@/components/escenas/escena";
+import { Director } from "./director";
 import { ButtonLink } from "@/components/ui/button";
 import { FreshnessBadge } from "@/components/ui/frescura";
 import { ProviderMark } from "@/components/ui/provider-mark";
@@ -30,23 +29,7 @@ export function EscenaDolar({ proveedores, asOf, estado }: { proveedores: Provee
       etiqueta="El dólar"
       alto={220}
       altoMobile={200}
-      comienzo="top 65%"
-      armar={(tl, q) => {
-        tl.from(q("[data-titulo]"), { y: 40, opacity: 0, duration: 0.1, ease: "power2.out" }, 0);
-        q("[data-punto]").forEach((p, i) => {
-          tl.from(p, { xPercent: 100 - Number((p as HTMLElement).dataset.pos ?? 0), duration: 0.22, ease: "power2.out" }, 0.1 + i * 0.03);
-          tl.from(p.firstElementChild, { opacity: 0, duration: 0.05 }, 0.1 + i * 0.03);
-        });
-        const fin = 0.1 + proveedores.length * 0.03 + 0.2;
-        tl.from(q("[data-guia]"), { scaleY: 0, duration: 0.08, ease: "power2.out" }, fin);
-        tl.from(q("[data-ganador]"), { opacity: 0, duration: 0.06 }, fin);
-        const cifra = q("[data-ahorro]")[0] as HTMLElement | undefined;
-        if (cifra) {
-          const c = { v: 0 };
-          tl.to(c, { v: ahorro, duration: 0.14, ease: "power1.out", onUpdate: () => void (cifra.textContent = pesos(Math.round(c.v), 0)) }, fin + 0.02);
-        }
-        tl.from(q("[data-cierre]"), { y: 20, opacity: 0, duration: 0.08 }, fin);
-      }}
+      director={<Director coreografia="dolar" comienzo="top 65%" />}
       claseInterior="flex flex-col"
     >
       <div className="flex h-full flex-col justify-start gap-6 pt-[92px] pb-28 md:justify-center md:gap-10 md:pt-24 md:pb-14">
@@ -86,7 +69,7 @@ export function EscenaDolar({ proveedores, asOf, estado }: { proveedores: Provee
 
         <div data-cierre className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <p className="max-w-[30ch] font-display text-[19px] leading-[1.2] font-bold tracking-[-0.02em] md:max-w-[34ch] md:text-[26px]">
-            USD 1.000 te cuestan <span data-ahorro className="tabular-nums">{pesos(ahorro, 0)}</span> menos en {barato.nombre} que en {caro.nombre}.
+            USD 1.000 te cuestan <span data-ahorro data-valor={ahorro} className="tabular-nums">{pesos(ahorro, 0)}</span> menos en {barato.nombre} que en {caro.nombre}.
           </p>
           <div className="flex flex-col gap-3 md:items-end">
             <ButtonLink href="/dolar/comprar" variante="secundario" tamano="md" flecha>

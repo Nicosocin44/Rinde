@@ -1,6 +1,5 @@
-"use client";
-
 import { Escena } from "@/components/escenas/escena";
+import { Director } from "./director";
 import { ButtonLink } from "@/components/ui/button";
 
 /**
@@ -12,14 +11,9 @@ export function EscenaCierre() {
     <Escena
       etiqueta="Empezá"
       alto={100}
-      comienzo="top bottom"
       className="sobre-color a-lo-ancho lamina-cerrada mt-10 h-auto! bg-sol md:mt-16"
       claseInterior="static! h-auto! overflow-visible!"
-      armar={(tl, q) => {
-        tl.from(q(".escena-interior"), { yPercent: 18, duration: 0.6, ease: "power2.out" }, 0);
-        tl.from(q("[data-gigante]"), { scale: 0.9, transformOrigin: "0% 100%", duration: 0.7, ease: "power2.out" }, 0.1);
-        tl.from(q("[data-acciones]"), { y: 30, opacity: 0, duration: 0.25, ease: "power2.out" }, 0.55);
-      }}
+      director={<Director coreografia="cierre" comienzo="top bottom" />}
     >
       <div className="flex flex-col gap-8 py-16 md:gap-12 md:py-24 lg:py-28">
         <h2 data-gigante className="font-display text-[68px] leading-[0.88] font-extrabold tracking-[-0.06em] md:text-[132px] xl:text-[176px]">

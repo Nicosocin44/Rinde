@@ -1,6 +1,5 @@
-"use client";
-
 import { Escena } from "@/components/escenas/escena";
+import { Director } from "./director";
 import { ButtonLink } from "@/components/ui/button";
 import { delta, mesAnio } from "@/lib/format";
 import type { PuntoComparacion } from "./datos";
@@ -37,22 +36,8 @@ export function EscenaCartera({ serie, inicio, vsInflacion, vsDolar }: { serie: 
       etiqueta="Tu cartera"
       alto={220}
       altoMobile={200}
-      comienzo="top 60%"
       className="sobre-color a-lo-ancho lamina-cerrada mt-16 bg-lila lg:mt-24"
-      armar={(tl, q) => {
-        tl.from(q("[data-titulo]"), { y: 40, opacity: 0, duration: 0.1, ease: "power2.out" }, 0);
-        tl.from(q("[data-linea]"), { strokeDashoffset: 1, duration: 0.42, ease: "none", stagger: 0.04 }, 0.1);
-        tl.from(q("[data-fin]"), { opacity: 0, scale: 0.5, duration: 0.05, stagger: 0.04, ease: "back.out(2)" }, 0.52);
-        q("[data-veredicto]").forEach((el, i) => {
-          const cifra = el.querySelector<HTMLElement>("[data-cifra]");
-          const objetivo = Number(cifra?.dataset.valor ?? 0);
-          tl.from(el, { y: 30, opacity: 0, duration: 0.08, ease: "power2.out" }, 0.62 + i * 0.04);
-          if (cifra) {
-            const c = { v: 0 };
-            tl.to(c, { v: objetivo, duration: 0.12, ease: "power1.out", onUpdate: () => void (cifra.textContent = delta(c.v, 1)) }, 0.62 + i * 0.04);
-          }
-        });
-      }}
+      director={<Director coreografia="cartera" comienzo="top 60%" />}
       claseInterior="flex flex-col"
     >
       <div className="flex h-full flex-col justify-start gap-5 pt-[92px] pb-28 md:justify-center md:gap-8 md:pt-24 md:pb-14">

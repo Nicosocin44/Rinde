@@ -1,7 +1,6 @@
-"use client";
-
 import Link from "next/link";
 import { Escena } from "@/components/escenas/escena";
+import { Director } from "./director";
 import { FreshnessBadge } from "@/components/ui/frescura";
 import { hora } from "@/lib/format";
 import type { FuenteEstado } from "./datos";
@@ -22,16 +21,8 @@ export function EscenaConfianza({ fuentes }: { fuentes: FuenteEstado[] }) {
       etiqueta="Confianza"
       alto={180}
       altoMobile={170}
-      comienzo="top 60%"
       fluidoMobile
-      armar={(tl, q) => {
-        tl.from(q("[data-titulo]"), { y: 40, opacity: 0, duration: 0.1, ease: "power2.out" }, 0);
-        q("[data-fuente]").forEach((f, i) => {
-          tl.from(f, { y: 26, opacity: 0, duration: 0.08, ease: "power2.out" }, 0.1 + i * 0.05);
-          tl.from(f.querySelector("[data-estado]"), { opacity: 0, x: 10, duration: 0.05 }, 0.16 + i * 0.05);
-        });
-        tl.from(q("[data-regla]"), { y: 24, opacity: 0, duration: 0.08, stagger: 0.05, ease: "power2.out" }, 0.18);
-      }}
+      director={<Director coreografia="confianza" comienzo="top 60%" />}
       claseInterior="flex flex-col"
     >
       <div className="flex h-full flex-col justify-start gap-6 pt-20 pb-10 md:justify-center md:gap-12 md:pt-24 md:pb-14">

@@ -1,6 +1,5 @@
-"use client";
-
 import { Escena } from "@/components/escenas/escena";
+import { Director } from "./director";
 import { pesos, porcentaje } from "@/lib/format";
 import type { MesMacizo } from "./datos";
 
@@ -21,33 +20,8 @@ export function EscenaMacizo({ monto, tea, nombre, inflacion, informeRem, meses 
       etiqueta="Macizo o hueco"
       alto={260}
       altoMobile={230}
-      comienzo="top 40%"
       className="inversa a-lo-ancho lamina-cerrada mt-16 bg-bg text-text lg:mt-24"
-      armar={(tl, q) => {
-        const hueca = q("[data-hueca]")[0] as HTMLElement;
-        const maciza = q("[data-maciza]")[0] as HTMLElement;
-        const contadores = q("[data-mes]") as HTMLElement[];
-        const vHueca = q("[data-valor-hueca]")[0] as HTMLElement;
-        const vMaciza = q("[data-valor-maciza]")[0] as HTMLElement;
-        const pintar = (t: number) => {
-          const i = Math.min(Math.floor(t), meses.length - 2);
-          const f = t - i;
-          const a = meses[i]!;
-          const b = meses[i + 1]!;
-          const quieta = a.quietaReal + (b.quietaReal - a.quietaReal) * f;
-          const rinde = a.rindeReal + (b.rindeReal - a.rindeReal) * f;
-          hueca.style.transform = `scaleY(${escala(quieta)})`;
-          maciza.style.transform = `scaleY(${escala(rinde)})`;
-          contadores.forEach((c) => (c.textContent = String(Math.round(t))));
-          vHueca.textContent = pesos(Math.round(quieta / 100) * 100, 0);
-          vMaciza.textContent = pesos(Math.round(rinde / 100) * 100, 0);
-        };
-        const tiempo = { t: 0 };
-        pintar(0);
-        tl.from(q("[data-titulo]"), { y: 40, opacity: 0, duration: 0.08, ease: "power2.out" }, 0);
-        tl.to(tiempo, { t: meses.length - 1, duration: 0.6, ease: "none", onUpdate: () => pintar(tiempo.t) }, 0.12);
-        tl.from(q("[data-cierre]"), { y: 24, opacity: 0, duration: 0.08 }, 0.74);
-      }}
+      director={<Director coreografia="macizo" comienzo="top 40%" datos={{ monto, tope, meses }} />}
       claseInterior="flex flex-col"
     >
       <div className="flex h-full flex-col justify-start gap-5 pt-[92px] pb-28 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-center md:gap-16 md:pt-24 md:pb-14">
@@ -64,11 +38,11 @@ export function EscenaMacizo({ monto, tea, nombre, inflacion, informeRem, meses 
           </p>
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col gap-3 md:h-[min(560px,62svh)]">
+        <div className="flex min-h-[240px] flex-1 flex-col gap-3 md:h-[min(560px,62svh)]">
           <p className="text-[14px] font-semibold text-text-2 md:hidden" aria-hidden>
             Mes <span data-mes className="tabular-nums text-text">{meses.length - 1}</span> de {meses.length - 1}
           </p>
-          <div className="relative grid min-h-0 flex-1 grid-cols-2 gap-4 md:gap-8">
+          <div className="relative grid min-h-[200px] flex-1 grid-cols-2 gap-4 md:gap-8">
             {[
               { clave: "hueca", titulo: "Quieta", detalle: "pierde poder de compra", valor: ultimo.quietaReal },
               { clave: "maciza", titulo: "Puesta a rendir", detalle: nombre, valor: ultimo.rindeReal },

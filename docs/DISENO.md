@@ -321,6 +321,8 @@ Consecuencias concretas:
 > Las cifras son ilustrativas. Siempre salen de los datos.
 
 ### Inicio (desktop)
+
+> Reemplazado el 17/11/2026: la home ahora es la portada ("la foto de hoy" en una frase), la cinta, el comparador y una historia en 8 escenas. La narrativa y la coreografía están en `docs/PROGRESO.md`. El wireframe de abajo queda como referencia histórica.
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ Rinde    Inicio  Dólar  Pesos  Bonos  Mercados  Calculadoras   ⌘K  Simple|Pro  [Mi cartera] │

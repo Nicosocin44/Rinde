@@ -1,6 +1,5 @@
-"use client";
-
 import { Escena } from "@/components/escenas/escena";
+import { Director } from "./director";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import type { AlertaDemo } from "./datos";
@@ -15,16 +14,7 @@ export function EscenaAlertas({ alertas }: { alertas: AlertaDemo[] }) {
       etiqueta="Alertas"
       alto={200}
       altoMobile={190}
-      comienzo="top 55%"
-      armar={(tl, q) => {
-        tl.from(q("[data-titulo]"), { y: 40, opacity: 0, duration: 0.1, ease: "power2.out" }, 0);
-        q("[data-aviso]").forEach((el, i) => {
-          const en = 0.14 + i * 0.16;
-          tl.from(el, { yPercent: -70, y: -40, opacity: 0, scale: 0.94, duration: 0.12, ease: "back.out(1.4)" }, en);
-          const marca = el.querySelector("[data-marca]");
-          if (marca) tl.from(marca, { scale: 0, duration: 0.05, ease: "back.out(3)" }, en + 0.1);
-        });
-      }}
+      director={<Director coreografia="alertas" comienzo="top 55%" />}
       claseInterior="flex flex-col"
     >
       <div className="flex h-full flex-col justify-start gap-6 pt-[92px] pb-28 md:grid md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:items-center md:gap-16 md:pt-24 md:pb-14">

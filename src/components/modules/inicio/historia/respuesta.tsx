@@ -1,6 +1,5 @@
-"use client";
-
 import { Escena } from "@/components/escenas/escena";
+import { Director } from "./director";
 import { FreshnessBadge } from "@/components/ui/frescura";
 import type { EstadoDato } from "@/lib/data/types";
 import { pesos, pesosCompacto, porcentaje, plazo } from "@/lib/format";
@@ -23,33 +22,8 @@ export function EscenaRespuesta({ opciones, asOf, estado }: { opciones: OpcionTa
       etiqueta="La respuesta"
       alto={230}
       altoMobile={210}
-      comienzo="top 60%"
       className="sobre-color a-lo-ancho lamina-cerrada mt-16 bg-celeste lg:mt-24"
-      armar={(tl, q) => {
-        const filas = q("[data-fila]");
-        // Desorden inicial: cada fila arranca en la posición que tenía en ORDEN_INICIAL.
-        filas.forEach((f, i) => {
-          const desde = inicial.findIndex((o) => o.id === opciones[i]!.id);
-          tl.set(f, { yPercent: (desde - i) * 100 }, 0);
-        });
-        tl.from(q("[data-titulo]"), { y: 40, opacity: 0, duration: 0.1, ease: "power2.out" }, 0);
-        // 1 · Las barras crecen hasta su TEA, y el número cuenta junto con la barra.
-        filas.forEach((f, i) => {
-          const barra = f.querySelector("[data-barra]");
-          const cifra = f.querySelector<HTMLElement>("[data-cifra]");
-          const o = opciones[i]!;
-          const en = 0.1 + inicial.findIndex((x) => x.id === o.id) * 0.035;
-          tl.from(barra, { scaleX: 0, duration: 0.2, ease: "power1.out" }, en);
-          if (cifra) {
-            const c = { v: 0 };
-            tl.to(c, { v: o.tea, duration: 0.2, ease: "power1.out", onUpdate: () => void (cifra.textContent = porcentaje(c.v, 1)) }, en);
-          }
-        });
-        // 2 · Se ordenan de mayor a menor.
-        tl.to(filas, { yPercent: 0, duration: 0.24, ease: "power2.inOut", stagger: 0.01 }, 0.42);
-        tl.from(q("[data-mejor]"), { scale: 0.6, opacity: 0, duration: 0.06, ease: "back.out(2)" }, 0.66);
-        tl.from(q("[data-cierre]"), { y: 20, opacity: 0, duration: 0.08 }, 0.7);
-      }}
+      director={<Director coreografia="respuesta" comienzo="top 60%" />}
       claseInterior="flex flex-col"
     >
       <div className="flex h-full flex-col justify-start gap-5 pt-[92px] pb-28 md:justify-center md:gap-10 md:pt-24 md:pb-14">
@@ -62,7 +36,7 @@ export function EscenaRespuesta({ opciones, asOf, estado }: { opciones: OpcionTa
 
         <ol className="flex flex-col" aria-label="Lo que más rinde hoy de cada tipo, ordenado por TEA">
           {opciones.map((o) => (
-            <li key={o.id} data-fila className="relative will-change-transform">
+            <li key={o.id} data-fila data-desde={inicial.findIndex((x) => x.id === o.id)} data-tea={o.tea} className="relative will-change-transform">
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 border-t border-border py-2 md:grid-cols-[minmax(0,19rem)_minmax(0,1fr)_7rem_9rem] md:gap-x-8 md:py-3.5">
                 <div className="min-w-0">
                   <p className="flex items-center gap-2 truncate font-display text-[16px] font-bold tracking-[-0.02em] md:text-[19px]">

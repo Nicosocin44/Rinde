@@ -21,7 +21,8 @@
   --c-border-strong: rgba(12, 14, 18, 0.16);
   --c-text: #0e1013;
   --c-text-2: #565c66;
-  --c-text-3: #6b717a;
+  /* #6B717A en DISENO.md; oscurecido a #61676F para pasar AA (4,5:1) también sobre accent-soft. */
+  --c-text-3: #61676f;
   --c-accent: #1766c2;
   --c-accent-soft: rgba(23, 102, 194, 0.08);
   --c-gain: #0b7a48;
@@ -150,7 +151,6 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
-    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "cv11", "ss01";

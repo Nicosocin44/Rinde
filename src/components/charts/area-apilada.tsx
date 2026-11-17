@@ -1,7 +1,7 @@
 "use client";
 
 import { area, curveMonotoneX } from "d3-shape";
-import { motion } from "motion/react";
+import { m as Mo } from "motion/react";
 import { useState } from "react";
 import { useAncho } from "@/lib/use-ancho";
 import { cn } from "@/lib/cn";
@@ -71,10 +71,10 @@ export function AreaApilada({
           </g>
         ))}
         <line x1={m.l} x2={ancho - m.r} y1={y(0)} y2={y(0)} stroke="var(--c-border-strong)" />
-        <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+        <Mo.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
           {base && <path d={base} fill="var(--c-text-3)" fillOpacity={0.28} />}
           {total && <path d={total} fill="var(--c-accent)" fillOpacity={0.55} />}
-        </motion.g>
+        </Mo.g>
         {ticksX.map((p, i) => (
           <text key={p.x} x={x(p.x)} y={alto - 6} textAnchor={i === 0 ? "start" : i === ticksX.length - 1 ? "end" : "middle"} className="fill-text-3 text-[11px] tabular">
             {formatoX(p.x)}

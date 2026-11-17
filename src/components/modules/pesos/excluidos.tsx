@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useState, type ReactNode } from "react";
 import type { Excluido } from "@/lib/data/types";
 import { cn } from "@/lib/cn";
@@ -20,9 +20,9 @@ export function Desplegable({ titulo, ayuda, children, abiertoInicial = false }:
       </button>
       <AnimatePresence initial={false}>
         {abierto && (
-          <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, transition: { duration: 0.12 } }} transition={{ duration: 0.24, ease: [0.2, 0, 0, 1] }} className="pb-4">
+          <m.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, transition: { duration: 0.12 } }} transition={{ duration: 0.24, ease: [0.2, 0, 0, 1] }} className="pb-4">
             {children}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

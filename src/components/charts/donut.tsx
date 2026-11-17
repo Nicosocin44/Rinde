@@ -1,10 +1,11 @@
 "use client";
 
 import { arc, pie } from "d3-shape";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import type { ReactNode } from "react";
 
-export const CATEGORICOS = ["var(--cat-1)", "var(--cat-2)", "var(--cat-3)", "var(--cat-4)", "var(--cat-5)", "var(--cat-6)"];
+import { CATEGORICOS } from "./colores";
+export { CATEGORICOS };
 
 /**
  * Donut fino (anillo de 14 px) con el total en el centro. La leyenda va aparte, como lista con porcentajes.
@@ -24,7 +25,7 @@ export function Donut({ datos, tamano = 200, centro, activo, onActivo }: { datos
     <div className="relative shrink-0" style={{ width: tamano, height: tamano }}>
       <svg width={tamano} height={tamano} viewBox={`${-r} ${-r} ${tamano} ${tamano}`} role="img" aria-label="Distribución de la cartera">
         {arcos.map((a, i) => (
-          <motion.path
+          <m.path
             key={a.data.clave}
             d={generador(a) ?? ""}
             fill={CATEGORICOS[i % CATEGORICOS.length]}

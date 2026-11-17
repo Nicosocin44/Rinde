@@ -2,7 +2,7 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowRight, CornerDownLeft, Search } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
@@ -59,17 +59,6 @@ export function CommandPalette() {
   const [indice, setIndice] = useState(0);
   const [extras, setExtras] = useState<ItemBusqueda[] | null>(null);
   const lista = useRef<HTMLUListElement>(null);
-
-  useEffect(() => {
-    const alTeclear = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setPaletaAbierta(true);
-      }
-    };
-    window.addEventListener("keydown", alTeclear);
-    return () => window.removeEventListener("keydown", alTeclear);
-  }, [setPaletaAbierta]);
 
   // El índice de instrumentos se carga recién la primera vez que se abre la paleta.
   useEffect(() => {
@@ -136,7 +125,6 @@ export function CommandPalette() {
     lista.current?.querySelector(`[data-indice="${indice}"]`)?.scrollIntoView({ block: "nearest" });
   }, [indice]);
 
-  let grupoAnterior = "";
   return (
     <Dialog.Root
       open={paletaAbierta}
@@ -149,10 +137,10 @@ export function CommandPalette() {
         {paletaAbierta && (
           <Dialog.Portal forceMount>
             <Dialog.Overlay asChild forceMount>
-              <motion.div className="fixed inset-0 z-50 bg-scrim backdrop-blur-[6px]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.15 } }} />
+              <m.div className="fixed inset-0 z-50 bg-scrim backdrop-blur-[6px]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.15 } }} />
             </Dialog.Overlay>
             <Dialog.Content asChild forceMount aria-describedby={undefined}>
-              <motion.div
+              <m.div
                 className="fixed inset-x-3 top-[max(12px,env(safe-area-inset-top))] z-50 mx-auto flex max-h-[min(560px,80dvh)] max-w-[620px] flex-col overflow-hidden rounded-(--radius-panel) border border-border bg-surface shadow-(--shadow-overlay) sm:top-[12vh]"
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -185,8 +173,7 @@ export function CommandPalette() {
                     </li>
                   )}
                   {resultados.map((r, i) => {
-                    const encabezado = r.grupo !== grupoAnterior ? r.grupo : null;
-                    grupoAnterior = r.grupo;
+                    const encabezado = i === 0 || resultados[i - 1]!.grupo !== r.grupo ? r.grupo : null;
                     return (
                       <li key={r.id} role="presentation">
                         {encabezado && <p className="px-3 pt-3 pb-1.5 text-label">{encabezado}</p>}
@@ -214,7 +201,7 @@ export function CommandPalette() {
                   <span>↵ para abrir</span>
                   <span className="ml-auto hidden sm:block">⌘K desde cualquier pantalla</span>
                 </div>
-              </motion.div>
+              </m.div>
             </Dialog.Content>
           </Dialog.Portal>
         )}

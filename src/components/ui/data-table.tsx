@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDown } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useMemo, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
@@ -136,7 +136,7 @@ export function DataTable<T>({
               const k = clave(f);
               const mejor = esMejor?.(f, i) ?? false;
               return (
-                <motion.tr
+                <m.tr
                   key={k}
                   layout="position"
                   initial={{ opacity: 0 }}
@@ -158,7 +158,7 @@ export function DataTable<T>({
                       {c.celda(f, i)}
                     </td>
                   ))}
-                </motion.tr>
+                </m.tr>
               );
             })}
           </AnimatePresence>
@@ -170,7 +170,7 @@ export function DataTable<T>({
         <ul className="flex flex-col border-t border-border md:hidden" aria-label={etiqueta}>
           <AnimatePresence initial={false}>
             {ordenadas.map((f, i) => (
-              <motion.li
+              <m.li
                 key={clave(f)}
                 layout="position"
                 transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}
@@ -183,7 +183,7 @@ export function DataTable<T>({
                 ) : (
                   <div className="px-3 py-3">{filaMovil(f, i)}</div>
                 )}
-              </motion.li>
+              </m.li>
             ))}
           </AnimatePresence>
         </ul>

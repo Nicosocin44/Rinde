@@ -58,7 +58,13 @@ export default async function Inicio() {
             Billeteras, cuentas, fondos, plazos fijos y letras del Tesoro, comparados en la misma tasa (TEA) y en pesos que ganás. El orden es por ganancia: ningún acuerdo comercial lo cambia.
           </p>
         </div>
-        {opciones.length ? <DondeRinde opciones={opciones} /> : <ErrorState titulo="No pudimos traer las tasas." detalle="Mostramos el comparador apenas vuelvan las fuentes." />}
+        {opciones.length ? (
+          <Suspense>
+            <DondeRinde opciones={opciones} />
+          </Suspense>
+        ) : (
+          <ErrorState titulo="No pudimos traer las tasas." detalle="Mostramos el comparador apenas vuelvan las fuentes." />
+        )}
         <SourceNote
           className="mt-6"
           fuentes={[FUENTES.argentinadatos, FUENTES.cnv, FUENTES.data912]}

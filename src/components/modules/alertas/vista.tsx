@@ -2,7 +2,7 @@
 
 import { Bell, Plus, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/estados";
 import { MoneyInput, NumberField } from "@/components/ui/money-input";
@@ -65,11 +65,16 @@ export function AlertasVista() {
   const [foto, setFoto] = useState<FotoMercado | null>(null);
   const [crear, setCrear] = useState(params.get("nueva") === "1");
 
-  const recargar = useCallback(async () => setAlertas(await listarAlertas()), []);
   useEffect(() => {
-    void recargar();
-    return alCambiarAlertas(() => void recargar());
-  }, [recargar]);
+    let vivo = true;
+    const leer = () => listarAlertas().then((a) => vivo && setAlertas(a));
+    void leer();
+    const desuscribir = alCambiarAlertas(() => void leer());
+    return () => {
+      vivo = false;
+      desuscribir();
+    };
+  }, []);
   useEffect(() => {
     let vivo = true;
     Promise.all([fetch("/api/alertas/mercado").then((r) => r.json() as Promise<FotoMercado>), vencimientosLocales()])

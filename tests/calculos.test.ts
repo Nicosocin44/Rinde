@@ -75,7 +75,8 @@ describe("1. tasas: TNA ↔ TEA ↔ TEM", () => {
 describe("2. plazo fijo", () => {
   it("interés exacto de $1.000.000 a 30 días al 24 % TNA", () => {
     const interes = interesPlazoFijo(G.PLAZO_FIJO.capital, G.PLAZO_FIJO.tna, G.PLAZO_FIJO.dias);
-    expect(interes.toFixed(20)).toBe(d(G.PLAZO_FIJO.interes).toFixed(20));
+    // Precisión de 20 dígitos significativos: exacto hasta el 15.º decimal de un peso.
+    expect(interes.toFixed(15)).toBe(d(G.PLAZO_FIJO.interes).toFixed(15));
     expect(interes.toFixed(2)).toBe("19726.03");
   });
 });

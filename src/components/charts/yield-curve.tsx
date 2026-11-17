@@ -1,7 +1,7 @@
 "use client";
 
 import { curveMonotoneX, line } from "d3-shape";
-import { motion, useInView } from "motion/react";
+import { m as Mo, useInView } from "motion/react";
 import { useRef } from "react";
 import { mesAnio, porcentaje } from "@/lib/format";
 import { useAncho } from "@/lib/use-ancho";
@@ -91,7 +91,7 @@ export function YieldCurve({
           ))}
 
         {trazo && (
-          <motion.path
+          <Mo.path
             d={trazo}
             fill="none"
             stroke="var(--c-text-3)"
@@ -109,7 +109,7 @@ export function YieldCurve({
             .y((p) => y(p.y))
             .curve(curveMonotoneX)(a.puntos);
           return d ? (
-            <motion.path
+            <Mo.path
               key={k}
               d={d}
               fill="none"
@@ -129,7 +129,7 @@ export function YieldCurve({
             <g key={p.id} onPointerEnter={() => onSeleccionar?.(p.id)} onClick={() => onSeleccionar?.(p.id)} className={onSeleccionar ? "cursor-pointer" : undefined}>
               {/* Zona táctil amplia, invisible. */}
               {onSeleccionar && <circle cx={x(p.x)} cy={y(p.y)} r={16} fill="transparent" />}
-              <motion.circle
+              <Mo.circle
                 cx={x(p.x)}
                 cy={y(p.y)}
                 initial={{ opacity: 0 }}

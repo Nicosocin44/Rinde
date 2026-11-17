@@ -60,7 +60,7 @@ export function SourceNote({
           <span key={f.name}>
             {i > 0 && " · "}
             {f.url.startsWith("http") ? (
-              <a href={f.url} target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:text-text-2 hover:underline">
+              <a href={f.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-6 items-center underline-offset-2 hover:text-text-2 hover:underline">
                 {f.name}
               </a>
             ) : (
@@ -79,7 +79,7 @@ export function SourceNote({
       {metodologia && (
         <>
           <span aria-hidden>·</span>
-          <Link href={metodologia} className="underline-offset-2 hover:text-text-2 hover:underline">
+          <Link href={metodologia} className="inline-flex min-h-6 items-center underline-offset-2 hover:text-text-2 hover:underline">
             ¿Cómo lo calculamos?
           </Link>
         </>

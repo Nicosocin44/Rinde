@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutGroup, motion } from "motion/react";
+import { LayoutGroup, m } from "motion/react";
 import { useId, useRef, type KeyboardEvent, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
@@ -80,7 +80,7 @@ export function SegmentedControl<T extends string>({
               )}
             >
               {activo && (
-                <motion.span
+                <m.span
                   layoutId="thumb"
                   className="absolute inset-0 -z-10 rounded-[7px] bg-surface shadow-(--shadow-thumb) dark:bg-[#2a2e35]"
                   transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}

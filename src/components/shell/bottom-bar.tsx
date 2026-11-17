@@ -3,8 +3,12 @@
 import { BadgeDollarSign, ChartPie, House, LayoutGrid, Landmark } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { navPrincipal, navSecundaria } from "@/config/site";
-import { Sheet } from "@/components/ui/sheet";
+import dynamic from "next/dynamic";
+
+// El menú "Más" se baja recién cuando se abre por primera vez.
+const Sheet = dynamic(() => import("@/components/ui/sheet").then((m) => m.Sheet), { ssr: false });
 import { cn } from "@/lib/cn";
 import { ToggleModo } from "./preferencias-controles";
 import { useShell } from "./shell-context";
@@ -22,6 +26,8 @@ const ITEMS = [
 export function BottomBar() {
   const pathname = usePathname();
   const { masAbierto, setMasAbierto } = useShell();
+  const [montado, setMontado] = useState(false);
+  if (masAbierto && !montado) setMontado(true);
   const enMas = !ITEMS.some((i) => rutaActiva(pathname, i.href));
 
   return (
@@ -60,9 +66,11 @@ export function BottomBar() {
           </li>
         </ul>
       </nav>
-      <Sheet abierto={masAbierto} onCambio={setMasAbierto} titulo="Más" lado="abajo">
-        <MenuMas onElegir={() => setMasAbierto(false)} />
-      </Sheet>
+      {(masAbierto || montado) && (
+        <Sheet abierto={masAbierto} onCambio={setMasAbierto} titulo="Más" lado="abajo">
+          <MenuMas onElegir={() => setMasAbierto(false)} />
+        </Sheet>
+      )}
     </>
   );
 }

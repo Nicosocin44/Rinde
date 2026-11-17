@@ -2,7 +2,7 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { AnimatePresence, motion, type PanInfo } from "motion/react";
+import { AnimatePresence, m, type PanInfo } from "motion/react";
 import type { ReactNode } from "react";
 import { useEsDesktop } from "@/lib/use-media";
 import { cn } from "@/lib/cn";
@@ -44,7 +44,7 @@ export function Sheet({
         {abierto && (
           <Dialog.Portal forceMount>
             <Dialog.Overlay asChild forceMount>
-              <motion.div
+              <m.div
                 className="fixed inset-0 z-50 bg-scrim backdrop-blur-[6px]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -52,7 +52,7 @@ export function Sheet({
               />
             </Dialog.Overlay>
             <Dialog.Content asChild forceMount>
-              <motion.div
+              <m.div
                 className={cn(
                   "fixed z-50 flex flex-col bg-surface shadow-(--shadow-overlay) outline-none",
                   posicion === "abajo"
@@ -93,7 +93,7 @@ export function Sheet({
                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-6" onPointerDown={(e) => e.stopPropagation()}>
                   {children}
                 </div>
-              </motion.div>
+              </m.div>
             </Dialog.Content>
           </Dialog.Portal>
         )}

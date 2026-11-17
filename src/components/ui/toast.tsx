@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
 
 /** Toast: abajo al centro en mobile y abajo a la derecha en desktop. Una línea. Sin íconos de colores. */
@@ -30,7 +30,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       >
         <AnimatePresence initial={false}>
           {toasts.map((t) => (
-            <motion.div
+            <m.div
               key={t.id}
               layout
               initial={{ opacity: 0, y: 12, scale: 0.98 }}
@@ -54,7 +54,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               ) : (
                 <span className="w-1" />
               )}
-            </motion.div>
+            </m.div>
           ))}
         </AnimatePresence>
       </div>

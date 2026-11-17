@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { resolverProveedor } from "@data/ar/proveedores";
@@ -46,6 +46,10 @@ export function DondeRinde({ opciones, montoInicial = 1_000_000, compacto = fals
   const [monto, setMonto] = useState(montoInicial);
   const [plazo, setPlazo] = useState<PlazoWidget>(30);
   const [soloLiquidez, setSoloLiquidez] = useState(false);
+  // El reordenamiento animado (FLIP) se activa recién con la primera interacción: en la carga no mide nada.
+  const [animar, setAnimar] = useState(false);
+  const inicial = monto === montoInicial && plazo === 30 && !soloLiquidez;
+  if (!inicial && !animar) setAnimar(true);
 
   const resultados = useMemo(() => dondeRindeMas(opciones, { monto, plazo, soloLiquidez }), [opciones, monto, plazo, soloLiquidez]);
   const dias = diasDeCalculo(plazo);
@@ -74,6 +78,7 @@ export function DondeRinde({ opciones, montoInicial = 1_000_000, compacto = fals
           <span
             role="switch"
             aria-checked={soloLiquidez}
+            aria-label="Necesito sacarla cuando quiera"
             tabIndex={0}
             onClick={() => setSoloLiquidez((v) => !v)}
             onKeyDown={(e) => {
@@ -111,9 +116,9 @@ export function DondeRinde({ opciones, montoInicial = 1_000_000, compacto = fals
           <ol className="flex flex-col border-t border-border">
             <AnimatePresence initial={false} mode="popLayout">
               {resultados.map((r, i) => (
-                <motion.li
+                <m.li
                   key={r.opcion.id}
-                  layout="position"
+                  layout={animar ? "position" : false}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -121,7 +126,7 @@ export function DondeRinde({ opciones, montoInicial = 1_000_000, compacto = fals
                   className={cn("relative border-b border-border", i === 0 && "bg-accent-soft")}
                 >
                   <FilaResultado r={r} posicion={i + 1} mejor={i === 0} textoPeriodo={textoPeriodo} compacto={compacto} />
-                </motion.li>
+                </m.li>
               ))}
             </AnimatePresence>
           </ol>
@@ -169,11 +174,9 @@ function FilaResultado({ r, posicion, mejor, textoPeriodo, compacto }: { r: Retu
       </div>
       {/* Barra comparativa: fina (8 px), radio completo; la mejor en accent, el resto en gris. Se anima con transform. */}
       <div className="col-span-2 col-start-3 row-start-2 h-2 overflow-hidden rounded-full bg-surface-2 lg:col-span-1 lg:col-start-4 lg:row-start-1">
-        <motion.div
-          className={cn("h-full origin-left rounded-full", mejor ? "bg-accent" : "bg-text-3/50")}
-          initial={false}
-          animate={{ scaleX: Math.max(0.02, r.proporcion) }}
-          transition={{ type: "spring", stiffness: 220, damping: 28 }}
+        <div
+          className={cn("h-full origin-left rounded-full transition-transform duration-(--duration-base) ease-(--ease-standard)", mejor ? "bg-accent" : "bg-text-3/50")}
+          style={{ transform: `scaleX(${Math.max(0.02, r.proporcion)})` }}
         />
       </div>
       <div className="text-right lg:col-start-5">

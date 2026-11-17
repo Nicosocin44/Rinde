@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CARTERA_DEMO } from "@data/samples/cartera-demo";
 import { pais } from "@/config/countries/ar";
 import { Sparkline } from "@/components/charts/sparkline";
-import { CATEGORICOS } from "@/components/charts/donut";
+import { CATEGORICOS } from "@/components/charts/colores";
 import { ButtonLink } from "@/components/ui/button";
 import { Cifra } from "@/components/ui/cifra";
 import { Delta } from "@/components/ui/delta";

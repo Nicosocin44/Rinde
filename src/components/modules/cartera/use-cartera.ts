@@ -10,6 +10,18 @@ import type { PreciosCartera } from "@/lib/data/servicios/cartera";
 
 export type EstadoCartera = "cargando" | "demo" | "propia" | "vacia";
 
+/** Lee IndexedDB y decide qué mostrar. Sin IndexedDB (algunas navegaciones privadas), la demo. */
+async function leerCartera(): Promise<{ datos: DatosCartera; estado: EstadoCartera }> {
+  try {
+    const propios = await repositorioLocal.cargar();
+    if (propios.movimientos.length > 0) return { datos: propios, estado: "propia" };
+    if (propios.ajustes?.demoDescartada) return { datos: propios, estado: "vacia" };
+  } catch {
+    // sigue a la demo
+  }
+  return { datos: CARTERA_DEMO, estado: "demo" };
+}
+
 /**
  * Estado de la cartera: lee IndexedDB; si está vacía y no se descartó la demo, muestra la cartera de ejemplo
  * (rotulada). Pide los precios de los instrumentos al servidor (solo los ids, nunca los montos).
@@ -21,28 +33,22 @@ export function useCartera(preciosIniciales?: PreciosCartera | null) {
   const [errorPrecios, setErrorPrecios] = useState(false);
 
   const recargar = useCallback(async () => {
-    try {
-      const propios = await repositorioLocal.cargar();
-      if (propios.movimientos.length > 0) {
-        setDatos(propios);
-        setEstado("propia");
-      } else if (propios.ajustes?.demoDescartada) {
-        setDatos(propios);
-        setEstado("vacia");
-      } else {
-        setDatos(CARTERA_DEMO);
-        setEstado("demo");
-      }
-    } catch {
-      // IndexedDB no disponible (navegación privada en algunos navegadores): mostramos la demo.
-      setDatos(CARTERA_DEMO);
-      setEstado("demo");
-    }
+    const r = await leerCartera();
+    setDatos(r.datos);
+    setEstado(r.estado);
   }, []);
 
   useEffect(() => {
-    void recargar();
-  }, [recargar]);
+    let vivo = true;
+    void leerCartera().then((r) => {
+      if (!vivo) return;
+      setDatos(r.datos);
+      setEstado(r.estado);
+    });
+    return () => {
+      vivo = false;
+    };
+  }, []);
 
   const ids = useMemo(() => (datos ? datos.activos.filter((a) => !["billetera", "plazo_fijo", "fci", "efectivo_usd"].includes(a.tipo)).map((a) => a.id).sort() : []), [datos]);
   const clave = ids.join(",");

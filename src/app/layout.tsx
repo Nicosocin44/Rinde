@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { MotionProvider } from "@/components/motion-provider";
 import { RegistroSW } from "@/components/shell/registro-sw";
 import { site } from "@/config/site";
 import { SCRIPT_PREFERENCIAS } from "@/lib/preferencias";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", axes: ["opsz"], display: "swap" });
+// "optional": si Inter no llegó al primer pintado, se queda la de respaldo (ajustada) y no hay un segundo
+// pintado que retrase el LCP. Medido: el LCP en mobile pasaba de 1 s a 3,7 s solo por el cambio de fuente.
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "optional" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
 const satoshi = localFont({ src: "../fonts/Satoshi-Variable.woff2", variable: "--font-satoshi", weight: "300 900", display: "swap" });
 
@@ -39,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_PREFERENCIAS }} />
       </head>
       <body className="min-h-dvh">
-        {children}
+        <MotionProvider>{children}</MotionProvider>
         <RegistroSW />
       </body>
     </html>

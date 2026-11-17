@@ -31,7 +31,6 @@ export function FotoDeHoy({
       <Link
         href="/dolar"
         className="group presionable relative flex flex-col gap-4 py-7 transition-colors lg:py-9 lg:pr-10"
-        aria-label={mep ? `Dólar MEP: ${pesos(mep.venta, 2)}. Ver el dólar hoy` : "Ver el dólar hoy"}
       >
         <Etiqueta>Dólar MEP</Etiqueta>
         {mep ? (

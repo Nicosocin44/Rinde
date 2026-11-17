@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { BarrasMensuales } from "@/components/charts/barras-mensuales";
 import { Sparkline } from "@/components/charts/sparkline";
 import { CifraPorcentaje } from "@/components/ui/cifra";
@@ -81,7 +81,9 @@ export function Bento({
               Rinden entre <span className="tabular font-medium text-text">{porcentaje(Math.min(...enCurva.map((l) => l.tea)), 1)}</span> y{" "}
               <span className="tabular font-medium text-text">{porcentaje(Math.max(...enCurva.map((l) => l.tea)), 1)}</span> TEA. A más plazo, más tasa.
             </p>
-            <CurvaMini letras={enCurva} ajuste={curva.ajuste} />
+            <Suspense fallback={<div className="h-[150px]" />}>
+              <CurvaMini letras={enCurva} ajuste={curva.ajuste} />
+            </Suspense>
           </div>
         ) : (
           <ErrorState compacto titulo="La curva no está disponible ahora." />

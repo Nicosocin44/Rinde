@@ -1,13 +1,14 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { LayoutGroup, motion } from "motion/react";
+import { LayoutGroup, m } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { navPrincipal } from "@/config/site";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { useEsDesktop } from "@/lib/use-media";
 import { ToggleModo, ToggleTema } from "./preferencias-controles";
 import { useShell } from "./shell-context";
 import { Wordmark } from "./wordmark";
@@ -24,6 +25,8 @@ export function rutaActiva(pathname: string, href: string): boolean {
 export function TopNav() {
   const pathname = usePathname();
   const { setPaletaAbierta, tituloCompacto } = useShell();
+  // En mobile no montamos la nav de escritorio ni sus controles: ahorra mediciones de layout en celulares.
+  const esDesktop = useEsDesktop();
   const [scrolleado, setScrolleado] = useState(false);
 
   useEffect(() => {
@@ -56,6 +59,7 @@ export function TopNav() {
           </span>
         </div>
 
+        {esDesktop && (
         <nav aria-label="Principal" className="hidden lg:block">
           <LayoutGroup id="nav">
             <ul className="flex items-center gap-1">
@@ -73,7 +77,7 @@ export function TopNav() {
                     >
                       {item.label}
                       {activo && (
-                        <motion.span
+                        <m.span
                           layoutId="punto-nav"
                           className="absolute bottom-0.5 left-1/2 size-1 -translate-x-1/2 rounded-full bg-text"
                           transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}
@@ -86,6 +90,7 @@ export function TopNav() {
             </ul>
           </LayoutGroup>
         </nav>
+        )}
 
         <div className="flex items-center justify-end gap-1.5 lg:flex-1 lg:gap-2">
           <button
@@ -105,9 +110,11 @@ export function TopNav() {
           >
             <Search className="size-[18px]" />
           </button>
-          <div className="hidden lg:block">
-            <ToggleModo />
-          </div>
+          {esDesktop && (
+            <div className="hidden lg:block">
+              <ToggleModo />
+            </div>
+          )}
           <ToggleTema />
           <div className="hidden lg:block">
             <ButtonLink href="/cartera" variante="primario" tamano="sm">

@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutGroup, motion } from "motion/react";
+import { LayoutGroup, m } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -43,7 +43,7 @@ export function SectionTabs({ solapas, etiqueta }: { solapas: Solapa[]; etiqueta
                       )}
                     >
                       {activo && (
-                        <motion.span
+                        <m.span
                           layoutId="thumb-solapa"
                           className="absolute inset-0 -z-10 rounded-[7px] bg-surface shadow-(--shadow-thumb) dark:bg-[#2a2e35]"
                           transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}

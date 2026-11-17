@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  devIndicators: false,
   // View Transitions: desde Next 16.3 funcionan sin flag (componente <ViewTransition> de React 19.3).
   async headers() {
     return [

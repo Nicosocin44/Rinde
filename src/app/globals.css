@@ -1,0 +1,462 @@
+@import "tailwindcss";
+
+/*
+ * Sistema de diseño de Rinde. Fuente de verdad: docs/DISENO.md (es contrato).
+ * Los colores viven como variables CSS para que dark y light sean de primera clase.
+ * El tema lo fija un script en <head> (preferencia del sistema o elección manual) en <html data-theme>.
+ */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant pro (&:where([data-modo="pro"], [data-modo="pro"] *));
+
+/* ─────────── Light: el modo "día" ─────────── */
+:root {
+  color-scheme: light;
+  --c-bg: #f7f7f4;
+  --c-bg-raised: #f0f0ec;
+  --c-surface: #ffffff;
+  --c-surface-2: #f2f2ee;
+  --c-border: rgba(12, 14, 18, 0.08);
+  --c-border-strong: rgba(12, 14, 18, 0.16);
+  --c-text: #0e1013;
+  --c-text-2: #565c66;
+  --c-text-3: #6b717a;
+  --c-accent: #1766c2;
+  --c-accent-soft: rgba(23, 102, 194, 0.08);
+  --c-gain: #0b7a48;
+  --c-loss: #c2353a;
+  --c-warn: #8f5e07;
+  --c-inverse: #0e1013;
+  --c-on-inverse: #f7f7f4;
+  --c-glass: rgba(247, 247, 244, 0.72);
+  --c-scrim: rgba(14, 16, 19, 0.28);
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --shadow-overlay: 0 24px 64px -16px rgba(14, 16, 19, 0.22), 0 2px 8px rgba(14, 16, 19, 0.06);
+  --shadow-thumb: 0 1px 2px rgba(14, 16, 19, 0.12), 0 0 0 0.5px rgba(14, 16, 19, 0.06);
+  --skeleton-a: rgba(12, 14, 18, 0.04);
+  --skeleton-b: rgba(12, 14, 18, 0.08);
+
+  /* Paleta categórica apagada (distribución de cartera) */
+  --cat-1: #4f8fd1;
+  --cat-2: #5f9f7a;
+  --cat-3: #b8904f;
+  --cat-4: #827cc0;
+  --cat-5: #c46d5a;
+  --cat-6: #7d838c;
+}
+
+/* ─────────── Dark: el modo "vitrina" ─────────── */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --c-bg: #0b0c0e;
+  --c-bg-raised: #111215;
+  --c-surface: #16181c;
+  --c-surface-2: #1d2025;
+  --c-border: rgba(255, 255, 255, 0.07);
+  --c-border-strong: rgba(255, 255, 255, 0.13);
+  --c-text: #f3f4f6;
+  --c-text-2: #a3a8b1;
+  --c-text-3: #80868f;
+  --c-accent: #7ab8f5;
+  --c-accent-soft: rgba(122, 184, 245, 0.12);
+  --c-gain: #3ccb7f;
+  --c-loss: #f2555a;
+  --c-warn: #f2b544;
+  --c-inverse: #f3f4f6;
+  --c-on-inverse: #0b0c0e;
+  --c-glass: rgba(11, 12, 14, 0.7);
+  --c-scrim: rgba(0, 0, 0, 0.5);
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-overlay: 0 24px 80px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+  --skeleton-a: rgba(255, 255, 255, 0.04);
+  --skeleton-b: rgba(255, 255, 255, 0.08);
+
+  --cat-1: #7ab8f5;
+  --cat-2: #8cc5a3;
+  --cat-3: #d8b47a;
+  --cat-4: #a9a3d9;
+  --cat-5: #d98c7a;
+  --cat-6: #8a9099;
+}
+
+/* Colores alternativos para daltonismo: suba en azul, baja en naranja. */
+:root[data-colores="alt"] {
+  --c-gain: #1f6fd1;
+  --c-loss: #c25e00;
+}
+:root[data-theme="dark"][data-colores="alt"] {
+  --c-gain: #6aaef5;
+  --c-loss: #f29544;
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-bg-raised: var(--c-bg-raised);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-border: var(--c-border);
+  --color-border-strong: var(--c-border-strong);
+  --color-text: var(--c-text);
+  --color-text-2: var(--c-text-2);
+  --color-text-3: var(--c-text-3);
+  --color-accent: var(--c-accent);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-gain: var(--c-gain);
+  --color-loss: var(--c-loss);
+  --color-warn: var(--c-warn);
+  --color-inverse: var(--c-inverse);
+  --color-on-inverse: var(--c-on-inverse);
+  --color-glass: var(--c-glass);
+  --color-scrim: var(--c-scrim);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-satoshi), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@theme {
+  /* Radios: 6 chips · 10 botones/inputs · 14 cards · 20 paneles y sheets */
+  --radius-chip: 6px;
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --radius-panel: 20px;
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --duration-micro: 120ms;
+  --duration-short: 200ms;
+  --duration-base: 320ms;
+  --duration-long: 560ms;
+
+  --breakpoint-xs: 23.4375rem; /* 375 */
+
+  --animate-pulso: pulso 2s var(--ease-standard) infinite;
+  --animate-brillo: brillo 1.6s ease-in-out infinite;
+
+  @keyframes pulso {
+    0% { transform: scale(1); opacity: 0.55; }
+    70%, 100% { transform: scale(2.6); opacity: 0; }
+  }
+  @keyframes brillo {
+    0%, 100% { background-color: var(--skeleton-a); }
+    50% { background-color: var(--skeleton-b); }
+  }
+}
+
+/* ─────────── Base ─────────── */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv11", "ss01";
+  }
+  body {
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 24px;
+    font-optical-sizing: auto;
+  }
+  ::selection {
+    background: var(--c-accent-soft);
+    color: var(--c-text);
+  }
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  button,
+  [role="button"],
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+/* ─────────── Tipografía (DISENO §4) ─────────── */
+@utility text-display {
+  font-family: var(--font-display);
+  font-size: 44px;
+  line-height: 48px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  @media (width >= 64rem) {
+    font-size: 72px;
+    line-height: 76px;
+  }
+}
+@utility text-h1 {
+  font-family: var(--font-display);
+  font-size: 34px;
+  line-height: 38px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  @media (width >= 64rem) {
+    font-size: 48px;
+    line-height: 52px;
+  }
+}
+@utility text-h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  @media (width >= 64rem) {
+    font-size: 32px;
+    line-height: 38px;
+  }
+}
+@utility text-h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  @media (width >= 64rem) {
+    font-size: 22px;
+    line-height: 28px;
+  }
+}
+@utility text-hero {
+  font-size: 44px;
+  line-height: 44px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum", "cv11", "ss01";
+  @media (width >= 64rem) {
+    font-size: 64px;
+    line-height: 64px;
+  }
+}
+@utility text-cifra {
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum", "cv11", "ss01";
+  @media (width >= 64rem) {
+    font-size: 32px;
+    line-height: 36px;
+  }
+}
+@utility text-chico {
+  font-size: 14px;
+  line-height: 20px;
+}
+@utility text-label {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+}
+@utility text-micro {
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.02em;
+  color: var(--c-text-3);
+}
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum", "cv11", "ss01";
+}
+
+/* ─────────── Superficies ─────────── */
+@utility card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--inner-glow);
+}
+@utility vidrio {
+  background: var(--c-glass);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+}
+@utility hairline-b {
+  box-shadow: inset 0 -1px 0 var(--c-border);
+}
+@utility contenedor {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  @media (width >= 48rem) {
+    padding-inline: 40px;
+  }
+  @media (width >= 90rem) {
+    padding-inline: 64px;
+    max-width: 1408px;
+  }
+}
+@utility presionable {
+  transition: transform var(--duration-micro) var(--ease-standard);
+  &:active {
+    transform: scale(0.98);
+  }
+}
+@utility sin-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Number ticker: la cifra se tiñe al cambiar y vuelve a su color en 600 ms. */
+.tinte-sube {
+  animation: tinte-sube 600ms var(--ease-standard);
+}
+.tinte-baja {
+  animation: tinte-baja 600ms var(--ease-standard);
+}
+@keyframes tinte-sube {
+  0%, 30% { color: color-mix(in oklab, var(--c-gain) 70%, currentColor); }
+}
+@keyframes tinte-baja {
+  0%, 30% { color: color-mix(in oklab, var(--c-loss) 70%, currentColor); }
+}
+
+/* Revelado al scrollear: fundido + 12 px, una sola vez. */
+/* Solo se oculta si hay JS (sin JS, el contenido se ve igual). */
+[data-js] .revelar {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity var(--duration-long) var(--ease-standard),
+    transform var(--duration-long) var(--ease-standard);
+  transition-delay: calc(var(--i, 0) * 40ms);
+}
+[data-js] .revelar[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-js] .revelar {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Slider nativo con el estilo del sistema (riel lo dibuja el componente). */
+.rinde-slider {
+  appearance: none;
+  background: transparent;
+  height: 24px;
+  cursor: pointer;
+}
+.rinde-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(0, 0, 0, 0.12);
+  transition: transform var(--duration-micro) var(--ease-standard);
+}
+.rinde-slider:active::-webkit-slider-thumb {
+  transform: scale(1.08);
+}
+.rinde-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.rinde-slider::-webkit-slider-runnable-track {
+  background: transparent;
+}
+.rinde-slider::-moz-range-track {
+  background: transparent;
+}
+.rinde-slider:focus-visible {
+  outline: none;
+}
+.rinde-slider:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+/* Simple / Pro: la misma pantalla, distinta densidad. */
+.solo-pro {
+  display: none !important;
+}
+[data-modo="pro"] .solo-pro {
+  display: revert !important;
+}
+[data-modo="pro"] .solo-simple {
+  display: none !important;
+}
+
+/* ─────────── View Transitions (React <ViewTransition>) ─────────── */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-group(.morph) {
+  animation-duration: var(--duration-base);
+  animation-timing-function: var(--ease-standard);
+}
+::view-transition-old(.fundido),
+::view-transition-new(.fundido) {
+  animation-duration: 200ms;
+}
+::view-transition-group(barra-superior),
+::view-transition-group(barra-inferior) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(barra-superior),
+::view-transition-old(barra-inferior) {
+  display: none;
+}
+::view-transition-new(barra-superior),
+::view-transition-new(barra-inferior) {
+  animation: none;
+}
+::view-transition-old(.pagina) {
+  animation: 140ms var(--ease-exit) both vt-salida;
+}
+::view-transition-new(.pagina) {
+  animation: 280ms var(--ease-standard) 60ms both vt-entrada;
+}
+@keyframes vt-salida {
+  to { opacity: 0; }
+}
+@keyframes vt-entrada {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 120ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 120ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

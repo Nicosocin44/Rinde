@@ -479,13 +479,8 @@
    interior queda alineado con el resto de la página. */
 @utility a-lo-ancho {
   --hueco: 8px;
-  /* En mobile el contenido entra un poco más que el resto de la página, para no pegarse al borde de la lámina. */
-  --extra: 10px;
   margin-inline: calc(50% - 50vw + var(--hueco));
-  padding-inline: calc(50vw - 50% - var(--hueco) + var(--extra));
-  @media (width >= 48rem) {
-    --extra: 0px;
-  }
+  padding-inline: calc(50vw - 50% - var(--hueco));
   @media (width >= 64rem) {
     --hueco: 14px;
   }

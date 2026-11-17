@@ -6,7 +6,7 @@ export default function NoEncontrado() {
     <div className="flex min-h-[60vh] flex-col justify-center gap-6 py-20">
       <p className="text-label">Error 404</p>
       <h1 className="text-display max-w-3xl text-balance">Esta página no rinde.</h1>
-      <p className="max-w-lg text-[17px] leading-[27px] text-text-2">No existe o cambió de lugar. Probá con el buscador (⌘K) o empezá por lo más visitado:</p>
+      <p className="max-w-lg text-[17px] leading-[27px] text-text-2">No existe o cambió de lugar. Probá con el buscador o empezá por lo más visitado:</p>
       <div className="flex flex-wrap gap-3">
         <ButtonLink href="/" variante="primario" tamano="lg">
           Ir al inicio

@@ -40,7 +40,7 @@ export function TablaCedears({ cedears }: { cedears: Cedear[] }) {
       valorOrden: (c) => c.ticker,
       celda: (c) => (
         <span className="flex items-center gap-3">
-          <ProviderMark sigla={c.ticker.slice(0, 2)} />
+          <ProviderMark activo={c.ticker} sigla={c.ticker.slice(0, 2)} />
           {c.nombre ? (
             <span>
               <span className="block font-medium">{c.nombre}</span>
@@ -77,7 +77,7 @@ export function TablaCedears({ cedears }: { cedears: Cedear[] }) {
         ordenPorDefecto={{ columna: "vol", direccion: "desc" }}
         filaMovil={(c) => (
           <span className="flex items-center gap-3">
-            <ProviderMark sigla={c.ticker.slice(0, 2)} />
+            <ProviderMark activo={c.ticker} sigla={c.ticker.slice(0, 2)} />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[15px] font-medium">{c.nombre ?? c.ticker}</span>
               <span className="block font-mono text-[12px] text-text-3">{c.ticker}</span>
@@ -109,9 +109,12 @@ export function TablaAcciones({ acciones }: { acciones: Accion[] }) {
       encabezado: "Acción",
       valorOrden: (a) => a.ticker,
       celda: (a) => (
-        <span>
-          <span className="block font-medium">{a.nombre ?? a.ticker}</span>
-          <span className="block font-mono text-[12px] text-text-3">{a.ticker}</span>
+        <span className="flex items-center gap-3">
+          <ProviderMark activo={a.ticker} sigla={a.ticker.slice(0, 2)} />
+          <span>
+            <span className="block font-medium">{a.nombre ?? a.ticker}</span>
+            <span className="block font-mono text-[12px] text-text-3">{a.ticker}</span>
+          </span>
         </span>
       ),
     },
@@ -141,7 +144,8 @@ export function TablaAcciones({ acciones }: { acciones: Accion[] }) {
         ordenPorDefecto={{ columna: "vol", direccion: "desc" }}
         filaMovil={(a) => (
           <span className="flex items-center justify-between gap-3">
-            <span className="min-w-0">
+            <ProviderMark activo={a.ticker} sigla={a.ticker.slice(0, 2)} />
+            <span className="min-w-0 flex-1">
               <span className="block truncate text-[15px] font-medium">{a.nombre ?? a.ticker}</span>
               <span className="block font-mono text-[12px] text-text-3">{a.ticker}</span>
             </span>
@@ -166,7 +170,10 @@ export function VistaCripto({ criptos }: { criptos: Cripto[] }) {
         {criptos.map((x, i) => (
           <li key={x.simbolo} className={cn("border-border", i % 2 === 1 && "border-l", i >= 2 && "border-t lg:border-t-0", i > 0 && "lg:border-l")}>
             <button type="button" aria-pressed={sel === x.simbolo} onClick={() => setSel(x.simbolo)} className={cn("presionable flex w-full flex-col gap-1 px-4 py-5 text-left transition-colors lg:px-6", sel === x.simbolo && "bg-surface-2/60")}>
-              <span className="text-label">{x.nombre}</span>
+              <span className="flex items-center gap-2 text-label">
+                <ProviderMark activo={x.simbolo} sigla={x.simbolo.slice(0, 2)} tamano={28} />
+                {x.nombre}
+              </span>
               <span className="tabular text-[24px] font-medium tracking-[-0.02em] lg:text-[28px]">{x.precioUsd && x.precioUsd > 2 ? dolares(x.precioUsd, 0) : pesos(x.precioArs, 2)}</span>
               <span className="tabular text-chico text-text-2">{x.precioUsd && x.precioUsd > 2 ? pesos(x.precioArs) : "promedio entre exchanges"}</span>
             </button>

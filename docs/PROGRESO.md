@@ -67,11 +67,31 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 7. **"Empezá gratis":** hoy no hay planes pagos activos. Si se lanza un plan pago, hay que revisar ese texto.
 8. **El plugin `frontend-design` no se pudo instalar desde la terminal** (la CLI responde "not found" aunque está en el catálogo). Seguí la guía de la skill leyéndola directo del catálogo descargado.
 
+### Segunda tanda (rama `rediseno-2`)
+
+- **Imágenes de compartir rediseñadas:** fondo tinta, wordmark nuevo y la cifra en una píldora del color de su tema. Aplica a Inicio, Dólar, Pesos y los resultados de las calculadoras.
+- **Encabezados de color en las demás páginas:** se probaron (láminas con el color de cada sección) y **se descartaron** por pedido de los fundadores. Las páginas internas quedan con su encabezado anterior.
+- **LCP:**
+  - El LCP **real** medido en la home es **0,38–0,48 s**.
+  - El de 3,5–3,7 s es la estimación de Lighthouse para un celular lento con 4G lenta.
+  - Se probó apagar la animación del titular y no cambia nada.
+  - Se achicaron los datos que viajan al comparador; performance quedó en 76–83.
+  - Lo que queda es el costo de hidratar React en ese celular simulado.
+
+### Lista de cambios pendientes (17/11/2026): puntos 1, 4, 5 y 7
+
+- **1. Cinta de cotizaciones:** ahora gira sola y continua, como la franja de rulo.com.ar. Es la única excepción a la regla de "nada en loop" (anotada en DISENO.md §7). Con movimiento reducido queda quieta.
+- **4 y 5. Logos de apps, bancos y activos:**
+  - Cubre 69 proveedores (bancos, billeteras, exchanges, brokers) y 93 activos (CEDEARs, acciones y cripto).
+  - Se bajan una sola vez con `python scripts/logos.py` y viven en `public/logos/`, así la web no depende de un servicio externo.
+  - Si una marca no tiene un logo usable, sigue el monograma de dos letras.
+  - **Para revisar:** son los íconos oficiales de cada sitio, usados para identificar a cada empresa. Antes de lanzar conviene confirmar que no hay problema de marcas.
+- **7. Sin atajos de teclado a la vista:** se sacaron el "⌘K" de la barra, el "esc" y la línea "↑↓ para moverte / ↵ para abrir" del buscador. El teclado sigue funcionando para quien lo use.
+
 ### Lo que falta del rediseño
 
-- Llevar la composición nueva (láminas, titulares grandes, colores con tema) a /dolar, /pesos, /bonos, /mercados, /calculadoras y /cartera.
-- Actualizar las imágenes de compartir (OG) a Bricolage.
-- Probar el scroll en un teléfono real (Android de gama media) y bajar el LCP: diferir la hidratación del comparador.
+- Rediseñar el cuerpo de cada página (cifra héroe, tablas y gráficos) con la misma profundidad que la home, empezando por /dolar.
+- Probar el scroll en un teléfono real (Android de gama media).
 
 ---
 

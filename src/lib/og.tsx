@@ -4,14 +4,22 @@ import { join } from "node:path";
 import { site } from "@/config/site";
 
 /**
- * Plantilla de imágenes para compartir (OG, historias, WhatsApp): grafito, cifra grande, wordmark chico.
- * Mismo sistema que el sitio. Satoshi en TTF estático (Satori no lee woff2 ni fuentes variables).
+ * Plantilla de imágenes para compartir (OG, historias, WhatsApp), con el sistema del rediseño:
+ * fondo tinta, wordmark en minúscula con punto sol, y la cifra protagonista dentro de una píldora del
+ * color de su tema (verde dólar, celeste tasas, sol lo del día, lila cartera, coral inflación).
+ * Fuentes en TTF estático porque Satori no lee woff2 ni fuentes variables.
  */
-let fuentes: Promise<{ medium: Buffer; bold: Buffer }> | null = null;
+let fuentes: Promise<{ display: Buffer; displayMedia: Buffer; texto: Buffer }> | null = null;
 function cargarFuentes() {
-  fuentes ??= Promise.all([readFile(join(process.cwd(), "assets/og/Satoshi-Medium.ttf")), readFile(join(process.cwd(), "assets/og/Satoshi-Bold.ttf"))]).then(([medium, bold]) => ({ medium, bold }));
+  const leer = (f: string) => readFile(join(process.cwd(), "assets/og", f));
+  fuentes ??= Promise.all([leer("Bricolage-ExtraBold.ttf"), leer("Bricolage-Medium.ttf"), leer("InstrumentSans-Medium.ttf")]).then(([display, displayMedia, texto]) => ({ display, displayMedia, texto }));
   return fuentes;
 }
+
+const COLORES = { verde: "#3ddc84", celeste: "#7dc1ff", sol: "#ffc93c", lila: "#c3b1ff", coral: "#ff8a65" } as const;
+const TINTA = "#0d0d0c";
+const PAPEL = "#f4f3ef";
+const GRIS = "#9a9890";
 
 export type ContenidoImagen = {
   etiqueta: string;
@@ -20,41 +28,55 @@ export type ContenidoImagen = {
   /** Filas chicas abajo (ej. otros dólares). */
   filas?: { k: string; v: string }[];
   pie?: string;
+  /** Color del tema de la cifra. */
+  color?: keyof typeof COLORES;
 };
 
 export async function imagenRinde(c: ContenidoImagen, { ancho = 1200, alto = 630 }: { ancho?: number; alto?: number } = {}) {
-  const { medium, bold } = await cargarFuentes();
+  const { display, displayMedia, texto } = await cargarFuentes();
   const vertical = alto > ancho;
   const escala = vertical ? 1.15 : 1;
-  const largoCifra = c.cifra.length;
-  const tamCifra = Math.round((largoCifra > 14 ? 104 : largoCifra > 10 ? 128 : 156) * escala);
+  const largo = c.cifra.length;
+  const tamCifra = Math.round((largo > 16 ? 84 : largo > 12 ? 104 : largo > 9 ? 124 : 148) * escala);
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#0b0c0e", color: "#f3f4f6", padding: vertical ? 96 : 72, fontFamily: "Satoshi" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 30 }}>
-            <div style={{ width: 7, height: 12, borderRadius: 2, background: "#80868f" }} />
-            <div style={{ width: 7, height: 19, borderRadius: 2, background: "#a3a8b1" }} />
-            <div style={{ width: 7, height: 28, borderRadius: 2, background: "#7ab8f5" }} />
-          </div>
-          <div style={{ fontSize: 34, fontWeight: 700, letterSpacing: -1.2 }}>{site.name}</div>
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: TINTA, color: PAPEL, padding: vertical ? 96 : 68, fontFamily: "Instrument" }}>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 4 }}>
+          <span style={{ fontFamily: "Bricolage", fontWeight: 800, fontSize: 46, letterSpacing: -2.6, lineHeight: 1 }}>{site.name.toLowerCase()}</span>
+          <span style={{ width: 13, height: 13, borderRadius: 99, background: COLORES.sol, marginBottom: 7 }} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: vertical ? 28 : 18 }}>
-          <div style={{ fontSize: 26 * escala, fontWeight: 500, letterSpacing: 3, textTransform: "uppercase", color: "#80868f" }}>{c.etiqueta}</div>
-          <div style={{ fontSize: tamCifra, fontWeight: 500, letterSpacing: -5, lineHeight: 1 }}>{c.cifra}</div>
-          {c.detalle && <div style={{ fontSize: 34 * escala, fontWeight: 500, color: "#a3a8b1", lineHeight: 1.35, maxWidth: ancho - 200 }}>{c.detalle}</div>}
-          {c.filas && (
-            <div style={{ display: "flex", flexDirection: vertical ? "column" : "row", gap: vertical ? 18 : 48, marginTop: 16 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: vertical ? 30 : 20 }}>
+          <div style={{ fontSize: 30 * escala, color: GRIS }}>{c.etiqueta}</div>
+          <div
+            style={{
+              display: "flex",
+              fontFamily: "Bricolage",
+              fontWeight: 800,
+              fontSize: tamCifra,
+              letterSpacing: -tamCifra * 0.045,
+              lineHeight: 1,
+              color: TINTA,
+              background: COLORES[c.color ?? "sol"],
+              borderRadius: tamCifra * 0.3,
+              padding: `${tamCifra * 0.08}px ${tamCifra * 0.2}px ${tamCifra * 0.12}px`,
+              transform: "rotate(-2deg)",
+            }}
+          >
+            {c.cifra}
+          </div>
+          {c.detalle && <div style={{ fontFamily: "BricolageMedia", fontSize: 36 * escala, lineHeight: 1.25, letterSpacing: -0.6, maxWidth: ancho - 180, marginTop: 6 }}>{c.detalle}</div>}
+          {c.filas && c.filas.length > 0 && (
+            <div style={{ display: "flex", flexDirection: vertical ? "column" : "row", gap: vertical ? 18 : 56, marginTop: 6 }}>
               {c.filas.map((f) => (
-                <div key={f.k} style={{ display: "flex", flexDirection: vertical ? "row" : "column", justifyContent: "space-between", gap: 6, fontSize: 28 * escala }}>
-                  <span style={{ color: "#80868f" }}>{f.k}</span>
-                  <span style={{ fontWeight: 700 }}>{f.v}</span>
+                <div key={f.k} style={{ display: "flex", flexDirection: vertical ? "row" : "column", justifyContent: "space-between", gap: 4, fontSize: 28 * escala }}>
+                  <span style={{ color: GRIS }}>{f.k}</span>
+                  <span style={{ fontFamily: "Bricolage", fontWeight: 800, fontSize: 36 * escala, letterSpacing: -1 }}>{f.v}</span>
                 </div>
               ))}
             </div>
           )}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, color: "#80868f" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, color: GRIS }}>
           <span>{c.pie ?? site.url.replace(/^https?:\/\//, "")}</span>
           <span>No es una recomendación de inversión</span>
         </div>
@@ -64,8 +86,9 @@ export async function imagenRinde(c: ContenidoImagen, { ancho = 1200, alto = 630
       width: ancho,
       height: alto,
       fonts: [
-        { name: "Satoshi", data: medium, weight: 500, style: "normal" },
-        { name: "Satoshi", data: bold, weight: 700, style: "normal" },
+        { name: "Bricolage", data: display, weight: 800, style: "normal" },
+        { name: "BricolageMedia", data: displayMedia, weight: 500, style: "normal" },
+        { name: "Instrument", data: texto, weight: 500, style: "normal" },
       ],
     },
   );

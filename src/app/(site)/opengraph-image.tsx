@@ -14,8 +14,9 @@ export default async function Imagen() {
   const oficial = c.ok ? c.data.find((x) => x.id === "oficial") : null;
   const mejor = p.ok ? mejoresDelDia(p.data.opciones).liquida : null;
   return imagenRinde({
-    etiqueta: "La foto de hoy",
-    cifra: mep ? `MEP ${pesos(mep.venta, 2)}` : "El dólar hoy",
+    etiqueta: "La foto de hoy: el dólar MEP",
+    color: "verde",
+    cifra: mep ? pesos(mep.venta, 2) : "El dólar hoy",
     detalle: mejor ? `Dónde rinde más tu plata: ${porcentaje(mejor.tna, 1)} TNA en ${mejor.nombre}` : undefined,
     filas: [oficial && { k: "Oficial", v: pesos(oficial.venta, 0) }, mep?.brecha !== null && mep?.brecha !== undefined && { k: "Brecha", v: porcentaje(mep.brecha, 1) }].filter(Boolean) as { k: string; v: string }[],
   });

@@ -515,11 +515,19 @@
   color: var(--c-text);
 }
 
-/* Cinta de cotizaciones: la mueve el scroll (GSAP), no un loop. Solo layout acá. */
+/* Cinta de cotizaciones: gira sola y continua, como una rueda (pedido de los fundadores, 17/11/2026).
+   Hay tres copias del contenido: al llegar a un tercio, vuelve al inicio sin que se note. */
 .cinta {
   display: flex;
   width: max-content;
   will-change: transform;
+  animation: cinta 60s linear infinite;
+}
+@keyframes cinta {
+  to { transform: translateX(-33.3333%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cinta { animation: none; }
 }
 
 /* Titular que sube palabra por palabra al cargar (el único movimiento que no dispara el usuario). */

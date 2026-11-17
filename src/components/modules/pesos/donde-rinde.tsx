@@ -11,7 +11,7 @@ import { SegmentedControl } from "@/components/ui/segmented";
 import { EmptyState } from "@/components/ui/estados";
 import type { OpcionPesos } from "@/lib/data/types";
 import { numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
-import { diasDeCalculo, dondeRindeMas, type PlazoWidget } from "@/lib/rankings/pesos";
+import { diasDeCalculo, dondeRindeMas, type OpcionComparador, type PlazoWidget } from "@/lib/rankings/pesos";
 import { cn } from "@/lib/cn";
 
 const PLAZOS: { valor: `${PlazoWidget}`; etiqueta: string; ariaLabel: string }[] = [
@@ -42,7 +42,7 @@ const LIQUIDEZ: Record<OpcionPesos["liquidez"], string> = {
  * "¿Dónde rinde más tu plata?": monto + plazo + liquidez → top 5 con "ganás $X en el período".
  * La feature estrella. El orden sale solo de la ganancia en pesos (ver lib/rankings/pesos.ts).
  */
-export function DondeRinde({ opciones, montoInicial = 1_000_000, compacto = false }: { opciones: OpcionPesos[]; montoInicial?: number; compacto?: boolean }) {
+export function DondeRinde({ opciones, montoInicial = 1_000_000, compacto = false }: { opciones: OpcionComparador[]; montoInicial?: number; compacto?: boolean }) {
   const [monto, setMonto] = useState(montoInicial);
   const [plazo, setPlazo] = useState<PlazoWidget>(30);
   const [soloLiquidez, setSoloLiquidez] = useState(false);

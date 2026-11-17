@@ -16,8 +16,18 @@ export type ConsultaRinde = {
   soloLiquidez: boolean;
 };
 
-export type ResultadoRinde = {
-  opcion: OpcionPesos;
+/** Lo único que necesita el comparador "¿Dónde rinde más?" de cada opción (lo que viaja al navegador). */
+export type OpcionComparador = Pick<OpcionPesos, "id" | "nombre" | "proveedorId" | "tipo" | "tna" | "tea" | "plazoDias" | "liquidez" | "tope" | "condicionEspecial" | "fuenteId">;
+
+/** Recorta las opciones a lo que usa el comparador y saca las que tienen condiciones (nunca compiten). */
+export function paraComparador(opciones: OpcionPesos[]): OpcionComparador[] {
+  return opciones
+    .filter((o) => !o.condicionEspecial)
+    .map(({ id, nombre, proveedorId, tipo, tna, tea, plazoDias, liquidez, tope, condicionEspecial, fuenteId }) => ({ id, nombre, proveedorId, tipo, tna, tea, plazoDias, liquidez, tope, condicionEspecial, fuenteId }));
+}
+
+export type ResultadoRinde<T extends OpcionComparador = OpcionPesos> = {
+  opcion: T;
   /** Días sobre los que se calcula la ganancia (30 cuando el plazo es "hoy"). */
   dias: number;
   /** Ganancia en pesos en esos días. */
@@ -40,7 +50,7 @@ export function diasDeCalculo(plazo: PlazoWidget): number {
  *  - Plazo fijo y caución: su plazo no puede superar el elegido (se renueva si es más corto).
  *  - LECAP: vence dentro del plazo elegido o hasta 15 días después (lo más parecido a "calzar" el plazo).
  */
-export function sirveParaPlazo(opcion: OpcionPesos, consulta: ConsultaRinde): boolean {
+export function sirveParaPlazo(opcion: OpcionComparador, consulta: ConsultaRinde): boolean {
   if (opcion.condicionEspecial) return false;
   if (opcion.liquidez === "inmediata") return true;
   if (consulta.soloLiquidez || consulta.plazo === 0) return false;
@@ -52,7 +62,7 @@ export function sirveParaPlazo(opcion: OpcionPesos, consulta: ConsultaRinde): bo
 /** Máximo de resultados por tipo, para que el top no sean cinco variantes de lo mismo. */
 const MAXIMO_POR_TIPO: Record<TipoOpcionPesos, number> = { billetera: 2, cuenta: 2, fci: 2, plazo_fijo: 2, caucion: 1, lecap: 1 };
 
-export function dondeRindeMas(opciones: OpcionPesos[], consulta: ConsultaRinde, cantidad = 5): ResultadoRinde[] {
+export function dondeRindeMas<T extends OpcionComparador>(opciones: T[], consulta: ConsultaRinde, cantidad = 5): ResultadoRinde<T>[] {
   const dias = diasDeCalculo(consulta.plazo);
   const candidatas = opciones
     .filter((o) => sirveParaPlazo(o, consulta))

@@ -19,7 +19,7 @@ import { obtenerCotizaciones, obtenerMacro, obtenerPesos, obtenerPulso } from "@
 import { mercadoAbierto } from "@/lib/data/freshness";
 import { resumenDelDia } from "@/lib/data/servicios/inicio";
 import { FUENTES } from "@/lib/data/types";
-import { mejoresDelDia } from "@/lib/rankings/pesos";
+import { mejoresDelDia, paraComparador } from "@/lib/rankings/pesos";
 
 export const revalidate = 60;
 
@@ -60,7 +60,7 @@ export default async function Inicio() {
         </div>
         {opciones.length ? (
           <Suspense>
-            <DondeRinde opciones={opciones} />
+            <DondeRinde opciones={paraComparador(opciones)} />
           </Suspense>
         ) : (
           <ErrorState titulo="No pudimos traer las tasas." detalle="Mostramos el comparador apenas vuelvan las fuentes." />

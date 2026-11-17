@@ -14,6 +14,7 @@ export default async function Imagen() {
   const lecaps = p.ok ? p.data.curva.letras.filter((l) => l.enCurva) : [];
   return imagenRinde({
     etiqueta: "Dónde rinde más tu plata hoy",
+    color: "celeste",
     cifra: liquida ? `${porcentaje(liquida.tna, 1)} TNA` : "Tasas en pesos",
     detalle: liquida ? `${liquida.nombre}, con la plata disponible al instante` : undefined,
     filas: [

@@ -1,11 +1,10 @@
 import type { CotizacionDolar, Pulso } from "@/lib/data/types";
 import { delta, pesos, porcentaje } from "@/lib/format";
 import { cn } from "@/lib/cn";
-import { CintaMovil } from "./cinta-movil";
 
 /**
  * Cinta de cotizaciones: una banda de color sol, inclinada, con los mismos datos reales de la página.
- * Avanza solo mientras scrolleás y frena cuando parás (DISENO.md §7: nada en loop).
+ * Gira sola y continua, como una rueda (DISENO.md §7, excepción pedida por los fundadores).
  */
 export function CintaCotizaciones({ cotizaciones, pulso, className }: { cotizaciones: CotizacionDolar[]; pulso: Pulso; className?: string }) {
   const items: { k: string; v: string; d?: number | null }[] = [
@@ -31,11 +30,11 @@ export function CintaCotizaciones({ cotizaciones, pulso, className }: { cotizaci
   return (
     <div className={cn("sangrado relative z-10 overflow-x-clip py-8", className)} aria-label="Cotizaciones de hoy" role="region">
       <div className="sobre-color -mx-[8vw] -rotate-2 overflow-hidden bg-sol py-4 lg:py-5">
-        <CintaMovil>
+        <div className="cinta">
           {fila(0)}
           {fila(1)}
           {fila(2)}
-        </CintaMovil>
+        </div>
       </div>
     </div>
   );

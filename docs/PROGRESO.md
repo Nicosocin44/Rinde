@@ -78,6 +78,16 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
   - Se achicaron los datos que viajan al comparador; performance quedó en 76–83.
   - Lo que queda es el costo de hidratar React en ese celular simulado.
 
+### Lista de cambios pendientes (17/11/2026): puntos 1, 4, 5 y 7
+
+- **1. Cinta de cotizaciones:** ahora gira sola y continua, como la franja de rulo.com.ar. Es la única excepción a la regla de "nada en loop" (anotada en DISENO.md §7). Con movimiento reducido queda quieta.
+- **4 y 5. Logos de apps, bancos y activos:**
+  - Cubre 69 proveedores (bancos, billeteras, exchanges, brokers) y 93 activos (CEDEARs, acciones y cripto).
+  - Se bajan una sola vez con `python scripts/logos.py` y viven en `public/logos/`, así la web no depende de un servicio externo.
+  - Si una marca no tiene un logo usable, sigue el monograma de dos letras.
+  - **Para revisar:** son los íconos oficiales de cada sitio, usados para identificar a cada empresa. Antes de lanzar conviene confirmar que no hay problema de marcas.
+- **7. Sin atajos de teclado a la vista:** se sacaron el "⌘K" de la barra, el "esc" y la línea "↑↓ para moverte / ↵ para abrir" del buscador. El teclado sigue funcionando para quien lo use.
+
 ### Lo que falta del rediseño
 
 - Rediseñar el cuerpo de cada página (cifra héroe, tablas y gráficos) con la misma profundidad que la home, empezando por /dolar.

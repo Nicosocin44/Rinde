@@ -98,8 +98,7 @@ export function TopNav() {
             className="hidden h-10 items-center gap-2 rounded-full pr-2 pl-3.5 text-[14px] text-text-3 transition-colors hover:bg-surface-2 hover:text-text-2 xl:flex"
           >
             <Search className="size-[15px]" />
-            <span className="pr-3">Buscar</span>
-            <kbd className="rounded-full bg-surface-2 px-2 py-0.5 font-sans text-[11px] text-text-3">⌘K</kbd>
+            <span className="pr-2">Buscar</span>
           </button>
           <button
             type="button"

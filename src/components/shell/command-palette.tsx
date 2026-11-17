@@ -1,7 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { ArrowRight, CornerDownLeft, Search } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { AnimatePresence, m } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -164,7 +164,6 @@ export function CommandPalette() {
                     aria-activedescendant={resultados[indice] ? `r-${resultados[indice]!.id}` : undefined}
                     className="h-14 w-full bg-transparent text-[16px] outline-none placeholder:text-text-3"
                   />
-                  <kbd className="hidden rounded-[5px] border border-border px-1.5 py-0.5 text-[11px] text-text-3 sm:block">esc</kbd>
                 </div>
                 <ul ref={lista} id="resultados-busqueda" role="listbox" className="min-h-0 flex-1 overflow-y-auto p-2">
                   {resultados.length === 0 && (
@@ -190,17 +189,12 @@ export function CommandPalette() {
                             {r.titulo}
                             {r.detalle && <span className="ml-2 text-chico text-text-3">{r.detalle}</span>}
                           </span>
-                          {i === indice ? <CornerDownLeft className="size-4 shrink-0 text-text-3" /> : <ArrowRight className="size-4 shrink-0 text-transparent" />}
+                          <ArrowRight className={cn("size-4 shrink-0", i === indice ? "text-text-3" : "text-transparent")} />
                         </div>
                       </li>
                     );
                   })}
                 </ul>
-                <div className="flex items-center gap-4 border-t border-border px-4 py-2.5 text-micro">
-                  <span>↑↓ para moverte</span>
-                  <span>↵ para abrir</span>
-                  <span className="ml-auto hidden sm:block">⌘K desde cualquier pantalla</span>
-                </div>
               </m.div>
             </Dialog.Content>
           </Dialog.Portal>

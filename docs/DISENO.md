@@ -235,7 +235,7 @@ Reemplazan las tablas de arriba, que quedan como referencia histórica.
 - Nada de efectos decorativos que no cuenten algo.
 
 Consecuencias concretas:
-- **Cinta de cotizaciones:** avanza solo mientras scrolleás y frena cuando parás. No es un marquee automático.
+- **Cinta de cotizaciones (única excepción, pedida por los fundadores el 17/11/2026):** gira sola y continua, como una rueda (referencia: la franja de rulo.com.ar). Con `prefers-reduced-motion` queda quieta.
 - **Punto "En vivo":** late **una vez** cuando llega un dato nuevo y después queda quieto (antes latía cada 2 s).
 - **Prohibido:** elementos que flotan, gradientes que giran, brillos que recorren bordes y skeletons con barrido infinito. Los skeletons quedan quietos con opacidad fija.
 - **Herramientas:** todo lo atado al scroll se hace con **GSAP + ScrollTrigger**. Motion queda para las microinteracciones (botones, solapas, sheets, indicadores que se deslizan). **Lenis** (scroll suave) va solo en la home, nunca en tablas ni en la app.

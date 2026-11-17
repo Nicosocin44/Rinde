@@ -182,7 +182,7 @@ export function Posiciones({ posiciones, total, onElegir }: { posiciones: Posici
           return (
             <li key={p.activoId}>
               <button type="button" onClick={() => onElegir(p)} className="presionable grid w-full grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-3 border-b border-border py-3.5 text-left md:grid-cols-[28px_minmax(0,1fr)_140px_120px_72px] md:gap-x-5">
-                <ProviderMark proveedorId={p.activo.proveedorId ?? p.activo.ticker ?? p.activoId} sigla={p.activo.ticker ? p.activo.ticker.slice(0, 2) : undefined} />
+                <ProviderMark proveedorId={p.activo.proveedorId ?? p.activo.ticker ?? p.activoId} activo={p.activo.ticker} sigla={p.activo.ticker ? p.activo.ticker.slice(0, 2) : undefined} />
                 <span className="min-w-0">
                   <span className="block truncate text-[15px] font-medium">{p.activo.nombre}</span>
                   <span className="block truncate text-chico text-text-3">

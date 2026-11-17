@@ -1,6 +1,7 @@
 import { CARTERA_DEMO } from "@data/samples/cartera-demo";
 import { hoyAR } from "@/lib/calculos/fechas";
 import { tasaPorPeriodo, valorFuturo, valorReal } from "@/lib/calculos/interes-compuesto";
+import { gananciaPeriodo } from "@/lib/calculos/tasas";
 import { describir, evaluar, type Alerta } from "@/lib/alertas/evaluar";
 import { analizarCartera, valorEn } from "@/lib/cartera/valuacion";
 import { obtenerCotizaciones, obtenerMacro, obtenerPesos, obtenerRanking } from "@/lib/data";
@@ -16,7 +17,8 @@ import { ordenarProveedores } from "@/lib/rankings/dolar";
  */
 
 export type Pieza = { id: string; nombre: string; tipo: string; proveedorId?: string; valorArs: number | null };
-export type OpcionTasa = { id: string; nombre: string; tipo: TipoOpcionPesos; etiquetaTipo: string; tea: number; tna: number; plazoDias: number | null };
+/** `ganancia30`: lo que ganás en 30 días con $ 1.000.000 a esa TEA (decimal.js). */
+export type OpcionTasa = { id: string; nombre: string; tipo: TipoOpcionPesos; etiquetaTipo: string; tea: number; tna: number; plazoDias: number | null; ganancia30: number };
 export type ProveedorPrecio = { id: string; nombre: string; compras: number; costoMil: number };
 export type PuntoComparacion = { fecha: string; cartera: number; inflacion: number; dolar: number };
 export type AlertaDemo = { id: string; texto: string; cumplida: boolean; actual: string | null };
@@ -37,7 +39,7 @@ const ETIQUETA_TIPO: Record<TipoOpcionPesos, string> = {
   billetera: "Billetera",
   cuenta: "Cuenta remunerada",
   fci: "Fondo money market",
-  plazo_fijo: "Plazo fijo a 30 días",
+  plazo_fijo: "Plazo fijo",
   caucion: "Caución",
   lecap: "Letra del Tesoro",
 };
@@ -53,7 +55,16 @@ function mejorPorTipo(opciones: OpcionPesos[]): OpcionTasa[] {
   }
   return [...mejor.values()]
     .sort((a, b) => b.tea - a.tea)
-    .map((o) => ({ id: o.id, nombre: o.nombre, tipo: o.tipo, etiquetaTipo: ETIQUETA_TIPO[o.tipo], tea: o.tea, tna: o.tna, plazoDias: o.plazoDias }));
+    .map((o) => ({
+      id: o.id,
+      nombre: o.nombre,
+      tipo: o.tipo,
+      etiquetaTipo: ETIQUETA_TIPO[o.tipo],
+      tea: o.tea,
+      tna: o.tna,
+      plazoDias: o.plazoDias,
+      ganancia30: gananciaPeriodo(1_000_000, o.tea, 30).toNumber(),
+    }));
 }
 
 function estadoDe<T>(c: Cargado<T>): { estado: EstadoDato | "error"; asOf: string | null } {

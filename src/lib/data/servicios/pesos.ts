@@ -17,7 +17,7 @@ import * as d912 from "../adapters/data912";
 import { conRespaldo } from "../cache";
 import { estadoPeriodico, mercadoAbierto, peorEstado } from "../freshness";
 import { FUENTES, type Caucion, type CurvaLecaps, type Excluido, type FondoMM, type Lecap, type OpcionPesos, type PlazoFijoBanco } from "../types";
-import { ajusteCuadratico, deduplicar, enBanda } from "../validacion";
+import { ajusteCuadratico, ajusteNelsonSiegel, deduplicar, enBanda } from "../validacion";
 import { cargarFeriados } from "./feriados";
 import type { z } from "zod";
 import type { adCaucionesSchema, adCuentasSchema, adLetrasSchema, adPlazoFijoSchema, d912PanelSchema } from "../schemas";
@@ -378,26 +378,34 @@ export function normalizarLecaps(
     });
   }
 
-  // Ajuste de la curva sobre ln(días): marca atípicos a más de 3 desvíos y reajusta sin ellos.
+  // Curva ajustada con Nelson-Siegel (t en años). Con 3 puntos, cuadrática sobre ln(días) como respaldo.
+  // Los puntos a más de 3 desvíos del ajuste se marcan "Atípica" y se reajusta sin ellos.
+  const ajustar = (ls: Lecap[]) => {
+    const ns = ajusteNelsonSiegel(ls.map((l) => ({ x: l.dias / 365, y: l.tea })));
+    if (ns) return { f: (dias: number) => ns.f(dias / 365), desvio: ns.desvio };
+    const q = ajusteCuadratico(ls.map((l) => ({ x: Math.log(l.dias), y: l.tea })));
+    return q ? { f: (dias: number) => q.f(Math.log(dias)), desvio: q.desvio } : null;
+  };
   let enCurva = letras.filter((l) => l.enCurva);
-  let ajuste = ajusteCuadratico(enCurva.map((l) => ({ x: Math.log(l.dias), y: l.tea })));
-  if (ajuste && ajuste.desvio > 0) {
+  let ajuste = ajustar(enCurva);
+  if (ajuste && ajuste.desvio > 0 && enCurva.length >= 6) {
     for (const l of enCurva) {
-      if (Math.abs(l.tea - ajuste.f(Math.log(l.dias))) > pais.lecaps.desviosAtipico * Math.max(ajuste.desvio, 0.004)) {
+      if (Math.abs(l.tea - ajuste.f(l.dias)) > pais.lecaps.desviosAtipico * Math.max(ajuste.desvio, 0.004)) {
         l.enCurva = false;
         l.etiqueta = "Atípica: se aleja de la curva";
       }
     }
     enCurva = letras.filter((l) => l.enCurva);
-    ajuste = ajusteCuadratico(enCurva.map((l) => ({ x: Math.log(l.dias), y: l.tea }))) ?? ajuste;
+    ajuste = ajustar(enCurva) ?? ajuste;
   }
   const puntosAjuste: CurvaLecaps["ajuste"] = [];
   if (ajuste && enCurva.length >= 3) {
     const min = Math.min(...enCurva.map((l) => l.dias));
     const max = Math.max(...enCurva.map((l) => l.dias));
-    for (let i = 0; i <= 40; i++) {
-      const dias = min + ((max - min) * i) / 40;
-      puntosAjuste.push({ dias, tea: ajuste.f(Math.log(dias)) });
+    for (let i = 0; i <= 48; i++) {
+      const dias = min + ((max - min) * i) / 48;
+      const tea = ajuste.f(dias);
+      if (Number.isFinite(tea)) puntosAjuste.push({ dias, tea });
     }
   }
   return { curva: { letras: letras.sort((a, b) => a.dias - b.dias), ajuste: puntosAjuste, liquidacion }, excluidas };

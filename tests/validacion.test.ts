@@ -1,12 +1,25 @@
 import { describe, expect, it } from "vitest";
 import { normalizarCuentas, normalizarFondos, normalizarLecaps } from "@/lib/data/servicios/pesos";
 import { normalizarRanking } from "@/lib/data/servicios/dolar";
+import { ajusteNelsonSiegel } from "@/lib/data/validacion";
 
 /** 11. Validación: una LECAP vencida y un FCI duplicado quedan excluidos con su motivo. */
 
 const feriados = new Set(["2026-11-23", "2026-12-08"]);
 
 const fila = (symbol: string, c: number, v = 1_000_000) => ({ symbol, px_bid: c, px_ask: c, v, q_op: 10, c, pct_change: 0.1 });
+
+describe("curva Nelson-Siegel", () => {
+  it("recupera una curva conocida y nunca devuelve NaN", () => {
+    const f1 = (u: number) => (1 - Math.exp(-u)) / u;
+    const real = (t: number) => 0.3 - 0.05 * f1(t / 0.4) + 0.08 * (f1(t / 0.4) - Math.exp(-t / 0.4));
+    const puntos = [0.03, 0.16, 0.2, 0.27, 0.45, 0.53, 0.61].map((x) => ({ x, y: real(x) }));
+    const ajuste = ajusteNelsonSiegel(puntos)!;
+    expect(ajuste).not.toBeNull();
+    for (const p of puntos) expect(ajuste.f(p.x)).toBeCloseTo(p.y, 3);
+    expect(Number.isFinite(ajuste.f(0.001))).toBe(true);
+  });
+});
 
 describe("11. validación de sanidad", () => {
   it("LECAPs: excluye vencidas, deja fuera de la curva las que vencen en ≤ 5 hábiles y nunca devuelve tasas absurdas", () => {

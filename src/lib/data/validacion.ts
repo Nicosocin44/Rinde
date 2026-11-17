@@ -63,7 +63,42 @@ export function filtrar<T>(
 }
 
 /**
- * Ajuste por mínimos cuadrados de y = a + b·x + c·x² (para la curva de letras, con x = ln(días)).
+ * Ajuste de Nelson-Siegel: y(t) = β0 + β1·f1(t/τ) + β2·f2(t/τ), con f1(u) = (1 − e^−u)/u y f2(u) = f1(u) − e^−u.
+ * Es el modelo estándar para curvas de tasas: capta el nivel, la pendiente y una "joroba" en el tramo corto.
+ * τ se busca en una grilla; los β salen por mínimos cuadrados. `t` en años. Con menos de 4 puntos, null.
+ */
+export function ajusteNelsonSiegel(puntos: { x: number; y: number }[]): { f: (x: number) => number; desvio: number } | null {
+  const n = puntos.length;
+  if (n < 4) return null;
+  const f1 = (u: number) => (u < 1e-8 ? 1 : (1 - Math.exp(-u)) / u);
+  const f2 = (u: number) => f1(u) - Math.exp(-u);
+  let mejor: { sse: number; b: [number, number, number]; tau: number } | null = null;
+  for (let tau = 0.03; tau <= 6; tau *= 1.12) {
+    const filas = puntos.map((p) => [1, f1(p.x / tau), f2(p.x / tau)] as const);
+    // Ecuaciones normales 3×3: (XᵀX) β = Xᵀy
+    const A = [0, 1, 2].map((i) => [0, 1, 2].map((j) => filas.reduce((s, r) => s + r[i]! * r[j]!, 0)));
+    const v = [0, 1, 2].map((i) => filas.reduce((s, r, k) => s + r[i]! * puntos[k]!.y, 0));
+    const b = resolver3(A, v);
+    if (!b) continue;
+    const sse = puntos.reduce((s, p, k) => s + (p.y - (b[0] + b[1] * filas[k]![1] + b[2] * filas[k]![2])) ** 2, 0);
+    if (!mejor || sse < mejor.sse) mejor = { sse, b, tau };
+  }
+  if (!mejor) return null;
+  const { b, tau, sse } = mejor;
+  return { f: (x: number) => b[0] + b[1] * f1(x / tau) + b[2] * f2(x / tau), desvio: Math.sqrt(sse / Math.max(1, n - 4)) };
+}
+
+function resolver3(m: number[][], v: number[]): [number, number, number] | null {
+  const det = (a: number[][]) =>
+    a[0]![0]! * (a[1]![1]! * a[2]![2]! - a[1]![2]! * a[2]![1]!) - a[0]![1]! * (a[1]![0]! * a[2]![2]! - a[1]![2]! * a[2]![0]!) + a[0]![2]! * (a[1]![0]! * a[2]![1]! - a[1]![1]! * a[2]![0]!);
+  const D = det(m);
+  if (!Number.isFinite(D) || Math.abs(D) < 1e-14) return null;
+  const col = (k: number) => m.map((fila, i) => fila.map((x, j) => (j === k ? v[i]! : x)));
+  return [det(col(0)) / D, det(col(1)) / D, det(col(2)) / D];
+}
+
+/**
+ * Ajuste por mínimos cuadrados de y = a + b·x + c·x² (respaldo de la curva cuando hay solo 3 puntos).
  * Devuelve la función ajustada y el desvío estándar de los residuos. Con menos de 3 puntos, null.
  */
 export function ajusteCuadratico(puntos: { x: number; y: number }[]): { f: (x: number) => number; desvio: number } | null {

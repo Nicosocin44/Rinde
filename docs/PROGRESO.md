@@ -85,6 +85,12 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
   - Cubre 69 proveedores (bancos, billeteras, exchanges, brokers) y 93 activos (CEDEARs, acciones y cripto).
   - Se bajan una sola vez con `python scripts/logos.py` y viven en `public/logos/`, así la web no depende de un servicio externo.
   - Si una marca no tiene un logo usable, sigue el monograma de dos letras.
+  - **Segunda pasada (logos manuales):** se sumaron logos oficiales de Wikimedia Commons, revisados uno por uno. Son los de Macro, ICBC, Banco Provincia, Banco Ciudad, Credicoop, Tesoro Nacional (escudo), YPF, AMD, Boeing, Costco, TSMC, ExxonMobil, Loma Negra, Molinos, Morixe, Autopistas del Sol y Comercial del Plata.
+    - En los logos anchos se recortó solo el símbolo, para que se lean a 28 px.
+    - Quedaron **75 proveedores y 106 activos con logo**.
+    - Se descartaron los candidatos que eran de otra empresa, y los que son solo texto chico (Berkshire y los ETF de State Street).
+    - Las fuentes originales están en `assets/logos-fuente/` (`python scripts/logos_manuales.py` las baja; `python scripts/logos.py` arma todo).
+  - **Siguen sin logo** (no hay versión pública de calidad): Prex, Personal Pay, Carrefour Banco, CMF, Piano, Julio, Masventas, Meridian, Bibank, Banco Andina, Dino, Allaria, Adcap, SBS, CryptoMarket, Banexcoin, Saldo, Plaza Cambio, Tría Cambio, Bytelime, Peanut, Vibrant, Eluter, Plus Crypto, Berkshire, los ETF SPY/DIA/XLE y 9 acciones chicas del panel general. Lo natural es pedirles el kit de marca cuando arranquen los acuerdos.
   - **Para revisar:** son los íconos oficiales de cada sitio, usados para identificar a cada empresa. Antes de lanzar conviene confirmar que no hay problema de marcas.
 - **7. Sin atajos de teclado a la vista:** se sacaron el "⌘K" de la barra, el "esc" y la línea "↑↓ para moverte / ↵ para abrir" del buscador. El teclado sigue funcionando para quien lo use.
 

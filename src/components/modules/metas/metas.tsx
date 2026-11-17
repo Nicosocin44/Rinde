@@ -10,29 +10,43 @@ import { SegmentedControl } from "@/components/ui/segmented";
 import { Sheet } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/components/ui/toast";
-import { evaluarMeta, hoyAR, sumarMeses, type ContextoMeta, type EstadoMeta, type Meta } from "@/lib/calculos";
+import { diasEntre, evaluarMeta, hoyAR, sumarMeses, type AporteMeta, type ContextoMeta, type EstadoMeta, type InstrumentoMeta, type Meta } from "@/lib/calculos";
 import { dinero, fechaCorta, mesAnio, porcentaje } from "@/lib/format";
 import { alCambiarMetas, borrarMeta, guardarMeta, listarMetas } from "@/lib/metas/almacen";
+import { aInstrumento, DOLARES_GUARDADOS, SIN_INVERTIR, TIPOS_INSTRUMENTO, type OpcionInstrumento } from "@/lib/metas/instrumentos";
 import { cn } from "@/lib/cn";
 
-/** La opción en pesos sin plazo que más rinde hoy. Es el supuesto de las metas en pesos. */
+/** La opción en pesos sin plazo que más rinde hoy. Es el supuesto del plan de las metas en pesos. */
 export type ReferenciaMeta = { nombre: string; tea: number } | null;
 
-type Props = { referencia: ReferenciaMeta; inflacionMensual: number | null };
+type Props = { referencia: ReferenciaMeta; inflacionMensual: number | null; opciones: OpcionInstrumento[] };
 
 const SUGERENCIAS = ["Un viaje", "Un auto", "Un departamento", "Estudios", "Fondo de emergencia"];
+const MOVIMIENTOS_VISIBLES = 5;
+
+const nuevoId = () => crypto.randomUUID();
+/** "unos días", "un mes", "3 meses": cuánto después de la fecha de la meta llega. */
+const tarde = (fechaMeta: string, llegada: string) => {
+  const dias = diasEntre(fechaMeta, llegada);
+  if (dias < 31) return "unos días";
+  const meses = Math.round(dias / (365 / 12));
+  return meses <= 1 ? "un mes" : `${meses} meses`;
+};
+const simbolo = (m: Meta["moneda"]) => (m === "ARS" ? "$" : "US$");
 
 /**
- * Metas de ahorro: cada persona arma las suyas (nombre, monto, fecha, cuánto puede poner por mes), ve el plan
- * para llegar con las tasas de hoy y cada 30 días carga cuánto tiene para ver si va adelantada o atrasada.
+ * Metas de ahorro: cada persona arma las suyas (nombre, monto, fecha, cuánto puede poner por mes) y va cargando
+ * cuánto pone y en qué instrumento. Ve cuánto vale hoy cada parte, cuánto le dieron sus inversiones, el plan para
+ * llegar con las tasas de hoy y, cada 30 días, si va adelantada o atrasada.
  */
-export function Metas({ referencia, inflacionMensual }: Props) {
+export function Metas({ referencia, inflacionMensual, opciones }: Props) {
   const toast = useToast();
   const [metas, setMetas] = useState<Meta[] | null>(null);
   // La fecha solo se usa después de leer las metas del navegador (nunca en el HTML del servidor).
   const [hoy] = useState(() => hoyAR());
   const [nueva, setNueva] = useState<string | false>(false);
-  const [controlDe, setControlDe] = useState<Meta | null>(null);
+  const [movimientoDe, setMovimientoDe] = useState<Meta | null>(null);
+  const [valoresDe, setValoresDe] = useState<Meta | null>(null);
 
   useEffect(() => {
     let vivo = true;
@@ -67,7 +81,7 @@ export function Metas({ referencia, inflacionMensual }: Props) {
       {metas.length === 0 ? (
         <EmptyState
           titulo="Todavía no armaste ninguna meta."
-          ayuda="Elegí qué querés lograr, cuánto cuesta y para cuándo. Te decimos cuánto poner por mes y, cada 30 días, cómo venís."
+          ayuda="Elegí qué querés lograr, cuánto cuesta y para cuándo. Después vas cargando cuánto ponés y dónde, y te decimos cómo venís."
           accion={
             <div className="flex flex-wrap gap-2">
               {SUGERENCIAS.map((s) => (
@@ -95,7 +109,13 @@ export function Metas({ referencia, inflacionMensual }: Props) {
                 meta={m}
                 estado={evaluarMeta(m, contexto, hoy)}
                 referencia={referencia}
-                onControl={() => setControlDe(m)}
+                hoy={hoy}
+                onSumar={() => setMovimientoDe(m)}
+                onValores={() => setValoresDe(m)}
+                onBorrarMovimiento={async (a) => {
+                  await guardarMeta({ ...m, aportes: m.aportes.filter((x) => x.id !== a.id) });
+                  toast("Movimiento borrado.", { etiqueta: "Deshacer", onClick: () => void guardarMeta(m) });
+                }}
                 onBorrar={async () => {
                   await borrarMeta(m.id);
                   toast(`Borraste "${m.nombre}".`, { etiqueta: "Deshacer", onClick: () => void guardarMeta(m) });
@@ -107,7 +127,8 @@ export function Metas({ referencia, inflacionMensual }: Props) {
       )}
 
       <p className="mt-8 max-w-2xl text-micro">
-        Es una simulación con las tasas y la inflación esperada de hoy, que cambian todos los días: no es una promesa de rendimiento ni una recomendación. Tus metas se guardan solo en este navegador.{" "}
+        Los valores de cada instrumento son estimados con la tasa del día en que pusiste la plata; corregilos con lo que te muestra tu app cuando quieras. El plan usa las tasas y la
+        inflación esperada de hoy, que cambian todos los días: no es una promesa de rendimiento ni una recomendación. Tus metas se guardan solo en este navegador.{" "}
         <Link href="/metodologia#metas" className="underline decoration-border-strong decoration-dotted underline-offset-4 hover:text-text">
           Ver la fórmula
         </Link>
@@ -119,6 +140,7 @@ export function Metas({ referencia, inflacionMensual }: Props) {
         hoy={hoy}
         contexto={contexto}
         referencia={referencia}
+        opciones={opciones}
         onCerrar={() => setNueva(false)}
         onGuardar={async (m) => {
           await guardarMeta(m);
@@ -126,28 +148,69 @@ export function Metas({ referencia, inflacionMensual }: Props) {
           toast(`Listo, "${m.nombre}" quedó guardada.`);
         }}
       />
-      <HojaControl
-        meta={controlDe}
-        hoy={hoy}
-        onCerrar={() => setControlDe(null)}
-        onGuardar={async (m) => {
-          await guardarMeta(m);
-          setControlDe(null);
-          toast("Actualizado. El plan se recalculó con las tasas de hoy.");
-        }}
-      />
+      <Sheet abierto={movimientoDe !== null} onCambio={(a) => !a && setMovimientoDe(null)} titulo={movimientoDe?.nombre ?? ""} descripcion="Cuánta plata pusiste o sacaste, y dónde.">
+        {movimientoDe && (
+          <FormMovimiento
+            key={movimientoDe.id + movimientoDe.aportes.length}
+            meta={movimientoDe}
+            hoy={hoy}
+            opciones={opciones}
+            onGuardar={async (a) => {
+              await guardarMeta({ ...movimientoDe, aportes: [...movimientoDe.aportes, a] });
+              setMovimientoDe(null);
+              toast(a.monto >= 0 ? "Sumado. El plan se recalculó con las tasas de hoy." : "Anotado el retiro.");
+            }}
+          />
+        )}
+      </Sheet>
+      <Sheet abierto={valoresDe !== null} onCambio={(a) => !a && setValoresDe(null)} titulo="Valores de hoy" descripcion="Copiá lo que te muestra tu banco, billetera o broker. Reemplaza nuestra estimación.">
+        {valoresDe && (
+          <FormValores
+            key={valoresDe.id + valoresDe.ajustes.length}
+            meta={valoresDe}
+            estado={evaluarMeta(valoresDe, contexto, hoy)}
+            hoy={hoy}
+            onGuardar={async (m) => {
+              await guardarMeta(m);
+              setValoresDe(null);
+              toast("Valores actualizados.");
+            }}
+          />
+        )}
+      </Sheet>
     </>
   );
 }
 
-function TarjetaMeta({ meta, estado: e, referencia, onControl, onBorrar }: { meta: Meta; estado: EstadoMeta; referencia: ReferenciaMeta; onControl: () => void; onBorrar: () => void }) {
+function TarjetaMeta({
+  meta,
+  estado: e,
+  referencia,
+  hoy,
+  onSumar,
+  onValores,
+  onBorrarMovimiento,
+  onBorrar,
+}: {
+  meta: Meta;
+  estado: EstadoMeta;
+  referencia: ReferenciaMeta;
+  hoy: string;
+  onSumar: () => void;
+  onValores: () => void;
+  onBorrarMovimiento: (a: AporteMeta) => void;
+  onBorrar: () => void;
+}) {
+  const [verTodo, setVerTodo] = useState(false);
   const $ = (x: number) => dinero(x, meta.moneda, 0);
-  const ultimo = meta.controles.at(-1)!;
   const marca = e.objetivoHoy > 0 ? Math.min(1, Math.max(0, e.esperadoHoy / e.objetivoHoy)) : 0;
   const ajusta = meta.moneda === "ARS" && Math.round(e.objetivoFinal) !== Math.round(meta.objetivo);
+  const movimientos = [...meta.aportes].sort((a, b) => b.fecha.localeCompare(a.fecha));
+  const visibles = verTodo ? movimientos : movimientos.slice(0, MOVIMIENTOS_VISIBLES);
+  const arranco = meta.aportes.length > 0 || e.esperadoHoy > 0;
 
   return (
-    <li className="flex flex-col gap-5 border-b border-border py-8">
+    <li className="flex flex-col gap-6 border-b border-border py-8">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <h3 className="text-h3 break-words">{meta.nombre}</h3>
@@ -183,12 +246,72 @@ function TarjetaMeta({ meta, estado: e, referencia, onControl, onBorrar }: { met
         </div>
       </div>
 
+      {e.tenencias.length > 0 && (
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h4 className="text-label">Dónde está tu plata</h4>
+            <p className="text-chico text-text-2">
+              Pusiste <span className="tabular font-medium text-text">{$(e.aportado)}</span>
+              {Math.round(e.ganancia) !== 0 && (
+                <>
+                  {" · "}tus inversiones te dieron{" "}
+                  <span className={cn("tabular font-medium", e.ganancia > 0 ? "text-gain" : "text-loss")}>
+                    {e.ganancia > 0 ? "+" : "−"}
+                    {$(Math.abs(e.ganancia))}
+                  </span>
+                </>
+              )}
+            </p>
+          </div>
+          <table className="w-full text-[15px]">
+            <thead className="sr-only">
+              <tr>
+                <th>Instrumento</th>
+                <th>Pusiste</th>
+                <th>Vale hoy</th>
+              </tr>
+            </thead>
+            <tbody>
+              {e.tenencias.map((t) => (
+                <tr key={t.instrumento.id} className="border-t border-border">
+                  <td className="py-3 pr-3">
+                    <span className="block font-medium">{t.instrumento.nombre}</span>
+                    {/* "Sin invertir" y "Dólares guardados" ya se explican solos: sin subtítulo. */}
+                    {t.instrumento.tipo !== "efectivo" && t.instrumento.tipo !== "dolares" && (
+                      <span className="text-chico text-text-3">
+                        {TIPOS_INSTRUMENTO[t.instrumento.tipo] ?? "Otro"}
+                        {t.instrumento.tea > 0 && <> · {porcentaje(t.instrumento.tea, 1)} TEA</>}
+                      </span>
+                    )}
+                  </td>
+                  <td className="tabular py-3 pr-3 text-right align-top text-text-2">
+                    <span className="block text-micro text-text-3 sm:hidden">Pusiste</span>
+                    {$(t.aportado)}
+                  </td>
+                  <td className="tabular py-3 text-right align-top font-medium">
+                    <span className="block text-micro font-normal text-text-3 sm:hidden">Vale hoy</span>
+                    {$(t.valor)}
+                    {!t.valorReal && t.instrumento.tea > 0 && <span className="block text-micro font-normal text-text-3">estimado</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {e.comparacion && referencia && (
+            <p className="max-w-2xl text-chico text-text-2">
+              Lo tuyo rinde en promedio {porcentaje(e.teaSaldo, 1)} TEA. Hoy {referencia.nombre}, la opción sin plazo que más rinde, paga {porcentaje(e.comparacion.teaReferencia, 1)}: con tu saldo
+              serían <span className="tabular font-medium text-text">{$(e.comparacion.extraPorMes)}</span> más por mes.
+            </p>
+          )}
+        </div>
+      )}
+
       <div className="flex max-w-2xl flex-col gap-1.5 text-[16px] leading-[24px] text-text-2">
         {e.cumplida ? (
           <p className="font-medium text-text">Llegaste a la meta.</p>
         ) : (
           <>
-            {meta.controles.length > 1 || e.esperadoHoy > ultimo.saldo ? (
+            {arranco && Math.abs(e.diferencia) >= 1 && (
               <p>
                 {e.diferencia >= 0 ? (
                   <span className="font-medium text-gain">Vas adelantado: +{$(e.diferencia)}</span>
@@ -197,7 +320,7 @@ function TarjetaMeta({ meta, estado: e, referencia, onControl, onBorrar }: { met
                 )}{" "}
                 contra el plan (la rayita de la barra).
               </p>
-            ) : null}
+            )}
             <p>
               Para llegar en {mesAnio(meta.fechaObjetivo)} tenés que poner <span className="tabular font-medium text-text">{$(e.aporteNecesario)}</span> por mes
               {e.mesesRestantes > 0 ? ` durante ${e.mesesRestantes} ${e.mesesRestantes === 1 ? "mes" : "meses"}` : ""}.
@@ -205,39 +328,73 @@ function TarjetaMeta({ meta, estado: e, referencia, onControl, onBorrar }: { met
             {meta.aporteMensual > 0 && (
               <p>
                 Con los {$(meta.aporteMensual)} por mes que planeaste,{" "}
-                {e.mesesConTuAporte === null ? "no llegás: la meta sube más rápido de lo que juntás." : <>llegás en {mesAnio(sumarMeses(ultimo.fecha, e.mesesConTuAporte))}.</>}
+                {e.mesesConTuAporte === null ? (
+                  "no llegás: la meta sube más rápido de lo que juntás."
+                ) : e.llegaEnFecha ? (
+                  <>llegás a tiempo ({mesAnio(sumarMeses(hoy, e.mesesConTuAporte))}).</>
+                ) : (
+                  <>
+                    llegás el {fechaCorta(sumarMeses(hoy, e.mesesConTuAporte), true)}, {tarde(meta.fechaObjetivo, sumarMeses(hoy, e.mesesConTuAporte))} después de lo que querías.
+                  </>
+                )}
               </p>
             )}
           </>
         )}
         <p className="text-chico text-text-3">
           {meta.teaManual !== null
-            ? `Con el rendimiento que elegiste: ${porcentaje(e.tea, 1)} anual.`
+            ? `Lo que pongas de acá en adelante, al ${porcentaje(e.teaPlan, 1)} anual que elegiste.`
             : meta.moneda === "USD"
-              ? "Sin rendimiento: dólares guardados."
+              ? "Lo que pongas de acá en adelante, en dólares sin rendimiento."
               : referencia
-                ? `Si lo ponés en ${referencia.nombre}, la opción sin plazo que más rinde hoy (${porcentaje(e.tea, 1)} TEA).`
-                : "Sin rendimiento: hoy no pudimos traer las tasas."}
+                ? `Lo que pongas de acá en adelante, en ${referencia.nombre} (${porcentaje(e.teaPlan, 1)} TEA, la opción sin plazo que más rinde hoy).`
+                : "Sin rendimiento para lo nuevo: hoy no pudimos traer las tasas."}
         </p>
       </div>
 
-      {meta.controles.length > 1 && (
-        <ol className="flex flex-wrap gap-x-5 gap-y-1 text-chico text-text-3" aria-label="Historial">
-          {meta.controles.map((c) => (
-            <li key={c.fecha} className="tabular">
-              {fechaCorta(c.fecha)} · {$(c.saldo)}
-            </li>
-          ))}
-        </ol>
+      {movimientos.length > 0 && (
+        <div>
+          <h4 className="mb-1 text-label">Movimientos</h4>
+          <ul className="text-chico">
+            {visibles.map((a) => (
+              <li key={a.id} className="flex items-center gap-3 border-b border-border py-1.5 last:border-0">
+                <span className="w-16 shrink-0 text-text-3">{fechaCorta(a.fecha)}</span>
+                <span className="min-w-0 flex-1 truncate text-text-2">{a.instrumento.nombre}</span>
+                <span className={cn("tabular font-medium", a.monto < 0 && "text-text-2")}>
+                  {a.monto >= 0 ? "+" : "−"}
+                  {$(Math.abs(a.monto))}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onBorrarMovimiento(a)}
+                  aria-label={`Borrar el movimiento del ${fechaCorta(a.fecha)}`}
+                  className="inline-flex size-9 shrink-0 items-center justify-center rounded-(--radius-control) text-text-3 hover:bg-surface-2 hover:text-loss"
+                >
+                  <Trash2 className="size-3.5" />
+                </button>
+              </li>
+            ))}
+          </ul>
+          {movimientos.length > MOVIMIENTOS_VISIBLES && (
+            <button type="button" onClick={() => setVerTodo((v) => !v)} className="mt-1 text-chico text-text-2 underline decoration-border-strong decoration-dotted underline-offset-4 hover:text-text">
+              {verTodo ? "Ver menos" : `Ver los ${movimientos.length}`}
+            </button>
+          )}
+        </div>
       )}
 
       <div className="flex flex-wrap items-center gap-3">
         {!e.cumplida && (
-          <Button variante={e.controlPendiente ? "primario" : "secundario"} tamano="sm" onClick={onControl}>
-            Cargar cuánto tengo
+          <Button variante={e.controlPendiente || meta.aportes.length === 0 ? "primario" : "secundario"} tamano="sm" onClick={onSumar}>
+            <Plus /> Sumar plata
           </Button>
         )}
-        {e.controlPendiente && <span className="text-chico text-text-2">Pasaron {e.diasDesdeControl} días desde tu último control.</span>}
+        {e.tenencias.some((t) => t.instrumento.tea > 0) && (
+          <Button variante="fantasma" tamano="sm" onClick={onValores}>
+            Actualizar valores
+          </Button>
+        )}
+        {e.controlPendiente && <span className="text-chico text-text-2">Pasaron {e.diasDesdeMovimiento} días: ¿cuánto pusiste este mes?</span>}
         <button
           type="button"
           onClick={onBorrar}
@@ -251,12 +408,218 @@ function TarjetaMeta({ meta, estado: e, referencia, onControl, onBorrar }: { met
   );
 }
 
+/**
+ * Selector de instrumento: primero los que ya usa la meta, después las opciones reales de hoy agrupadas por tipo,
+ * y al final "sin invertir" y "otro" (nombre y TEA a mano). En dólares: dólares guardados u otro.
+ */
+/** Lo que el selector muestra elegido al abrir: el último instrumento usado, o "sin invertir" / "dólares guardados". */
+function instrumentoInicial(moneda: Meta["moneda"], usados: InstrumentoMeta[], opciones: OpcionInstrumento[]): InstrumentoMeta {
+  const u = usados[0];
+  if (!u) return moneda === "ARS" ? SIN_INVERTIR : DOLARES_GUARDADOS;
+  // Si es una opción del comparador, la TEA se actualiza a la de hoy.
+  const deHoy = opciones.find((o) => o.id === u.id);
+  return deHoy ? aInstrumento(deHoy) : u;
+}
+
+function ElegirInstrumento({
+  moneda,
+  opciones,
+  usados,
+  soloUsados = false,
+  onChange,
+}: {
+  moneda: Meta["moneda"];
+  opciones: OpcionInstrumento[];
+  usados: InstrumentoMeta[];
+  soloUsados?: boolean;
+  onChange: (i: InstrumentoMeta | null) => void;
+}) {
+  const id = useId();
+  const base = moneda === "ARS" ? SIN_INVERTIR : DOLARES_GUARDADOS;
+  const inicial = usados[0]?.id ?? base.id;
+  const [valor, setValor] = useState(inicial);
+  const [nombreOtro, setNombreOtro] = useState("");
+  const [teaOtro, setTeaOtro] = useState(0);
+
+  const grupos = useMemo(() => {
+    const porTipo = new Map<string, OpcionInstrumento[]>();
+    if (moneda === "ARS") for (const o of opciones) porTipo.set(o.tipo, [...(porTipo.get(o.tipo) ?? []), o]);
+    return [...porTipo.entries()];
+  }, [moneda, opciones]);
+
+  const resolver = (v: string, nombre = nombreOtro, tea = teaOtro): InstrumentoMeta | null => {
+    if (v === "otro") return nombre.trim() ? { id: `otro-${nombre.trim().toLowerCase()}`, nombre: nombre.trim(), tipo: "otro", tea: tea / 100 } : null;
+    const usado = usados.find((u) => u.id === v);
+    if (usado) {
+      // Si es una opción del comparador, la TEA se actualiza a la de hoy.
+      const deHoy = opciones.find((o) => o.id === v);
+      return deHoy ? aInstrumento(deHoy) : usado;
+    }
+    if (v === base.id) return base;
+    const o = opciones.find((x) => x.id === v);
+    return o ? aInstrumento(o) : null;
+  };
+
+  const cambiar = (v: string, nombre?: string, tea?: number) => {
+    setValor(v);
+    if (nombre !== undefined) setNombreOtro(nombre);
+    if (tea !== undefined) setTeaOtro(tea);
+    onChange(resolver(v, nombre ?? nombreOtro, tea ?? teaOtro));
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor={id} className="text-label">
+          Dónde
+        </label>
+        <select
+          id={id}
+          value={valor}
+          onChange={(ev) => cambiar(ev.target.value)}
+          className="h-11 w-full min-w-0 rounded-(--radius-control) border border-border-strong bg-surface-2 px-3 text-[16px] text-text outline-none transition-colors focus:border-accent focus:bg-surface"
+        >
+          {usados.length > 0 && (
+            <optgroup label="Lo que ya usás en esta meta">
+              {usados.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.nombre}
+                </option>
+              ))}
+            </optgroup>
+          )}
+          {!soloUsados && (
+            <>
+              {!usados.some((u) => u.id === base.id) && <option value={base.id}>{base.nombre}</option>}
+              {grupos.map(([tipo, lista]) => (
+                <optgroup key={tipo} label={`${TIPOS_INSTRUMENTO[tipo] ?? tipo} · rinden hoy`}>
+                  {lista
+                    .filter((o) => !usados.some((u) => u.id === o.id))
+                    .map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {aInstrumento(o).nombre} · {porcentaje(o.tea, 1)}
+                      </option>
+                    ))}
+                </optgroup>
+              ))}
+              <option value="otro">Otro…</option>
+            </>
+          )}
+        </select>
+      </div>
+      {valor === "otro" && (
+        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_140px]">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor={`${id}-otro`} className="text-label">
+              Nombre
+            </label>
+            <input
+              id={`${id}-otro`}
+              value={nombreOtro}
+              maxLength={50}
+              onChange={(ev) => cambiar("otro", ev.target.value)}
+              placeholder={moneda === "ARS" ? "Ej.: CEDEARs en mi broker" : "Ej.: cuenta en dólares"}
+              className="h-11 rounded-(--radius-control) border border-border-strong bg-surface-2 px-3.5 text-[16px] text-text outline-none transition-colors placeholder:text-text-3 focus:border-accent focus:bg-surface"
+            />
+          </div>
+          <NumberField etiqueta="Rinde por año" valor={teaOtro} onChange={(v) => cambiar("otro", undefined, v)} sufijo="% TEA" min={0} max={300} paso={1} decimales={1} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+const claseFecha =
+  "h-11 w-full rounded-(--radius-control) border border-border-strong bg-surface-2 px-3.5 text-[16px] text-text outline-none transition-colors focus:border-accent focus:bg-surface";
+
+function FormMovimiento({ meta, hoy, opciones, onGuardar }: { meta: Meta; hoy: string; opciones: OpcionInstrumento[]; onGuardar: (a: AporteMeta) => void }) {
+  const idFecha = useId();
+  const [sentido, setSentido] = useState<"pongo" | "saco">("pongo");
+  const [monto, setMonto] = useState(meta.aporteMensual);
+  const [fecha, setFecha] = useState(hoy);
+  const usados = useMemo(() => {
+    const vistos = new Map<string, InstrumentoMeta>();
+    for (const a of [...meta.aportes].sort((x, y) => y.fecha.localeCompare(x.fecha))) if (!vistos.has(a.instrumento.id)) vistos.set(a.instrumento.id, a.instrumento);
+    return [...vistos.values()];
+  }, [meta.aportes]);
+  const [instrumento, setInstrumento] = useState<InstrumentoMeta | null>(() => instrumentoInicial(meta.moneda, usados, opciones));
+  const valido = monto > 0 && instrumento !== null && /^\d{4}-\d{2}-\d{2}$/.test(fecha) && fecha <= hoy;
+
+  return (
+    <form
+      className="flex flex-col gap-5"
+      onSubmit={(ev) => {
+        ev.preventDefault();
+        if (valido) onGuardar({ id: nuevoId(), fecha, monto: sentido === "pongo" ? monto : -monto, instrumento: instrumento!, cargado: new Date().toISOString() });
+      }}
+    >
+      {usados.length > 0 && (
+        <SegmentedControl
+          etiqueta="Qué hiciste"
+          ancho="lleno"
+          valor={sentido}
+          onChange={(v) => {
+            setSentido(v);
+            setInstrumento(instrumentoInicial(meta.moneda, usados, opciones));
+          }}
+          opciones={[
+            { valor: "pongo", etiqueta: "Puse plata" },
+            { valor: "saco", etiqueta: "Saqué plata" },
+          ]}
+        />
+      )}
+      <MoneyInput etiqueta={sentido === "pongo" ? "Cuánto pusiste" : "Cuánto sacaste"} moneda={simbolo(meta.moneda)} valor={monto} onChange={setMonto} tamano="lg" />
+      <ElegirInstrumento key={sentido} moneda={meta.moneda} opciones={opciones} usados={usados} soloUsados={sentido === "saco"} onChange={setInstrumento} />
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor={idFecha} className="text-label">
+          Cuándo
+        </label>
+        <input id={idFecha} type="date" value={fecha} max={hoy} onChange={(ev) => setFecha(ev.target.value)} className={claseFecha} />
+      </div>
+      <Button type="submit" variante="primario" disabled={!valido}>
+        Guardar
+      </Button>
+    </form>
+  );
+}
+
+function FormValores({ meta, estado, hoy, onGuardar }: { meta: Meta; estado: EstadoMeta; hoy: string; onGuardar: (m: Meta) => void }) {
+  const editables = estado.tenencias.filter((t) => t.instrumento.tea > 0);
+  const [valores, setValores] = useState<Record<string, number>>(() => Object.fromEntries(editables.map((t) => [t.instrumento.id, Math.round(t.valor)])));
+
+  return (
+    <form
+      className="flex flex-col gap-5"
+      onSubmit={(ev) => {
+        ev.preventDefault();
+        const nuevos = editables
+          .filter((t) => Math.abs((valores[t.instrumento.id] ?? 0) - Math.round(t.valor)) >= 1)
+          .map((t) => ({ id: nuevoId(), fecha: hoy, instrumentoId: t.instrumento.id, valor: valores[t.instrumento.id] ?? 0, cargado: new Date().toISOString() }));
+        // Un ajuste por instrumento y por día: el nuevo reemplaza al de hoy.
+        const ajustes = [...meta.ajustes.filter((j) => !(j.fecha === hoy && nuevos.some((x) => x.instrumentoId === j.instrumentoId))), ...nuevos];
+        onGuardar({ ...meta, ajustes });
+      }}
+    >
+      {editables.map((t) => (
+        <div key={t.instrumento.id} className="flex flex-col gap-1">
+          <MoneyInput etiqueta={t.instrumento.nombre} moneda={simbolo(meta.moneda)} valor={valores[t.instrumento.id] ?? 0} onChange={(v) => setValores((x) => ({ ...x, [t.instrumento.id]: v }))} />
+          <p className="text-micro text-text-3">Estimado hoy: {dinero(t.valor, meta.moneda, 0)}</p>
+        </div>
+      ))}
+      <Button type="submit" variante="primario">
+        Guardar
+      </Button>
+    </form>
+  );
+}
+
 function HojaNuevaMeta({
   abierta,
   nombreInicial,
   hoy,
   contexto,
   referencia,
+  opciones,
   onCerrar,
   onGuardar,
 }: {
@@ -265,12 +628,13 @@ function HojaNuevaMeta({
   hoy: string;
   contexto: ContextoMeta;
   referencia: ReferenciaMeta;
+  opciones: OpcionInstrumento[];
   onCerrar: () => void;
   onGuardar: (m: Meta) => void;
 }) {
   return (
     <Sheet abierto={abierta} onCambio={(a) => !a && onCerrar()} titulo="Nueva meta" descripcion="Cuánto cuesta lo que querés y para cuándo.">
-      <FormNuevaMeta key={nombreInicial} nombreInicial={nombreInicial} hoy={hoy} contexto={contexto} referencia={referencia} onGuardar={onGuardar} />
+      <FormNuevaMeta key={nombreInicial} nombreInicial={nombreInicial} hoy={hoy} contexto={contexto} referencia={referencia} opciones={opciones} onGuardar={onGuardar} />
     </Sheet>
   );
 }
@@ -280,12 +644,14 @@ function FormNuevaMeta({
   hoy,
   contexto,
   referencia,
+  opciones,
   onGuardar,
 }: {
   nombreInicial: string;
   hoy: string;
   contexto: ContextoMeta;
   referencia: ReferenciaMeta;
+  opciones: OpcionInstrumento[];
   onGuardar: (m: Meta) => void;
 }) {
   const idNombre = useId();
@@ -293,6 +659,7 @@ function FormNuevaMeta({
   const [moneda, setMoneda] = useState<Meta["moneda"]>("ARS");
   const [objetivo, setObjetivo] = useState(0);
   const [tenes, setTenes] = useState(0);
+  const [donde, setDonde] = useState<InstrumentoMeta | null>(SIN_INVERTIR);
   const [meses, setMeses] = useState(12);
   const [aporte, setAporte] = useState(0);
   const [rinde, setRinde] = useState<"hoy" | "propio">("hoy");
@@ -309,20 +676,21 @@ function FormNuevaMeta({
       // Dólares sin rendimiento elegido = "dólares guardados" (null); en pesos, null = la mejor opción de hoy.
       teaManual: moneda === "USD" ? (teaPropia > 0 ? teaPropia / 100 : null) : rinde === "propio" ? teaPropia / 100 : null,
       creada: hoy,
-      controles: [{ fecha: hoy, saldo: tenes }],
+      aportes: tenes > 0 && donde ? [{ id: "inicial", fecha: hoy, monto: tenes, instrumento: donde }] : [],
+      ajustes: [],
     }),
-    [nombre, moneda, objetivo, hoy, meses, aporte, rinde, teaPropia, tenes],
+    [nombre, moneda, objetivo, hoy, meses, aporte, rinde, teaPropia, tenes, donde],
   );
   const e = evaluarMeta(borrador, contexto, hoy);
   const $ = (x: number) => dinero(x, moneda, 0);
-  const valida = borrador.nombre.length > 0 && objetivo > 0;
+  const valida = borrador.nombre.length > 0 && objetivo > 0 && (tenes === 0 || donde !== null);
 
   return (
     <form
       className="flex flex-col gap-5"
       onSubmit={(ev) => {
         ev.preventDefault();
-        if (valida) onGuardar({ ...borrador, id: crypto.randomUUID() });
+        if (valida) onGuardar({ ...borrador, id: nuevoId(), aportes: borrador.aportes.map((a) => ({ ...a, id: nuevoId(), cargado: new Date().toISOString() })) });
       }}
     >
       <div className="flex flex-col gap-1.5">
@@ -342,20 +710,24 @@ function FormNuevaMeta({
         etiqueta="Moneda"
         ancho="lleno"
         valor={moneda}
-        onChange={setMoneda}
+        onChange={(v) => {
+          setMoneda(v);
+          setDonde(v === "ARS" ? SIN_INVERTIR : DOLARES_GUARDADOS);
+        }}
         opciones={[
           { valor: "ARS", etiqueta: "En pesos" },
           { valor: "USD", etiqueta: "En dólares" },
         ]}
       />
-      <MoneyInput etiqueta={moneda === "ARS" ? "Cuánto cuesta hoy" : "Cuánto cuesta"} moneda={moneda === "ARS" ? "$" : "US$"} valor={objetivo} onChange={setObjetivo} />
-      <MoneyInput etiqueta="Ya tenés juntado" moneda={moneda === "ARS" ? "$" : "US$"} valor={tenes} onChange={setTenes} />
+      <MoneyInput etiqueta={moneda === "ARS" ? "Cuánto cuesta hoy" : "Cuánto cuesta"} moneda={simbolo(moneda)} valor={objetivo} onChange={setObjetivo} />
+      <MoneyInput etiqueta="Ya tenés juntado" moneda={simbolo(moneda)} valor={tenes} onChange={setTenes} />
+      {tenes > 0 && <ElegirInstrumento key={moneda} moneda={moneda} opciones={opciones} usados={[]} onChange={setDonde} />}
       <Slider etiqueta="Para cuándo" valor={meses} onChange={setMeses} min={1} max={120} formato={(v) => `${v} ${v === 1 ? "mes" : "meses"} · ${mesAnio(sumarMeses(hoy, v))}`} />
-      <MoneyInput etiqueta="Podés poner por mes (opcional)" moneda={moneda === "ARS" ? "$" : "US$"} valor={aporte} onChange={setAporte} />
+      <MoneyInput etiqueta="Podés poner por mes (opcional)" moneda={simbolo(moneda)} valor={aporte} onChange={setAporte} />
       {moneda === "ARS" ? (
         <>
           <SegmentedControl
-            etiqueta="Rendimiento"
+            etiqueta="Lo que pongas cada mes, ¿cuánto rinde?"
             ancho="lleno"
             tamano="sm"
             valor={rinde}
@@ -380,12 +752,13 @@ function FormNuevaMeta({
               <p className="text-label">Tenés que poner por mes</p>
               <p className="tabular text-h2">{$(e.aporteNecesario)}</p>
               <p className="mt-1 text-chico text-text-2">
-                {moneda === "ARS" && Math.round(e.objetivoFinal) !== Math.round(objetivo) && (
-                  <>
-                    Con la inflación esperada, en {mesAnio(borrador.fechaObjetivo)} va a costar unos {$(e.objetivoFinal)}.{" "}
-                  </>
-                )}
-                {aporte > 0 && (e.mesesConTuAporte === null ? `Con ${$(aporte)} por mes no llegás.` : `Con ${$(aporte)} por mes llegás en ${mesAnio(sumarMeses(hoy, e.mesesConTuAporte))}.`)}
+                {moneda === "ARS" && Math.round(e.objetivoFinal) !== Math.round(objetivo) && <>Con la inflación esperada, en {mesAnio(borrador.fechaObjetivo)} va a costar unos {$(e.objetivoFinal)}. </>}
+                {aporte > 0 &&
+                  (e.mesesConTuAporte === null
+                    ? `Con ${$(aporte)} por mes no llegás.`
+                    : e.llegaEnFecha
+                      ? `Con ${$(aporte)} por mes llegás a tiempo.`
+                      : `Con ${$(aporte)} por mes llegás el ${fechaCorta(sumarMeses(hoy, e.mesesConTuAporte), true)}, ${tarde(borrador.fechaObjetivo, sumarMeses(hoy, e.mesesConTuAporte))} más tarde.`)}
               </p>
             </>
           )}
@@ -394,37 +767,6 @@ function FormNuevaMeta({
 
       <Button type="submit" variante="primario" disabled={!valida}>
         Guardar meta
-      </Button>
-    </form>
-  );
-}
-
-function HojaControl({ meta, hoy, onCerrar, onGuardar }: { meta: Meta | null; hoy: string; onCerrar: () => void; onGuardar: (m: Meta) => void }) {
-  return (
-    <Sheet abierto={meta !== null} onCambio={(a) => !a && onCerrar()} titulo={meta ? meta.nombre : ""} descripcion="Cargá cuánto tenés juntado hoy para esta meta.">
-      {meta && <FormControl key={meta.id + meta.controles.length} meta={meta} hoy={hoy} onGuardar={onGuardar} />}
-    </Sheet>
-  );
-}
-
-function FormControl({ meta, hoy, onGuardar }: { meta: Meta; hoy: string; onGuardar: (m: Meta) => void }) {
-  const [saldo, setSaldo] = useState((meta.controles.at(-1)?.saldo ?? 0) + meta.aporteMensual);
-  return (
-    <form
-      className="flex flex-col gap-5"
-      onSubmit={(ev) => {
-        ev.preventDefault();
-        // Un control por día: si ya cargó hoy, se reemplaza.
-        const controles = [...meta.controles.filter((c) => c.fecha !== hoy), { fecha: hoy, saldo }].sort((a, b) => a.fecha.localeCompare(b.fecha));
-        onGuardar({ ...meta, controles });
-      }}
-    >
-      <MoneyInput etiqueta="Tenés hoy" moneda={meta.moneda === "ARS" ? "$" : "US$"} valor={saldo} onChange={setSaldo} tamano="lg" />
-      <p className={cn("text-chico text-text-2")}>
-        La vez anterior ({fechaCorta(meta.controles.at(-1)!.fecha)}) tenías {dinero(meta.controles.at(-1)!.saldo, meta.moneda, 0)}.
-      </p>
-      <Button type="submit" variante="primario">
-        Guardar
       </Button>
     </form>
   );

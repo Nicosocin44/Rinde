@@ -1,7 +1,8 @@
 "use client";
 
 import Dexie, { type Table } from "dexie";
-import type { Meta } from "@/lib/calculos/metas";
+import type { AjusteMeta, AporteMeta, Meta } from "@/lib/calculos/metas";
+import { DOLARES_GUARDADOS, SIN_INVERTIR } from "./instrumentos";
 
 /** Metas guardadas en el navegador (IndexedDB), como la cartera y las alertas. v2: en la cuenta del usuario. */
 class BaseMetas extends Dexie {
@@ -9,6 +10,27 @@ class BaseMetas extends Dexie {
   constructor() {
     super("rinde-metas");
     this.version(1).stores({ metas: "id, creada" });
+    // v2: de "controles" (el total juntado en cada fecha, sin decir dónde) a movimientos por instrumento. Lo que
+    // cambió entre un control y el siguiente fue plata puesta o sacada: pasa a ser un movimiento "sin invertir" (o "dólares guardados").
+    this.version(2)
+      .stores({ metas: "id, creada" })
+      .upgrade((tx) =>
+        tx
+          .table("metas")
+          .toCollection()
+          .modify((m: Meta & { controles?: { fecha: string; saldo: number }[] }) => {
+            const aportes: AporteMeta[] = [];
+            let anterior = 0;
+            (m.controles ?? []).forEach((c, i) => {
+              const diferencia = c.saldo - anterior;
+              if (diferencia !== 0) aportes.push({ id: `${m.id}-control-${i}`, fecha: c.fecha, monto: diferencia, instrumento: m.moneda === "USD" ? DOLARES_GUARDADOS : SIN_INVERTIR });
+              anterior = c.saldo;
+            });
+            m.aportes = m.aportes ?? aportes;
+            m.ajustes = m.ajustes ?? ([] as AjusteMeta[]);
+            delete m.controles;
+          }),
+      );
   }
 }
 

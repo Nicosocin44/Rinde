@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/shell/page-header";
 import { SourceNote } from "@/components/ui/frescura";
 import { obtenerMacro, obtenerPesos } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
+import { opcionesParaMetas } from "@/lib/metas/instrumentos";
 import { mejoresDelDia } from "@/lib/rankings/pesos";
 
 export const revalidate = 3600;
@@ -21,10 +22,10 @@ export default async function Page() {
     <>
       <PageHeader
         titulo="Tus metas"
-        bajada="Un viaje, un auto, un depto: ponele nombre a lo que querés, cuánto cuesta y para cuándo. Te decimos cuánto juntar por mes y, cada 30 días, cómo venís."
+        bajada="Un viaje, un auto, un depto: ponele nombre a lo que querés, cuánto cuesta y para cuándo. Vas cargando cuánto ponés y dónde, y te decimos cuánto juntar por mes y cómo venís."
         className="mb-10 lg:mb-14"
       />
-      <Metas referencia={mejor ? { nombre: mejor.nombre, tea: mejor.tea } : null} inflacionMensual={inflacionMensual} />
+      <Metas referencia={mejor ? { nombre: mejor.nombre, tea: mejor.tea } : null} inflacionMensual={inflacionMensual} opciones={p.ok ? opcionesParaMetas(p.data.opciones) : []} />
       <SourceNote className="mt-8" fuentes={[FUENTES.argentinadatos, FUENTES.cnv, FUENTES.bcra]} actualizado={p.ok ? p.asOf : null} estado={p.ok ? p.status : "stale"} metodologia="/metodologia#metas">
         <span aria-hidden>·</span>
         <span>

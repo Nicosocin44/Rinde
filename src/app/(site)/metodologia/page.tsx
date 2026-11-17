@@ -241,13 +241,18 @@ Aporte para una meta = (meta − C0 × (1 + i)^n) × i / (((1 + i)^n − 1) × (
     titulo: "Metas de ahorro",
     contenido: (
       <>
-        <Formula>{`Tasa mensual i = (1 + TEA)^(1/12) − 1     (TEA: la mejor opción sin plazo de hoy, o la que elijas)
+        <Formula>{`Valor de cada instrumento: entre movimiento y movimiento crece a su TEA, valor × (1 + TEA)^(días / 365)
+  (la TEA es la del día en que pusiste la plata; un retiro resta; "Actualizar valores" lo reemplaza por el valor real)
+Tasa mensual i = (1 + TEA)^(1/12) − 1
+  i_saldo: TEA promedio de lo que ya tenés, ponderada por valor
+  i_plan: la mejor opción sin plazo de hoy, o la que elijas, para lo que pongas de acá en adelante
 Objetivo en el mes n = objetivo de hoy × (1 + π)^n     (π: inflación mensual esperada del REM; solo metas en pesos)
-Aporte por mes = (objetivo en la fecha − saldo × (1 + i)^n) × i / ((1 + i)^n − 1)     (aportes al final de cada mes)
-Meses para llegar: se simula mes a mes, saldo × (1 + i) + aporte, hasta superar el objetivo de ese mes`}</Formula>
+Aporte por mes = (objetivo en la fecha − saldo × (1 + i_saldo)^n) × i_plan / ((1 + i_plan)^n − 1)     (aportes al final de cada mes)
+Meses para llegar: se simula mes a mes hasta que lo invertido más lo nuevo supera el objetivo de ese mes`}</Formula>
         <p className="mt-3">
-          Cada vez que cargás cuánto tenés, el plan se recalcula desde ese saldo con las tasas de ese día. &quot;Según el plan&quot; es lo que tendrías hoy si hubieras puesto lo que planeaste
-          todos los meses, a la tasa de hoy. Las metas en dólares no se ajustan por inflación y, salvo que elijas otro, suponen que los dólares no rinden.
+          Los valores son estimados: los fondos y billeteras cambian su tasa todos los días, así que conviene corregirlos de vez en cuando con lo que muestra tu app. &quot;Según el plan&quot;
+          es lo que tendrías hoy si hubieras puesto lo que planeaste todos los meses, a la tasa del plan. La comparación con la mejor opción de hoy solo aparece si la diferencia es de al menos un
+          punto, y ordena solo por tasa. Las metas en dólares no se ajustan por inflación y, salvo que elijas otro, suponen que los dólares no rinden.
         </p>
       </>
     ),

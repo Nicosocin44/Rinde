@@ -167,7 +167,7 @@ export function PriceChart({
         ) : (
           <div className="flex flex-col gap-1">
             <div className="text-label">{titulo}</div>
-            {formato ? <span className="tabular text-cifra">{mostrado !== null ? formato(mostrado) : "—"}</span> : <Cifra valor={mostrado} moneda={moneda} decimales={decimales} className="text-cifra" uniforme />}
+            {formato ? <span className="tabular text-cifra">{mostrado !== null ? formato(mostrado) : "—"}</span> : <Cifra valor={mostrado} moneda={moneda} decimales={decimales} className="text-cifra" />}
             <p className="flex items-center gap-2 text-chico text-text-2">
               <Delta valor={variacionMostrada} tipo={variacionEn === "puntos" ? "puntos" : "porcentaje"} className={tono === "neutro" ? "!text-text-2" : undefined} />
               <span>{scrub ? `al ${fechaCorta(scrub.fecha, true)}` : `en ${RANGOS.find((r) => r.valor === rango)?.etiqueta === "Máx" ? "toda la serie" : nombreRango(rango)}`}</span>

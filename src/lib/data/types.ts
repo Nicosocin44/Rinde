@@ -32,6 +32,7 @@ export const FUENTES = {
   criptoya: { id: "criptoya", name: "CriptoYa", url: "https://criptoya.com" },
   cnv: { id: "cnv", name: "CNV", url: "https://www.argentina.gob.ar/cnv" },
   wikipedia: { id: "wikipedia", name: "Wikipedia", url: "https://es.wikipedia.org" },
+  binance: { id: "binance", name: "Binance", url: "https://www.binance.com" },
   rinde: { id: "propia", name: "Elaboración propia", url: "/metodologia" },
 } as const satisfies Record<string, Fuente>;
 

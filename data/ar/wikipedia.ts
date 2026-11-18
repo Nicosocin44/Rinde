@@ -58,6 +58,11 @@ export const WIKIPEDIA: Record<string, string> = {
   GOLD: "Barrick_Gold",
   BA: "Boeing",
   CAT: "Caterpillar_Inc.",
+  // Cripto (Tether a secas es una canción: el artículo de la moneda es "Tether (criptomoneda)")
+  BTC: "Bitcoin",
+  ETH: "Ethereum",
+  USDT: "Tether_(criptomoneda)",
+  USDC: "USD_Coin",
   // Acciones argentinas
   ALUA: "Aluar",
   BBAR: "BBVA_Argentina",

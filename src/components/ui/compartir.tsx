@@ -9,13 +9,36 @@ import { useToast } from "./toast";
  * "Compartir resultado": genera una imagen (1080×1350, para historias y WhatsApp) con la cifra y el contexto.
  * En el celular abre el menú nativo de compartir; en la compu la descarga.
  */
-export function CompartirResultado({ titulo, cifra, detalle, nombreArchivo = "resultado" }: { titulo: string; cifra: string; detalle: string; nombreArchivo?: string }) {
+export function CompartirResultado({
+  titulo,
+  cifra,
+  detalle,
+  nombreArchivo = "resultado",
+  progreso,
+  color,
+  texto = "Compartir resultado",
+  tamano,
+}: {
+  titulo: string;
+  cifra: string;
+  detalle: string;
+  nombreArchivo?: string;
+  /** Barra de avance en la imagen (0 a 1). */
+  progreso?: number;
+  color?: "verde" | "celeste" | "sol" | "lila" | "coral";
+  /** Texto del botón. */
+  texto?: string;
+  tamano?: "sm" | "md";
+}) {
   const toast = useToast();
   const [generando, setGenerando] = useState(false);
 
   const compartir = async () => {
     setGenerando(true);
-    const url = `/api/compartir?${new URLSearchParams({ t: titulo, c: cifra, d: detalle })}`;
+    const params = new URLSearchParams({ t: titulo, c: cifra, d: detalle });
+    if (progreso !== undefined) params.set("p", String(Math.round(progreso * 100)));
+    if (color) params.set("col", color);
+    const url = `/api/compartir?${params}`;
     try {
       const r = await fetch(url);
       if (!r.ok) throw new Error();
@@ -40,9 +63,9 @@ export function CompartirResultado({ titulo, cifra, detalle, nombreArchivo = "re
   };
 
   return (
-    <Button onClick={compartir} disabled={generando} variante="secundario">
+    <Button onClick={compartir} disabled={generando} variante="secundario" tamano={tamano}>
       <Share />
-      {generando ? "Generando…" : "Compartir resultado"}
+      {generando ? "Generando…" : texto}
     </Button>
   );
 }

@@ -5,6 +5,7 @@ import { Revelar } from "@/components/ui/revelar";
 export const metadata: Metadata = { title: "Calculadoras financieras", description: "Interés compuesto, metas de ahorro, jubilación, plazo fijo, conversor de tasas e inflación." };
 
 const CALCULADORAS = [
+  { href: "/calculadoras/que-hubiera-pasado", titulo: "¿Qué hubiera pasado si…?", pregunta: "Si hace un año ponía mi plata en algo, ¿cuánto tendría hoy?", ejemplo: "$ 1.000.000 en dólar, plazo fijo, una acción o bitcoin" },
   { href: "/calculadoras/interes-compuesto", titulo: "Interés compuesto", pregunta: "¿Cuánto junto si ahorro todos los meses?", ejemplo: "$ 100.000 por mes durante 10 años" },
   { href: "/metas", titulo: "Metas de ahorro", pregunta: "¿Cuánto tengo que juntar por mes para mi meta?", ejemplo: "Un viaje de US$ 800 en 8 meses" },
   { href: "/calculadoras/jubilacion", titulo: "Jubilación", pregunta: "¿Cuánto tengo que ahorrar para jubilarme?", ejemplo: "Gastar US$ 1.500 por mes al jubilarte" },

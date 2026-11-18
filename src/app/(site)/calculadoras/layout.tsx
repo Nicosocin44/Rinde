@@ -9,6 +9,7 @@ export default function CalculadorasLayout({ children }: { children: React.React
         etiqueta="Calculadoras"
         solapas={[
           { href: "/calculadoras", label: "Todas" },
+          { href: "/calculadoras/que-hubiera-pasado", label: "¿Qué hubiera pasado?" },
           { href: "/calculadoras/interes-compuesto", label: "Interés compuesto" },
           { href: "/calculadoras/jubilacion", label: "Jubilación" },
           { href: "/calculadoras/plazo-fijo", label: "Plazo fijo" },

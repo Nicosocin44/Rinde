@@ -207,3 +207,42 @@ export type VelaCompacta = [string, number, number, number, number];
 export function compactar(velas: Vela[]): VelaCompacta[] {
   return velas.map((v) => [v.fecha, v.apertura, v.maximo, v.minimo, v.cierre]);
 }
+
+export type AjusteRatio = {
+  /** Desde qué índice de la serie es comparable (antes hay un salto que no es un cambio de ratio: se corta). */
+  desde: number;
+  /** Multiplicador para el precio de cada índice (1 después del último cambio de ratio). */
+  factores: number[];
+  /** Los cambios de ratio encontrados: fecha del primer precio nuevo y cuántas veces cambió (3 = cada CEDEAR nuevo vale un tercio). */
+  cambios: { indice: number; veces: number }[];
+};
+
+/**
+ * Ajusta los cambios de ratio y splits: un salto de más de 55 % en un día que da casi un número entero de veces (±5 %),
+ * como 56.000 → 18.760 (3 veces) o 83.000 → 8.105 (10 veces), es un cambio de ratio. Los precios anteriores se dividen
+ * (o multiplican) por ese entero exacto y la serie sigue siendo comparable. Un salto que no da entero no se puede
+ * explicar: la serie se corta ahí, como `cortarEnSalto`.
+ */
+export function ajustarRatios(serie: { cierre: number }[], umbral = 0.55, tolerancia = 0.05): AjusteRatio {
+  const factores = serie.map(() => 1);
+  const cambios: AjusteRatio["cambios"] = [];
+  let acumulado = d(1);
+  for (let j = serie.length - 1; j >= 0; j--) {
+    factores[j] = acumulado.toNumber();
+    if (j === 0) break;
+    const anterior = serie[j - 1]!.cierre;
+    if (anterior <= 0) continue;
+    const r = d(serie[j]!.cierre).div(anterior);
+    if (r.lte(UNO.plus(umbral)) && r.gte(UNO.minus(umbral))) continue;
+    const veces = r.lt(1) ? UNO.div(r) : r;
+    const entero = Math.round(veces.toNumber());
+    if (entero >= 2 && veces.div(entero).minus(1).abs().lte(tolerancia)) {
+      // Bajó (cada unidad nueva vale menos): los precios de antes se dividen; subió: se multiplican.
+      acumulado = acumulado.mul(r.lt(1) ? UNO.div(entero) : entero);
+      cambios.push({ indice: j, veces: entero });
+    } else {
+      return { desde: j, factores, cambios };
+    }
+  }
+  return { desde: 0, factores, cambios };
+}

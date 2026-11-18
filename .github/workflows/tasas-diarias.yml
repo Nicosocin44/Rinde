@@ -1,0 +1,40 @@
+# Guarda una foto diaria de las tasas (plazo fijo por banco, billeteras y LECAPs) en data/historico/tasas/.
+# Nadie publica el historial de la tasa de cada banco: cada día que no se guarda se pierde.
+# Corre de lunes a viernes a las 19:00 de Argentina (22:00 UTC) y se puede disparar a mano desde la pestaña Actions.
+name: Tasas del día
+
+on:
+  schedule:
+    - cron: "0 22 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tasas-diarias
+  cancel-in-progress: false
+
+jobs:
+  guardar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Guardar las tasas de hoy
+        run: node scripts/guardar-tasas.mjs
+      - name: Subir el archivo si cambió
+        run: |
+          if git diff --quiet -- data/historico/tasas; then
+            echo "Sin cambios"
+            exit 0
+          fi
+          git config user.name "rinde-datos"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/historico/tasas
+          git commit -m "Tasas del $(TZ=America/Argentina/Buenos_Aires date +%d/%m/%Y) (automático)"
+          git pull --rebase --autostash
+          git push

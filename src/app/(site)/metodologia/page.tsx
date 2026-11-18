@@ -287,6 +287,22 @@ Equivalencia en dólares = monto / dólar MEP de hoy (venta)`}</Formula>
     ),
   },
   {
+    id: "que-hubiera",
+    titulo: "¿Qué hubiera pasado si…?",
+    contenido: (
+      <>
+        <Formula>{`Dólar, acción, CEDEAR o bitcoin = monto × precio de hoy / precio de esa fecha   (el último dato en o antes de cada fecha)
+Plazo fijo = Π (1 + TNA del momento × días / 365), renovado cada 30 días   (tasa promedio de depósitos a 30 días)
+Para no perder = monto × IPC de hoy / IPC de esa fecha   (el mes en curso se proyecta con el REM)
+Contra la inflación = valor de hoy / lo que necesitabas para no perder − 1`}</Formula>
+        <p className="mt-3">
+          Los dólares son MEP y blue (ArgentinaDatos); las acciones y CEDEARs, su precio en pesos en BYMA (data912), cortado en el último cambio de ratio; bitcoin, su precio en
+          dólares en Binance por el dólar cripto de cada día. Sin comisiones ni impuestos. Ordena solo por cuánto tendrías hoy: son rendimientos pasados, no una recomendación.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "jubilacion",
     titulo: "Jubilación",
     contenido: (

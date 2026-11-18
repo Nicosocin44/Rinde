@@ -1,6 +1,6 @@
 import { CEDEARS, ACCIONES_GENERAL, PANEL_LIDER } from "@data/ar/mercados";
 import { DESCRIPCION_ETF, WIKIPEDIA } from "@data/ar/wikipedia";
-import { cortarEnSalto, type Vela } from "@/lib/calculos";
+import { ajustarRatios, type Vela } from "@/lib/calculos";
 import { describirEmpresa, menciona, nombreParaBuscar } from "@/lib/activos/perfil";
 import type { Noticia } from "@/lib/noticias";
 import * as d912 from "../adapters/data912";
@@ -40,8 +40,10 @@ export type FichaActivo = {
   parecidosPor: "sector" | "panel" | "volumen";
   /** Cierres diarios desde el último cambio de ratio (o split no ajustado). */
   velas: Vela[];
-  /** true si la serie se cortó por un cambio de ratio. */
-  serieCortada: boolean;
+  /** Si la serie se cortó por un salto que no es un cambio de ratio: la fecha desde la que arranca. null si no se cortó. */
+  serieCortada: string | null;
+  /** Cambios de ratio o splits ajustados en la serie: fecha del primer precio nuevo y cuántas veces cambió. */
+  cambiosRatio: { fecha: string; veces: number }[];
   /** MEP diario, para pasar la serie a dólares. */
   mep: PuntoSerie[];
   acerca: { texto: string; fuente: "wikipedia" | "wikidata" | "propia"; url: string | null; enIngles?: boolean } | null;
@@ -71,17 +73,22 @@ async function ubicar(ticker: string, cedears: Cedear[], acciones: Accion[]): Pr
   return null;
 }
 
-async function velasDe(tipo: TipoActivo, ticker: string): Promise<{ velas: Vela[]; cortada: boolean }> {
+async function velasDe(tipo: TipoActivo, ticker: string): Promise<{ velas: Vela[]; cortada: string | null; cambios: { fecha: string; veces: number }[] }> {
   try {
     const h = await d912.historico(tipo === "cedear" ? "cedears" : "stocks", ticker);
     const todas: Vela[] = h
       .filter((p) => p.c > 0)
       .map((p) => ({ fecha: p.date.slice(0, 10), apertura: p.o ?? p.c, maximo: p.h ?? p.c, minimo: p.l ?? p.c, cierre: p.c, volumen: p.v ?? 0 }))
       .sort((a, b) => a.fecha.localeCompare(b.fecha));
-    const velas = cortarEnSalto(todas);
-    return { velas, cortada: velas.length < todas.length };
+    // Cambios de ratio y splits: los precios de antes se ajustan para que sean comparables (no se corta la historia).
+    const a = ajustarRatios(todas);
+    const velas = todas.slice(a.desde).map((v, i) => {
+      const f = a.factores[a.desde + i]!;
+      return { ...v, apertura: v.apertura * f, maximo: v.maximo * f, minimo: v.minimo * f, cierre: v.cierre * f };
+    });
+    return { velas, cortada: a.desde > 0 ? (todas[a.desde]?.fecha ?? null) : null, cambios: a.cambios.map((c) => ({ fecha: todas[c.indice]!.fecha, veces: c.veces })) };
   } catch {
-    return { velas: [], cortada: false };
+    return { velas: [], cortada: null, cambios: [] };
   }
 }
 
@@ -176,6 +183,7 @@ export async function cargarActivo(ticker: string) {
         parecidosPor,
         velas: serie.velas,
         serieCortada: serie.cortada,
+        cambiosRatio: serie.cambios,
         mep: historicoDolar.ok ? historicoDolar.data.mep : [],
         acerca,
         noticias: delActivo.slice(0, 8),

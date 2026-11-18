@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/shell/page-header";
 import { SectionTabs } from "@/components/shell/section-tabs";
+import { Favoritos } from "@/components/modules/mercados/favoritos";
 
 export default function MercadosLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,7 +14,10 @@ export default function MercadosLayout({ children }: { children: React.ReactNode
           { href: "/mercados/cripto", label: "Cripto" },
         ]}
       />
-      <div className="pt-8 lg:pt-12">{children}</div>
+      <div className="pt-8 lg:pt-12">
+        <Favoritos />
+        {children}
+      </div>
     </>
   );
 }

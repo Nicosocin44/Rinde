@@ -33,9 +33,9 @@ export function VigiaAlertas() {
       const alertas = (await listarAlertas()).filter((a) => a.activa);
       if (alertas.length === 0) return;
       try {
-        const r = await fetch("/api/alertas/mercado");
-        if (!r.ok) return;
-        const foto = { ...((await r.json()) as FotoMercado), vencimientos: await vencimientosLocales() };
+        const { fotoConActivos, tickersDeAlertas } = await import("@/lib/alertas/foto");
+        const foto = await fotoConActivos(tickersDeAlertas(alertas), await vencimientosLocales());
+        if (!foto) return;
         const hoy = hoyAR();
         for (const a of alertas) {
           const res = evaluar(a, foto);

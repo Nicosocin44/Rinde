@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useId, useMemo, useState } from "react";
 import { LIQUIDEZ_OPCION } from "@/components/modules/pesos/etiquetas";
 import { Button } from "@/components/ui/button";
+import { CompartirResultado } from "@/components/ui/compartir";
 import { EmptyState, Skeleton } from "@/components/ui/estados";
 import { MoneyInput, NumberField } from "@/components/ui/money-input";
 import { SegmentedControl } from "@/components/ui/segmented";
@@ -669,6 +670,25 @@ function TarjetaMeta({
             <Button variante={e.controlPendiente || meta.aportes.length === 0 ? "primario" : "secundario"} tamano="sm" onClick={onSumar}>
               <Plus /> Sumar plata
             </Button>
+          )}
+          {/* La imagen muestra el avance, no los montos: la persona elige compartir cuánto le falta, no cuánta plata tiene. */}
+          {e.saldo > 0 && (
+            <CompartirResultado
+              titulo={`Mi meta: ${meta.nombre}`}
+              cifra={porcentaje(e.avance, 0)}
+              detalle={
+                e.cumplida
+                  ? "Llegué a la meta."
+                  : e.mesesConTuAporte !== null && meta.aporteMensual > 0
+                    ? `Si sigo así, llego en ${mesAnio(sumarMeses(hoy, e.mesesConTuAporte))}.`
+                    : `La meta es para ${mesAnio(meta.fechaObjetivo)}.`
+              }
+              progreso={e.avance}
+              color="lila"
+              texto="Compartir mi avance"
+              tamano="sm"
+              nombreArchivo="mi-meta"
+            />
           )}
           {onValores && e.tenencias.some((t) => t.instrumento.tea > 0) && (
             <Button variante="fantasma" tamano="sm" onClick={onValores}>

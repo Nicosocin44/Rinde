@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { aPesos, cortarEnSalto, enDolares, inflacionEsperadaHasta, maximaCaida, primaContraMep, rango, rendimientos, resumenBono, variacionDesde, volatilidadAnual, type Vela } from "@/lib/calculos";
+import { ajustarRatios, aPesos, cortarEnSalto, enDolares, inflacionEsperadaHasta, maximaCaida, primaContraMep, rango, rendimientos, resumenBono, variacionDesde, volatilidadAnual, type Vela } from "@/lib/calculos";
 
 // Golden tests de la ficha de un activo, calculados a mano.
 
@@ -114,5 +114,40 @@ describe("ficha de bonos, letras y cripto", () => {
     };
     expect(resumenBono(def, "2026-08-01")).toEqual({ pagosPorAnio: 2, tasaHoy: 0.04, tasaMaxima: 0.04, cuotasRestantes: 2, proximaAmortizacion: "2027-01-09", vencimiento: "2027-07-09" });
     expect(resumenBono(def, "2026-02-01").tasaHoy).toBe(0.01);
+  });
+});
+
+describe("cambios de ratio y splits", () => {
+  const c = (xs: number[]) => xs.map((cierre) => ({ cierre }));
+  const ajustada = (xs: number[]) => {
+    const a = ajustarRatios(c(xs));
+    return xs.slice(a.desde).map((x, i) => x * a.factores[a.desde + i]!);
+  };
+
+  it("un cambio de ratio de 3 (como SPY): los precios de antes se dividen por 3", () => {
+    const a = ajustarRatios(c([100, 101, 34, 35]));
+    expect(a.desde).toBe(0);
+    expect(a.cambios).toEqual([{ indice: 2, veces: 3 }]);
+    const s = ajustada([100, 101, 34, 35]);
+    expect(s[0]).toBeCloseTo(100 / 3, 10);
+    expect(s[1]).toBeCloseTo(101 / 3, 10);
+    expect(s.slice(2)).toEqual([34, 35]);
+  });
+
+  it("un split de 10 (como YPF, 83.000 → 8.105) y un ratio inverso", () => {
+    expect(ajustarRatios(c([83000, 8105])).cambios).toEqual([{ indice: 1, veces: 10 }]);
+    expect(ajustada([10, 10.2, 51])).toEqual([50, 51, 51]);
+  });
+
+  it("un salto que no da entero corta la serie, y antes se ajusta el ratio posterior", () => {
+    expect(ajustada([100, 180, 181])).toEqual([180, 181]);
+    const s = ajustada([50, 90, 91, 30.4]);
+    expect(s).toHaveLength(3);
+    expect(s[0]).toBeCloseTo(30, 10);
+    expect(s[2]).toBe(30.4);
+  });
+
+  it("sin saltos no cambia nada", () => {
+    expect(ajustarRatios(c([100, 110, 99])).factores).toEqual([1, 1, 1]);
   });
 });

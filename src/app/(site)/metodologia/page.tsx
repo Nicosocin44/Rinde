@@ -211,6 +211,25 @@ Paridad = P / valor técnico`}</Formula>
 CCL implícito = precio en pesos / precio de la especie C`}</Formula>,
   },
   {
+    id: "activo",
+    titulo: "Ficha de cada activo",
+    contenido: (
+      <>
+        <p>
+          Precio, rango del día y volumen: data912 (BYMA con demora). La serie arranca en el último salto de más de 55 % en un día (cambio de ratio de un CEDEAR o split no
+          ajustado), igual que en la cartera. La descripción de cada empresa sale de Wikipedia en castellano, del artículo que verificamos a mano para cada ticker; los ETF los
+          describimos nosotros. Las noticias son las de la sección Noticias que nombran a la empresa.
+        </p>
+        <Formula>{`Rendimiento = último cierre / cierre en o antes de la fecha − 1     (1 semana, 1 mes, 3 meses, en el año, 1 año, 5 años)
+En dólares = cada cierre / dólar MEP de ese día (o el último anterior)
+Volatilidad anual = desvío muestral de ln(P_t / P_t−1) en las últimas 252 ruedas × √252
+Máxima caída = peor P_t / máximo previo − 1, en el último año
+Rango de 52 semanas = mínimo y máximo del día del último año
+Prima del CEDEAR = dólar implícito (MEP) / dólar MEP − 1`}</Formula>
+      </>
+    ),
+  },
+  {
     id: "cartera",
     titulo: "Tu cartera",
     contenido: (

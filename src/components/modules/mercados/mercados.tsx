@@ -74,6 +74,7 @@ export function TablaCedears({ cedears }: { cedears: Cedear[] }) {
         filas={visibles}
         columnas={columnas}
         clave={(c) => c.ticker}
+        enlace={(c) => `/activo/${encodeURIComponent(c.ticker)}`}
         ordenPorDefecto={{ columna: "vol", direccion: "desc" }}
         filaMovil={(c) => (
           <span className="flex items-center gap-3">
@@ -141,6 +142,7 @@ export function TablaAcciones({ acciones }: { acciones: Accion[] }) {
         filas={filas}
         columnas={columnas}
         clave={(a) => a.ticker}
+        enlace={(a) => `/activo/${encodeURIComponent(a.ticker)}`}
         ordenPorDefecto={{ columna: "vol", direccion: "desc" }}
         filaMovil={(a) => (
           <span className="flex items-center justify-between gap-3">

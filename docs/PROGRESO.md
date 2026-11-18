@@ -124,6 +124,39 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Ficha de cada activo (rama `ficha-activo`, 18/11/2026)
+
+> Pedido de los fundadores: al tocar un activo, que traiga toda su info más sus noticias, como la página de un activo en Google Finance.
+
+**Dónde está:** `/activo/[ticker]` (por ejemplo `/activo/AAPL`, `/activo/GGAL`). Se llega tocando cualquier fila de CEDEARs o acciones (en la compu toda la fila es clickeable y la primera celda es un link; en el celular la fila entera es el link), desde el buscador y desde los tickers de cada noticia.
+
+**Qué muestra:**
+- Encabezado con logo, nombre, ticker, tipo (CEDEAR o acción del panel líder/general) y sector.
+- **Gráfico** con rangos (1S a Máx) y selector **en pesos / en dólares** (cada cierre dividido por el MEP de ese día).
+- Precio de hoy y, en los CEDEAR, cuánto más caro o barato sale su dólar implícito contra el MEP.
+- **Datos clave:** cierre anterior, rango del día (o de la última rueda), rango de 52 semanas, volumen, volatilidad anual y máxima caída del último año. En los CEDEAR, además: precio de un CEDEAR en dólares, precio de la acción en EE.UU. con su variación y dólares implícitos MEP y CCL.
+- **Rendimiento** a 1 semana, 1 mes, 3 meses, en el año, 1 año y 5 años, **en pesos y en dólares MEP**.
+- **Noticias** de la empresa (las de la sección Noticias que la nombran) y **Acerca de** (Wikipedia, con la fuente y la licencia).
+- **Otros del mismo sector** (CEDEAR) o del mismo panel (acción), con link a su ficha.
+
+**Datos:** data912 (precio, historia con apertura/máximo/mínimo/cierre/volumen, panel de EE.UU.), ArgentinaDatos (MEP histórico), DolarAPI (MEP de hoy), Wikipedia (descripción) y los medios de Noticias. Cálculos en `src/lib/calculos/activo.ts` con 8 golden tests (`tests/activo.test.ts`).
+
+**Fuentes verificadas (18/11/2026):**
+- data912 `/historical/{cedears,stocks}/{ticker}`: además de `c` trae `o`, `h`, `l`, `v` (y `dr`, `sa`, que no usamos). Para tickers que no tiene responde 200 con `{"Error": …}`: por ejemplo **NU no tiene historia**; la ficha lo dice y muestra el resto.
+- data912 `/live/usa_stocks`: precio y variación de la acción en EE.UU. (con demora).
+- Wikipedia `/api/rest_v1/page/summary/{título}`: responde sin clave, pero **limita los pedidos seguidos** (429). Se cachea una semana y se pide solo el título verificado de cada ticker (`data/ar/wikipedia.ts`): la búsqueda automática confundía, por ejemplo, Tesla con Nikola Tesla.
+
+### Decisiones de la ficha para revisar
+
+1. **Sin búsqueda en Wikipedia:** solo los 74 tickers con artículo verificado tienen descripción. Los que no tienen artículo propio (Cresud, TGN, Ternium Argentina, varias del panel general) o tienen uno ambiguo (Metrogas, Banco Hipotecario) quedan sin descripción.
+2. **Los ETF los describimos nosotros** en una línea (qué índice replican).
+3. **Noticias solo de los medios que ya seguimos** (últimos 3 días). Para CEDEARs de EE.UU. va a haber pocas: no sumamos Google News ni Yahoo porque sus feeds son para uso personal.
+4. **Sin datos de balance** (P/E, capitalización, dividendos): no hay una fuente gratuita y confiable que los publique para usar en la web. Se suman si conseguimos una.
+5. **Bonos, LECAPs y cripto** todavía no tienen ficha propia: siguen en sus pantallas.
+6. **Un ticker que no existe** muestra la página "no encontrado" con `noindex`, pero responde 200 y no 404: con la carga en streaming, Next.js ya mandó la página cuando se entera (está documentado así).
+
+---
+
 ## Metas de ahorro (rama `metas`, 17/11/2026)
 
 > Idea de los fundadores (audios del 17/11): separar las metas de la jubilación y hacerlas un plan fácil para quien no conoce el mercado de capitales: "quiero un auto", "un viaje de US$ 800", "un departamento", "estudios".

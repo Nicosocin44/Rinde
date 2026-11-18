@@ -2,6 +2,8 @@
 
 import { ArrowDown } from "lucide-react";
 import { AnimatePresence, m } from "motion/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
@@ -30,6 +32,7 @@ export function DataTable<T>({
   clave,
   esMejor,
   onClickFila,
+  enlace,
   filaMovil,
   orden: ordenControlado,
   onOrden,
@@ -46,6 +49,11 @@ export function DataTable<T>({
   clave: (fila: T) => string;
   esMejor?: (fila: T, i: number) => boolean;
   onClickFila?: (fila: T) => void;
+  /**
+   * Cada fila lleva a una página (por ejemplo, la ficha de un activo). Toda la fila es clickeable, la primera celda es
+   * un link de verdad (teclado y lectores de pantalla) y en mobile la fila entera es el link.
+   */
+  enlace?: (fila: T) => string;
   filaMovil?: (fila: T, i: number) => ReactNode;
   orden?: { columna: string; direccion: "asc" | "desc" } | null;
   onOrden?: (o: { columna: string; direccion: "asc" | "desc" }) => void;
@@ -58,6 +66,7 @@ export function DataTable<T>({
   className?: string;
   topSticky?: string;
 }) {
+  const router = useRouter();
   const [ordenLocal, setOrdenLocal] = useState(ordenPorDefecto ?? null);
   const orden = ordenControlado !== undefined ? ordenControlado : ordenLocal;
 
@@ -143,19 +152,34 @@ export function DataTable<T>({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, transition: { duration: 0.12 } }}
                   transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}
-                  onClick={onClickFila ? () => onClickFila(f) : undefined}
+                  onClick={
+                    enlace
+                      ? (e) => {
+                          // Un click en el link de la primera celda ya navega solo.
+                          if (!(e.target as HTMLElement).closest("a")) router.push(enlace(f));
+                        }
+                      : onClickFila
+                        ? () => onClickFila(f)
+                        : undefined
+                  }
                   onPointerEnter={onResaltar ? () => onResaltar(k) : undefined}
                   onPointerLeave={onResaltar ? () => onResaltar(null) : undefined}
                   className={cn(
                     "h-[52px] shadow-[inset_0_-1px_0_var(--c-border)] transition-colors duration-(--duration-micro)",
                     mejor ? "bg-accent-soft" : "hover:bg-surface-2/60",
                     resaltada === k && !mejor && "bg-surface-2/60",
-                    onClickFila && "cursor-pointer",
+                    (onClickFila || enlace) && "cursor-pointer",
                   )}
                 >
-                  {columnas.map((c) => (
+                  {columnas.map((c, j) => (
                     <td key={c.id} className={cn("px-3 py-2 first:pl-3 last:pr-3", c.alineacion === "derecha" && "tabular text-right", claseSolo(c))}>
-                      {c.celda(f, i)}
+                      {enlace && j === 0 ? (
+                        <Link href={enlace(f)} className="rounded-(--radius-chip) outline-offset-4 hover:underline hover:decoration-border-strong hover:underline-offset-4">
+                          {c.celda(f, i)}
+                        </Link>
+                      ) : (
+                        c.celda(f, i)
+                      )}
                     </td>
                   ))}
                 </m.tr>
@@ -176,7 +200,11 @@ export function DataTable<T>({
                 transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}
                 className={cn("border-b border-border", esMejor?.(f, i) && "bg-accent-soft")}
               >
-                {onClickFila ? (
+                {enlace ? (
+                  <Link href={enlace(f)} className="presionable block w-full px-3 py-3 text-left">
+                    {filaMovil(f, i)}
+                  </Link>
+                ) : onClickFila ? (
                   <button type="button" onClick={() => onClickFila(f)} className="presionable block w-full px-3 py-3 text-left">
                     {filaMovil(f, i)}
                   </button>

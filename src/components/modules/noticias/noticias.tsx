@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { ProviderMark } from "@/components/ui/provider-mark";
@@ -30,8 +31,10 @@ function Mercados({ mercados, tickers }: { mercados: Mercado[]; tickers: string[
         </li>
       ))}
       {tickers.map((t) => (
-        <li key={t} className="rounded-full border border-border px-2 py-0.5 font-mono text-[11px] text-text-2">
-          {t}
+        <li key={t}>
+          <Link href={`/activo/${encodeURIComponent(t)}`} className="inline-block rounded-full border border-border px-2 py-0.5 font-mono text-[11px] text-text-2 hover:border-text-3 hover:text-text">
+            {t}
+          </Link>
         </li>
       ))}
     </ul>

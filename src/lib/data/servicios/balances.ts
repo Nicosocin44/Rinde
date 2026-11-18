@@ -16,7 +16,7 @@ export function tickerSec(ticker: string, tipo: "cedear" | "accion", sector: str
  * El resumen de una empresa. La respuesta de la SEC pesa hasta 4 MB (no entra en la caché de fetch): se guarda el
  * resumen, que pesa unos pocos KB, 12 horas. Los balances salen como mucho una vez por trimestre.
  */
-const resumenDeCik = unstable_cache(async (cik: number): Promise<ResumenBalances | null> => resumirBalances(await sec.hechos(cik), hoyAR()), ["balances-sec-v1"], {
+const resumenDeCik = unstable_cache(async (cik: number): Promise<ResumenBalances | null> => resumirBalances(await sec.hechos(cik), hoyAR()), ["balances-sec-v2"], {
   revalidate: 43_200,
 });
 

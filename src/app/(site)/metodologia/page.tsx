@@ -308,22 +308,32 @@ Cripto: volatilidad anualizada con 365 días (opera todos los días); BTC y ETH 
           (ingresos, ganancia, flujo de caja) se busca entre los nombres que usan las normas contables de EE.UU. y las internacionales (IFRS). Si un ejercicio aparece en varios balances,
           usamos el más nuevo (las correcciones). Mostramos los ejercicios que traen los dos últimos balances anuales: más atrás aparecen cifras de antes de fusiones o reestructuraciones.
         </p>
-        <Formula>{`Cuarto trimestre = ejercicio − primeros nueve meses           (las empresas no lo informan por separado)
+        <Formula>{`Trimestres: los resultados vienen por trimestre; el flujo de efectivo, acumulado en el año (3, 6, 9 y 12 meses)
+  trimestre = acumulado − acumulado anterior del mismo ejercicio; cuarto trimestre = ejercicio − nueve meses
 Últimos 12 meses = suma de los últimos 4 trimestres seguidos    (si no hay, el último ejercicio)
-Crecimiento = ejercicio / ejercicio anterior − 1                 (los dos del mismo balance)
-Margen neto = ganancia neta / ingresos       Margen operativo = ganancia operativa / ingresos
-Flujo de caja libre = flujo de caja operativo − inversión en bienes de uso
-Rentabilidad sobre el patrimonio (ROE) = ganancia de 12 meses / patrimonio del último balance
+Crecimiento anual = ejercicio / ejercicio anterior − 1         (los dos del mismo balance)
+Interanual = último trimestre / mismo trimestre del año anterior − 1
+Ganancia bruta = ingresos − costo de ventas (si no la informa)    EBITDA = ganancia operativa + amortizaciones
+Márgenes = ganancia bruta, operativa, EBITDA o neta / ingresos (12 meses)
+Flujo de caja libre = flujo de las operaciones − inversión en bienes de uso
+ROE = ganancia de 12 meses / patrimonio       ROA = ganancia de 12 meses / activo total   (del último balance)
+Liquidez corriente = activo corriente / pasivo corriente     Prueba ácida = (activo corriente − inventarios) / pasivo corriente
+Deuda financiera = deuda de largo plazo con su porción corriente + papeles comerciales   (IFRS: préstamos + bonos)
+Deuda neta = deuda financiera − caja − inversiones de corto plazo      Deuda neta / EBITDA (12 meses)
+Cobertura de intereses = ganancia operativa / intereses (12 meses)     Payout = dividendos pagados / ganancia neta
 Capitalización = precio de una acción en EE.UU. × acciones (promedio diluido del último período)
+Valor de empresa = capitalización + deuda neta
 PER = capitalización / ganancia de 12 meses     Precio/ventas = capitalización / ingresos de 12 meses
-Precio/valor libro = capitalización / patrimonio     Dividendo = dividendo por acción del último ejercicio / precio`}</Formula>
+Precio/valor libro = capitalización / patrimonio     Valor de empresa / EBITDA
+Rendimiento del dividendo = dividendo por acción del último ejercicio / precio
+Rendimiento del flujo libre = flujo de caja libre de 12 meses / capitalización`}</Formula>
         <ul>
           <li>Los múltiplos (PER y demás) solo aparecen para empresas de EE.UU. con balances en dólares: en un ADR, un papel puede representar varias acciones.</li>
           <li>
             Balances en pesos: están ajustados por inflación a la fecha de cada balance, así que solo comparamos ejercicios que vienen en el mismo balance y no mostramos trimestres. Las
             empresas argentinas presentan sus balances más nuevos en la CNV antes que en la SEC: si el último en la SEC tiene más de 15 meses, lo avisamos.
           </li>
-          <li>Bancos: no informan &quot;ingresos&quot; como el resto, así que mostramos la ganancia, el patrimonio y la rentabilidad, sin flujo de caja libre.</li>
+          <li>Bancos: no informan &quot;ingresos&quot; como el resto, así que mostramos la ganancia, el patrimonio y la rentabilidad, sin flujo de caja libre, EBITDA ni deuda neta (su caja es la plata de los depositantes).</li>
         </ul>
       </>
     ),

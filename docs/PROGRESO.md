@@ -142,10 +142,14 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 > En la ficha de cada CEDEAR y de cada acción argentina con ADR, debajo del rendimiento. Datos reales de la SEC (EDGAR), gratis, sin cuenta y de dominio público.
 
 - **Cuatro cifras arriba:** ingresos y ganancia neta (últimos 12 meses o último ejercicio), con el crecimiento y el margen; PER (o, si no se puede, la rentabilidad sobre el patrimonio); dividendo (o flujo de caja libre).
-- **Gráfico por ejercicio:** ingresos en gris y ganancia en verde, o en rojo por debajo del cero si fue pérdida. Al lado, el último balance: activos, pasivos, patrimonio, caja, deuda, endeudamiento, margen operativo y, en empresas de EE.UU., capitalización, precio/ventas y precio/valor libro.
-- **Modo Pro:** la tabla completa ejercicio por ejercicio (ingresos, ganancia operativa y neta, margen, ganancia y dividendo por acción, flujo operativo, inversión y flujo libre).
-- **Cálculos propios** en `src/lib/calculos/balances.ts`, con 11 golden tests sobre recortes reales de Apple, Mercado Libre y Galicia (`tests/fixtures/sec-*.json`). Metodología en /metodologia#balances. La SEC suma su línea en el pie del sitio.
-- Probado con Apple, Coca-Cola, Mercado Libre, Nebius, TSMC, YPF y Galicia. SPY (ETF) y Aluar (sin ADR) no muestran la sección.
+- **Resultados trimestrales y anuales** (selector Trimestral / Anual): el último trimestre contra el mismo del año anterior, en una frase, y el gráfico de los últimos 8 trimestres (o 4 ejercicios): ingresos en gris y ganancia en verde, o en rojo por debajo del cero si fue pérdida.
+- **Los tres estados contables completos**, en solapas, con una columna de variación interanual:
+  - *Resultados:* ingresos, costo de ventas, ganancia bruta, investigación y desarrollo, gastos comerciales, ganancia operativa, EBITDA, intereses, ganancia antes de impuestos, impuestos, ganancia neta, margen, ganancia y dividendo por acción, acciones.
+  - *Balance:* caja, inversiones de corto plazo, cuentas por cobrar, inventarios, activo corriente, bienes de uso, llave de negocio, intangibles, activo total, cuentas por pagar, deuda de corto y de largo plazo, pasivo corriente y total, deuda financiera, patrimonio.
+  - *Flujo de caja:* de las operaciones, amortizaciones, inversión en bienes de uso, flujo libre, de inversión, de financiación, dividendos pagados y recompras.
+- **Números clave**, en cinco grupos con una línea que explica cada uno: valuación (capitalización, valor de empresa, PER, precio/ventas, valor libro, EV/EBITDA, rendimiento del dividendo y del flujo libre), rentabilidad (márgenes bruto, operativo, EBITDA y neto, ROE, ROA), crecimiento (anual e interanual), salud financiera (liquidez corriente, prueba ácida, deuda neta, deuda neta/EBITDA, deuda y pasivos sobre patrimonio, cobertura de intereses) y accionistas (ganancia y dividendo por acción, payout, dividendos pagados, recompras, acciones).
+- **Cálculos propios** en `src/lib/calculos/balances.ts`, con 17 golden tests sobre recortes reales de Apple, Coca-Cola, Mercado Libre y Galicia (`tests/fixtures/sec-*.json`). Metodología en /metodologia#balances. La SEC suma su línea en el pie del sitio.
+- Probado con Apple, Coca-Cola, Nvidia, Mercado Libre, Nebius, Nu, TSMC, YPF y Galicia. SPY (ETF) y Aluar (sin ADR) no muestran la sección.
 - La sección carga aparte (con un esqueleto del mismo tamaño): la ficha no espera a la SEC.
 
 **Decisiones para revisar:**
@@ -155,7 +159,9 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 4. **Múltiplos (PER, etc.) solo en empresas de EE.UU. con balances en dólares** (10-K): en un ADR un papel puede ser varias acciones, y en pesos el precio de hoy contra un balance viejo engaña.
 5. **Se muestran los ejercicios de los dos últimos balances anuales** (unos cuatro años). Más atrás aparecían cifras de antes de reestructuraciones (Nebius cuando era Yandex) o mal cargadas en la SEC.
 6. **La SEC pide un mail de contacto** en cada consulta. Usamos el de `site.contacto` (hoy `hola@rinde.example`): **hay que poner uno real antes de publicar**.
-7. **Bancos:** no informan "ingresos" como el resto; se muestran ganancia, patrimonio y rentabilidad, sin flujo libre.
+7. **Bancos:** no informan "ingresos" como el resto; se muestran ganancia, patrimonio y rentabilidad, sin flujo libre, EBITDA ni deuda neta.
+8. **Deuda financiera:** en US GAAP, la deuda de largo plazo con su porción corriente más los papeles comerciales; en IFRS, los préstamos y, si los informa aparte, los bonos. No incluye arrendamientos salvo que la empresa los sume en el mismo concepto (Coca-Cola).
+9. **El trimestre de cierre de ejercicio y el flujo trimestral se derivan** restando acumulados (las empresas no los informan por separado). La ganancia por acción de ese trimestre queda vacía: no es una resta exacta.
 
 ---
 

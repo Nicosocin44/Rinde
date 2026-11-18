@@ -193,27 +193,6 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
         <AcercaDe
           titulo={a.sector === "ETF" ? "Qué es" : "Acerca de la empresa"}
           texto={a.acerca ? <p>{a.acerca.texto}</p> : null}
-          wikipedia={a.acerca?.fuente === "wikipedia" ? a.acerca.url : null}
-          fuente={
-            a.acerca?.fuente === "wikidata" ? (
-              <>
-                Armado con los datos de{" "}
-                <a href={`https://www.wikidata.org/wiki/${p?.id ?? ""}`} target="_blank" rel="noopener noreferrer" className="underline decoration-border-strong decoration-dotted underline-offset-4 hover:text-text">
-                  Wikidata
-                </a>
-                {a.acerca.enIngles && a.acerca.url && (
-                  <>
-                    {" · "}
-                    <a href={a.acerca.url} target="_blank" rel="noopener noreferrer" className="underline decoration-border-strong decoration-dotted underline-offset-4 hover:text-text">
-                      Más en Wikipedia (en inglés)
-                    </a>
-                  </>
-                )}
-              </>
-            ) : p ? (
-              <>Datos de la empresa: Wikidata.</>
-            ) : undefined
-          }
           datos={datosEmpresa}
         />
       </div>

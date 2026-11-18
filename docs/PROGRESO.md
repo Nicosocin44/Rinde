@@ -137,6 +137,24 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Fuentes discretas (punto 17 de la lista, rama `fuentes-discretas`, 18/11/2026)
+
+> Pedido de los fundadores: sacar de las pantallas las notas de fuente ("Fuente: ArgentinaDatos · CNV · data912 · actualizado…") y los rótulos "de ejemplo", que se veían hechos por IA. Se eligió la versión discreta.
+
+- **Las fuentes van en un solo lugar:** una línea en el pie del sitio (DolarAPI, ArgentinaDatos, BCRA, CNV, data912, CriptoYa y Binance, más Wikipedia y Wikidata para las descripciones) y /metodologia.
+- **El estado queda corto** (`EstadoDiscreto`): un punto y "En vivo", "Demorado 20 min · 16:29" o "Cierre del 18 nov". Primero lo dejamos solo como punto y no se entendía (corrección de los fundadores).
+- **Inicio:** sin "Alertas de ejemplo…", "Datos de ejemplo: una cartera inventada…" ni las notas de fuente de las escenas del dólar y de las tasas. La escena de confianza pasa a titularse "Todo sale de fuentes públicas."
+- **Fichas:** sin la línea "Fuente: Wikipedia (CC BY-SA 4.0)" ni "Armado con los datos de Wikidata": la atribución está en el pie.
+- `SourceNote` sigue en las 28 pantallas, pero solo dibuja el punto. CLAUDE.md (regla 2), DISENO.md y DATOS_Y_FORMULAS.md actualizados; el test e2e ahora verifica que no haya "Fuente:" en las páginas y que el pie tenga las fuentes.
+
+### Decisiones para revisar
+1. **La cartera y la meta de ejemplo (en /cartera y /metas) siguen rotuladas "Datos de ejemplo".** Ahí alguien podría creer que son sus datos. Las del Inicio no, porque son una demostración.
+2. **"¿De dónde sale este número?" sigue igual** (con la fórmula y la fuente): solo aparece si alguien lo toca.
+3. **Wikipedia pide atribución (CC BY-SA)**: la pusimos en el pie del sitio en vez de debajo de cada descripción. Es una forma aceptada de atribuir, pero conviene confirmarlo antes del lanzamiento comercial.
+4. **La frase "Es una comparación, no una recomendación"** de la escena de tasas del Inicio también se fue: el disclaimer general del pie sigue en todas las páginas.
+
+---
+
 ## Opciones de GGAL, primera entrega (rama `opciones`, 18/11/2026)
 
 > Punto 9 de la lista de cambios pendientes. Pantalla nueva en **/mercados/opciones** (solapa "Opciones" de Mercados), con link desde la ficha de GGAL. Datos reales de data912.

@@ -1,6 +1,6 @@
 import { Escena } from "@/components/escenas/escena";
 import { Director } from "./director";
-import { FreshnessBadge } from "@/components/ui/frescura";
+import { EstadoDiscreto } from "@/components/ui/estado-dato";
 import type { EstadoDato } from "@/lib/data/types";
 import { pesos, pesosCompacto, porcentaje, plazo } from "@/lib/format";
 import type { OpcionTasa } from "./datos";
@@ -70,10 +70,7 @@ export function EscenaRespuesta({ opciones, asOf, estado }: { opciones: OpcionTa
 
         <div data-cierre className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <p className="max-w-[36ch] font-display text-[19px] leading-[1.2] font-bold tracking-[-0.02em] md:text-[24px]">El orden lo decide la tasa. Nadie paga por estar arriba.</p>
-          <p className="flex flex-col gap-1 text-micro md:items-end">
-            <FreshnessBadge estado={estado} asOf={asOf} />
-            <span>Fuente: ArgentinaDatos, CNV y data912. Es una comparación, no una recomendación.</span>
-          </p>
+          <EstadoDiscreto estado={estado} asOf={asOf} className="md:self-end" />
         </div>
       </div>
     </Escena>

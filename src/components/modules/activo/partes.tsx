@@ -126,8 +126,8 @@ export function NoticiasActivo({ titulo, noticias, vacio }: { titulo: string; no
   );
 }
 
-/** Descripción del activo: texto (de Wikipedia, con su fuente, o propio) y una grilla de datos fijos. */
-export function AcercaDe({ titulo, texto, wikipedia, fuente, datos }: { titulo: string; texto: ReactNode | null; wikipedia?: string | null; fuente?: ReactNode; datos: [string, ReactNode][] }) {
+/** Descripción del activo: texto (de Wikipedia o propio; la atribución está en el pie del sitio) y una grilla de datos fijos. */
+export function AcercaDe({ titulo, texto, datos }: { titulo: string; texto: ReactNode | null; datos: [string, ReactNode][] }) {
   return (
     <section aria-labelledby="acerca" className="flex flex-col">
       <h2 id="acerca" className="mb-4 text-h3">
@@ -135,16 +135,6 @@ export function AcercaDe({ titulo, texto, wikipedia, fuente, datos }: { titulo: 
       </h2>
       <div className="border-t border-border pt-4">
         {texto ? <div className="flex flex-col gap-3 text-[15px] leading-[24px] text-text-2 text-pretty">{texto}</div> : <p className="text-chico text-text-3">Todavía no tenemos una descripción de este activo.</p>}
-        {wikipedia && (
-          <p className="mt-3 text-micro text-text-3">
-            Fuente:{" "}
-            <a href={wikipedia} target="_blank" rel="noopener noreferrer" className="underline decoration-border-strong decoration-dotted underline-offset-4 hover:text-text">
-              Wikipedia
-            </a>{" "}
-            (CC BY-SA 4.0).
-          </p>
-        )}
-        {fuente && <p className="mt-3 text-micro text-text-3">{fuente}</p>}
         <dl className="mt-4 grid grid-cols-2 gap-4 text-chico">
           {datos.map(([k, v]) => (
             <div key={k} className="min-w-0">

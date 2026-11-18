@@ -23,7 +23,6 @@ export function EscenaAlertas({ alertas }: { alertas: AlertaDemo[] }) {
           <p className="max-w-[40ch] text-[15px] leading-[22px] text-text-2 md:text-[18px] md:leading-[28px]">
             Si el dólar pasa un valor, si una billetera sube la tasa o si una letra rinde más que el plazo fijo. Vos ponés la condición; nosotros miramos el mercado.
           </p>
-          <p className="text-micro md:hidden">Alertas de ejemplo, evaluadas con los datos reales de este momento.</p>
           <div className="mt-1">
             <ButtonLink href="/alertas" variante="primario" tamano="md" flecha>
               Crear una alerta
@@ -32,7 +31,7 @@ export function EscenaAlertas({ alertas }: { alertas: AlertaDemo[] }) {
         </div>
 
         <div className="flex flex-col gap-3 md:gap-4">
-          <ul className="flex flex-col gap-2.5 md:gap-3.5" aria-label="Alertas de ejemplo, evaluadas con los datos de hoy">
+          <ul className="flex flex-col gap-2.5 md:gap-3.5" aria-label="Alertas, evaluadas con los datos de hoy">
             {alertas.map((a) => (
               <li
                 key={a.id}
@@ -65,7 +64,6 @@ export function EscenaAlertas({ alertas }: { alertas: AlertaDemo[] }) {
               </li>
             ))}
           </ul>
-          <p className="text-micro max-md:hidden">Alertas de ejemplo, evaluadas con los datos reales de este momento.</p>
         </div>
       </div>
     </Escena>

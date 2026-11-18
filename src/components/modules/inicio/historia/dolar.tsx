@@ -1,7 +1,7 @@
 import { Escena } from "@/components/escenas/escena";
 import { Director } from "./director";
 import { ButtonLink } from "@/components/ui/button";
-import { FreshnessBadge } from "@/components/ui/frescura";
+import { EstadoDiscreto } from "@/components/ui/estado-dato";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import type { EstadoDato } from "@/lib/data/types";
 import { pesos } from "@/lib/format";
@@ -75,10 +75,7 @@ export function EscenaDolar({ proveedores, asOf, estado }: { proveedores: Provee
             <ButtonLink href="/dolar/comprar" variante="secundario" tamano="md" flecha>
               Ver todos los precios
             </ButtonLink>
-            <p className="flex flex-col gap-1 text-micro md:items-end">
-              <FreshnessBadge estado={estado} asOf={asOf} />
-              <span>Fuente: CriptoYa y DolarAPI. Precio final para comprar, con comisiones.</span>
-            </p>
+            <EstadoDiscreto estado={estado} asOf={asOf} className="md:self-end" />
           </div>
         </div>
       </div>

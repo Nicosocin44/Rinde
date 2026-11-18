@@ -21,7 +21,7 @@ const TERMINOS: { t: string; corto: string; largo: string; ver?: { href: string;
   { t: "CCL", corto: "Contado con liquidación.", largo: "Como el MEP, pero los dólares terminan en una cuenta en el exterior. Suele ser un poco más caro." },
   { t: "Brecha", corto: "Cuánto más caro está un dólar que el oficial.", largo: "Brecha = dólar ÷ oficial − 1. Si es chica, comprar en el banco o en el broker cuesta parecido.", ver: { href: "/dolar/historico", etiqueta: "Histórico de la brecha" } },
   { t: "Spread", corto: "La diferencia entre el precio de compra y el de venta.", largo: "Es lo que perdés si comprás y vendés en el mismo momento. Cuanto más bajo, mejor.", ver: { href: "/dolar/comprar", etiqueta: "Dónde comprar dólares" } },
-  { t: "TIR", corto: "Tasa interna de retorno.", largo: "Lo que rinde por año un bono si lo tenés hasta el final y cobrás todos los pagos a tiempo.", ver: { href: "/bonos", etiqueta: "Bonos" } },
+  { t: "TIR", corto: "Tasa interna de retorno.", largo: "Lo que rinde por año un bono si lo tenés hasta el final y cobrás todos los pagos a tiempo.", ver: { href: "/mercados/bonos", etiqueta: "Bonos" } },
   { t: "Duration", corto: "En cuántos años, en promedio, recuperás lo que pusiste.", largo: "También mide cuánto se mueve el precio si cambian las tasas: a más duration, más sensible." },
   { t: "Paridad", corto: "Precio del bono contra lo que “vale” según su contrato.", largo: "Paridad = precio ÷ valor técnico. Debajo de 100 % cotiza con descuento." },
   { t: "Riesgo país", corto: "Lo que paga Argentina por encima de EE.UU. para endeudarse.", largo: "Se mide en puntos básicos: 855 puntos son 8,55 % por año más que un bono del Tesoro estadounidense." },

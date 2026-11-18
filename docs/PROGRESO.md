@@ -137,6 +137,23 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Mercados más ordenado: bonos adentro, grupos y Wall Street (rama `mercados-bonos-grupos`, 18/11/2026)
+
+> Pedido de Benja: pasar Bonos a Mercados para tener menos secciones arriba, armar grupos de seguimiento y mostrar los índices de EE.UU. en CEDEARs.
+
+- **Bonos es una solapa de Mercados** (`/mercados/bonos`): CEDEARs · Acciones · Bonos · Cripto · Opciones. El menú de arriba queda en 6 (Inicio, Dólar, Pesos, Mercados, Metas, Calculadoras). `/bonos` redirige con un 308, así que los links viejos y lo que haya indexado Google siguen andando. La ficha de cada bono, el buscador, el glosario y el sitemap apuntan a la ruta nueva.
+- **Grupos de seguimiento:** cada activo que seguís puede ir a un grupo, y **cada persona arma los suyos** (no hay grupos armados de antemano; hasta 24 letras). Se elige desde la ficha (al lado de "Siguiendo") o con **Organizar** en Siguiendo, que también deja de seguir. Arriba de la lista aparecen los filtros por grupo (solo si alguno tiene grupo) y el último filtro elegido se recuerda en el navegador. Lógica pura en `src/lib/favoritos/grupos.ts` con tests.
+- **Siguiendo va al costado**, para no tapar lo importante: en pantallas de 1280 px o más es una columna fija a la derecha; en el celular y la tablet, un botón con una estrella al lado de las solapas (con la cantidad) que abre la lista. En Opciones, que tiene tablas anchas, solo está el botón.
+- **Wall Street hoy** (arriba de la solapa CEDEARs): S&P 500, Nasdaq 100 y Dow Jones, con la variación del día en dólares y, abajo, en pesos. Tocás uno y vas a la ficha del CEDEAR.
+
+**Decisiones para revisar:**
+1. **Los índices se miden con el CEDEAR de su ETF** (SPY, QQQ, DIA), no con el índice en sí: data912 no publica los índices y el panel de EE.UU. no tiene SPY, QQQ ni DIA. La cifra grande es la variación de la especie en dólares (D), que es la que se parece a la del índice; está aclarado debajo. Para el número del índice (6.800 puntos) hace falta una fuente con licencia.
+2. **Mostramos también la variación en pesos**, que suma lo que se movió el dólar. Hoy se ve bien la diferencia: el S&P bajó 0,5 % en dólares y el CEDEAR subió 1,6 % en pesos.
+3. **Los grupos son uno por activo** (un activo no puede estar en dos grupos a la vez). Es lo más simple de entender; si se quiere, se pasa a etiquetas.
+4. **Bonos no tiene encabezado propio**: usa el de Mercados, como las otras solapas.
+
+---
+
 ## Fuentes discretas (punto 17 de la lista, rama `fuentes-discretas`, 18/11/2026)
 
 > Pedido de los fundadores: sacar de las pantallas las notas de fuente ("Fuente: ArgentinaDatos · CNV · data912 · actualizado…") y los rótulos "de ejemplo", que se veían hechos por IA. Se eligió la versión discreta.

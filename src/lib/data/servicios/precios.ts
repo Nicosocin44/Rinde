@@ -9,7 +9,7 @@ import { claseDeFicha } from "./fichas";
 
 export type ClaseActivo = "cedear" | "accion" | "bono" | "lecap" | "cripto" | "opcion";
 
-/** El precio de hoy de un activo, con su nombre y en qué moneda cotiza, para favoritos y alertas. */
+/** El precio de hoy de un activo, con su nombre y en qué moneda cotiza, para las alertas. */
 export type PrecioActivo = {
   ticker: string;
   nombre: string;

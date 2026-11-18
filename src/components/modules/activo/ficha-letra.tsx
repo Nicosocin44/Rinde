@@ -7,7 +7,7 @@ import type { FichaLetra } from "@/lib/data/servicios/fichas";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { fechaCorta, mesAnio, numero, porcentaje } from "@/lib/format";
 import { CurvaConLetra } from "./grafico";
-import { SeguirActivo } from "./seguir";
+import { AvisoActivo } from "./seguir";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, type Dato } from "./partes";
 
 /** Ficha de una LECAP o BONCAP: cuánto cobrás, cómo está en la curva, si le gana a la inflación y al plazo fijo. */
@@ -35,7 +35,7 @@ export function FichaLetraVista({ f, asOf, estado }: { f: FichaLetra; asOf: stri
       <PageHeader
         eyebrow={<Ruta seccion="LECAPs y BONCAPs" href="/pesos/lecaps" ticker={l.ticker} />}
         titulo={nombre}
-        acciones={<SeguirActivo ticker={l.ticker} nombre={nombre} precio={l.precio} moneda="ARS" />}
+        acciones={<AvisoActivo ticker={l.ticker} nombre={nombre} precio={l.precio} moneda="ARS" />}
         bajada={`Letra del Tesoro a tasa fija en pesos · vence el ${fechaCorta(l.vencimiento, true)} (${l.dias} días)`}
         className="mb-8 lg:mb-12"
       />

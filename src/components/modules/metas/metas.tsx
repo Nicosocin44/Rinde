@@ -589,7 +589,7 @@ function TarjetaMeta({
               →
             </span>
           </summary>
-          <div className="mt-3 overflow-x-auto">
+          <div className="relative mt-3 overflow-x-auto">
             <table className="w-full min-w-[520px] text-[14px]">
               <thead>
                 <tr className="text-left text-micro text-text-3">

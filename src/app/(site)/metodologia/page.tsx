@@ -218,14 +218,20 @@ CCL implícito = precio en pesos / precio de la especie C`}</Formula>,
         <p>
           Precio, rango del día y volumen: data912 (BYMA con demora). La serie arranca en el último salto de más de 55 % en un día (cambio de ratio de un CEDEAR o split no
           ajustado), igual que en la cartera. La descripción de cada empresa sale de Wikipedia en castellano, del artículo que verificamos a mano para cada ticker; los ETF los
-          describimos nosotros. Las noticias son las de la sección Noticias que nombran a la empresa.
+          describimos nosotros. Las noticias son las de la sección Noticias que nombran a la empresa (en bonos, letras y cripto, las de su mercado). Bonos: precio de la especie D
+          y flujos del prospecto del canje 2020. LECAPs: no hay historia de precios en nuestra fuente, por eso la ficha muestra la curva del día. Cripto: el precio en pesos es la
+          mediana entre exchanges (CriptoYa); el precio en dólares de BTC y ETH es el de Binance, porque el promedio en dólares de los exchanges locales trae sobreprecio.
         </p>
         <Formula>{`Rendimiento = último cierre / cierre en o antes de la fecha − 1     (1 semana, 1 mes, 3 meses, en el año, 1 año, 5 años)
 En dólares = cada cierre / dólar MEP de ese día (o el último anterior)
 Volatilidad anual = desvío muestral de ln(P_t / P_t−1) en las últimas 252 ruedas × √252
 Máxima caída = peor P_t / máximo previo − 1, en el último año
 Rango de 52 semanas = mínimo y máximo del día del último año
-Prima del CEDEAR = dólar implícito (MEP) / dólar MEP − 1`}</Formula>
+Prima del CEDEAR = dólar implícito (MEP) / dólar MEP − 1
+Bonos: rendimiento corriente = cupón anual de hoy × capital que queda / precio
+LECAPs: ganancia del plazo = valor final / precio − 1; contra la inflación = (1 + ganancia) / (1 + inflación esperada) − 1
+  inflación esperada = Π (1 + REM del mes)^(días del plazo en ese mes / días del mes) − 1
+Cripto: volatilidad anualizada con 365 días (opera todos los días); BTC y ETH en pesos = precio en Binance × dólar cripto del día`}</Formula>
       </>
     ),
   },

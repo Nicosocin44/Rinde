@@ -1,6 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { DataTable, type Columna } from "@/components/ui/data-table";
@@ -183,9 +184,14 @@ export function VistaCripto({ criptos }: { criptos: Cripto[] }) {
         ))}
       </ul>
       <section className="flex flex-col gap-4">
-        <h2 className="text-h3">
-          Dónde comprar {c.nombre} con pesos <span className="text-text-3">({c.exchanges.length} exchanges)</span>
-        </h2>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+          <h2 className="text-h3">
+            Dónde comprar {c.nombre} con pesos <span className="text-text-3">({c.exchanges.length} exchanges)</span>
+          </h2>
+          <Link href={`/activo/${c.simbolo}`} className="text-chico font-medium text-accent hover:underline">
+            Ver la ficha de {c.nombre}: gráfico, rendimiento y noticias
+          </Link>
+        </div>
         <ul className="border-t border-border">
           {c.exchanges.slice(0, 12).map((e, i) => (
             <li key={e.id} className={cn("grid grid-cols-[20px_28px_minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-3 py-3 md:grid-cols-[20px_28px_minmax(0,1fr)_140px_140px_80px]", i === 0 && "bg-accent-soft")}>

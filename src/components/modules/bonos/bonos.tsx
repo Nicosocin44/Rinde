@@ -1,13 +1,11 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { bonoPorTicker } from "@data/ar/bonos-usd";
 import { YieldCurve } from "@/components/charts/yield-curve";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Delta } from "@/components/ui/delta";
 import { MoneyInput } from "@/components/ui/money-input";
-import { Sheet } from "@/components/ui/sheet";
 import { calculadoraFlujos, metricasBono } from "@/lib/calculos";
 import type { BonoUsd, ObligacionNegociable } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesosCompacto, porcentaje } from "@/lib/format";
@@ -16,10 +14,8 @@ import { cn } from "@/lib/cn";
 const COLOR_NY = "var(--c-accent)";
 const COLOR_LOCAL = "var(--c-text-2)";
 
-export function Bonos({ bonos, ajustes, liquidacion }: { bonos: BonoUsd[]; ajustes: { ny: { x: number; y: number }[]; local: { x: number; y: number }[] }; liquidacion: string }) {
-  const params = useSearchParams();
+export function Bonos({ bonos, ajustes }: { bonos: BonoUsd[]; ajustes: { ny: { x: number; y: number }[]; local: { x: number; y: number }[] } }) {
   const [resaltado, setResaltado] = useState<string | null>(null);
-  const [calc, setCalc] = useState<BonoUsd | null>(bonos.find((b) => b.ticker === params.get("t")?.toUpperCase()) ?? null);
 
   const columnas: Columna<BonoUsd>[] = [
     {
@@ -75,7 +71,7 @@ export function Bonos({ bonos, ajustes, liquidacion }: { bonos: BonoUsd[]; ajust
           formatoY={(v) => porcentaje(v, 1)}
           formatoX={(v) => `${numero(v, 0)} años`}
         />
-        <p className="mt-2 text-micro">TIR contra duration (años promedio hasta cobrar los flujos). Tocá un punto o una fila.</p>
+        <p className="mt-2 text-micro">TIR contra duration (años promedio hasta cobrar los flujos). Tocá una fila para ver la ficha del bono, con sus pagos.</p>
       </div>
       <DataTable
         etiqueta="Bonos soberanos en dólares"
@@ -85,7 +81,7 @@ export function Bonos({ bonos, ajustes, liquidacion }: { bonos: BonoUsd[]; ajust
         ordenPorDefecto={{ columna: "tir", direccion: "desc" }}
         resaltada={resaltado}
         onResaltar={setResaltado}
-        onClickFila={setCalc}
+        enlace={(b) => `/activo/${b.ticker}`}
         filaMovil={(b) => (
           <span className="flex items-center gap-3">
             <span className="size-2 shrink-0 rounded-full" style={{ background: b.ley === "Nueva York" ? COLOR_NY : COLOR_LOCAL }} />
@@ -102,14 +98,12 @@ export function Bonos({ bonos, ajustes, liquidacion }: { bonos: BonoUsd[]; ajust
           </span>
         )}
       />
-      <Sheet abierto={calc !== null} onCambio={(v) => !v && setCalc(null)} titulo={calc ? `${calc.ticker} · ${calc.nombre}` : ""} descripcion={calc ? `Ley ${calc.ley === "Nueva York" ? "Nueva York" : "argentina"} · vence el ${fechaCorta(calc.vencimiento, true)}` : undefined}>
-        {calc && <CalculadoraFlujos b={calc} liquidacion={liquidacion} />}
-      </Sheet>
     </div>
   );
 }
 
-function CalculadoraFlujos({ b, liquidacion }: { b: BonoUsd; liquidacion: string }) {
+/** Calculadora "invierto US$ X, ¿cuánto cobro y cuándo?" (también en la ficha de cada bono). */
+export function CalculadoraFlujos({ b, liquidacion }: { b: BonoUsd; liquidacion: string }) {
   const [monto, setMonto] = useState(1000);
   const def = bonoPorTicker.get(b.ticker)!;
   const r = useMemo(() => calculadoraFlujos(def, monto, b.precioUsd, liquidacion), [def, monto, b.precioUsd, liquidacion]);

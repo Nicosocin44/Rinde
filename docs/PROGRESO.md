@@ -146,14 +146,28 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - data912 `/live/usa_stocks`: precio y variación de la acción en EE.UU. (con demora).
 - Wikipedia `/api/rest_v1/page/summary/{título}`: responde sin clave, pero **limita los pedidos seguidos** (429). Se cachea una semana y se pide solo el título verificado de cada ticker (`data/ar/wikipedia.ts`): la búsqueda automática confundía, por ejemplo, Tesla con Nikola Tesla.
 
+### Fichas de bonos, LECAPs y cripto (misma rama)
+
+- **Bonos** (`/activo/AL30`): gráfico en dólares (especie D) y en pesos, TIR, duration, paridad, cupón de hoy y hasta cuánto sube, rendimiento corriente, capital que queda, próximo pago, rango de 52 semanas, volatilidad y máxima caída. **Su par en la otra ley** (AL30 ↔ GD30) con la diferencia de TIR en puntos básicos. La **calculadora de flujos** (antes en un panel de /bonos), rendimiento por período, noticias de bonos y deuda, una descripción armada con el cronograma del bono y los otros bonos ordenados por duration.
+- **LECAPs y BONCAPs** (`/activo/S29E7`): la **calculadora de cobro** arriba, la **curva** con la letra marcada (data912 no publica historia de letras), TEA/TNA/TEM, ganancia en todo el plazo, precio y valor final, **si le gana a la inflación esperada** (REM, día por día hasta el vencimiento) y **contra el mejor plazo fijo** de plazo parecido, noticias de tasas y las letras de plazo parecido.
+- **Cripto** (`/activo/BTC`, ETH, USDT, USDC): BTC y ETH con gráfico en dólares (Binance, ~2 años y 9 meses) y en pesos (× dólar cripto del día); USDT y USDC con el dólar cripto en pesos y su **brecha contra el MEP**. Rango, volatilidad (anualizada con 365 días), máxima caída, **dónde comprar más barato** (los 6 exchanges con mejor precio de compra), rendimiento, noticias de cripto y Wikipedia.
+- Se llega desde las tablas de Bonos y LECAPs, desde Mercados → Cripto y desde el buscador. El smoke e2e suma 5 fichas.
+- Cálculos nuevos con tests: volatilidad con 365 días, serie en pesos, inflación esperada hasta el vencimiento y resumen del cronograma de un bono (12 tests en `tests/activo.test.ts`).
+
+**Fuentes verificadas (18/11/2026):** data912 `/historical/bonds/AL30` (pesos) y `AL30D` (dólares) con apertura/máximo/mínimo/cierre/volumen; para letras responde "no tengo ese ticker". Binance `/api/v3/klines?interval=1d&limit=1000`. ArgentinaDatos `/cotizaciones/dolares/cripto` (diario desde feb 2023). Wikipedia: Bitcoin, Ethereum, USD Coin y **"Tether (criptomoneda)"** (el artículo "Tether" es una canción).
+
+**Un hallazgo de layout:** el texto oculto para lectores de pantalla ("sube"/"baja") dentro de una tabla con scroll horizontal se escapaba del contenedor y ensanchaba la página en el celular (la barra inferior quedaba más ancha que la pantalla). Se arregla con `relative` en el contenedor con scroll; quedó aplicado en las tablas nuevas y en la de alternativas de Metas.
+
 ### Decisiones de la ficha para revisar
 
-1. **Sin búsqueda en Wikipedia:** solo los 74 tickers con artículo verificado tienen descripción. Los que no tienen artículo propio (Cresud, TGN, Ternium Argentina, varias del panel general) o tienen uno ambiguo (Metrogas, Banco Hipotecario) quedan sin descripción.
+1. **Sin búsqueda en Wikipedia:** solo los 78 tickers con artículo verificado (74 acciones y CEDEARs, y 4 cripto) tienen descripción. Los que no tienen artículo propio (Cresud, TGN, Ternium Argentina, varias del panel general) o tienen uno ambiguo (Metrogas, Banco Hipotecario) quedan sin descripción.
 2. **Los ETF los describimos nosotros** en una línea (qué índice replican).
 3. **Noticias solo de los medios que ya seguimos** (últimos 3 días). Para CEDEARs de EE.UU. va a haber pocas: no sumamos Google News ni Yahoo porque sus feeds son para uso personal.
 4. **Sin datos de balance** (P/E, capitalización, dividendos): no hay una fuente gratuita y confiable que los publique para usar en la web. Se suman si conseguimos una.
-5. **Bonos, LECAPs y cripto** todavía no tienen ficha propia: siguen en sus pantallas.
-6. **Un ticker que no existe** muestra la página "no encontrado" con `noindex`, pero responde 200 y no 404: con la carga en streaming, Next.js ya mandó la página cuando se entera (está documentado así).
+5. **Bonos, LECAPs y cripto también tienen ficha** (ver abajo). Al tocar una fila de Bonos o de LECAPs ahora se abre la ficha, que tiene la calculadora que antes se abría en un panel.
+6. **Precio en dólares de BTC y ETH: Binance**, no el promedio en dólares de los exchanges locales (que trae unos 5 % de sobreprecio y no coincidía con el gráfico).
+7. **El rendimiento de los bonos es solo precio:** no suma los cupones y el capital cobrados (está aclarado en la tabla). Un "rendimiento total" necesita reinvertir los pagos.
+8. **Un ticker que no existe** muestra la página "no encontrado" con `noindex`, pero responde 200 y no 404: con la carga en streaming, Next.js ya mandó la página cuando se entera (está documentado así).
 
 ---
 

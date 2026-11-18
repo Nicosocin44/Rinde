@@ -9,10 +9,18 @@ export const revalidate = 86400;
 
 export function GET() {
   const items: ItemBusqueda[] = [
-    ...LECAPS.map((l) => ({ id: `l-${l.ticker}`, titulo: l.ticker, detalle: `${l.tipo} · vence ${l.vencimiento.split("-").reverse().join("/")}`, grupo: "Instrumentos" as const, href: `/pesos/lecaps?t=${l.ticker}`, claves: "lecap boncap letra" })),
-    ...BONOS_USD.map((b) => ({ id: `b-${b.ticker}`, titulo: b.ticker, detalle: `${b.nombre} · ley ${b.ley === "Argentina" ? "local" : "NY"}`, grupo: "Instrumentos" as const, href: `/bonos?t=${b.ticker}`, claves: "bono soberano dolares" })),
+    ...LECAPS.map((l) => ({ id: `l-${l.ticker}`, titulo: l.ticker, detalle: `${l.tipo} · vence ${l.vencimiento.split("-").reverse().join("/")}`, grupo: "Instrumentos" as const, href: `/activo/${l.ticker}`, claves: "lecap boncap letra" })),
+    ...BONOS_USD.map((b) => ({ id: `b-${b.ticker}`, titulo: b.ticker, detalle: `${b.nombre} · ley ${b.ley === "Argentina" ? "local" : "NY"}`, grupo: "Instrumentos" as const, href: `/activo/${b.ticker}`, claves: "bono soberano dolares" })),
     ...Object.entries(CEDEARS).map(([t, c]) => ({ id: `c-${t}`, titulo: t, detalle: `${c.nombre} · CEDEAR`, grupo: "Instrumentos" as const, href: `/activo/${encodeURIComponent(t)}`, claves: `cedear ${c.nombre}` })),
     ...Object.entries({ ...PANEL_LIDER, ...ACCIONES_GENERAL }).map(([t, n]) => ({ id: `a-${t}`, titulo: t, detalle: `${n} · acción`, grupo: "Instrumentos" as const, href: `/activo/${t}`, claves: `accion ${n}` })),
+    ...(
+      [
+        ["BTC", "Bitcoin"],
+        ["ETH", "Ether"],
+        ["USDT", "Tether"],
+        ["USDC", "USD Coin"],
+      ] as const
+    ).map(([t, n]) => ({ id: `k-${t}`, titulo: t, detalle: `${n} · cripto`, grupo: "Instrumentos" as const, href: `/activo/${t}`, claves: `cripto ${n}` })),
     ...PROVEEDORES.filter((p) => p.tipo !== "p2p" && p.tipo !== "fondo").map((p) => ({
       id: `p-${p.id}`,
       titulo: p.nombre,

@@ -8,6 +8,7 @@ import { armarPulso } from "./servicios/inicio";
 import { cargarMacro } from "./servicios/macro";
 import { cargarBonos, cargarCripto, cargarMercados } from "./servicios/mercados";
 import { cargarNoticias } from "./servicios/noticias";
+import { cargarOpciones } from "./servicios/opciones";
 import { cargarPesos } from "./servicios/pesos";
 
 /**
@@ -29,6 +30,7 @@ export const obtenerFichaBono = cache(cargarFichaBono);
 export const obtenerFichaLetra = cache(cargarFichaLetra);
 export const obtenerFichaCripto = cache(cargarFichaCripto);
 export const obtenerQueHubiera = cache(cargarQueHubiera);
+export const obtenerOpciones = cache(cargarOpciones);
 
 export const obtenerPulso = cache(async () => {
   const [c, m, p] = await Promise.all([obtenerCotizaciones(), obtenerMacro(), obtenerPesos()]);

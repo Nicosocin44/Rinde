@@ -137,6 +137,30 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Opciones de GGAL, primera entrega (rama `opciones`, 18/11/2026)
+
+> Punto 9 de la lista de cambios pendientes. Pantalla nueva en **/mercados/opciones** (solapa "Opciones" de Mercados), con link desde la ficha de GGAL. Datos reales de data912.
+
+- **Cadena por vencimiento:** calls a la izquierda, puts a la derecha, la base en el medio. Compra, venta, último, volumen, volatilidad implícita y delta. Una línea marca dónde está el precio de GGAL; el lado de cada base que ya tiene valor intrínseco va sombreado. En el celular, calls o puts de a uno. Arranca en el vencimiento con más volumen.
+- **Volatilidad:** la implícita de la base más cercana al precio (promedio de call y put) contra la histórica de 20 y 60 ruedas, con una frase que la explica.
+- **Lanzamiento cubierto como tasa:** para cada call, la TNA si te ejercen, cuánto puede bajar GGAL y que igual te ejerzan, y el punto de equilibrio. Al lado, la caución, la LECAP y el plazo fijo de plazo parecido. Por defecto se ven las bases por debajo del precio; las de arriba, con un botón.
+- **Cálculos propios** (`src/lib/calculos/opciones.ts`, 20 tests): vencimientos (tercer viernes, o el hábil anterior), lectura de los símbolos, Black-Scholes, volatilidad implícita, delta y lanzamiento cubierto. Metodología en /metodologia#opciones.
+- **Validación:** se excluyen las series vencidas y las puntas cruzadas; la VI fuera de 5 %–300 % no se muestra; las puntas muy separadas se marcan; un lanzamiento con TNA fuera de ±300 % se descarta.
+
+### Decisiones de opciones para revisar
+
+1. **Las opciones van en Mercados (solapa "Opciones"), no en el menú de arriba.** También hay un link desde la ficha de GGAL.
+2. **Vencimiento: tercer viernes del mes, o el hábil anterior si es feriado.** Es la regla de BYMA que conocemos; conviene confirmarla con un broker.
+3. **Modelo Black-Scholes europeo, sin dividendos.** Las de BYMA son americanas; en puts con mucho valor intrínseco la VI es aproximada. Está dicho en la página y en la metodología.
+4. **Tasa del modelo:** la caución al plazo más parecido; si la caución no está al día, la LECAP más parecida. Sin tasa disponible, 0 % (y la página lo dice).
+5. **Lanzamiento cubierto con las puntas reales** (comprás la acción a la punta vendedora, vendés el call a la compradora) y días de la liquidación de hoy al cobro del ejercicio. Antes de comisiones: cambian mucho entre brokers.
+6. **No sumamos el lanzamiento cubierto al comparador de /pesos.** Tiene riesgo de precio (si GGAL cae debajo del punto de equilibrio, perdés), así que mezclarlo con plazo fijo y billeteras confundiría. Se compara en la página de opciones.
+7. **"Volumen" se muestra tal como lo da data912**, sin confirmar si son contratos o nominales.
+
+**Lo que sigue (segunda y tercera entrega):** calculadora de estrategias con gráfico de ganancia y pérdida, cajas (tasa sin riesgo de precio), sonrisa de volatilidad, alertas de primas, otros subyacentes (YPF, PAMP: alcanza con sumarlos en `data/ar/opciones.ts`) e historial de primas (data912 no lo tiene: hay que guardarlo).
+
+---
+
 ## Primera tanda de ideas (rama `primera-tanda`, 18/11/2026)
 
 > Ideas de Benja para que la gente vuelva: favoritos y alertas desde la ficha, "¿qué hubiera pasado si…?", compartir el avance de una meta y empezar a guardar el historial de tasas.
@@ -321,6 +345,8 @@ Todo funciona con **datos reales** salvo donde se indica. Cada número muestra s
 | CriptoYa | `/api/bancostodos`, `/api/{usdt,usdc,btc,eth}/{ars,usd}/1` | Sí | Precios finales con comisiones. 9 de 22 bancos tienen cotizaciones de hace meses: se excluyen. |
 | BCRA v4.0 | `/estadisticas/v4.0/monetarias` | Sí | Catálogo y series OK. |
 | Binance | `/api/v3/klines` | Sí | Histórico semanal de BTC y ETH (para valuar carteras). |
+| data912 | `/live/arg_options` | Sí (18/11/2026) | 518 opciones de BYMA; 129 de GGAL (prefijo GFG). Puntas con cantidades, último, volumen y variación. **Sin griegas**: las calculamos nosotros. Con una base de 5 cifras el mes queda en una letra (GFGC10300D). |
+| data912 | `/eod/option_chain/GGAL` | Sí, pero no sirve | Es la cadena de la GGAL de Nueva York (bases en US$), no la local. No la usamos. |
 
 ---
 

@@ -251,5 +251,74 @@ export type Cedear = {
 
 export type Accion = { ticker: string; nombre: string | null; panel: "líder" | "general"; precio: number; variacion: number | null; volumen: number };
 
-export type CriptoExchange = { id: string; nombre: string; compras: number; vendes: number; spread: number; asOf: string };
+// ───────────────────────── Opciones ─────────────────────────
+
+/** Una opción de la cadena (call o put de una base). Precios por acción, en pesos. */
+export type LadoOpcion = {
+  simbolo: string;
+  compra: number | null;
+  venta: number | null;
+  cantCompra: number | null;
+  cantVenta: number | null;
+  ultimo: number | null;
+  variacion: number | null;
+  volumen: number;
+  operaciones: number;
+  /** Precio con el que calculamos el modelo: punto medio de las puntas, o el último si operó hoy. */
+  referencia: number | null;
+  /** Volatilidad implícita (fracción anual), calculada por nosotros. */
+  vi: number | null;
+  delta: number | null;
+  intrinseco: number;
+  extrinseco: number | null;
+  /** Diferencia entre compra y venta mayor al 25 % del punto medio: el precio de referencia es poco confiable. */
+  puntasAbiertas: boolean;
+};
+
+export type FilaOpciones = { base: number; call: LadoOpcion | null; put: LadoOpcion | null };
+
+export type FilaLanzamiento = {
+  simbolo: string;
+  base: number;
+  /** Prima que cobrás: la mejor punta compradora del call. */
+  prima: number;
+  inversion: number;
+  directo: number;
+  tna: number;
+  tea: number;
+  colchon: number;
+  equilibrio: number;
+  caidaEquilibrio: number;
+};
+
+export type ComparableTasa = { id: string; nombre: string; detalle: string; tna: number };
+
+export type VencimientoOpciones = {
+  codigo: string;
+  fecha: string;
+  /** Días corridos de hoy al vencimiento. */
+  dias: number;
+  /** Días de la liquidación de hoy (24 hs) al cobro del ejercicio (vencimiento + 1 hábil). */
+  diasCobro: number;
+  filas: FilaOpciones[];
+  volumen: number;
+  /** Base más cercana al precio de la acción y su volatilidad implícita (promedio de call y put). */
+  baseCercana: number | null;
+  viCercana: number | null;
+  lanzamientos: FilaLanzamiento[];
+  /** Tasas en pesos a un plazo parecido, para comparar el lanzamiento cubierto. */
+  comparables: ComparableTasa[];
+  /** Tasa que usa el modelo para este plazo. null: no hubo tasa disponible y se calculó con 0 %. */
+  tasaModelo: { nombre: string; tna: number; tea: number } | null;
+};
+
+export type CadenaOpciones = {
+  subyacente: { ticker: string; nombre: string; precio: number; compra: number | null; venta: number | null; variacion: number | null };
+  lote: number;
+  vencimientos: VencimientoOpciones[];
+  volHistorica: { d20: number | null; d60: number | null };
+  liquidacion: string;
+};
+
+export type CriptoExchange ={ id: string; nombre: string; compras: number; vendes: number; spread: number; asOf: string };
 export type Cripto = { simbolo: "BTC" | "ETH" | "USDT" | "USDC"; nombre: string; precioArs: number; precioUsd: number | null; exchanges: CriptoExchange[] };

@@ -40,6 +40,7 @@ const RUTAS_POR_DEFECTO = [
   "/mercados",
   "/mercados/acciones",
   "/mercados/cripto",
+  "/mercados/opciones",
   "/alertas",
   "/metodologia",
   "/aprender",

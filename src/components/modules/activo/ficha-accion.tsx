@@ -1,4 +1,6 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
+import { SUBYACENTES_OPCIONES } from "@data/ar/opciones";
 import { PageHeader } from "@/components/shell/page-header";
 import { Delta } from "@/components/ui/delta";
 import { ErrorState } from "@/components/ui/estados";
@@ -155,6 +157,11 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
               </>
             )}
           </p>
+          {SUBYACENTES_OPCIONES[a.ticker] && (
+            <Link href="/mercados/opciones" className="self-start text-chico font-medium text-accent hover:underline">
+              Ver las opciones de {a.ticker}: cadena, volatilidad y lanzamiento cubierto
+            </Link>
+          )}
           {a.cambiosRatio.length > 0 && (
             <p className="text-micro text-text-3">
               Precios ajustados por {a.cambiosRatio.length === 1 ? "el cambio de ratio" : "los cambios de ratio"} del{" "}

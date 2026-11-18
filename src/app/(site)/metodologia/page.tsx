@@ -164,6 +164,43 @@ Cobro al vencimiento = (monto / (P / 100)) × VF / 100`}</Formula>
     ),
   },
   {
+    id: "opciones",
+    titulo: "Opciones de GGAL",
+    contenido: (
+      <>
+        <p>
+          Precios de BYMA con demora (data912): mejores puntas de compra y venta, último precio y volumen de cada serie. El símbolo dice todo: GFGC5400DI es un call (C; V es put) de GGAL con base $ 5.400 que vence en diciembre.
+          Las series vencen el tercer viernes del mes; si es feriado, el hábil anterior. Cada contrato son 100 acciones y las primas están por acción.
+        </p>
+        <p>La fuente no publica griegas para las opciones locales: las calculamos nosotros con Black-Scholes.</p>
+        <Formula>{`Precio de referencia = (compra + venta) / 2   (o el último, si operó hoy y no hay puntas)
+Volatilidad implícita = la σ con la que Black-Scholes da el precio de referencia
+Delta call = N(d1)      Delta put = N(d1) − 1
+d1 = (ln(S / K) + (r + σ² / 2) × t) / (σ × √t)
+S = punto medio de GGAL · K = base · t = días al vencimiento / 365 · r = ln(1 + TEA de la caución al plazo más parecido)`}</Formula>
+        <ul>
+          <li>Es un modelo para opciones europeas y sin dividendos. Las de BYMA son americanas: en los puts con mucho valor intrínseco la volatilidad implícita es aproximada.</li>
+          <li>Excluimos las series vencidas y las puntas cruzadas (compra mayor que venta). Una volatilidad implícita fuera del rango de 5 % a 300 % anual no se muestra.</li>
+          <li>Si la compra y la venta están separadas más de un 25 % del punto medio, la volatilidad implícita se marca como aproximada.</li>
+          <li>Volatilidad histórica: el desvío de las variaciones diarias de las últimas 20 y 60 ruedas, anualizado con 252 ruedas.</li>
+        </ul>
+        <p>
+          <strong>Lanzamiento cubierto.</strong> Comprás la acción a la mejor punta vendedora (S) y vendés el call a la mejor punta compradora (C). Si te ejercen, cobrás la base (K). Los días van de la liquidación de hoy (24 h) al
+          cobro del ejercicio (vencimiento + 1 día hábil).
+        </p>
+        <Formula>{`Ponés por acción = S − C
+Rendimiento directo = K / (S − C) − 1
+TNA = rendimiento directo × 365 / días
+Colchón = 1 − K / S   (cuánto puede bajar la acción y que igual te ejerzan)
+Punto de equilibrio = S − C`}</Formula>
+        <p>
+          Es antes de comisiones, derechos de mercado e impuestos, y sin dividendos. Lo comparamos con la caución, la LECAP y el plazo fijo de plazo más parecido, ordenados solo por TNA. Una tasa fuera de ±300 % sale de una punta
+          suelta y se descarta.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "simulador",
     titulo: "Simulador",
     contenido: (

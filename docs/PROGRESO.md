@@ -159,6 +159,29 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Calendario de la semana (punto 15, rama `calendario-semanal`, 19/11/2026)
+
+> Pedido de los fundadores: inspirado en el calendario de resultados de Earnings Whispers, pero también con datos como el IPC. Sin sección nueva: arriba a la derecha de Mercados. Semanal y con muy pocas palabras.
+
+- **Dónde:** en el encabezado de Mercados, a la derecha del título (en todas sus solapas). En el celular va debajo de la bajada y se desliza de costado, arrancando en el día de hoy.
+- **Qué muestra:** lunes a viernes. En cada día, en una o dos palabras con su bandera: datos del INDEC (IPC, EMAE, PBI, Balanza, Desempleo, Pobreza, Salarios), de EE.UU. (Inflación, Empleo, PCE, PBI), la Tasa Fed, feriados, pago de bonos en dólares, vencimientos de LECAPs y de opciones de GGAL. Abajo, los logos de las empresas que presentan resultados: primero las argentinas (ADRs), después las que tienen CEDEAR por tamaño, como mucho 4 por día (+N). Hoy resaltado; los días que pasaron, más claros.
+- **Al tocar algo**, una línea con el detalle: "Jueves 19 · 16:00 h · Balanza: Comercio exterior de octubre · INDEC". Los datos de EE.UU. traen lo esperado y lo anterior (y lo que dio, cuando sale). Las empresas, si es antes de la apertura o después del cierre, con link a la ficha.
+- **Flechas** para ir una semana para atrás y hasta cuatro para adelante (`/api/calendario?semana=…`, que no acepta otras fechas). El sábado y el domingo arranca en la semana que viene.
+- **Fuentes, verificadas el 19/11/2026:**
+  - INDEC: su calendario de difusión mensual (`/Calendario/FiltrosCalendario/mes/Diciembre-2026/0`); se lee el título, la fecha y la hora de cada informe.
+  - Reserva Federal: las reuniones del FOMC de 2026 y 2027 de su página oficial.
+  - Nasdaq: resultados de empresas y datos económicos de EE.UU. **Su calendario económico viene corrido un día** (lo de un jueves aparece al pedir el viernes; el empleo del viernes 4/12, el sábado 5/12; la Fed del 9/12, el 10/12). Lo compensamos. Para la Fed usamos la página oficial.
+  - Feriados (ArgentinaDatos), bonos y LECAPs (nuestras tablas) y opciones (data912).
+- Cada fuente es independiente: si una falla, falta lo suyo y el resto se ve. Si fallan todas, el calendario no aparece y la página sigue igual. 10 tests (INDEC con un fixture real, Fed, horarios con y sin horario de verano de EE.UU., filtro de empresas, armado de la semana).
+
+### Decisiones para revisar
+1. **Va en Mercados, en todas sus solapas.** El IPC o las licitaciones también le importan a Pesos; se puede sumar ahí después.
+2. **Empresas: solo las argentinas y las que tienen CEDEAR**, como mucho 4 por día. Las demás quedan en "+N".
+3. **Nasdaq no es una API oficial** (igual que Yahoo): revisar sus condiciones antes del lanzamiento comercial.
+4. **Las licitaciones del Tesoro y el REM del BCRA todavía no están**: no encontramos una fuente con sus fechas que se pueda leer de forma confiable. No ponemos fechas que no podamos verificar.
+
+---
+
 ## Wall Street hoy con el gráfico del día (rama `wall-street-graficos`, 19/11/2026)
 
 - Cada tarjeta de "Wall Street hoy" (S&P 500, Nasdaq 100, Dow Jones) suma un minigráfico del día, como el de Yahoo: el recorrido de la rueda cada 5 minutos, una línea punteada en el cierre anterior y el área entre las dos, en verde si la tarjeta viene positiva y en rojo si no.

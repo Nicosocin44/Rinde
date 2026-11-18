@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Revelar } from "@/components/ui/revelar";
 
-export const metadata: Metadata = { title: "Calculadoras financieras", description: "Interés compuesto, jubilación y metas, plazo fijo, conversor de tasas e inflación." };
+export const metadata: Metadata = { title: "Calculadoras financieras", description: "Interés compuesto, metas de ahorro, jubilación, plazo fijo, conversor de tasas e inflación." };
 
 const CALCULADORAS = [
   { href: "/calculadoras/interes-compuesto", titulo: "Interés compuesto", pregunta: "¿Cuánto junto si ahorro todos los meses?", ejemplo: "$ 100.000 por mes durante 10 años" },
-  { href: "/calculadoras/jubilacion", titulo: "Jubilación y metas", pregunta: "¿Cuánto tengo que ahorrar por mes para llegar?", ejemplo: "Gastar US$ 1.500 por mes al jubilarte" },
+  { href: "/metas", titulo: "Metas de ahorro", pregunta: "¿Cuánto tengo que juntar por mes para mi meta?", ejemplo: "Un viaje de US$ 800 en 8 meses" },
+  { href: "/calculadoras/jubilacion", titulo: "Jubilación", pregunta: "¿Cuánto tengo que ahorrar para jubilarme?", ejemplo: "Gastar US$ 1.500 por mes al jubilarte" },
   { href: "/calculadoras/plazo-fijo", titulo: "Plazo fijo", pregunta: "¿Cuánto cobro y le gano a la inflación?", ejemplo: "$ 1.000.000 a 30 días" },
   { href: "/calculadoras/tasas", titulo: "Conversor de tasas", pregunta: "¿Cuánto es esta TNA en TEA y TEM?", ejemplo: "24 % TNA a 30 días" },
   { href: "/calculadoras/inflacion", titulo: "Inflación", pregunta: "¿Cuánto valen hoy mis pesos de antes?", ejemplo: "$ 100.000 de hace 3 años" },

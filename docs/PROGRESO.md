@@ -101,6 +101,55 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Metas de ahorro (rama `metas`, 17/11/2026)
+
+> Idea de los fundadores (audios del 17/11): separar las metas de la jubilación y hacerlas un plan fácil para quien no conoce el mercado de capitales: "quiero un auto", "un viaje de US$ 800", "un departamento", "estudios".
+
+**Dónde está:** `/metas`, sección propia en el menú principal (entre Pesos y Bonos), en "Tus herramientas" del pie, en el buscador y como acceso directo de la app instalada. En el celular entra por "Más". Calculadoras tiene un link. La de jubilación quedó solo para jubilación.
+
+**Qué hace:**
+- Cada persona arma sus metas: nombre libre, pesos o dólares, cuánto cuesta, cuánto ya tiene, para cuándo (1 a 120 meses) y cuánto puede poner por mes (opcional). Botones de arranque rápido: "Un viaje", "Un auto", "Un departamento", "Estudios", "Fondo de emergencia".
+- **El plan:** cuánto poner por mes para llegar en fecha y, con lo que la persona dijo que puede poner, en qué mes llega (o que no llega).
+- **La barra de avance** con una rayita de "según el plan" y la frase "Vas adelantado / atrasado: ±$ X" (con signo y palabra, no solo color).
+- **Cuánto ponés y dónde:** con "Sumar plata" la persona carga cada depósito (o retiro) con su instrumento: las opciones reales del comparador con la TEA de hoy (las 12 que más rinden de cada tipo: billeteras, cuentas, fondos, plazos fijos, LECAPs, caución), "sin invertir", "dólares guardados" u "otro" con nombre y TEA a mano. Fecha editable.
+- **Dónde está tu plata:** tabla por instrumento con lo que puso, lo que vale hoy (estimado con la TEA del día en que lo puso) y la ganancia total de sus inversiones. "Actualizar valores" reemplaza la estimación por el valor real que muestra su app.
+- **Comparación neutral:** si lo suyo rinde en promedio al menos 1 punto menos que la mejor opción sin plazo de hoy, dice cuánto más por mes daría ese saldo. Sin "pasate a X".
+- **Historial de movimientos** con borrar y "Deshacer".
+- **Resumen arriba** (con 2 metas o más): lo juntado, lo puesto, lo que dieron las inversiones y lo que hay que poner por mes entre todas, separado por moneda, y cuántas esperan la carga del mes.
+- **Rendimiento real** (metas en pesos): cada aporte actualizado por IPC hasta hoy contra lo que vale: "le ganaste por +$ X", "la inflación se comió −$ X" o "quedaste parejo" (menos de 0,5 %).
+- **Camino a la meta:** gráfico mes a mes de lo que pone, lo que rinde y lo que va a costar (sube con la inflación), con la fecha elegida marcada y los hitos ("el 50 % en mar 2027 · la meta en sep 2027").
+- **¿Dónde rinde más lo que pongas cada mes?:** la mejor opción de cada tipo (mismo ranking neutral de la home) con cuánto poner por mes y cuándo llega con lo planeado; con liquidez y tope de cada una.
+- **Vencimientos:** cuándo vence cada plazo fijo, LECAP o caución cargado; si ya venció, avisa.
+- **Dólar MEP:** las metas en pesos muestran su equivalente en dólares y las en dólares, en pesos.
+- **Meta de ejemplo** cuando no hay ninguna: un viaje de $ 3 M con cuatro aportes, rotulada "Datos de ejemplo" (montos inventados; tasas, inflación y dólar reales).
+- **Cada 30 días** "Sumar plata" se resalta: "Pasaron 33 días: ¿cuánto pusiste este mes?". El plan se recalcula con lo que hay y las tasas de ese día.
+- Varias metas a la vez. Borrar con "Deshacer".
+- Se guarda **solo en el navegador** (IndexedDB, `rinde-metas`), igual que la cartera y las alertas.
+
+**Datos:** la tasa es la **mejor opción sin plazo de hoy** (`mejoresDelDia().liquida`, la misma que usa interés compuesto) y la inflación es la esperada del REM a 12 meses, pasada a mensual. Fuente y hora en la nota de abajo, fórmula en `/metodologia#metas`.
+
+**Cálculo:** `src/lib/calculos/metas.ts` (puro, decimal.js), 24 tests en `tests/metas.test.ts`: valuación por instrumento (aportes, retiros, ajustes, orden de carga en un mismo día), TEA promedio, plan con dos tasas (lo invertido y lo nuevo), que tener más plata nunca atrasa la fecha de llegada, camino e hitos, rendimiento real, vencimientos, alternativas (neutrales: solo por TEA) y resumen por moneda.
+
+**Datos que usa:** opciones en pesos (ArgentinaDatos, CNV, data912), inflación esperada (REM del BCRA), IPC mensual (INDEC vía ArgentinaDatos, últimos 36 meses) y dólar MEP (DolarAPI).
+
+**Guardado:** IndexedDB `rinde-metas` v2. Las metas creadas con la primera versión (un saldo total por fecha) se convierten solas: cada diferencia entre controles pasa a ser un movimiento "sin invertir" (o "dólares guardados").
+
+### Decisiones de metas para revisar
+
+1. **Las metas en pesos se piensan en precios de hoy:** el objetivo sube con la inflación esperada (un depto de $ 95 M hoy "cuesta" unos $ 263 M en 5 años con el REM actual). Es lo honesto, pero el número asusta: se puede mostrar todo en pesos de hoy si lo prefieren.
+2. **El aporte mensual se toma fijo en pesos.** Si la inflación le gana, la pantalla dice "no llegás: la meta sube más rápido de lo que juntás". Una mejora posible: ofrecer "aumentar el aporte con la inflación".
+3. **Las metas en dólares no rinden** salvo que la persona ponga un rendimiento, y no se ajustan por inflación.
+4. **El supuesto es la mejor opción sin plazo** (liquidez inmediata), no plazo fijo ni LECAP: es lo más simple para alguien que pone plata todos los meses y la puede sacar cuando quiera.
+5. **"Según el plan"** = lo que tendría hoy si hubiera puesto lo planeado todos los meses, a la tasa del plan.
+6. **Valores estimados:** cada instrumento crece con la TEA del día en que se puso la plata (si vuelve a poner, pasa a la TEA de ese día) y se supone que se renueva (un plazo fijo vencido sigue rindiendo igual). Los fondos y billeteras cambian de tasa todos los días: por eso está "Actualizar valores".
+7. **Lo ya invertido y lo nuevo rinden distinto en el plan:** lo que tiene, a su TEA promedio; lo que ponga, a la mejor opción sin plazo de hoy.
+8. **No se conecta con la cartera.** Las metas llevan su propio registro de movimientos. Se podría vincular una meta a posiciones de la cartera, pero duplicaría la carga o mezclaría plata que no es para la meta.
+9. **Las alternativas no miran el tope ni la liquidez para ordenar:** se ordenan solo por tasa y se muestran la liquidez y el tope al lado. Una LECAP puede quedar primera aunque no sirva para plata que entra todos los meses.
+10. **El rendimiento real se calcula solo en pesos.** En dólares haría falta la inflación de EE.UU.
+11. **Sin aviso con la app cerrada:** el recordatorio de los 30 días aparece cuando la persona entra. Avisar por push o email necesita las cuentas de la fase 2.
+
+---
+
 ## Qué está hecho, por sección
 
 Todo funciona con **datos reales** salvo donde se indica. Cada número muestra su fuente, su hora y su estado.
@@ -111,7 +160,7 @@ Todo funciona con **datos reales** salvo donde se indica. Cada número muestra s
 | **Inicio** | "La foto de hoy" (dólar MEP, dónde rinde más hoy, qué pasó hoy en dos líneas), **"¿Dónde rinde más tu plata?"** con monto, plazo y liquidez, y la historia del producto en 8 escenas (ver "Rediseño" arriba). | ✅ |
 | **Dólar** | Cotizaciones de los 7 dólares con variación, brecha y gráfico de 30 días · **Dónde comprar** USD, USDT y USDC: ranking por precio final con comisiones, costo de USD 1.000, filtro 24/7, orden para comprar/vender/spread, precios con condiciones especiales aparte y cotizaciones excluidas con su motivo · **Histórico** de MEP, oficial y blue (hasta 2018) y de la brecha, con el número del encabezado que sigue al cursor · **Conversor** con todos los tipos de cambio. | ✅ |
 | **Pesos** | **Comparador** de 120+ opciones normalizadas a TEA, sin duplicados · **Plazo fijo** por banco a 30/60/90/180/365 días · **Billeteras y cuentas** (incluye Mercado Pago y Ualá a través de sus fondos) · **Fondos money market** con la TNA calculada desde la cuotaparte · **Caución** · **LECAPs y BONCAPs** con curva, tabla sincronizada y calculadora por letra · **Simulador** a N días con escenarios de inflación (baja, REM, alta) y resultado real. | ✅ (CER pendiente) |
-| **Calculadoras** | Interés compuesto, jubilación y metas (en dólares, con la regla del 4 % explicada), plazo fijo, conversor TNA/TEA/TEM e inflación ("¿cuánto valen hoy?"). Todas con **"Compartir resultado"** (genera una imagen para historias y WhatsApp) y link a la fórmula. | ✅ (falta "sueldo en dólares") |
+| **Calculadoras** | Interés compuesto, **metas de ahorro** (ver abajo), jubilación (en dólares, con la regla del 4 % explicada), plazo fijo, conversor TNA/TEA/TEM e inflación ("¿cuánto valen hoy?"). Todas con **"Compartir resultado"** (genera una imagen para historias y WhatsApp) y link a la fórmula. | ✅ (falta "sueldo en dólares") |
 | **Cartera** | Carga manual (billetera, plazo fijo, CEDEAR, acción, bono, LECAP, cripto, dólares), cartera de ejemplo rotulada, valor en pesos / dólares MEP / pesos constantes, gráfico de evolución, **"¿Le ganaste a la inflación?"** con TWR y TIR contra IPC, MEP y plazo fijo, distribución, posiciones con detalle y borrado, **ideas** (6 reglas) y exportar/importar JSON y CSV. Se guarda **solo en el navegador**. | ✅ |
 | **Bonos y ONs** | Bonares y Globales con TIR, duration, paridad, cupón y próximo pago; curva separada por ley; calculadora de flujos por bono. ONs con precio y volumen del día. | ✅ (ONs sin TIR) |
 | **Mercados** | CEDEARs con dólar implícito (MEP y CCL en modo Pro), buscador y filtro por sector; acciones del panel líder y general; cripto (BTC, ETH, USDT, USDC) con ranking de exchanges. | ✅ |

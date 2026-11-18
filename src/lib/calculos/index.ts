@@ -10,4 +10,5 @@ export * from "./interes-compuesto";
 export * from "./inflacion";
 export * from "./dolar";
 export * from "./cartera";
+export * from "./metas";
 export { resolverTasa } from "./raices";

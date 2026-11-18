@@ -178,7 +178,7 @@ Reemplazan las tablas de arriba, que quedan como referencia histórica.
 - Los títulos van en peso 800 con tracking negativo: el titular es parte del diseño, no un contenedor neutro.
 - **No se resalta una sola palabra del titular** con otro color o en itálica: es una de las marcas más claras de "hecho por IA".
 - **Las etiquetas no van en mayúsculas** ni hay etiquetas decorativas arriba de cada título. Si una etiqueta no informa algo, se saca.
-- Signo de moneda más chico y en `text-2`: `$` al 60 % del tamaño de la cifra, alineado arriba. Los decimales, en `text-2` también. Ejemplo: **1.584**<span>,99</span>.
+- Signo de moneda más chico: `$` al 60 % del tamaño de la cifra, alineado arriba. **En las cifras grandes, el signo, la coma, los decimales y el "%" van del mismo color que el número** (pedido de los fundadores, 18/11/2026). En las cifras chicas de tablas, el signo y los decimales pueden ir atenuados.
 - Números siempre alineados a la derecha en tablas.
 - Formato `es-AR` en todos lados: `$ 1.234,56`, `24,5 %`, `+0,25 %`, `16 nov`, `hace 2 min`.
 

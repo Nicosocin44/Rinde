@@ -71,7 +71,7 @@ export function TopNav() {
                         href={item.href}
                         aria-current={activo ? "page" : undefined}
                         className={cn(
-                          "relative z-0 flex h-10 items-center rounded-full px-2.5 text-[14px] xl:px-4 xl:text-[15px] font-medium transition-colors duration-(--duration-short)",
+                          "relative z-0 flex h-10 items-center rounded-full px-3 text-[15px] xl:px-4 font-medium transition-colors duration-(--duration-short)",
                           activo ? "text-on-inverse" : "text-text-2 hover:text-text",
                         )}
                       >

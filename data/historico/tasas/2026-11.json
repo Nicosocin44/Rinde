@@ -1,0 +1,295 @@
+{
+ "2026-11-18": {
+  "plazoFijo": {
+   "BANCO DE LA NACION ARGENTINA": {
+    "tna": 0.1925,
+    "tnaNoClientes": null
+   },
+   "BANCO DE GALICIA Y BUENOS AIRES S.A.": {
+    "tna": 0.1825,
+    "tnaNoClientes": null
+   },
+   "BANCO BBVA ARGENTINA S.A.": {
+    "tna": 0.17,
+    "tnaNoClientes": null
+   },
+   "BANCO SANTANDER ARGENTINA S.A.": {
+    "tna": 0.18,
+    "tnaNoClientes": null
+   },
+   "BANCO DE LA PROVINCIA DE BUENOS AIRES": {
+    "tna": 0.21,
+    "tnaNoClientes": 0.22
+   },
+   "BANCO MACRO S.A.": {
+    "tna": 0.215,
+    "tnaNoClientes": null
+   },
+   "INDUSTRIAL AND COMMERCIAL BANK OF CHINA (ARGENTINA) S.A.U.": {
+    "tna": 0.179,
+    "tnaNoClientes": null
+   },
+   "BANCO DE LA CIUDAD DE BUENOS AIRES": {
+    "tna": 0.17,
+    "tnaNoClientes": null
+   },
+   "BANCO PATAGONIA S.A.": {
+    "tna": 0.16,
+    "tnaNoClientes": null
+   },
+   "BANCO CREDICOOP COOPERATIVO LIMITADO": {
+    "tna": 0.185,
+    "tnaNoClientes": 0.185
+   },
+   "BANCO BICA S.A.": {
+    "tna": 0.24,
+    "tnaNoClientes": 0.24
+   },
+   "BANCO CMF S.A.": {
+    "tna": 0.24,
+    "tnaNoClientes": 0.24
+   },
+   "BANCO COMAFI SOCIEDAD ANONIMA": {
+    "tna": 0.19,
+    "tnaNoClientes": 0.19
+   },
+   "BANCO DE COMERCIO S.A.": {
+    "tna": 0.24,
+    "tnaNoClientes": 0.24
+   },
+   "BANCO DE FORMOSA S.A.": {
+    "tna": 0.195,
+    "tnaNoClientes": 0.195
+   },
+   "BANCO DE LA PROVINCIA DE CORDOBA S.A.": {
+    "tna": 0.2075,
+    "tnaNoClientes": 0.2075
+   },
+   "BANCO DEL CHUBUT S.A.": {
+    "tna": 0.205,
+    "tnaNoClientes": 0.205
+   },
+   "BANCO DEL SOL S.A.": {
+    "tna": 0.23,
+    "tnaNoClientes": 0.23
+   },
+   "BANCO DINO S.A.": {
+    "tna": 0.2,
+    "tnaNoClientes": 0.22
+   },
+   "BANCO HIPOTECARIO S.A.": {
+    "tna": 0.195,
+    "tnaNoClientes": 0.22
+   },
+   "BANCO JULIO SOCIEDAD ANONIMA": {
+    "tna": 0.19,
+    "tnaNoClientes": 0.19
+   },
+   "BANCO MARIVA S.A.": {
+    "tna": 0.235,
+    "tnaNoClientes": 0.235
+   },
+   "BANCO MASVENTAS S.A.": {
+    "tna": 0.21,
+    "tnaNoClientes": 0.19
+   },
+   "BANCO MERIDIAN S.A.": {
+    "tna": 0.24,
+    "tnaNoClientes": 0.24
+   },
+   "BANCO PROVINCIA DE TIERRA DEL FUEGO": {
+    "tna": 0.19,
+    "tnaNoClientes": 0.15
+   },
+   "BANCO VOII S.A.": {
+    "tna": 0.23,
+    "tnaNoClientes": 0.23
+   },
+   "BIBANK S.A.": {
+    "tna": 0.215,
+    "tnaNoClientes": 0.215
+   },
+   "CRÉDITO REGIONAL COMPAÑÍA FINANCIERA S.A.U.": {
+    "tna": 0.2375,
+    "tnaNoClientes": 0.24
+   },
+   "REBA COMPAÑIA FINANCIERA S.A.": {
+    "tna": 0.24,
+    "tnaNoClientes": 0.24
+   },
+   "Banco Piano": {
+    "tna": 0.175,
+    "tnaNoClientes": 0.175
+   },
+   "Brubank": {
+    "tna": 0.17,
+    "tnaNoClientes": 0.17
+   },
+   "UALA": {
+    "tna": 0.22,
+    "tnaNoClientes": 0.22
+   },
+   "Cocos": {
+    "tna": 0.24,
+    "tnaNoClientes": 0.24
+   }
+  },
+  "cuentas": {
+   "BELO": {
+    "tna": 0.19,
+    "tope": null,
+    "fecha": "2026-11-18"
+   },
+   "BICA CUENTA POSITIVA 2": {
+    "tna": 0.16,
+    "tope": 20000000,
+    "fecha": "2026-11-18"
+   },
+   "BICA CUENTA POSITIVA 3": {
+    "tna": 0.19,
+    "tope": 2250000,
+    "fecha": "2026-11-18"
+   },
+   "BICA CUENTA POSITIVA 4": {
+    "tna": 0.22,
+    "tope": 750000,
+    "fecha": "2026-11-18"
+   },
+   "BNA": {
+    "tna": 0.14,
+    "tope": 2000000,
+    "fecha": "2026-11-18"
+   },
+   "BRUBANK CUENTA MAX": {
+    "tna": 0.19,
+    "tope": 1000000,
+    "fecha": "2026-11-18"
+   },
+   "BRUBANK CUENTA MAX SELECCIONADA": {
+    "tna": 0.22,
+    "tope": 2000000,
+    "fecha": "2026-11-18"
+   },
+   "CARREFOUR BANCO": {
+    "tna": 0.2,
+    "tope": null,
+    "fecha": "2026-11-18"
+   },
+   "CRESIUM": {
+    "tna": 0.201,
+    "tope": null,
+    "fecha": "2026-11-18"
+   },
+   "FIWIND": {
+    "tna": 0.23,
+    "tope": 750000,
+    "fecha": "2026-11-18"
+   },
+   "MONTEMAR PAY": {
+    "tna": 0.19,
+    "tope": null,
+    "fecha": "2026-11-18"
+   },
+   "NARANJA X": {
+    "tna": 0.2,
+    "tope": 1000000,
+    "fecha": "2026-11-18"
+   },
+   "NARANJA X FRASCOS 14-27": {
+    "tna": 0.2,
+    "tope": 30000000,
+    "fecha": "2026-11-18"
+   },
+   "NARANJA X FRASCOS 28": {
+    "tna": 0.2,
+    "tope": 30000000,
+    "fecha": "2026-11-18"
+   },
+   "NARANJA X FRASCOS 7-13": {
+    "tna": 0.2,
+    "tope": 30000000,
+    "fecha": "2026-11-18"
+   },
+   "REBA": {
+    "tna": 0.21,
+    "tope": 1000000,
+    "fecha": "2026-11-18"
+   },
+   "SUPERVIELLE": {
+    "tna": 0.14,
+    "tope": 1000000,
+    "fecha": "2026-11-18"
+   },
+   "SUPERVIELLE HIT IOL": {
+    "tna": 0.14,
+    "tope": null,
+    "fecha": "2026-11-18"
+   },
+   "UALA": {
+    "tna": 0.19,
+    "tope": 1000000,
+    "fecha": "2026-11-18"
+   },
+   "UALA PLUS 1": {
+    "tna": 0.2,
+    "tope": 1000000,
+    "fecha": "2026-11-18"
+   },
+   "UALA PLUS 2": {
+    "tna": 0.24,
+    "tope": 1000000,
+    "fecha": "2026-11-18"
+   }
+  },
+  "letras": {
+   "S30N6": {
+    "precio": 128.96,
+    "tea": 0.2434,
+    "vencimiento": "2026-11-30",
+    "dias": 12
+   },
+   "T15E7": {
+    "precio": 155.38,
+    "tea": 0.2556,
+    "vencimiento": "2027-01-15",
+    "dias": 58
+   },
+   "S29E7": {
+    "precio": 106.6,
+    "tea": 0.2666,
+    "vencimiento": "2027-01-29",
+    "dias": 72
+   },
+   "S26F7": {
+    "precio": 101.35,
+    "tea": 0.2768,
+    "vencimiento": "2027-02-26",
+    "dias": 100
+   },
+   "T30A7": {
+    "precio": 140.28,
+    "tea": 0.293,
+    "vencimiento": "2027-04-30",
+    "dias": 163
+   },
+   "T31Y7": {
+    "precio": 131.79,
+    "tea": 0.3008,
+    "vencimiento": "2027-05-31",
+    "dias": 194
+   },
+   "T30J7": {
+    "precio": 132.59,
+    "tea": 0.3039,
+    "vencimiento": "2027-06-30",
+    "dias": 224
+   },
+   "TY30P": {
+    "precio": 114.25,
+    "tea": 0.314,
+    "vencimiento": "2030-05-30",
+    "dias": 1289
+   }
+  }
+ }
+}

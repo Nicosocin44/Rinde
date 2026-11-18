@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { HistorialPlazoFijo } from "@/components/modules/pesos/historial-tasas";
 import { Respuesta } from "@/components/modules/pesos/respuesta";
 import { TablaPlazoFijo } from "@/components/modules/pesos/tablas";
 import { ErrorState } from "@/components/ui/estados";
@@ -36,6 +37,7 @@ export default async function PlazoFijo() {
         }
       />
       <TablaPlazoFijo bancos={bancos} />
+      <HistorialPlazoFijo />
       <SourceNote className="mt-6" fuentes={[FUENTES.argentinadatos, FUENTES.bcra]} actualizado={r.data.estados.plazosFijos.asOf} estado={r.data.estados.plazosFijos.ok ? "close" : "stale"} metodologia="/metodologia#plazo-fijo">
         <span aria-hidden>·</span>
         <span>Tasas informadas al BCRA por cada banco · depósitos garantizados por SEDESA</span>

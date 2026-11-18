@@ -25,6 +25,21 @@ export function historicoDolar(casa: string) {
   return traerJson(`${BASE}/cotizaciones/dolares/${casa}`, adHistoricoDolarSchema, { fuente: FUENTE, revalidate: 3600, timeoutMs: 12000 });
 }
 
+/**
+ * La fuente mezcla unidades en la serie de depósitos a 30 días: hasta enero de 2025 hay días en fracción (0,3443) y días en
+ * porcentaje (34,43) para la misma tasa (verificado el 18/11/2026). Una TNA de más de 300 % no existió en la serie, así
+ * que un valor mayor a 3 es un porcentaje.
+ */
+export function tnaComoFraccion(valor: number): number {
+  return valor > 3 ? valor / 100 : valor;
+}
+
+/** Tasa promedio de los depósitos a plazo fijo a 30 días (TNA, como fracción), diaria. */
+export async function depositos30Dias() {
+  const serie = await traerJson(`${BASE}/finanzas/tasas/depositos30Dias`, adSerieSchema, { fuente: FUENTE, revalidate: revalidar("macro") });
+  return serie.map((p) => ({ fecha: p.fecha, valor: tnaComoFraccion(p.valor) }));
+}
+
 export function inflacionMensual() {
   return traerJson(`${BASE}/finanzas/indices/inflacion`, adSerieSchema, { fuente: FUENTE, revalidate: revalidar("macro") });
 }

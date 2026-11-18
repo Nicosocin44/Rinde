@@ -82,7 +82,8 @@ export async function cargarPreciosCartera(ids: string[]): Promise<PreciosCarter
     porTipo("cripto").length ? cargarCripto() : null,
     ad.historicoDolar("bolsa").catch(() => []),
     ad.inflacionMensual().catch(() => []),
-    traerJson("https://api.argentinadatos.com/v1/finanzas/tasas/depositos30Dias", z.array(z.object({ fecha: z.string(), valor: z.number() })), { fuente: "ArgentinaDatos", revalidate: revalidar("macro") }).catch(() => []),
+    // Ya normalizada: la fuente mezcla fracción y porcentaje (dividir todo por 100 dejaba días de 2024 en 0,3 %).
+    ad.depositos30Dias().catch(() => []),
     cargarPesos(),
   ]);
 
@@ -126,7 +127,7 @@ export async function cargarPreciosCartera(ids: string[]): Promise<PreciosCarter
     historicos,
     mep: semanal(mepH.map((p) => [p.fecha, p.venta])),
     ipc: ipc.filter((p) => p.fecha >= "2020-01-01").map((p) => [p.fecha, p.valor / 100]),
-    pf30: semanal(pf.map((p) => [p.fecha, p.valor / 100])),
+    pf30: semanal(pf.map((p) => [p.fecha, p.valor])),
     mejores: { liquida, a30, lecaps: opciones.filter((o) => o.tipo === "lecap") },
     asOf: new Date().toISOString(),
   };

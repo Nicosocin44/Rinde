@@ -135,7 +135,18 @@ export const d912MepSchema = z.array(
 
 export const d912CclSchema = z.array(z.object({ ticker_ar: z.string(), CCL_mark: numNulo, arg_panel: z.string().optional() }));
 
-export const d912HistoricoSchema = z.array(z.object({ date: z.string(), c: num }));
+/** Cierres diarios. Verificado el 18/11/2026: además del cierre trae apertura, máximo, mínimo y volumen (nominales). */
+export const d912HistoricoSchema = z.array(z.object({ date: z.string(), c: num, o: numNulo.optional(), h: numNulo.optional(), l: numNulo.optional(), v: numNulo.optional() }));
+
+// ───────── Wikipedia ─────────
+/** Resumen de un artículo (API REST de Wikipedia en castellano). Solo aceptamos artículos, no desambiguaciones. */
+export const wikipediaResumenSchema = z.object({
+  type: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
+  extract: z.string(),
+  content_urls: z.object({ desktop: z.object({ page: z.string() }) }).optional(),
+});
 
 // ───────── CriptoYa ─────────
 const punta = z.object({ ask: num, totalAsk: num, bid: num, totalBid: num, time: num });

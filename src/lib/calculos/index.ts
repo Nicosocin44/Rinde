@@ -11,4 +11,5 @@ export * from "./inflacion";
 export * from "./dolar";
 export * from "./cartera";
 export * from "./metas";
+export * from "./activo";
 export { resolverTasa } from "./raices";

@@ -1,27 +1,22 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { YieldCurve } from "@/components/charts/yield-curve";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Delta } from "@/components/ui/delta";
 import { MetricExplainer } from "@/components/ui/metric-explainer";
 import { MoneyInput } from "@/components/ui/money-input";
-import { Sheet } from "@/components/ui/sheet";
 import { cobroAlVencimiento } from "@/lib/calculos";
 import type { CurvaLecaps, Lecap } from "@/lib/data/types";
 import { fechaCorta, numero, pesos, porcentaje } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 /**
- * LECAPs y BONCAPs: curva + tabla con hover sincronizado. Click → calculadora del instrumento
+ * LECAPs y BONCAPs: curva + tabla con hover sincronizado. Click → la ficha de la letra, que tiene la calculadora
  * ("si pongo $X hoy, al vencimiento cobro $Y").
  */
 export function Lecaps({ curva }: { curva: CurvaLecaps }) {
-  const params = useSearchParams();
   const [resaltada, setResaltada] = useState<string | null>(null);
-  const inicial = curva.letras.find((l) => l.ticker === params.get("t")?.toUpperCase()) ?? null;
-  const [calculadora, setCalculadora] = useState<Lecap | null>(inicial);
   const enCurva = curva.letras.filter((l) => l.enCurva);
 
   const columnas: Columna<Lecap>[] = [
@@ -76,7 +71,7 @@ export function Lecaps({ curva }: { curva: CurvaLecaps }) {
         ordenPorDefecto={{ columna: "dias", direccion: "asc" }}
         resaltada={resaltada}
         onResaltar={setResaltada}
-        onClickFila={setCalculadora}
+        enlace={(l) => `/activo/${l.ticker}`}
         filaMovil={(l) => (
           <span className="flex items-center gap-3">
             <span className="min-w-0 flex-1">
@@ -96,14 +91,12 @@ export function Lecaps({ curva }: { curva: CurvaLecaps }) {
         )}
       />
 
-      <Sheet abierto={calculadora !== null} onCambio={(v) => !v && setCalculadora(null)} titulo={calculadora ? `Calculadora ${calculadora.ticker}` : ""} descripcion={calculadora ? `${calculadora.tipo} · vence el ${fechaCorta(calculadora.vencimiento, true)}` : undefined}>
-        {calculadora && <CalculadoraLecap l={calculadora} liquidacion={curva.liquidacion} />}
-      </Sheet>
     </div>
   );
 }
 
-function CalculadoraLecap({ l, liquidacion }: { l: Lecap; liquidacion: string }) {
+/** Calculadora "si pongo $X hoy, ¿cuánto cobro al vencimiento?" (también en la ficha de cada letra). */
+export function CalculadoraLecap({ l, liquidacion }: { l: Lecap; liquidacion: string }) {
   const [monto, setMonto] = useState(1_000_000);
   const c = cobroAlVencimiento(monto, l.precio, l.vf);
   return (

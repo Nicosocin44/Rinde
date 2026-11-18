@@ -53,7 +53,6 @@ export default async function BonosPage() {
               <Bonos
                 bonos={r.data.bonos}
                 ajustes={{ ny: curva(r.data.bonos.filter((b) => b.ley === "Nueva York")), local: curva(r.data.bonos.filter((b) => b.ley === "Argentina")) }}
-                liquidacion={r.data.liquidacion}
               />
             </Suspense>
             <SourceNote className="mt-6" fuentes={[FUENTES.data912]} actualizado={r.asOf} estado={r.status} metodologia="/metodologia#bonos">

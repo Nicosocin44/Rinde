@@ -18,6 +18,8 @@ type Opciones = {
   revalidate: number;
   timeoutMs?: number;
   reintentos?: number;
+  /** Encabezados extra (por ejemplo, el User-Agent que piden Wikidata y Wikimedia). */
+  headers?: Record<string, string>;
 };
 
 /**
@@ -25,12 +27,12 @@ type Opciones = {
  * Si la respuesta no cumple el schema, falla: preferimos no mostrar nada a mostrar algo mal.
  */
 export async function traerJson<S extends z.ZodType>(url: string, schema: S, opciones: Opciones): Promise<z.infer<S>> {
-  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1 } = opciones;
+  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1, headers = {} } = opciones;
   let ultimoError: unknown;
   for (let intento = 0; intento <= reintentos; intento++) {
     try {
       const respuesta = await fetch(url, {
-        headers: { accept: "application/json" },
+        headers: { accept: "application/json", ...headers },
         signal: AbortSignal.timeout(timeoutMs),
         next: { revalidate },
       });

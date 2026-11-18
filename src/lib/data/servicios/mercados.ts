@@ -5,6 +5,7 @@ import { resolverProveedor } from "@data/ar/proveedores";
 import { cronograma, fechaLiquidacion, hoyAR, metricasBono, spread } from "@/lib/calculos";
 import * as criptoya from "../adapters/criptoya";
 import * as d912 from "../adapters/data912";
+import * as wikidata from "../adapters/wikidata";
 import { conRespaldo } from "../cache";
 import { mercadoAbierto } from "../freshness";
 import { FUENTES, type Accion, type BonoUsd, type Cedear, type Cripto, type Excluido, type ObligacionNegociable } from "../types";
@@ -148,6 +149,21 @@ export function normalizarAcciones(panel: Panel): Accion[] {
     .sort((a, b) => (a.panel === b.panel ? b.volumen - a.volumen : a.panel === "líder" ? -1 : 1));
 }
 
+/**
+ * Nombres de los tickers que no están en nuestras listas curadas (por ejemplo NBIS → Nebius Group), desde Wikidata.
+ * Se piden todos los símbolos del panel (no solo los que operaron hoy) para que la consulta sea siempre la misma y quede
+ * cacheada una semana. Si Wikidata no responde, quedan sin nombre y se muestra el ticker, como antes.
+ */
+async function nombresFaltantes(panel: Panel, conocidos: Record<string, unknown>, bolsas: Parameters<typeof wikidata.nombres>[1]): Promise<Record<string, string>> {
+  const todos = new Set(panel.map((p) => p.symbol));
+  const faltan = [...todos].filter((t) => !esEspecieDerivada(t, todos) && !(t in conocidos));
+  try {
+    return await wikidata.nombres(faltan, bolsas);
+  } catch {
+    return {};
+  }
+}
+
 export async function cargarMercados() {
   return conRespaldo<{ cedears: Cedear[]; acciones: Accion[]; mepPromedio: number | null }>("mercados", [FUENTES.data912], async () => {
     const [cedears, mep, ccl, acciones] = await Promise.all([
@@ -157,10 +173,14 @@ export async function cargarMercados() {
       d912.panel("arg_stocks"),
     ]);
     const cclMapa = new Map(ccl.filter((c) => c.CCL_mark && c.CCL_mark > 0).map((c) => [c.ticker_ar, c.CCL_mark!]));
-    const lista = normalizarCedears(cedears, mep, cclMapa);
+    const [nombresCedears, nombresAcciones] = await Promise.all([
+      nombresFaltantes(cedears, CEDEARS, ["Q13677", "Q82059"]),
+      nombresFaltantes(acciones, { ...PANEL_LIDER, ...ACCIONES_GENERAL }, ["Q891560"]),
+    ]);
+    const lista = normalizarCedears(cedears, mep, cclMapa).map((c) => ({ ...c, nombre: c.nombre ?? nombresCedears[c.ticker] ?? null }));
     const meps = lista.slice(0, 30).map((c) => c.mepImplicito).filter((x): x is number => x !== null && x > 0);
     return {
-      data: { cedears: lista, acciones: normalizarAcciones(acciones), mepPromedio: meps.length ? mediana(meps) : null },
+      data: { cedears: lista, acciones: normalizarAcciones(acciones).map((a) => ({ ...a, nombre: a.nombre ?? nombresAcciones[a.ticker] ?? null })), mepPromedio: meps.length ? mediana(meps) : null },
       asOf: new Date().toISOString(),
       status: estadoData912(),
     };

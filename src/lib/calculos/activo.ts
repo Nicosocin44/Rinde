@@ -174,3 +174,36 @@ export function resumenBono(def: DefinicionBono, hoy: FechaISO): ResumenBono {
     vencimiento: def.pagos.at(-1)!,
   };
 }
+
+/**
+ * Pasa velas a otra moneda con el tipo de cambio de cada día (o de cada momento): apertura, máximo, mínimo y
+ * cierre se dividen (pesos → dólares) o se multiplican (dólares → pesos) por el último valor del dólar a esa fecha.
+ * Las fechas pueden ser días ("2026-11-18") o fecha y hora ISO, siempre que las dos series usen el mismo formato.
+ */
+export function velasEnOtraMoneda(velas: Vela[], dolar: { fecha: string; valor: number }[], operacion: "dividir" | "multiplicar"): Vela[] {
+  const ordenado = [...dolar].filter((m) => m.valor > 0).sort((a, b) => a.fecha.localeCompare(b.fecha));
+  const salida: Vela[] = [];
+  let j = -1;
+  for (const v of velas) {
+    while (j + 1 < ordenado.length && ordenado[j + 1]!.fecha <= v.fecha) j++;
+    if (j < 0) continue;
+    const tc = d(ordenado[j]!.valor);
+    const pasar = (x: number) => (operacion === "dividir" ? d(x).div(tc) : d(x).mul(tc)).toNumber();
+    salida.push({ ...v, apertura: pasar(v.apertura), maximo: pasar(v.maximo), minimo: pasar(v.minimo), cierre: pasar(v.cierre) });
+  }
+  return salida;
+}
+
+/** Variación entre la primera apertura y el último cierre de un tramo de velas (fracción). null si no alcanza. */
+export function variacionDeVelas(velas: Vela[]): number | null {
+  if (velas.length < 2 || velas[0]!.apertura <= 0) return null;
+  return d(velas.at(-1)!.cierre).div(velas[0]!.apertura).minus(1).toNumber();
+}
+
+/** Vela compacta para los gráficos: [fecha ISO (o fecha y hora), apertura, máximo, mínimo, cierre]. */
+export type VelaCompacta = [string, number, number, number, number];
+
+/** Velas del dominio → formato compacto del gráfico (lo que viaja al navegador). */
+export function compactar(velas: Vela[]): VelaCompacta[] {
+  return velas.map((v) => [v.fecha, v.apertura, v.maximo, v.minimo, v.cierre]);
+}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/shell/page-header";
 import { SourceNote } from "@/components/ui/frescura";
 import { ProviderMark } from "@/components/ui/provider-mark";
-import { aPesos, hoyAR, maximaCaida, primaContraMep, rango, rendimientos, sumarDias, volatilidadAnual, type Vela } from "@/lib/calculos";
+import { aPesos, compactar, hoyAR, maximaCaida, primaContraMep, rango, rendimientos, sumarDias, variacionDeVelas, velasEnOtraMoneda, volatilidadAnual, type Vela } from "@/lib/calculos";
 import type { FichaCripto } from "@/lib/data/servicios/fichas";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, porcentaje } from "@/lib/format";
@@ -43,11 +43,47 @@ export function FichaCriptoVista({ f, asOf, estado }: { f: FichaCripto; asOf: st
   const caida = maximaCaida(base, unAnioAtras);
   const brecha = estable && f.mep ? primaContraMep(c.precioArs, f.mep) : null;
 
+  // Últimas 24 h (Binance, velas de 5 min). En pesos: dólares × USDT/ARS del mismo momento.
+  const dolarCriptoDia = f.intradiaUsdtArs.map((v) => ({ fecha: v.fecha, valor: v.cierre }));
+  const diaUsd = f.intradiaUsd;
+  const diaArs = estable ? (c.simbolo === "USDT" ? f.intradiaUsdtArs : []) : velasEnOtraMoneda(diaUsd, dolarCriptoDia, "multiplicar");
+  const enDia = { etiquetaDia: "en 24 h" };
   const series: SerieGrafico[] = estable
-    ? [{ id: "ars", etiqueta: "En pesos", titulo: `${c.simbolo} en pesos (dólar cripto)`, moneda: "$", serie: cierresArs.map((p) => [p.fecha, p.cierre]) }]
+    ? [
+        {
+          id: "ars",
+          etiqueta: "En pesos",
+          titulo: `${c.simbolo} en pesos (dólar cripto)`,
+          moneda: "$",
+          serie: cierresArs.map((p) => [p.fecha, p.cierre]),
+          intradia: diaArs.length > 1 ? compactar(diaArs) : undefined,
+          variacionDia: variacionDeVelas(diaArs),
+          ...enDia,
+        },
+      ]
     : [
-        { id: "usd", etiqueta: "En dólares", titulo: `${c.simbolo} en dólares`, moneda: "US$", serie: cierresUsd.map((p) => [p.fecha, p.cierre]) },
-        { id: "ars", etiqueta: "En pesos", titulo: `${c.simbolo} en pesos`, moneda: "$", serie: cierresArs.map((p) => [p.fecha, p.cierre]) },
+        {
+          id: "usd",
+          etiqueta: "En dólares",
+          titulo: `${c.simbolo} en dólares`,
+          moneda: "US$",
+          serie: cierresUsd.map((p) => [p.fecha, p.cierre]),
+          velas: compactar(f.velasUsd),
+          intradia: diaUsd.length > 1 ? compactar(diaUsd) : undefined,
+          variacionDia: variacionDeVelas(diaUsd),
+          ...enDia,
+        },
+        {
+          id: "ars",
+          etiqueta: "En pesos",
+          titulo: `${c.simbolo} en pesos`,
+          moneda: "$",
+          serie: cierresArs.map((p) => [p.fecha, p.cierre]),
+          velas: compactar(velasEnOtraMoneda(f.velasUsd, dolarCripto, "multiplicar")),
+          intradia: diaArs.length > 1 ? compactar(diaArs) : undefined,
+          variacionDia: variacionDeVelas(diaArs),
+          ...enDia,
+        },
       ];
 
   const datos: Dato[] = [

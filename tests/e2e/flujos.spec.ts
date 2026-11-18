@@ -59,4 +59,22 @@ test.describe("flujos clave", () => {
     await expect(lista).toContainText("Dólar MEP por encima de");
     await expect(lista).toContainText(/Se cumple ahora|Todavía no/);
   });
+
+  test("Buscador: en el Inicio la ruedita mueve la lista del buscador, no la página de atrás", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(2500); // el scroll suave se carga cuando el navegador queda libre
+    await page.getByRole("button", { name: "Buscar" }).first().click();
+    const lista = page.locator("#resultados-busqueda");
+    await expect(lista).toBeVisible();
+    const caja = (await lista.boundingBox())!;
+    await page.mouse.move(caja.x + caja.width / 2, caja.y + caja.height / 2);
+    for (let i = 0; i < 6; i++) {
+      await page.mouse.wheel(0, 120);
+      await page.waitForTimeout(80);
+    }
+    await page.waitForTimeout(600);
+    expect(await lista.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  });
 });

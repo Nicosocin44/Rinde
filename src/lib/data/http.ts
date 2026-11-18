@@ -20,6 +20,8 @@ type Opciones = {
   reintentos?: number;
   /** Encabezados extra (por ejemplo, el User-Agent que piden Wikidata y Wikimedia). */
   headers?: Record<string, string>;
+  /** Sin la caché de fetch (respuestas de más de 2 MB, que Next no guarda): quien llama cachea el resultado. */
+  sinCache?: boolean;
 };
 
 /**
@@ -27,14 +29,14 @@ type Opciones = {
  * Si la respuesta no cumple el schema, falla: preferimos no mostrar nada a mostrar algo mal.
  */
 export async function traerJson<S extends z.ZodType>(url: string, schema: S, opciones: Opciones): Promise<z.infer<S>> {
-  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1, headers = {} } = opciones;
+  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1, headers = {}, sinCache = false } = opciones;
   let ultimoError: unknown;
   for (let intento = 0; intento <= reintentos; intento++) {
     try {
       const respuesta = await fetch(url, {
         headers: { accept: "application/json", ...headers },
         signal: AbortSignal.timeout(timeoutMs),
-        next: { revalidate },
+        ...(sinCache ? { cache: "no-store" as const } : { next: { revalidate } }),
       });
       if (!respuesta.ok) throw new ErrorDeFuente(fuente, url, `respondió ${respuesta.status}`);
       const json: unknown = await respuesta.json();

@@ -42,7 +42,11 @@ export function Footer() {
           <a href="https://es.wikipedia.org" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-text-2">
             Wikipedia
           </a>{" "}
-          (CC BY-SA 4.0) y Wikidata. Cómo calculamos cada número:{" "}
+          (CC BY-SA 4.0) y Wikidata. Balances de empresas:{" "}
+          <a href="https://www.sec.gov/edgar" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-text-2">
+            SEC EDGAR
+          </a>
+          . Cómo calculamos cada número:{" "}
           <Link href="/metodologia" className="underline underline-offset-2 hover:text-text-2">
             Metodología
           </Link>

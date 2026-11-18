@@ -137,6 +137,28 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Balances y resultados de las empresas (punto 14 de la lista, rama `balances`, 18/11/2026)
+
+> En la ficha de cada CEDEAR y de cada acción argentina con ADR, debajo del rendimiento. Datos reales de la SEC (EDGAR), gratis, sin cuenta y de dominio público.
+
+- **Cuatro cifras arriba:** ingresos y ganancia neta (últimos 12 meses o último ejercicio), con el crecimiento y el margen; PER (o, si no se puede, la rentabilidad sobre el patrimonio); dividendo (o flujo de caja libre).
+- **Gráfico por ejercicio:** ingresos en gris y ganancia en verde, o en rojo por debajo del cero si fue pérdida. Al lado, el último balance: activos, pasivos, patrimonio, caja, deuda, endeudamiento, margen operativo y, en empresas de EE.UU., capitalización, precio/ventas y precio/valor libro.
+- **Modo Pro:** la tabla completa ejercicio por ejercicio (ingresos, ganancia operativa y neta, margen, ganancia y dividendo por acción, flujo operativo, inversión y flujo libre).
+- **Cálculos propios** en `src/lib/calculos/balances.ts`, con 11 golden tests sobre recortes reales de Apple, Mercado Libre y Galicia (`tests/fixtures/sec-*.json`). Metodología en /metodologia#balances. La SEC suma su línea en el pie del sitio.
+- Probado con Apple, Coca-Cola, Mercado Libre, Nebius, TSMC, YPF y Galicia. SPY (ETF) y Aluar (sin ADR) no muestran la sección.
+- La sección carga aparte (con un esqueleto del mismo tamaño): la ficha no espera a la SEC.
+
+**Decisiones para revisar:**
+1. **Fuente: la SEC.** Cubre los CEDEARs de empresas (no los ETF) y las argentinas con ADR (Galicia, YPF, Pampa, Macro, BBVA, Supervielle, Central Puerto, TGS, Telecom, Loma Negra, Edenor, Cresud e IRSA). Las demás acciones argentinas necesitarían la CNV, que no tiene una API: quedan sin balances por ahora.
+2. **Las argentinas suelen estar atrasadas en la SEC** (Galicia: el último con datos es de marzo de 2025). Si el último balance tiene más de 15 meses, aparece un aviso que lo dice y explica que los nuevos están en la CNV. TSMC tampoco cargó su 2025 en formato de datos.
+3. **Balances en pesos (ajustados por inflación):** solo se comparan ejercicios del mismo balance y no se muestran trimestres. Mezclar balances distintos daría crecimientos inflados.
+4. **Múltiplos (PER, etc.) solo en empresas de EE.UU. con balances en dólares** (10-K): en un ADR un papel puede ser varias acciones, y en pesos el precio de hoy contra un balance viejo engaña.
+5. **Se muestran los ejercicios de los dos últimos balances anuales** (unos cuatro años). Más atrás aparecían cifras de antes de reestructuraciones (Nebius cuando era Yandex) o mal cargadas en la SEC.
+6. **La SEC pide un mail de contacto** en cada consulta. Usamos el de `site.contacto` (hoy `hola@rinde.example`): **hay que poner uno real antes de publicar**.
+7. **Bancos:** no informan "ingresos" como el resto; se muestran ganancia, patrimonio y rentabilidad, sin flujo libre.
+
+---
+
 ## Fuentes discretas (punto 17 de la lista, rama `fuentes-discretas`, 18/11/2026)
 
 > Pedido de los fundadores: sacar de las pantallas las notas de fuente ("Fuente: ArgentinaDatos · CNV · data912 · actualizado…") y los rótulos "de ejemplo", que se veían hechos por IA. Se eligió la versión discreta.

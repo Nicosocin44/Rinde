@@ -34,6 +34,7 @@ export const FUENTES = {
   wikipedia: { id: "wikipedia", name: "Wikipedia", url: "https://es.wikipedia.org" },
   binance: { id: "binance", name: "Binance", url: "https://www.binance.com" },
   wikidata: { id: "wikidata", name: "Wikidata", url: "https://www.wikidata.org" },
+  sec: { id: "sec", name: "SEC EDGAR", url: "https://www.sec.gov/edgar" },
   rinde: { id: "propia", name: "Elaboración propia", url: "/metodologia" },
 } as const satisfies Record<string, Fuente>;
 

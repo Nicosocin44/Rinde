@@ -1,9 +1,9 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { SUBYACENTES_OPCIONES } from "@data/ar/opciones";
 import { PageHeader } from "@/components/shell/page-header";
 import { Delta } from "@/components/ui/delta";
-import { ErrorState } from "@/components/ui/estados";
+import { ErrorState, Skeleton } from "@/components/ui/estados";
 import { SourceNote } from "@/components/ui/frescura";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import { ratioAproximado } from "@/lib/activos/perfil";
@@ -11,6 +11,7 @@ import { d, enDolares, hoyAR, maximaCaida, primaContraMep, rango, rendimientos, 
 import type { FichaActivo } from "@/lib/data/servicios/activo";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
+import { BalancesEmpresa } from "./balances";
 import { SeguirActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
@@ -188,6 +189,12 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
         />
       )}
 
+      {a.sector !== "ETF" && (
+        <Suspense fallback={<EsperaBalances />}>
+          <BalancesEmpresa ticker={a.ticker} tipo={a.tipo} sector={a.sector} nombre={nombre} precioAccionUsd={a.tipo === "cedear" ? (a.subyacente?.precio ?? null) : null} />
+        </Suspense>
+      )}
+
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
         <NoticiasActivo titulo={`Noticias de ${nombre}`} noticias={a.noticias} vacio={`No encontramos noticias de ${nombre} en los últimos tres días en los medios que seguimos.`} />
         <AcercaDe
@@ -214,5 +221,20 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
       </SourceNote>
       <Aviso />
     </>
+  );
+}
+
+/** Mientras llegan los balances: el lugar reservado para que la página no salte. */
+function EsperaBalances() {
+  return (
+    <div aria-hidden className="mt-12 flex flex-col gap-4 lg:mt-16">
+      <Skeleton className="h-7 w-56" />
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-[104px]" />
+        ))}
+      </div>
+      <Skeleton className="h-52" />
+    </div>
   );
 }

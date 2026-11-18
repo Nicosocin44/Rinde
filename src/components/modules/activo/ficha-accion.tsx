@@ -155,7 +155,17 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
               </>
             )}
           </p>
-          {a.serieCortada && <p className="text-micro text-text-3">La serie arranca en el último cambio de ratio: antes de esa fecha los precios no son comparables con los de hoy.</p>}
+          {a.cambiosRatio.length > 0 && (
+            <p className="text-micro text-text-3">
+              Precios ajustados por {a.cambiosRatio.length === 1 ? "el cambio de ratio" : "los cambios de ratio"} del{" "}
+              {a.cambiosRatio.map((c) => `${fechaCorta(c.fecha, true)} (×${c.veces})`).join(" y del ")}: antes de esa fecha, los precios se dividen para que se puedan comparar con los de hoy.
+            </p>
+          )}
+          {a.serieCortada && (
+            <p className="text-micro text-text-3">
+              La historia arranca el {fechaCorta(a.serieCortada, true)}: ese día hay un salto de precio que no es un cambio de ratio y no pudimos explicar, así que lo anterior no es comparable.
+            </p>
+          )}
         </section>
         <DatosClave datos={sinHistoria ? datos.filter((x) => x.valor !== "—") : datos} />
       </div>

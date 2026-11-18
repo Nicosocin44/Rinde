@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cortarEnSalto, enDolares, maximaCaida, primaContraMep, rango, rendimientos, variacionDesde, volatilidadAnual, type Vela } from "@/lib/calculos";
+import { aPesos, cortarEnSalto, enDolares, inflacionEsperadaHasta, maximaCaida, primaContraMep, rango, rendimientos, resumenBono, variacionDesde, volatilidadAnual, type Vela } from "@/lib/calculos";
 
 // Golden tests de la ficha de un activo, calculados a mano.
 
@@ -67,5 +67,52 @@ describe("ficha de activo", () => {
     expect(primaContraMep(1650, 1500)).toBeCloseTo(0.1, 12);
     expect(primaContraMep(1350, 1500)).toBeCloseTo(-0.1, 12);
     expect(primaContraMep(1500, 0)).toBeNull();
+  });
+});
+
+describe("ficha de bonos, letras y cripto", () => {
+  it("volatilidad de cripto: anualiza con 365 días", () => {
+    const serie = Array.from({ length: 21 }, (_, i) => ({ cierre: i % 2 === 0 ? 100 : 110 }));
+    const a = Math.log(1.1);
+    expect(volatilidadAnual(serie, 365, 365)).toBeCloseTo(a * Math.sqrt(20 / 19) * Math.sqrt(365), 10);
+  });
+
+  it("a pesos: multiplica por el dólar de esa fecha o el último anterior", () => {
+    const serie = [p("2025-12-31", 1), p("2026-01-02", 2), p("2026-01-03", 3)];
+    const dolar = [
+      { fecha: "2026-01-03", valor: 1500 },
+      { fecha: "2026-01-01", valor: 1000 },
+    ];
+    expect(aPesos(serie, dolar)).toEqual([p("2026-01-02", 2000), p("2026-01-03", 4500)]);
+  });
+
+  it("inflación esperada hasta el vencimiento, por días de cada mes", () => {
+    const rem = [
+      { mes: "2026-12", valor: 0.02 },
+      { mes: "2027-01", valor: 0.03 },
+    ];
+    expect(inflacionEsperadaHasta(rem, "2026-12-01", "2027-01-01")).toBeCloseTo(0.02, 12);
+    // Medio diciembre y medio enero: 1,02^(16/31) × 1,03^(15/31) − 1.
+    expect(inflacionEsperadaHasta(rem, "2026-12-16", "2027-01-16")).toBeCloseTo(1.02 ** (16 / 31) * 1.03 ** (15 / 31) - 1, 12);
+    // Después del último dato repite el último mes: febrero al 3 %.
+    expect(inflacionEsperadaHasta(rem, "2027-02-01", "2027-03-01")).toBeCloseTo(0.03, 12);
+    expect(inflacionEsperadaHasta(rem, "2026-10-01", "2026-11-01")).toBeNull();
+    expect(inflacionEsperadaHasta(rem, "2027-01-01", "2026-12-01")).toBeNull();
+  });
+
+  it("resumen de un bono step-up que amortiza en cuotas", () => {
+    const def = {
+      ticker: "X",
+      pagos: ["2026-01-09", "2026-07-09", "2027-01-09", "2027-07-09"],
+      inicioDevengamiento: "2025-07-09",
+      cupones: [
+        { desde: "2025-07-09", tasaAnual: 0.01 },
+        { desde: "2026-07-09", tasaAnual: 0.04 },
+      ],
+      amortizaciones: { "2026-07-09": 25, "2027-01-09": 25, "2027-07-09": 50 },
+      frecuencia: 2,
+    };
+    expect(resumenBono(def, "2026-08-01")).toEqual({ pagosPorAnio: 2, tasaHoy: 0.04, tasaMaxima: 0.04, cuotasRestantes: 2, proximaAmortizacion: "2027-01-09", vencimiento: "2027-07-09" });
+    expect(resumenBono(def, "2026-02-01").tasaHoy).toBe(0.01);
   });
 });

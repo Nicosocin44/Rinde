@@ -1,5 +1,6 @@
+import type { DefinicionBono } from "./bonos";
 import { d, UNO, type Num } from "./decimal";
-import { sumarDias, type FechaISO } from "./fechas";
+import { diasEntre, sumarDias, type FechaISO } from "./fechas";
 
 /**
  * Datos de la ficha de un activo (CEDEAR o acción): rendimiento por período, rango, volatilidad, máxima caída,
@@ -68,15 +69,15 @@ export function rango(serie: Vela[], desde: FechaISO): { minimo: number; maximo:
 
 /**
  * Volatilidad anual: desvío estándar (muestral) de los rendimientos logarítmicos diarios de las últimas `ruedas`,
- * por la raíz de 252. Necesita al menos 20 ruedas.
+ * por la raíz de las ruedas de un año (252 en la bolsa; 365 en cripto, que opera todos los días). Necesita al menos 20.
  */
-export function volatilidadAnual(serie: { cierre: number }[], ruedas = RUEDAS_POR_ANIO): number | null {
+export function volatilidadAnual(serie: { cierre: number }[], ruedas = RUEDAS_POR_ANIO, porAnio = RUEDAS_POR_ANIO): number | null {
   const tramo = serie.slice(-(ruedas + 1)).filter((p) => p.cierre > 0);
   if (tramo.length < 21) return null;
   const r = tramo.slice(1).map((p, i) => d(p.cierre).div(tramo[i]!.cierre).ln());
   const media = r.reduce((s, x) => s.plus(x), d(0)).div(r.length);
   const varianza = r.reduce((s, x) => s.plus(x.minus(media).pow(2)), d(0)).div(r.length - 1);
-  return varianza.sqrt().mul(d(RUEDAS_POR_ANIO).sqrt()).toNumber();
+  return varianza.sqrt().mul(d(porAnio).sqrt()).toNumber();
 }
 
 /** Máxima caída desde un pico hasta el piso siguiente (con sus fechas), desde una fecha. null si nunca bajó. */
@@ -109,4 +110,67 @@ export function enDolares(serie: { fecha: FechaISO; cierre: number }[], mep: { f
 export function primaContraMep(implicito: Num, mep: Num): number | null {
   if (d(mep).lte(0) || d(implicito).lte(0)) return null;
   return d(implicito).div(mep).minus(1).toNumber();
+}
+
+/** La serie en pesos: cada cierre en dólares por el dólar de esa fecha (o el último anterior). Sin dólar previo, se saltea. */
+export function aPesos(serie: { fecha: FechaISO; cierre: number }[], dolar: { fecha: FechaISO; valor: number }[]): { fecha: FechaISO; cierre: number }[] {
+  const ordenado = [...dolar].filter((m) => m.valor > 0).sort((a, b) => a.fecha.localeCompare(b.fecha));
+  const salida: { fecha: FechaISO; cierre: number }[] = [];
+  let j = -1;
+  for (const p of serie) {
+    while (j + 1 < ordenado.length && ordenado[j + 1]!.fecha <= p.fecha) j++;
+    if (j < 0) continue;
+    salida.push({ fecha: p.fecha, cierre: d(p.cierre).mul(ordenado[j]!.valor).toNumber() });
+  }
+  return salida;
+}
+
+/**
+ * Inflación esperada entre dos fechas con las expectativas mensuales del REM: cada mes pesa por los días del período que
+ * caen en él, Π (1 + π_mes)^(días en el mes / días del mes) − 1. Para meses después del último dato, repite el último.
+ */
+export function inflacionEsperadaHasta(mensual: { mes: string; valor: number }[], desde: FechaISO, hasta: FechaISO): number | null {
+  const ordenado = [...mensual].sort((a, b) => a.mes.localeCompare(b.mes));
+  if (ordenado.length === 0 || hasta <= desde) return null;
+  let factor = UNO;
+  let fecha = desde;
+  while (fecha < hasta) {
+    const mes = fecha.slice(0, 7);
+    const [y, m] = mes.split("-").map(Number);
+    const diasDelMes = new Date(Date.UTC(y!, m!, 0)).getUTCDate();
+    const finDeMes = sumarDias(`${mes}-01`, diasDelMes);
+    const corte = finDeMes < hasta ? finDeMes : hasta;
+    const dias = diasEntre(fecha, corte);
+    const pi = ordenado.find((x) => x.mes === mes)?.valor ?? (mes > ordenado.at(-1)!.mes ? ordenado.at(-1)!.valor : null);
+    if (pi === null) return null;
+    factor = factor.mul(UNO.plus(pi).pow(d(dias).div(diasDelMes)));
+    fecha = corte;
+  }
+  return factor.minus(1).toNumber();
+}
+
+export type ResumenBono = {
+  /** Pagos por año (2 = semestral). */
+  pagosPorAnio: number;
+  /** Tasa del cupón vigente a la fecha y la máxima que llega a pagar (step-up). */
+  tasaHoy: number;
+  tasaMaxima: number;
+  /** Cuotas de amortización que faltan y desde cuándo. */
+  cuotasRestantes: number;
+  proximaAmortizacion: FechaISO | null;
+  vencimiento: FechaISO;
+};
+
+/** Lo que hay que saber de un bono para describirlo en una línea, sacado de su cronograma. */
+export function resumenBono(def: DefinicionBono, hoy: FechaISO): ResumenBono {
+  const vigente = [...def.cupones].filter((c) => c.desde <= hoy).at(-1) ?? def.cupones[0]!;
+  const amortizaciones = Object.keys(def.amortizaciones).filter((f) => f > hoy && (def.amortizaciones[f] ?? 0) > 0).sort();
+  return {
+    pagosPorAnio: def.frecuencia,
+    tasaHoy: vigente.tasaAnual,
+    tasaMaxima: Math.max(...def.cupones.map((c) => c.tasaAnual)),
+    cuotasRestantes: amortizaciones.length,
+    proximaAmortizacion: amortizaciones[0] ?? null,
+    vencimiento: def.pagos.at(-1)!,
+  };
 }

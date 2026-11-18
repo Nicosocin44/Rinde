@@ -25,6 +25,7 @@ const RUTAS = [
   "/calculadoras/tasas",
   "/calculadoras/inflacion",
   "/metas",
+  "/noticias",
   "/cartera",
   "/alertas",
   "/aprender",

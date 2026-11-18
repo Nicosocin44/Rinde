@@ -4,6 +4,7 @@ import { cargarFeriados } from "./servicios/feriados";
 import { armarPulso } from "./servicios/inicio";
 import { cargarMacro } from "./servicios/macro";
 import { cargarBonos, cargarCripto, cargarMercados } from "./servicios/mercados";
+import { cargarNoticias } from "./servicios/noticias";
 import { cargarPesos } from "./servicios/pesos";
 
 /**
@@ -19,6 +20,7 @@ export const obtenerBonos = cache(cargarBonos);
 export const obtenerMercados = cache(cargarMercados);
 export const obtenerCripto = cache(cargarCripto);
 export const obtenerFeriados = cache(cargarFeriados);
+export const obtenerNoticias = cache(cargarNoticias);
 
 export const obtenerPulso = cache(async () => {
   const [c, m, p] = await Promise.all([obtenerCotizaciones(), obtenerMacro(), obtenerPesos()]);

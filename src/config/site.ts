@@ -25,6 +25,7 @@ export const navPrincipal: NavItem[] = [
   { href: "/metas", label: "Metas" },
   { href: "/bonos", label: "Bonos" },
   { href: "/mercados", label: "Mercados" },
+  { href: "/noticias", label: "Noticias" },
   { href: "/calculadoras", label: "Calculadoras" },
 ];
 

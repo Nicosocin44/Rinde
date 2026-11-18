@@ -24,6 +24,8 @@ export const ar = {
     macro: [43200, 86400],
     feriados: [604800, 604800],
     historico: [86400, 86400],
+    /** Noticias: cada 5 min con el mercado abierto, cada 15 min fuera de hora. */
+    noticias: [300, 900],
   },
 
   /** Umbrales de frescura. */

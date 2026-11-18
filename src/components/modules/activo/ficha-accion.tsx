@@ -12,7 +12,7 @@ import type { FichaActivo } from "@/lib/data/servicios/activo";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
 import { BalancesEmpresa } from "./balances";
-import { SeguirActivo } from "./seguir";
+import { AvisoActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
 
@@ -98,7 +98,7 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
       <PageHeader
         eyebrow={<Ruta seccion={a.tipo === "cedear" ? "CEDEARs" : "Acciones"} href={a.tipo === "cedear" ? "/mercados" : "/mercados/acciones"} ticker={a.ticker} />}
         titulo={nombre}
-        acciones={a.precio ? <SeguirActivo ticker={a.ticker} nombre={nombre} precio={a.precio} moneda="ARS" /> : undefined}
+        acciones={a.precio ? <AvisoActivo ticker={a.ticker} nombre={nombre} precio={a.precio} moneda="ARS" /> : undefined}
         bajada={
           <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <ProviderMark activo={a.ticker} sigla={a.ticker.slice(0, 2)} tamano={32} />

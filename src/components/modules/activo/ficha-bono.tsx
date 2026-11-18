@@ -8,7 +8,7 @@ import { compactar, d, hoyAR, maximaCaida, rango, rendimientos, sumarDias, volat
 import type { FichaBono } from "@/lib/data/servicios/fichas";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { fechaCorta, numero, pesos, porcentaje } from "@/lib/format";
-import { SeguirActivo } from "./seguir";
+import { AvisoActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
 
@@ -47,7 +47,7 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
       <PageHeader
         eyebrow={<Ruta seccion="Bonos" href="/mercados/bonos" ticker={b.ticker} />}
         titulo={b.nombre}
-        acciones={<SeguirActivo ticker={b.ticker} nombre={b.nombre} precio={b.precioUsd} moneda="USD" />}
+        acciones={<AvisoActivo ticker={b.ticker} nombre={b.nombre} precio={b.precioUsd} moneda="USD" />}
         bajada={`Bono del Tesoro en dólares · ${ley} · vence el ${fechaCorta(b.vencimiento, true)}`}
         className="mb-8 lg:mb-12"
       />

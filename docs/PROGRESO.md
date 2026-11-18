@@ -142,7 +142,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 > Pedido de los fundadores: sacar de las pantallas las notas de fuente ("Fuente: ArgentinaDatos · CNV · data912 · actualizado…") y los rótulos "de ejemplo", que se veían hechos por IA. Se eligió la versión discreta.
 
 - **Las fuentes van en un solo lugar:** una línea en el pie del sitio (DolarAPI, ArgentinaDatos, BCRA, CNV, data912, CriptoYa y Binance, más Wikipedia y Wikidata para las descripciones) y /metodologia.
-- **El estado queda como un punto** (`EstadoDiscreto`) junto al dato demorado, del cierre o desactualizado. Al tocarlo dice "Demorado 20 min · 16:29" o "Cierre del 18 nov". Con el dato en vivo no aparece nada.
+- **El estado queda corto** (`EstadoDiscreto`): un punto y "En vivo", "Demorado 20 min · 16:29" o "Cierre del 18 nov". Primero lo dejamos solo como punto y no se entendía (corrección de los fundadores).
 - **Inicio:** sin "Alertas de ejemplo…", "Datos de ejemplo: una cartera inventada…" ni las notas de fuente de las escenas del dólar y de las tasas. La escena de confianza pasa a titularse "Todo sale de fuentes públicas."
 - **Fichas:** sin la línea "Fuente: Wikipedia (CC BY-SA 4.0)" ni "Armado con los datos de Wikidata": la atribución está en el pie.
 - `SourceNote` sigue en las 28 pantallas, pero solo dibuja el punto. CLAUDE.md (regla 2), DISENO.md y DATOS_Y_FORMULAS.md actualizados; el test e2e ahora verifica que no haya "Fuente:" en las páginas y que el pie tenga las fuentes.

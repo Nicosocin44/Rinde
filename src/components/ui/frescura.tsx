@@ -35,8 +35,8 @@ export function FreshnessBadge({ estado, asOf, className }: { estado: EstadoDato
 
 /**
  * Lo que queda al pie de cada dato. Desde el 18/11/2026 (pedido de los fundadores) las fuentes no se escriben en cada
- * pantalla: están en el pie del sitio y en /metodologia. Acá solo queda el estado, discreto: un punto que al tocarlo
- * dice si el dato está demorado o es del cierre, y de qué hora. `fuentes`, `metodologia` y `children` se mantienen para
+ * pantalla: están en el pie del sitio y en /metodologia. Acá solo queda el estado, corto: un punto y "En vivo",
+ * "Demorado 20 min · 16:29" o "Cierre del 18 nov". `fuentes`, `metodologia` y `children` se mantienen para
  * no cambiar cada pantalla, pero ya no se muestran.
  */
 export function SourceNote({
@@ -51,7 +51,7 @@ export function SourceNote({
   className?: string;
   children?: React.ReactNode;
 }) {
-  if (!estado || estado === "live") return null;
+  if (!estado) return null;
   return (
     <p className={cn("flex items-center", className)}>
       <EstadoDiscreto estado={estado} asOf={actualizado} />

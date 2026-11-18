@@ -26,6 +26,7 @@ export const CEDEARS: Record<string, { nombre: string; sector: string }> = {
   SPOT: { nombre: "Spotify", sector: "Comunicación" },
   DIS: { nombre: "Disney", sector: "Comunicación" },
   MELI: { nombre: "Mercado Libre", sector: "Consumo" },
+  NU: { nombre: "Nu Holdings (Nubank)", sector: "Finanzas" },
   GLOB: { nombre: "Globant", sector: "Tecnología" },
   KO: { nombre: "Coca-Cola", sector: "Consumo básico" },
   PEP: { nombre: "PepsiCo", sector: "Consumo básico" },

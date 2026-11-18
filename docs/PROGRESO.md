@@ -137,6 +137,49 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Opciones de GGAL, primera entrega (rama `opciones`, 18/11/2026)
+
+> Punto 9 de la lista de cambios pendientes. Pantalla nueva en **/mercados/opciones** (solapa "Opciones" de Mercados), con link desde la ficha de GGAL. Datos reales de data912.
+
+- **Cadena por vencimiento:** calls a la izquierda, puts a la derecha, la base en el medio. Compra, venta, último, volumen, volatilidad implícita y delta. Una línea marca dónde está el precio de GGAL; el lado de cada base que ya tiene valor intrínseco va sombreado. En el celular, calls o puts de a uno. Arranca en el vencimiento con más volumen.
+- **Volatilidad:** la implícita de la base más cercana al precio (promedio de call y put) contra la histórica de 20 y 60 ruedas, con una frase que la explica.
+- **Lanzamiento cubierto como tasa:** para cada call, la TNA si te ejercen, cuánto puede bajar GGAL y que igual te ejerzan, y el punto de equilibrio. Al lado, la caución, la LECAP y el plazo fijo de plazo parecido. Por defecto se ven las bases por debajo del precio; las de arriba, con un botón.
+- **Cálculos propios** (`src/lib/calculos/opciones.ts`, 20 tests): vencimientos (tercer viernes, o el hábil anterior), lectura de los símbolos, Black-Scholes, volatilidad implícita, delta y lanzamiento cubierto. Metodología en /metodologia#opciones.
+- **Validación:** se excluyen las series vencidas y las puntas cruzadas; la VI fuera de 5 %–300 % no se muestra; las puntas muy separadas se marcan; un lanzamiento con TNA fuera de ±300 % se descarta.
+
+### Decisiones de opciones para revisar
+
+1. **Las opciones van en Mercados (solapa "Opciones"), no en el menú de arriba.** También hay un link desde la ficha de GGAL.
+2. **Vencimiento: tercer viernes del mes, o el hábil anterior si es feriado.** Es la regla de BYMA que conocemos; conviene confirmarla con un broker.
+3. **Modelo Black-Scholes europeo, sin dividendos.** Las de BYMA son americanas; en puts con mucho valor intrínseco la VI es aproximada. Está dicho en la página y en la metodología.
+4. **Tasa del modelo:** la caución al plazo más parecido; si la caución no está al día, la LECAP más parecida. Sin tasa disponible, 0 % (y la página lo dice).
+5. **Lanzamiento cubierto con las puntas reales** (comprás la acción a la punta vendedora, vendés el call a la compradora) y días de la liquidación de hoy al cobro del ejercicio. Antes de comisiones: cambian mucho entre brokers.
+6. **No sumamos el lanzamiento cubierto al comparador de /pesos.** Tiene riesgo de precio (si GGAL cae debajo del punto de equilibrio, perdés), así que mezclarlo con plazo fijo y billeteras confundiría. Se compara en la página de opciones.
+7. **"Volumen" se muestra tal como lo da data912**, sin confirmar si son contratos o nominales.
+
+### Opciones, segunda y tercera entrega (misma rama, 18/11/2026)
+
+Opciones queda en tres solapas: **Cadena** (`/mercados/opciones`), **Tasas** (`/mercados/opciones/tasas`) y **Estrategias** (`/mercados/opciones/estrategias`). El vencimiento elegido se recuerda al pasar de una solapa a otra.
+
+- **Calculadora de estrategias:** siete armadas (compra de call o put, lanzamiento cubierto, spreads alcista y bajista, mariposa, cono) o una propia de hasta 6 patas. Las primas arrancan en las puntas de ahora y se pueden editar. Muestra lo que pagás o cobrás hoy, la ganancia y la pérdida máximas ("sin techo" o "sin piso"), los puntos de equilibrio y el gráfico de ganancia y pérdida al vencimiento y hoy (Black-Scholes), con el resultado en cada precio al pasar el dedo. Avisa cuando hay ventas de opciones (garantía y riesgo).
+- **Cajas:** para colocar o tomar pesos, con la tasa ya neta de comisión y cuántas cajas se pueden armar con las cantidades de las puntas.
+- **Comisión de cada persona:** un campo en Tasas y Estrategias (arranca en 0,5 %, se recuerda en su navegador). El lanzamiento cubierto ahora también la descuenta.
+- **Sonrisa de volatilidad:** gráfico de la VI por base, con puts por debajo del precio y calls por encima.
+- **Historial de primas:** `scripts/guardar-opciones.mjs` guarda cada día hábil a las 19 h (mismo workflow de GitHub que las tasas) compra, venta, último y volumen de cada serie de GGAL en `data/historico/opciones/`. La primera foto es del 18/11/2026; el gráfico de cada serie aparece desde la segunda rueda.
+- **Alertas de primas:** "Avisame de esta prima" en la solapa Cadena. Usa el sistema de alertas de siempre: `/api/precios` ahora entiende símbolos de opciones (GFGC5400DI → "Call GGAL 5.400 dic").
+- 35 tests de opciones (cajas, estrategias calculadas a mano, comisión, historial).
+
+**Decisiones para revisar (además de las de arriba):**
+8. **Comisión de referencia: 0,5 %** (comisión + derechos de mercado) sobre cada operación, editable. Es un valor típico, no el de un broker en particular.
+9. **Las cajas se filtran entre la mitad y el doble de la caución** al plazo más parecido. Sin ese filtro aparecían "préstamos al 0,3 % anual" que salían de puntas sueltas de 1 o 2 contratos en bases lejanas.
+10. **La sonrisa usa solo opciones fuera del dinero.** Los puts muy adentro del dinero daban VI de 200 %: el modelo europeo no capta el ejercicio anticipado de las americanas.
+11. **El historial se guarda con el mismo commit automático diario que las tasas** ("Tasas y opciones del…"). Si falla la parte de opciones, las tasas igual se guardan. Los feriados (sin volumen) no se guardan.
+12. **Las opciones no se pueden "Seguir"** (favoritos): la lista de Siguiendo lleva a la ficha de cada activo y las opciones no tienen ficha. Sí tienen alertas.
+
+**Lo que sigue:** otros subyacentes (YPF, PAMP: alcanza con sumarlos en `data/ar/opciones.ts` y en `scripts/guardar-opciones.mjs`), cuando lo decidan.
+
+---
+
 ## Primera tanda de ideas (rama `primera-tanda`, 18/11/2026)
 
 > Ideas de Benja para que la gente vuelva: favoritos y alertas desde la ficha, "¿qué hubiera pasado si…?", compartir el avance de una meta y empezar a guardar el historial de tasas.
@@ -321,6 +364,8 @@ Todo funciona con **datos reales** salvo donde se indica. Cada número muestra s
 | CriptoYa | `/api/bancostodos`, `/api/{usdt,usdc,btc,eth}/{ars,usd}/1` | Sí | Precios finales con comisiones. 9 de 22 bancos tienen cotizaciones de hace meses: se excluyen. |
 | BCRA v4.0 | `/estadisticas/v4.0/monetarias` | Sí | Catálogo y series OK. |
 | Binance | `/api/v3/klines` | Sí | Histórico semanal de BTC y ETH (para valuar carteras). |
+| data912 | `/live/arg_options` | Sí (18/11/2026) | 518 opciones de BYMA; 129 de GGAL (prefijo GFG). Puntas con cantidades, último, volumen y variación. **Sin griegas**: las calculamos nosotros. Con una base de 5 cifras el mes queda en una letra (GFGC10300D). |
+| data912 | `/eod/option_chain/GGAL` | Sí, pero no sirve | Es la cadena de la GGAL de Nueva York (bases en US$), no la local. No la usamos. |
 
 ---
 

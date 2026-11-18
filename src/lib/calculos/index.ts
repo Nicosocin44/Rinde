@@ -13,4 +13,5 @@ export * from "./cartera";
 export * from "./metas";
 export * from "./activo";
 export * from "./que-hubiera";
+export * from "./opciones";
 export { resolverTasa } from "./raices";

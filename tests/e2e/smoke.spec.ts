@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const RUTAS = ["/", "/dolar", "/dolar/comprar", "/pesos", "/pesos/lecaps", "/calculadoras/interes-compuesto", "/bonos", "/mercados", "/noticias", "/metodologia", "/activo/AAPL", "/activo/GGAL", "/activo/AL30", "/activo/BTC", "/activo/USDT", "/calculadoras/que-hubiera-pasado", "/pesos/plazo-fijo"];
+const RUTAS = ["/", "/dolar", "/dolar/comprar", "/pesos", "/pesos/lecaps", "/calculadoras/interes-compuesto", "/bonos", "/mercados", "/mercados/opciones", "/mercados/opciones/tasas", "/mercados/opciones/estrategias", "/noticias", "/metodologia", "/activo/AAPL", "/activo/GGAL", "/activo/AL30", "/activo/BTC", "/activo/USDT", "/calculadoras/que-hubiera-pasado", "/pesos/plazo-fijo"];
 
 for (const ruta of RUTAS) {
   test(`smoke ${ruta}: carga sin errores y con fuente visible`, async ({ page }) => {

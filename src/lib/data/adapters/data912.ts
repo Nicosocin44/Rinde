@@ -1,6 +1,6 @@
 import { traerJson } from "../http";
 import { revalidar } from "../freshness";
-import { d912CclSchema, d912HistoricoSchema, d912MepSchema, d912PanelSchema } from "../schemas";
+import { d912CclSchema, d912HistoricoSchema, d912MepSchema, d912OpcionesSchema, d912PanelSchema } from "../schemas";
 
 /**
  * data912: precios de BYMA con demora (letras, bonos, ONs, CEDEARs, acciones). Sin autenticación.
@@ -14,6 +14,11 @@ export type Panel = "arg_notes" | "arg_bonds" | "arg_corp" | "arg_cedears" | "ar
 
 export function panel(nombre: Panel) {
   return traerJson(`${BASE}/live/${nombre}`, d912PanelSchema, { fuente: FUENTE, revalidate: revalidar("mercado") });
+}
+
+/** Opciones de BYMA con demora: puntas (precio y cantidad), último, volumen y variación. Sin griegas: las calculamos nosotros. */
+export function opciones() {
+  return traerJson(`${BASE}/live/arg_options`, d912OpcionesSchema, { fuente: FUENTE, revalidate: revalidar("mercado") });
 }
 
 /** MEP implícito por activo (bonos y CEDEARs), con precios en ARS y USD. */

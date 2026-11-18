@@ -1,4 +1,5 @@
-# Guarda una foto diaria de las tasas (plazo fijo por banco, billeteras y LECAPs) en data/historico/tasas/.
+# Guarda una foto diaria de las tasas (plazo fijo por banco, billeteras y LECAPs) en data/historico/tasas/
+# y el cierre de las opciones de GGAL en data/historico/opciones/.
 # Nadie publica el historial de la tasa de cada banco: cada día que no se guarda se pierde.
 # Corre de lunes a viernes a las 19:00 de Argentina (22:00 UTC) y se puede disparar a mano desde la pestaña Actions.
 name: Tasas del día
@@ -26,15 +27,19 @@ jobs:
           node-version: 22
       - name: Guardar las tasas de hoy
         run: node scripts/guardar-tasas.mjs
+      - name: Guardar las opciones de hoy
+        # Si falla, igual se suben las tasas.
+        continue-on-error: true
+        run: node scripts/guardar-opciones.mjs
       - name: Subir el archivo si cambió
         run: |
-          if git diff --quiet -- data/historico/tasas; then
+          if [ -z "$(git status --porcelain -- data/historico)" ]; then
             echo "Sin cambios"
             exit 0
           fi
           git config user.name "rinde-datos"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/historico/tasas
-          git commit -m "Tasas del $(TZ=America/Argentina/Buenos_Aires date +%d/%m/%Y) (automático)"
+          git add data/historico
+          git commit -m "Tasas y opciones del $(TZ=America/Argentina/Buenos_Aires date +%d/%m/%Y) (automático)"
           git pull --rebase --autostash
           git push

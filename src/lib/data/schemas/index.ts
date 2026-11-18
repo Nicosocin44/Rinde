@@ -119,6 +119,21 @@ export const d912PanelSchema = z.array(
   }),
 );
 
+/** Opciones de BYMA (/live/arg_options). Verificado el 18/11/2026: precios por acción, con cantidades en cada punta. */
+export const d912OpcionesSchema = z.array(
+  z.object({
+    symbol: z.string(),
+    q_bid: numNulo,
+    px_bid: numNulo,
+    px_ask: numNulo,
+    q_ask: numNulo,
+    v: numNulo,
+    q_op: numNulo,
+    c: numNulo,
+    pct_change: numNulo,
+  }),
+);
+
 export const d912MepSchema = z.array(
   z.object({
     ticker: z.string(),

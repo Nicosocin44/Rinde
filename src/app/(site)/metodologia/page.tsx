@@ -164,6 +164,67 @@ Cobro al vencimiento = (monto / (P / 100)) × VF / 100`}</Formula>
     ),
   },
   {
+    id: "opciones",
+    titulo: "Opciones de GGAL",
+    contenido: (
+      <>
+        <p>
+          Precios de BYMA con demora (data912): mejores puntas de compra y venta, último precio y volumen de cada serie. El símbolo dice todo: GFGC5400DI es un call (C; V es put) de GGAL con base $ 5.400 que vence en diciembre.
+          Las series vencen el tercer viernes del mes; si es feriado, el hábil anterior. Cada contrato son 100 acciones y las primas están por acción.
+        </p>
+        <p>La fuente no publica griegas para las opciones locales: las calculamos nosotros con Black-Scholes.</p>
+        <Formula>{`Precio de referencia = (compra + venta) / 2   (o el último, si operó hoy y no hay puntas)
+Volatilidad implícita = la σ con la que Black-Scholes da el precio de referencia
+Delta call = N(d1)      Delta put = N(d1) − 1
+d1 = (ln(S / K) + (r + σ² / 2) × t) / (σ × √t)
+S = punto medio de GGAL · K = base · t = días al vencimiento / 365 · r = ln(1 + TEA de la caución al plazo más parecido)`}</Formula>
+        <ul>
+          <li>Es un modelo para opciones europeas y sin dividendos. Las de BYMA son americanas: en los puts con mucho valor intrínseco la volatilidad implícita es aproximada.</li>
+          <li>Excluimos las series vencidas y las puntas cruzadas (compra mayor que venta). Una volatilidad implícita fuera del rango de 5 % a 300 % anual no se muestra.</li>
+          <li>Si la compra y la venta están separadas más de un 25 % del punto medio, la volatilidad implícita se marca como aproximada.</li>
+          <li>Volatilidad histórica: el desvío de las variaciones diarias de las últimas 20 y 60 ruedas, anualizado con 252 ruedas.</li>
+        </ul>
+        <p>
+          <strong>Lanzamiento cubierto.</strong> Comprás la acción a la mejor punta vendedora (S) y vendés el call a la mejor punta compradora (C). Si te ejercen, cobrás la base (K). Los días van de la liquidación de hoy (24 h) al
+          cobro del ejercicio (vencimiento + 1 día hábil).
+        </p>
+        <Formula>{`Ponés por acción = S − C
+Rendimiento directo = K / (S − C) − 1
+TNA = rendimiento directo × 365 / días
+Colchón = 1 − K / S   (cuánto puede bajar la acción y que igual te ejerzan)
+Punto de equilibrio = S − C`}</Formula>
+        <p>
+          Con c = tu comisión más derechos de mercado (la ponés vos; arranca en 0,5 %), que se cobra al comprar la acción, al vender el call y al entregar las acciones en el ejercicio: ponés S × (1 + c) − C × (1 − c) y cobrás K
+          × (1 − c). Sin impuestos ni dividendos. Lo comparamos con la caución, la LECAP y el plazo fijo de plazo más parecido, ordenados solo por TNA. Una tasa fuera de ±300 % sale de una punta suelta y se descarta.
+        </p>
+        <p>
+          <strong>Cajas.</strong> Call comprado y put vendido en la base baja (K1), call vendido y put comprado en la alta (K2). Al vencimiento valen siempre K2 − K1. Para colocar pesos comprás la caja (pagás las puntas vendedoras de
+          lo que comprás y cobrás las compradoras de lo que vendés); para tomar, la vendés.
+        </p>
+        <Formula>{`Colocar: ponés hoy = Call K1 (venta) + Put K2 (venta) − Call K2 (compra) − Put K1 (compra) + c × (suma de las cuatro primas)
+Tomar: recibís hoy = Call K1 (compra) + Put K2 (compra) − Call K2 (venta) − Put K1 (venta) − c × (suma de las cuatro primas)
+TNA = ((K2 − K1) / hoy − 1) × 365 / días
+Cajas disponibles = la menor cantidad entre las cuatro puntas que usás`}</Formula>
+        <p>
+          Una caja es un préstamo sintético: mostramos solo las que dan entre la mitad y el doble de la tasa de caución al plazo más parecido (sin caución, entre 5 % y 150 % TNA). Fuera de esa banda son puntas sueltas de bases
+          lejanas. No incluye los costos del ejercicio.
+        </p>
+        <p>
+          <strong>Calculadora de estrategias.</strong> Cada pata es una compra o venta de un call, un put o la acción. Hoy pagás Σ (± precio × acciones) + c × Σ (precio × acciones). Al vencimiento, un call vale máx(0, S − K) y un
+          put, máx(0, K − S). El resultado es lineal entre bases: la ganancia y la pérdida máximas salen de mirarlo en 0, en cada base y en la pendiente después de la última base (si sigue subiendo o bajando, no tiene techo o piso).
+          Los puntos de equilibrio salen de interpolar entre bases. La curva de hoy valúa cada opción con Black-Scholes y su volatilidad implícita.
+        </p>
+        <p>
+          <strong>Sonrisa de volatilidad.</strong> La volatilidad implícita de los puts por debajo del precio y de los calls por encima: las que todavía no tienen valor intrínseco, donde el modelo europeo es más confiable.
+        </p>
+        <p>
+          <strong>Historial y alertas.</strong> data912 no publica la historia de las opciones locales: guardamos una foto de cada serie (compra, venta, último y volumen) cada día hábil a las 19 h, desde el 18/11/2026. La prima
+          de cada día es el punto medio de las puntas o, si no había, el último si operó. Las alertas de una prima miran ese mismo precio.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "simulador",
     titulo: "Simulador",
     contenido: (

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { site } from "@/config/site";
-import { CONCEPTOS, type HechosEmpresa } from "@/lib/calculos/balances";
+import { CONCEPTOS_USADOS, type HechosEmpresa } from "@/lib/calculos/balances";
 import { traerJson } from "../http";
 
 /**
@@ -30,7 +30,8 @@ const hechoSchema = z.object({
   filed: z.string(),
 });
 const conceptoSchema = z.object({ units: z.record(z.string(), z.array(hechoSchema)) });
-const crudoSchema = z.object({ cik: z.number(), entityName: z.string(), facts: z.record(z.string(), z.record(z.string(), z.unknown())) });
+// El CIK a veces viene como número y a veces como texto con ceros adelante (Nu, verificado el 18/11/2026).
+const crudoSchema = z.object({ cik: z.union([z.number(), z.string()]).transform(Number), entityName: z.string(), facts: z.record(z.string(), z.record(z.string(), z.unknown())) });
 
 /**
  * Los hechos XBRL de una empresa, solo de los conceptos que usamos (validados uno por uno). La respuesta completa pesa
@@ -40,7 +41,7 @@ export async function hechos(cik: number): Promise<HechosEmpresa> {
   const url = `https://data.sec.gov/api/xbrl/companyfacts/CIK${String(cik).padStart(10, "0")}.json`;
   const crudo = await traerJson(url, crudoSchema, { fuente: FUENTE, revalidate: 0, sinCache: true, timeoutMs: 15_000, headers });
   const facts: HechosEmpresa["facts"] = {};
-  for (const [tax, concepto] of Object.values(CONCEPTOS).flat()) {
+  for (const [tax, concepto] of CONCEPTOS_USADOS) {
     const valor = crudo.facts[tax]?.[concepto];
     if (valor === undefined) continue;
     const r = conceptoSchema.safeParse(valor);

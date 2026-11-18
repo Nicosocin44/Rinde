@@ -234,7 +234,8 @@ function EsperaBalances() {
           <Skeleton key={i} className="h-[104px]" />
         ))}
       </div>
-      <Skeleton className="h-52" />
+      <Skeleton className="mt-6 h-72" />
+      <Skeleton className="mt-6 h-[420px]" />
     </div>
   );
 }

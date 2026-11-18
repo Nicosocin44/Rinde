@@ -32,6 +32,7 @@ const BASE: ItemBusqueda[] = [
   { id: "s-simulador", titulo: "Simulador: pongo $X a N días", grupo: "Secciones", href: "/pesos/simulador" },
   { id: "s-bonos", titulo: "Bonos soberanos y ONs", grupo: "Secciones", href: "/bonos", claves: "bonares globales tir" },
   { id: "s-mercados", titulo: "CEDEARs, acciones y cripto", grupo: "Secciones", href: "/mercados" },
+  { id: "s-noticias", titulo: "Noticias del mercado", grupo: "Secciones", href: "/noticias", claves: "diarios medios hoy ultimo" },
   { id: "s-cartera", titulo: "Mi cartera", grupo: "Secciones", href: "/cartera", claves: "portfolio rendimiento" },
   { id: "s-alertas", titulo: "Alertas", grupo: "Secciones", href: "/alertas" },
   { id: "s-metas", titulo: "Mis metas de ahorro", detalle: "Un viaje, un auto, un depto", grupo: "Secciones", href: "/metas", claves: "objetivo ahorrar plan" },

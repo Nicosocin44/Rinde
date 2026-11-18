@@ -54,3 +54,27 @@ export async function traerJson<S extends z.ZodType>(url: string, schema: S, opc
   const motivo = ultimoError instanceof Error ? (ultimoError.name === "TimeoutError" ? "no respondió a tiempo" : ultimoError.message) : "error desconocido";
   throw new ErrorDeFuente(fuente, url, motivo);
 }
+
+/**
+ * Igual que `traerJson`, pero devuelve el texto crudo (RSS/XML). La validación la hace quien lo parsea.
+ */
+export async function traerTexto(url: string, opciones: Opciones): Promise<string> {
+  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1 } = opciones;
+  let ultimoError: unknown;
+  for (let intento = 0; intento <= reintentos; intento++) {
+    try {
+      const respuesta = await fetch(url, {
+        headers: { accept: "application/rss+xml, application/xml, text/xml", "user-agent": "Mozilla/5.0 (compatible; RindeNoticias/1.0)" },
+        signal: AbortSignal.timeout(timeoutMs),
+        next: { revalidate },
+      });
+      if (!respuesta.ok) throw new ErrorDeFuente(fuente, url, `respondió ${respuesta.status}`);
+      return await respuesta.text();
+    } catch (error) {
+      ultimoError = error;
+    }
+  }
+  if (ultimoError instanceof ErrorDeFuente) throw ultimoError;
+  const motivo = ultimoError instanceof Error ? (ultimoError.name === "TimeoutError" ? "no respondió a tiempo" : ultimoError.message) : "error desconocido";
+  throw new ErrorDeFuente(fuente, url, motivo);
+}

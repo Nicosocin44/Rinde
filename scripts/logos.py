@@ -7,7 +7,8 @@ Genera src/config/logos.ts con la lista de los que existen.
 
 Al final suma los logos manuales de assets/logos-fuente/ (ver scripts/logos_manuales.py), que tienen prioridad.
 
-uso: python scripts/logos.py
+uso: python scripts/logos.py            (todo)
+     python scripts/logos.py medios     (solo un grupo; el resto queda como está)
 """
 import io
 import json
@@ -81,6 +82,11 @@ RECORTE = {
     "activos/AMD": (0.79, 0, 1, 1), "activos/BA": (0, 0, 0.17, 1), "activos/COME": (0, 0, 0.42, 1),
 }
 
+MEDIOS = {
+    "infobae": "infobae.com", "lanacion": "lanacion.com.ar", "ambito": "ambito.com", "cronista": "cronista.com",
+    "iprofesional": "iprofesional.com", "bloomberglinea": "bloomberglinea.com",
+}
+
 RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "public" / "logos"
 FUENTE_MANUAL = RAIZ / "assets" / "logos-fuente"
@@ -131,12 +137,17 @@ def bajar(dominio: str) -> Image.Image | None:
     return None
 
 
-def main() -> None:
+def main(grupos: list[str]) -> None:
+    """`grupos` limita qué se vuelve a bajar (ej. solo "medios"); los demás se toman de lo que ya está en public/logos/."""
     SALIDA.mkdir(parents=True, exist_ok=True)
     cache: dict[str, Image.Image | None] = {}
-    hay: dict[str, list[str]] = {"proveedores": [], "activos": []}
-    for grupo, mapa in (("proveedores", PROVEEDORES), ("activos", ACTIVOS)):
+    todos = {"proveedores": PROVEEDORES, "activos": ACTIVOS, "medios": MEDIOS}
+    hay: dict[str, list[str]] = {g: [] for g in todos}
+    for grupo, mapa in todos.items():
         (SALIDA / grupo).mkdir(exist_ok=True)
+        if grupos and grupo not in grupos:
+            hay[grupo] = [f.stem for f in (SALIDA / grupo).glob("*.png")]
+            continue
         for clave, dominio in mapa.items():
             if dominio not in cache:
                 cache[dominio] = bajar(dominio)
@@ -158,9 +169,12 @@ def main() -> None:
         " * Si un id no está acá, se muestra el monograma.\n */\n"
         f"export const LOGOS_PROVEEDORES = new Set<string>({json.dumps(sorted(hay['proveedores']))});\n"
         f"export const LOGOS_ACTIVOS = new Set<string>({json.dumps(sorted(hay['activos']))});\n"
+        f"export const LOGOS_MEDIOS = new Set<string>({json.dumps(sorted(hay['medios']))});\n"
     )
     (RAIZ / "src" / "config" / "logos.ts").write_text(ts, encoding="utf-8")
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    main(sys.argv[1:])

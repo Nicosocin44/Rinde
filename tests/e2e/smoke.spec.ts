@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const RUTAS = ["/", "/dolar", "/dolar/comprar", "/pesos", "/pesos/lecaps", "/calculadoras/interes-compuesto", "/bonos", "/mercados", "/metodologia"];
+const RUTAS = ["/", "/dolar", "/dolar/comprar", "/pesos", "/pesos/lecaps", "/calculadoras/interes-compuesto", "/bonos", "/mercados", "/noticias", "/metodologia"];
 
 for (const ruta of RUTAS) {
   test(`smoke ${ruta}: carga sin errores y con fuente visible`, async ({ page }) => {

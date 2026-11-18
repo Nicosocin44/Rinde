@@ -94,6 +94,29 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
   - **Para revisar:** son los íconos oficiales de cada sitio, usados para identificar a cada empresa. Antes de lanzar conviene confirmar que no hay problema de marcas.
 - **7. Sin atajos de teclado a la vista:** se sacaron el "⌘K" de la barra, el "esc" y la línea "↑↓ para moverte / ↵ para abrir" del buscador. El teclado sigue funcionando para quien lo use.
 
+### Noticias (etapa 1, 17/11/2026, rama `noticias`)
+
+**Qué es:** una página nueva, **/noticias**, con las noticias económicas y financieras de los principales medios.
+- La noticia más importante del momento va destacada arriba: la que más medios cubren y cuyo título habla de un mercado. Las notas de rutina ("a cuánto cotiza hoy") no compiten por ese lugar.
+- Debajo, todo por día y hora, con el logo del medio, a qué mercado pertenece y qué empresas menciona.
+- Cuando varios medios cuentan lo mismo, se muestra una sola vez con "También en…".
+- Filtro por mercado: Dólar, Tasas y pesos, Bonos y deuda, Acciones y CEDEARs, Cripto y Economía.
+- **Por decisión de los fundadores, no hay noticias en el Inicio**, y la página se llama "Noticias", no "Último momento".
+
+**Medios:** Infobae, La Nación, Ámbito, El Cronista, iProfesional y Bloomberg Línea (RSS públicos, verificados el 17/11/2026, todos respondieron).
+- Se actualiza cada 5 minutos con el mercado abierto y cada 15 fuera de hora.
+- Si un medio falla, se muestran los demás y se avisa cuál no respondió.
+
+**Cómo funciona:**
+- La clasificación por mercado, la detección de empresas y la agrupación de duplicados están en `src/lib/noticias/` y tienen 13 tests.
+- Una nota que solo nombra una empresa al pasar no entra.
+
+**Decisiones para revisar:**
+1. **Seeking Alpha no se usa:** su feed dice expresamente que es solo para uso personal y prohíbe publicarlo. MarketWatch y CNBC tampoco, por la misma razón. Para noticias internacionales en inglés hace falta una licencia o un servicio pago (Finnhub, Marketaux).
+2. **Bancos argentinos:** ninguno publica sus informes de research en un formato que se pueda tomar automáticamente. Se pueden sumar si se consigue acceso.
+3. **BCRA, CNV e INDEC:** no tienen RSS. Los comunicados del BCRA y los hechos relevantes de la CNV necesitan su propio adapter (etapa siguiente).
+4. **Qué mostramos de cada nota:** solo el título, un extracto de hasta 220 caracteres que el medio publica en su feed, la hora y el link. La nota completa queda en el sitio del medio. Conviene confirmarlo con un abogado antes de lanzar.
+
 ### Lo que falta del rediseño
 
 - Rediseñar el cuerpo de cada página (cifra héroe, tablas y gráficos) con la misma profundidad que la home, empezando por /dolar.

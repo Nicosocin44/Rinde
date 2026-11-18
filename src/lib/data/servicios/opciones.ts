@@ -4,7 +4,6 @@ import {
   diasEntre,
   fechaLiquidacion,
   hoyAR,
-  lanzamientoCubierto,
   MESES_OPCION,
   parsearSimbolo,
   sumarHabiles,
@@ -19,7 +18,7 @@ import {
 import * as d912 from "../adapters/data912";
 import { conRespaldo } from "../cache";
 import { mercadoAbierto } from "../freshness";
-import { FUENTES, type CadenaOpciones, type ComparableTasa, type Excluido, type FilaLanzamiento, type FilaOpciones, type LadoOpcion, type VencimientoOpciones } from "../types";
+import { FUENTES, type CadenaOpciones, type ComparableTasa, type Excluido, type FilaOpciones, type LadoOpcion, type VencimientoOpciones } from "../types";
 import { cargarFeriados } from "./feriados";
 import { cargarPesos, type DatosPesos } from "./pesos";
 import type { z } from "zod";
@@ -32,8 +31,6 @@ type Tasa = { nombre: string; tna: number; tea: number };
 const BANDA_VI: [number, number] = [0.05, 3];
 /** Puntas con una diferencia mayor a esto (sobre el punto medio) se marcan como abiertas. */
 const PUNTAS_ABIERTAS = 0.25;
-/** Un lanzamiento con una TNA fuera de ±300 % sale de una punta suelta: se descarta. */
-const TNA_LANZAMIENTO_MAX = 3;
 
 const positivo = (x: number | null | undefined) => (x && x > 0 ? x : null);
 const codigoDeFecha = (fecha: string) => Object.keys(MESES_OPCION).find((k) => MESES_OPCION[k] === Number(fecha.slice(5, 7))) ?? fecha.slice(5, 7);
@@ -42,7 +39,8 @@ export type Subyacente = { precio: number; compra: number | null; venta: number 
 
 /**
  * Arma la cadena de opciones de un subyacente: agrupa por vencimiento y base, descarta las vencidas y las puntas
- * cruzadas, y calcula volatilidad implícita, delta y el lanzamiento cubierto de cada call.
+ * cruzadas, y calcula volatilidad implícita y delta. Las tasas (lanzamiento cubierto, cajas) se arman en la pantalla,
+ * con la comisión que elija cada persona (src/lib/opciones/tasas.ts).
  * `tasa(dias)` devuelve la tasa en pesos para ese plazo (la usa el modelo); null = 0 %.
  */
 export function normalizarOpciones(p: {
@@ -115,7 +113,6 @@ export function normalizarOpciones(p: {
   }
 
   const conDatos = (l: LadoOpcion | null) => !!l && (l.compra !== null || l.venta !== null || l.ultimo !== null);
-  const precioCompraAccion = sv ?? p.subyacente.precio;
 
   const vencimientos = [...porFecha.entries()]
     .map(([fecha, mapa]) => {
@@ -125,29 +122,6 @@ export function normalizarOpciones(p: {
       const conVi = filas.filter((f) => f.call?.vi != null || f.put?.vi != null);
       const cercana = conVi.reduce<FilaOpciones | null>((m, f) => (!m || Math.abs(f.base - s) < Math.abs(m.base - s) ? f : m), null);
       const vis = cercana ? [cercana.call?.vi, cercana.put?.vi].filter((x): x is number => x != null) : [];
-      const lanzamientos: FilaLanzamiento[] = [];
-      for (const f of filas) {
-        const prima = f.call?.compra;
-        if (!f.call || !prima) continue;
-        const l = lanzamientoCubierto(precioCompraAccion, prima, f.base, diasCobro);
-        if (!l) continue;
-        if (l.tna.abs().gt(TNA_LANZAMIENTO_MAX)) {
-          excluidos.push({ id: f.call.simbolo, reason: "Lanzamiento cubierto con una tasa fuera de rango" });
-          continue;
-        }
-        lanzamientos.push({
-          simbolo: f.call.simbolo,
-          base: f.base,
-          prima,
-          inversion: l.inversion.toNumber(),
-          directo: l.directo.toNumber(),
-          tna: l.tna.toNumber(),
-          tea: l.tea.toNumber(),
-          colchon: l.colchon.toNumber(),
-          equilibrio: l.equilibrio.toNumber(),
-          caidaEquilibrio: l.caidaEquilibrio.toNumber(),
-        });
-      }
       return {
         codigo: codigoDeFecha(fecha),
         fecha,
@@ -157,7 +131,6 @@ export function normalizarOpciones(p: {
         volumen: filas.reduce((t, f) => t + (f.call?.volumen ?? 0) + (f.put?.volumen ?? 0), 0),
         baseCercana: cercana?.base ?? null,
         viCercana: vis.length ? vis.reduce((a, b) => a + b, 0) / vis.length : null,
-        lanzamientos,
         tasaModelo: p.tasa(dias),
       };
     })

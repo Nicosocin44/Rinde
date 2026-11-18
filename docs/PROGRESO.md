@@ -157,7 +157,26 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 6. **No sumamos el lanzamiento cubierto al comparador de /pesos.** Tiene riesgo de precio (si GGAL cae debajo del punto de equilibrio, perdés), así que mezclarlo con plazo fijo y billeteras confundiría. Se compara en la página de opciones.
 7. **"Volumen" se muestra tal como lo da data912**, sin confirmar si son contratos o nominales.
 
-**Lo que sigue (segunda y tercera entrega):** calculadora de estrategias con gráfico de ganancia y pérdida, cajas (tasa sin riesgo de precio), sonrisa de volatilidad, alertas de primas, otros subyacentes (YPF, PAMP: alcanza con sumarlos en `data/ar/opciones.ts`) e historial de primas (data912 no lo tiene: hay que guardarlo).
+### Opciones, segunda y tercera entrega (misma rama, 18/11/2026)
+
+Opciones queda en tres solapas: **Cadena** (`/mercados/opciones`), **Tasas** (`/mercados/opciones/tasas`) y **Estrategias** (`/mercados/opciones/estrategias`). El vencimiento elegido se recuerda al pasar de una solapa a otra.
+
+- **Calculadora de estrategias:** siete armadas (compra de call o put, lanzamiento cubierto, spreads alcista y bajista, mariposa, cono) o una propia de hasta 6 patas. Las primas arrancan en las puntas de ahora y se pueden editar. Muestra lo que pagás o cobrás hoy, la ganancia y la pérdida máximas ("sin techo" o "sin piso"), los puntos de equilibrio y el gráfico de ganancia y pérdida al vencimiento y hoy (Black-Scholes), con el resultado en cada precio al pasar el dedo. Avisa cuando hay ventas de opciones (garantía y riesgo).
+- **Cajas:** para colocar o tomar pesos, con la tasa ya neta de comisión y cuántas cajas se pueden armar con las cantidades de las puntas.
+- **Comisión de cada persona:** un campo en Tasas y Estrategias (arranca en 0,5 %, se recuerda en su navegador). El lanzamiento cubierto ahora también la descuenta.
+- **Sonrisa de volatilidad:** gráfico de la VI por base, con puts por debajo del precio y calls por encima.
+- **Historial de primas:** `scripts/guardar-opciones.mjs` guarda cada día hábil a las 19 h (mismo workflow de GitHub que las tasas) compra, venta, último y volumen de cada serie de GGAL en `data/historico/opciones/`. La primera foto es del 18/11/2026; el gráfico de cada serie aparece desde la segunda rueda.
+- **Alertas de primas:** "Avisame de esta prima" en la solapa Cadena. Usa el sistema de alertas de siempre: `/api/precios` ahora entiende símbolos de opciones (GFGC5400DI → "Call GGAL 5.400 dic").
+- 35 tests de opciones (cajas, estrategias calculadas a mano, comisión, historial).
+
+**Decisiones para revisar (además de las de arriba):**
+8. **Comisión de referencia: 0,5 %** (comisión + derechos de mercado) sobre cada operación, editable. Es un valor típico, no el de un broker en particular.
+9. **Las cajas se filtran entre la mitad y el doble de la caución** al plazo más parecido. Sin ese filtro aparecían "préstamos al 0,3 % anual" que salían de puntas sueltas de 1 o 2 contratos en bases lejanas.
+10. **La sonrisa usa solo opciones fuera del dinero.** Los puts muy adentro del dinero daban VI de 200 %: el modelo europeo no capta el ejercicio anticipado de las americanas.
+11. **El historial se guarda con el mismo commit automático diario que las tasas** ("Tasas y opciones del…"). Si falla la parte de opciones, las tasas igual se guardan. Los feriados (sin volumen) no se guardan.
+12. **Las opciones no se pueden "Seguir"** (favoritos): la lista de Siguiendo lleva a la ficha de cada activo y las opciones no tienen ficha. Sí tienen alertas.
+
+**Lo que sigue:** otros subyacentes (YPF, PAMP: alcanza con sumarlos en `data/ar/opciones.ts` y en `scripts/guardar-opciones.mjs`), cuando lo decidan.
 
 ---
 

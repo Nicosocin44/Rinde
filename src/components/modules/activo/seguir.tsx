@@ -86,7 +86,8 @@ export function SeguirActivo({ ticker, nombre, precio, moneda }: Props) {
   );
 }
 
-function FormAviso({ ticker, nombre, precio, moneda, onListo }: Props & { onListo: (a: Alerta) => void }) {
+/** Formulario de una alerta de precio (lo usan las fichas y las opciones). */
+export function FormAviso({ ticker, nombre, precio, moneda, onListo }: Props & { onListo: (a: Alerta) => void }) {
   const decimales = moneda === "USD" || precio < 1000 ? 2 : 0;
   const redondear = (x: number) => Number(x.toFixed(decimales));
   const [condicion, setCondicion] = useState<"menor" | "mayor">("menor");

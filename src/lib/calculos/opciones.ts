@@ -173,16 +173,18 @@ export type LanzamientoCubierto = {
  * Comprás la acción y vendés un call. Si al vencimiento la acción está por encima de la base, te ejercen:
  * entregás la acción a la base y la cuenta queda cerrada, como una colocación a tasa.
  * Ej.: acción $4.720, call base $4.400 cobrado a $480, 31 días → inversión $4.240, directo 3,77 %, TNA 44,4 %.
- * Antes de comisiones, derechos de mercado e impuestos.
+ * `comision` (fracción, comisión + derechos de mercado) se cobra al comprar la acción, al vender el call y al
+ * entregar la acción en el ejercicio: inversión = S × (1 + c) − C × (1 − c); cobro = K × (1 − c). Sin impuestos.
  */
-export function lanzamientoCubierto(precioAccion: Num, prima: Num, base: Num, dias: number): LanzamientoCubierto | null {
+export function lanzamientoCubierto(precioAccion: Num, prima: Num, base: Num, dias: number, comision: Num = 0): LanzamientoCubierto | null {
   const s = d(precioAccion);
   const c = d(prima);
   const k = d(base);
-  if (dias <= 0 || s.lte(0) || c.lte(0) || k.lte(0)) return null;
-  const inversion = s.minus(c);
+  const com = d(comision);
+  if (dias <= 0 || s.lte(0) || c.lte(0) || k.lte(0) || com.lt(0) || com.gte(1)) return null;
+  const inversion = s.mul(UNO.plus(com)).minus(c.mul(UNO.minus(com)));
   if (inversion.lte(0)) return null;
-  const factor = k.div(inversion);
+  const factor = k.mul(UNO.minus(com)).div(inversion);
   const directo = factor.minus(UNO);
   return {
     inversion,
@@ -190,8 +192,152 @@ export function lanzamientoCubierto(precioAccion: Num, prima: Num, base: Num, di
     tna: directo.mul(DIAS_ANIO).div(dias),
     tea: factor.pow(DIAS_ANIO.div(dias)).minus(UNO),
     colchon: UNO.minus(k.div(s)),
-    equilibrio: inversion,
-    caidaEquilibrio: c.div(s),
+    // Si no te ejercen y vendés la acción (pagando comisión), no perdés mientras S_venta × (1 − c) ≥ inversión.
+    equilibrio: inversion.div(UNO.minus(com)),
+    caidaEquilibrio: UNO.minus(inversion.div(UNO.minus(com)).div(s)),
+  };
+}
+
+// ───────────────────────── Cajas ─────────────────────────
+
+export type PuntasCaja = {
+  /** Call de la base baja y de la base alta, put de la base baja y de la base alta: mejores puntas. */
+  callBaja: { compra: number | null; venta: number | null };
+  callAlta: { compra: number | null; venta: number | null };
+  putBaja: { compra: number | null; venta: number | null };
+  putAlta: { compra: number | null; venta: number | null };
+};
+
+export type TasaCaja = {
+  /** Colocar: lo que ponés hoy por acción. Tomar: lo que recibís hoy por acción. */
+  hoy: Dec;
+  /** Lo que cobrás (colocar) o pagás (tomar) al vencimiento por acción: la diferencia de bases. */
+  alVencimiento: Dec;
+  directo: Dec;
+  tna: Dec;
+  tea: Dec;
+};
+
+/**
+ * Caja (box spread): call comprado y put vendido en la base baja, call vendido y put comprado en la base alta.
+ * Al vencimiento vale siempre la diferencia de bases, suba o baje la acción: es una tasa sin riesgo de precio.
+ *  - Colocar pesos: comprás la caja (pagás las puntas vendedoras de lo que comprás, cobrás las compradoras de lo que vendés).
+ *  - Tomar pesos: la vendés (al revés), y al vencimiento pagás la diferencia de bases.
+ * `comision` se cobra sobre cada una de las cuatro primas. Antes de los costos del ejercicio.
+ * Ej.: bases 4.400 y 5.000, colocar por $585 → al vencimiento $600: 2,56 % directo.
+ */
+export function tasaCaja(baja: Num, alta: Num, p: PuntasCaja, operacion: "colocar" | "tomar", dias: number, comision: Num = 0): TasaCaja | null {
+  const k1 = d(baja);
+  const k2 = d(alta);
+  const com = d(comision);
+  if (dias <= 0 || k2.lte(k1) || com.lt(0) || com.gte(1)) return null;
+  const precios =
+    operacion === "colocar"
+      ? { compras: [p.callBaja.venta, p.putAlta.venta], ventas: [p.callAlta.compra, p.putBaja.compra] }
+      : { compras: [p.callAlta.venta, p.putBaja.venta], ventas: [p.callBaja.compra, p.putAlta.compra] };
+  const todos = [...precios.compras, ...precios.ventas];
+  if (todos.some((x) => !x || x <= 0)) return null;
+  const pagas = precios.compras.reduce((s, x) => s.plus(x!), d(0));
+  const cobras = precios.ventas.reduce((s, x) => s.plus(x!), d(0));
+  const costos = todos.reduce((s, x) => s.plus(x!), d(0)).mul(com);
+  const diferencia = k2.minus(k1);
+  // Colocar: hoy ponés (pagás − cobrás + costos). Tomar: hoy recibís (cobrás − pagás − costos).
+  const hoy = operacion === "colocar" ? pagas.minus(cobras).plus(costos) : cobras.minus(pagas).minus(costos);
+  if (hoy.lte(0)) return null;
+  // Colocar: cobrás la diferencia por lo que pusiste. Tomar: pagás la diferencia por lo que recibiste (tu costo).
+  const factor = diferencia.div(hoy);
+  const directo = factor.minus(UNO);
+  return { hoy, alVencimiento: diferencia, directo, tna: directo.mul(DIAS_ANIO).div(dias), tea: factor.pow(DIAS_ANIO.div(dias)).minus(UNO) };
+}
+
+// ───────────────────────── Estrategias ─────────────────────────
+
+export type Pata = {
+  tipo: TipoOpcion | "accion";
+  lado: "compra" | "venta";
+  /** Base de la opción (en la acción no se usa). */
+  base: number;
+  /** Prima por acción, o precio de la acción. */
+  precio: number;
+  /** Opciones: contratos. Acción: cantidad de acciones. */
+  cantidad: number;
+};
+
+const signo = (p: Pata) => (p.lado === "compra" ? 1 : -1);
+/** Acciones que mueve la pata: contratos × lote, o las acciones. */
+const acciones = (p: Pata, lote: number) => (p.tipo === "accion" ? p.cantidad : p.cantidad * lote);
+
+/** Lo que pagás hoy para armar la estrategia (negativo: cobrás), con la comisión sobre cada pata. */
+export function costoEstrategia(patas: Pata[], lote: number, comision: Num = 0): Dec {
+  return patas.reduce((s, p) => {
+    const monto = d(p.precio).mul(acciones(p, lote));
+    return s.plus(monto.mul(signo(p))).plus(monto.mul(comision));
+  }, d(0));
+}
+
+/** Lo que vale la estrategia al vencimiento si la acción cierra en `s` (sin costos del ejercicio). */
+export function valorAlVencimiento(patas: Pata[], lote: number, s: Num): Dec {
+  const precio = d(s);
+  return patas.reduce((total, p) => {
+    const unidad = p.tipo === "accion" ? precio : p.tipo === "call" ? noNegativo(precio.minus(p.base)) : noNegativo(d(p.base).minus(precio));
+    return total.plus(unidad.mul(acciones(p, lote)).mul(signo(p)));
+  }, d(0));
+}
+
+const noNegativo = (x: Dec) => (x.gt(0) ? x : d(0));
+
+/** Ganancia o pérdida al vencimiento si la acción cierra en `s`. */
+export function resultadoAlVencimiento(patas: Pata[], lote: number, s: Num, comision: Num = 0): Dec {
+  return valorAlVencimiento(patas, lote, s).minus(costoEstrategia(patas, lote, comision));
+}
+
+export type AnalisisEstrategia = {
+  /** Positivo: pagás hoy. Negativo: cobrás hoy. */
+  costo: Dec;
+  /** null = ilimitada. */
+  gananciaMaxima: Dec | null;
+  /** null = ilimitada. Se informa como número positivo (lo que podés perder). */
+  perdidaMaxima: Dec | null;
+  /** Precios de la acción al vencimiento en los que no ganás ni perdés. */
+  equilibrios: number[];
+};
+
+/**
+ * Al vencimiento el resultado es lineal entre bases: alcanza con mirarlo en 0, en cada base y la pendiente después de
+ * la última base. Pendiente final positiva = ganancia ilimitada; negativa = pérdida ilimitada.
+ */
+export function analizarEstrategia(patas: Pata[], lote: number, comision: Num = 0): AnalisisEstrategia | null {
+  if (patas.length === 0) return null;
+  const costo = costoEstrategia(patas, lote, comision);
+  const bases = [...new Set(patas.filter((p) => p.tipo !== "accion").map((p) => p.base))].sort((a, b) => a - b);
+  const xs = [0, ...bases.filter((b) => b > 0)];
+  const ys = xs.map((x) => resultadoAlVencimiento(patas, lote, x, comision));
+  // Pendiente por $ 1 de la acción después de la base más alta: calls y acciones suman, puts no.
+  const pendiente = patas.reduce((s, p) => s + (p.tipo === "put" ? 0 : signo(p) * acciones(p, lote)), 0);
+  const maximo = ys.reduce((m, y) => (y.gt(m) ? y : m), ys[0]!);
+  const minimo = ys.reduce((m, y) => (y.lt(m) ? y : m), ys[0]!);
+  const equilibrios: number[] = [];
+  const agregar = (x: number) => {
+    if (x >= 0 && !equilibrios.some((e) => Math.abs(e - x) < 1e-6)) equilibrios.push(Math.round(x * 100) / 100);
+  };
+  for (let i = 0; i < xs.length; i++) {
+    const y0 = ys[i]!;
+    if (y0.isZero()) agregar(xs[i]!);
+    if (i < xs.length - 1) {
+      const y1 = ys[i + 1]!;
+      if (y0.isNeg() !== y1.isNeg() && !y0.isZero() && !y1.isZero()) {
+        // Interpolación lineal: x0 + (x1 − x0) × y0 / (y0 − y1).
+        agregar(d(xs[i]!).plus(d(xs[i + 1]! - xs[i]!).mul(y0).div(y0.minus(y1))).toNumber());
+      }
+    }
+  }
+  const yUltimo = ys.at(-1)!;
+  if (pendiente !== 0 && !yUltimo.isZero() && yUltimo.isNeg() === pendiente > 0) agregar(d(xs.at(-1)!).minus(yUltimo.div(pendiente)).toNumber());
+  return {
+    costo,
+    gananciaMaxima: pendiente > 0 ? null : maximo,
+    perdidaMaxima: pendiente < 0 ? null : minimo.isNeg() ? minimo.neg() : d(0),
+    equilibrios: equilibrios.sort((a, b) => a - b),
   };
 }
 

@@ -305,7 +305,6 @@ export type VencimientoOpciones = {
   /** Base más cercana al precio de la acción y su volatilidad implícita (promedio de call y put). */
   baseCercana: number | null;
   viCercana: number | null;
-  lanzamientos: FilaLanzamiento[];
   /** Tasas en pesos a un plazo parecido, para comparar el lanzamiento cubierto. */
   comparables: ComparableTasa[];
   /** Tasa que usa el modelo para este plazo. null: no hubo tasa disponible y se calculó con 0 %. */

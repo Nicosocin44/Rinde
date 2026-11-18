@@ -1,55 +1,51 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { DataTable, type Columna } from "@/components/ui/data-table";
-import { MetricExplainer } from "@/components/ui/metric-explainer";
+import { SonrisaVolatilidad } from "@/components/charts/opciones";
 import { SegmentedControl } from "@/components/ui/segmented";
-import type { CadenaOpciones, FilaLanzamiento, FilaOpciones, LadoOpcion, VencimientoOpciones } from "@/lib/data/types";
-import { fechaCorta, fechaLarga, nombreMes, numero, pesos, porcentaje, SIN_DATO } from "@/lib/format";
+import type { CadenaOpciones, FilaOpciones, LadoOpcion, VencimientoOpciones } from "@/lib/data/types";
+import { fechaCorta, numero, pesos, porcentaje, SIN_DATO } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { EncabezadoVencimiento, useVencimiento } from "./comun";
+import { HistorialPrimas, type HistorialOpciones } from "./historial";
 
 const prima = (x: number | null | undefined) => (x === null || x === undefined ? SIN_DATO : numero(x, 2));
-const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-/** Cadena de opciones, volatilidad y lanzamiento cubierto de un vencimiento. */
-export function VistaOpciones({ cadena }: { cadena: CadenaOpciones }) {
-  // Arranca en el vencimiento con más volumen: el que mira la mayoría.
-  const principal = cadena.vencimientos.reduce((m, v) => (v.volumen > m.volumen ? v : m), cadena.vencimientos[0]!);
-  const [fecha, setFecha] = useState(principal.fecha);
-  const v = cadena.vencimientos.find((x) => x.fecha === fecha) ?? principal;
+/** Solapa Cadena: la cadena de un vencimiento, cuánto movimiento descuentan las primas y el historial. */
+export function VistaCadena({ cadena, historial }: { cadena: CadenaOpciones; historial: HistorialOpciones }) {
+  const [v, elegir] = useVencimiento(cadena);
   const { subyacente: s } = cadena;
-
   return (
     <div className="flex flex-col gap-14 lg:gap-20">
       <section aria-labelledby="titulo-cadena" className="flex flex-col gap-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex flex-col gap-1">
-            <h2 id="titulo-cadena" className="text-[22px] font-semibold tracking-tight">
-              Cadena de {s.ticker}
-            </h2>
-            <p className="text-chico text-text-2">
-              Vence el {fechaLarga(v.fecha).toLowerCase()} · {v.dias === 0 ? "hoy" : v.dias === 1 ? "mañana" : `faltan ${v.dias} días`}
-            </p>
-          </div>
-          <div className="sin-scrollbar -mx-4 overflow-x-auto px-4 lg:mx-0 lg:px-0">
-            <SegmentedControl
-              etiqueta="Vencimiento"
-              valor={fecha}
-              onChange={setFecha}
-              opciones={cadena.vencimientos.map((x) => ({ valor: x.fecha, etiqueta: `${mayuscula(nombreMes(x.fecha))} ${x.fecha.slice(8, 10)}`, ariaLabel: `Vencimiento del ${fechaCorta(x.fecha, true)}` }))}
-            />
-          </div>
-        </div>
-        <Volatilidad v={v} cadena={cadena} />
+        <EncabezadoVencimiento titulo={`Cadena de ${s.ticker}`} id="titulo-cadena" cadena={cadena} v={v} onElegir={elegir} />
         <Cadena v={v} precio={s.precio} ticker={s.ticker} />
         <p className="max-w-3xl text-micro">
-          Primas en pesos por acción; cada contrato son {cadena.lote} acciones. Compra y venta son las mejores puntas de BYMA. En gris claro, el lado de cada base que ya tiene valor intrínseco (call por debajo del precio, put por
+          Primas en pesos por acción; cada contrato son {cadena.lote} acciones. Compra y venta son las mejores puntas de BYMA. Sombreado, el lado de cada base que ya tiene valor intrínseco (call por debajo del precio, put por
           encima). VI: volatilidad implícita; delta: cuánto se mueve la prima por cada $ 1 que se mueve {s.ticker}. Las dos las calculamos nosotros con Black-Scholes
-          {v.tasaModelo ? ` y la tasa de ${v.tasaModelo.nombre.toLowerCase()} (${porcentaje(v.tasaModelo.tna, 1)} TNA)` : " con tasa 0 % (no hubo una tasa en pesos disponible)"}. Con * , las puntas están muy separadas y la VI es
+          {v.tasaModelo ? ` y la tasa de ${v.tasaModelo.nombre.toLowerCase()} (${porcentaje(v.tasaModelo.tna, 1)} TNA)` : " con tasa 0 % (no hubo una tasa en pesos disponible)"}. Con *, las puntas están muy separadas y la VI es
           aproximada.
         </p>
       </section>
-      <Lanzamiento v={v} cadena={cadena} />
+      <section aria-labelledby="titulo-volatilidad" className="flex flex-col gap-6">
+        <div className="flex max-w-3xl flex-col gap-2">
+          <h2 id="titulo-volatilidad" className="text-[22px] font-semibold tracking-tight">
+            Cuánto movimiento descuentan las primas
+          </h2>
+          <p className="text-text-2">
+            La volatilidad implícita es el movimiento anual de {s.ticker} que hace que el modelo dé las primas de hoy. Si es más alta que lo que se movió en las últimas ruedas, el mercado espera más movimiento que el reciente.
+          </p>
+        </div>
+        <Volatilidad v={v} cadena={cadena} />
+        <SonrisaVolatilidad
+          calls={v.filas.flatMap((f) => (f.base >= s.precio && f.call?.vi != null && !f.call.puntasAbiertas ? [{ x: f.base, y: f.call.vi }] : []))}
+          puts={v.filas.flatMap((f) => (f.base <= s.precio && f.put?.vi != null && !f.put.puntasAbiertas ? [{ x: f.base, y: f.put.vi }] : []))}
+          precio={s.precio}
+          ticker={s.ticker}
+        />
+        <p className="max-w-3xl text-micro">Volatilidad implícita de cada base: puts por debajo del precio y calls por encima (las que todavía no tienen valor intrínseco, donde el modelo es más confiable), sin las de puntas muy separadas. Cuando las bases lejanas están más caras que las del medio, la curva “sonríe”.</p>
+      </section>
+      <HistorialPrimas cadena={cadena} v={v} historial={historial} />
     </div>
   );
 }
@@ -231,120 +227,3 @@ function Cadena({ v, precio, ticker }: { v: VencimientoOpciones; precio: number;
   );
 }
 
-// ───────────────────────── Lanzamiento cubierto ─────────────────────────
-
-function Colchon({ x, ticker }: { x: number; ticker: string }) {
-  if (Math.abs(x) < 0.0005) return <span>{ticker} tiene que quedar igual</span>;
-  return x > 0 ? (
-    <span>
-      Puede bajar <span className="font-medium text-text">{porcentaje(x, 1)}</span>
-    </span>
-  ) : (
-    <span>
-      Tiene que subir <span className="font-medium text-text">{porcentaje(-x, 1)}</span>
-    </span>
-  );
-}
-
-function Lanzamiento({ v, cadena }: { v: VencimientoOpciones; cadena: CadenaOpciones }) {
-  const { subyacente: s } = cadena;
-  const compraAccion = s.venta ?? s.precio;
-  // Para explicar la cuenta: la base con valor intrínseco más cercana al precio (la típica de un lanzamiento "tasa").
-  const ejemplo = [...v.lanzamientos].filter((l) => l.colchon > 0).sort((a, b) => a.colchon - b.colchon)[0] ?? v.lanzamientos[0];
-  // Por defecto, solo las bases por debajo del precio: ahí la tasa no depende de que la acción suba.
-  const [conArriba, setConArriba] = useState(false);
-  const arriba = v.lanzamientos.filter((l) => l.colchon < 0);
-  const visibles = conArriba || arriba.length === v.lanzamientos.length ? v.lanzamientos : v.lanzamientos.filter((l) => l.colchon >= 0);
-  const columnas: Columna<FilaLanzamiento>[] = [
-    { id: "base", encabezado: "Base", valorOrden: (l) => l.base, celda: (l) => <span className="font-mono font-semibold tabular">{numero(l.base, l.base % 1 ? 2 : 0)}</span> },
-    { id: "prima", encabezado: "Cobrás de prima", alineacion: "derecha", valorOrden: (l) => l.prima, celda: (l) => pesos(l.prima, 2) },
-    { id: "inversion", encabezado: "Ponés por acción", alineacion: "derecha", solo: "desktop", valorOrden: (l) => l.inversion, celda: (l) => pesos(l.inversion, 2) },
-    { id: "tna", encabezado: "TNA si te ejercen", alineacion: "derecha", valorOrden: (l) => l.tna, ordenInicial: "desc", celda: (l) => <span className="font-semibold">{porcentaje(l.tna, 1)}</span> },
-    { id: "colchon", encabezado: `Para que te ejerzan, ${s.ticker}…`, alineacion: "derecha", valorOrden: (l) => l.colchon, celda: (l) => <span className="text-chico text-text-2"><Colchon x={l.colchon} ticker={s.ticker} /></span> },
-    { id: "equilibrio", encabezado: "No perdés hasta", alineacion: "derecha", solo: "desktop", valorOrden: (l) => l.equilibrio, celda: (l) => <span>{pesos(l.equilibrio, 2)}</span> },
-  ];
-
-  return (
-    <section aria-labelledby="titulo-lanzamiento" className="flex flex-col gap-6">
-      <div className="flex max-w-3xl flex-col gap-2">
-        <h2 id="titulo-lanzamiento" className="text-[22px] font-semibold tracking-tight">
-          Lanzamiento cubierto: la tasa en pesos de vender un call
-        </h2>
-        <p className="text-text-2">
-          Comprás {s.ticker} a {pesos(compraAccion, 2)} (la mejor punta vendedora) y vendés un call a la mejor punta compradora. Si al vencimiento {s.ticker} está por encima de la base, te ejercen: entregás las acciones a la
-          base y la ganancia queda fija desde hoy, como una colocación a tasa. Si queda por debajo, te quedás con las acciones y la prima cobrada.
-        </p>
-      </div>
-
-      {v.comparables.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <p className="text-label">En pesos, a un plazo parecido ({v.diasCobro} días)</p>
-          <ul className="flex flex-wrap gap-2">
-            {v.comparables.map((c) => (
-              <li key={c.id} className="flex items-baseline gap-2 rounded-(--radius-chip) border border-border px-3 py-1.5 text-chico">
-                <span className="font-medium">{c.nombre}</span>
-                <span className="text-text-3">{c.detalle}</span>
-                <span className="tabular font-semibold">{porcentaje(c.tna, 1)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {v.lanzamientos.length === 0 ? (
-        <p className="text-text-2">Para este vencimiento no hay calls con punta compradora: no se puede armar un lanzamiento cubierto ahora.</p>
-      ) : (
-        <DataTable
-          etiqueta={`Lanzamiento cubierto de ${s.ticker}, vencimiento ${fechaCorta(v.fecha, true)}`}
-          filas={visibles}
-          columnas={columnas}
-          clave={(l) => l.simbolo}
-          ordenPorDefecto={{ columna: "base", direccion: "asc" }}
-          filaMovil={(l) => (
-            <span className="flex items-center gap-3">
-              <span className="min-w-0 flex-1">
-                <span className="block font-mono text-[15px] font-semibold tabular">Base {numero(l.base, l.base % 1 ? 2 : 0)}</span>
-                <span className="block text-micro">
-                  Prima {pesos(l.prima, 2)} · <Colchon x={l.colchon} ticker={s.ticker} />
-                </span>
-              </span>
-              <span className="text-right">
-                <span className="tabular block text-[15px] font-semibold">{porcentaje(l.tna, 1)}</span>
-                <span className="block text-micro">TNA</span>
-              </span>
-            </span>
-          )}
-        />
-      )}
-      {arriba.length > 0 && arriba.length < v.lanzamientos.length && (
-        <button type="button" onClick={() => setConArriba((x) => !x)} className="self-start text-chico font-medium text-accent hover:underline">
-          {conArriba
-            ? `Ocultar las bases por encima de ${pesos(s.precio, 0)}`
-            : `Ver también las ${arriba.length} bases por encima de ${pesos(s.precio, 0)}: ahí la tasa depende de que ${s.ticker} suba`}
-        </button>
-      )}
-
-      {ejemplo && (
-        <MetricExplainer
-          titulo={`¿De dónde sale la tasa de la base ${numero(ejemplo.base, 0)}?`}
-          formula="TNA = (base ÷ (precio de la acción − prima) − 1) × 365 ÷ días"
-          pasos={[
-            { etiqueta: `Precio de ${s.ticker} (punta vendedora)`, valor: pesos(compraAccion, 2) },
-            { etiqueta: "Prima que cobrás (punta compradora)", valor: pesos(ejemplo.prima, 2) },
-            { etiqueta: "Ponés por acción", valor: pesos(ejemplo.inversion, 2) },
-            { etiqueta: "Cobrás si te ejercen (la base)", valor: pesos(ejemplo.base, 2) },
-            { etiqueta: "Rendimiento directo", valor: porcentaje(ejemplo.directo, 2) },
-            { etiqueta: "Días (de la liquidación de hoy al cobro del ejercicio)", valor: numero(v.diasCobro, 0) },
-          ]}
-          resultado={`${porcentaje(ejemplo.tna, 2)} TNA`}
-          fuente="Puntas de BYMA (data912). Antes de comisiones, derechos de mercado e impuestos."
-          ancla="/metodologia#opciones"
-        />
-      )}
-      <p className="max-w-3xl text-micro">
-        La tasa es antes de comisiones, derechos de mercado e impuestos, que en opciones pesan: preguntale a tu broker cuánto cobra. No incluye dividendos. Si {s.ticker} cae por debajo del punto de equilibrio, perdés plata como con
-        cualquier acción.
-      </p>
-    </section>
-  );
-}

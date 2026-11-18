@@ -5,7 +5,7 @@ import { TablaCedears } from "@/components/modules/mercados/mercados";
 import { Cifra } from "@/components/ui/cifra";
 import { ErrorState } from "@/components/ui/estados";
 import { SourceNote } from "@/components/ui/frescura";
-import { obtenerCotizaciones, obtenerMercados } from "@/lib/data";
+import { obtenerCotizaciones, obtenerMercados, obtenerRecorridosEEUU } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
 import { porcentaje } from "@/lib/format";
 
@@ -13,12 +13,12 @@ export const revalidate = 120;
 export const metadata: Metadata = { title: "CEDEARs: precios y dólar implícito", description: "Precio de los CEDEARs en pesos y dólares, con el MEP y el CCL implícitos." };
 
 export default async function Cedears() {
-  const [r, c] = await Promise.all([obtenerMercados(), obtenerCotizaciones()]);
+  const [r, c, recorridos] = await Promise.all([obtenerMercados(), obtenerCotizaciones(), obtenerRecorridosEEUU().catch(() => ({}))]);
   if (!r.ok) return <ErrorState titulo="No pudimos traer los CEDEARs." detalle={r.error} />;
   const mep = c.ok ? c.data.find((x) => x.id === "mep")?.venta : null;
   return (
     <>
-      <IndicesEEUU indices={r.data.indices ?? []} />
+      <IndicesEEUU indices={r.data.indices ?? []} recorridos={recorridos} />
       <section className="mb-12 flex flex-col gap-3 lg:mb-16">
         <p className="text-label">Dólar implícito en los CEDEARs</p>
         <Cifra valor={r.data.mepPromedio} className="text-hero" />

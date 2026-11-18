@@ -33,6 +33,7 @@ export const FUENTES = {
   cnv: { id: "cnv", name: "CNV", url: "https://www.argentina.gob.ar/cnv" },
   wikipedia: { id: "wikipedia", name: "Wikipedia", url: "https://es.wikipedia.org" },
   binance: { id: "binance", name: "Binance", url: "https://www.binance.com" },
+  yahoo: { id: "yahoo", name: "Yahoo Finance", url: "https://finance.yahoo.com" },
   wikidata: { id: "wikidata", name: "Wikidata", url: "https://www.wikidata.org" },
   sec: { id: "sec", name: "SEC EDGAR", url: "https://www.sec.gov/edgar" },
   rinde: { id: "propia", name: "Elaboración propia", url: "/metodologia" },

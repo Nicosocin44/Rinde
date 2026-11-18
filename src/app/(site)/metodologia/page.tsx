@@ -217,8 +217,9 @@ CCL implícito = precio en pesos / precio de la especie C`}</Formula>,
       <>
         <p>
           Precio, rango del día y volumen: data912 (BYMA con demora). La serie arranca en el último salto de más de 55 % en un día (cambio de ratio de un CEDEAR o split no
-          ajustado), igual que en la cartera. La descripción de cada empresa sale de Wikipedia en castellano, del artículo que verificamos a mano para cada ticker; los ETF los
-          describimos nosotros. Las noticias son las de la sección Noticias que nombran a la empresa (en bonos, letras y cripto, las de su mercado). Bonos: precio de la especie D
+          ajustado), igual que en la cartera. La descripción de cada empresa sale de Wikipedia en castellano: del artículo que verificamos a mano para cada ticker o, si no está en nuestra
+          lista, del que Wikidata asocia a la empresa de ese ticker. Si no hay artículo en castellano, armamos una línea con los datos de Wikidata
+          (industria, sede, fundación, bolsa). Sede, fundación, empleados y sitio web también salen de Wikidata. Los ETF los describimos nosotros. Las noticias son las de la sección Noticias que nombran a la empresa (en bonos, letras y cripto, las de su mercado). Bonos: precio de la especie D
           y flujos del prospecto del canje 2020. LECAPs: no hay historia de precios en nuestra fuente, por eso la ficha muestra la curva del día. Cripto: el precio en pesos es la
           mediana entre exchanges (CriptoYa); el precio en dólares de BTC y ETH es el de Binance, porque el promedio en dólares de los exchanges locales trae sobreprecio.
         </p>

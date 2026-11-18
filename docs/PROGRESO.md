@@ -158,6 +158,18 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 **Un hallazgo de layout:** el texto oculto para lectores de pantalla ("sube"/"baja") dentro de una tabla con scroll horizontal se escapaba del contenedor y ensanchaba la página en el celular (la barra inferior quedaba más ancha que la pantalla). Se arregla con `relative` en el contenedor con scroll; quedó aplicado en las tablas nuevas y en la de alternativas de Metas.
 
+### Activos que no están en nuestras listas (por ejemplo NBIS)
+
+> Pedido de Benja: "hay algunos activos sin datos, como NBIS".
+
+- **Wikidata** como fuente nueva (CC0, sin clave; pide un User-Agent): a partir del ticker trae el perfil de la empresa (nombre, país, sede, fundación, empleados, sitio web, industria, bolsa y sus artículos de Wikipedia). Solo cotizaciones vigentes en NYSE, Nasdaq o la Bolsa de Buenos Aires; si un ticker es de varias empresas (la "C" figura en Citigroup y en tickers viejos de otras), gana la más conocida.
+- **Nombres en las tablas:** los CEDEARs y acciones que no están en `data/ar/mercados.ts` ahora muestran su nombre (NBIS → Nebius Group, MU → Micron Technology). Se piden en tandas de 80, cacheadas una semana.
+- **Ficha:** descripción en castellano (el artículo de Wikipedia que Wikidata asocia, o una línea armada con el perfil, con link a Wikipedia en inglés), datos de la empresa (también para las curadas), industria en el encabezado, noticias que nombran a la empresa aunque no esté en la lista, puntas de compra y venta, operaciones del día, ratio aproximado del CEDEAR (solo si da casi entero) y volumen en EE.UU.
+- **Sin historia (NBIS, NU):** precio grande arriba, cierre anterior calculado con la variación del día, sin filas vacías ni tabla de rendimiento, y como parecidos los CEDEARs más operados.
+- 8 tests nuevos (`tests/perfil.test.ts`) con respuestas reales de Wikidata guardadas en `tests/fixtures/wikidata.json`.
+
+**Lo que sigue faltando:** la **historia de precios** de los CEDEARs nuevos (data912 no la tiene; las fuentes que sí, como Financial Modeling Prep o Alpha Vantage, piden crear una cuenta para sacar una API key) y los **logos** de las empresas que no están en `public/logos/`.
+
 ### Decisiones de la ficha para revisar
 
 1. **Sin búsqueda en Wikipedia:** solo los 78 tickers con artículo verificado (74 acciones y CEDEARs, y 4 cripto) tienen descripción. Los que no tienen artículo propio (Cresud, TGN, Ternium Argentina, varias del panel general) o tienen uno ambiguo (Metrogas, Banco Hipotecario) quedan sin descripción.

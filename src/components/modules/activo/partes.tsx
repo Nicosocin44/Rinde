@@ -127,7 +127,7 @@ export function NoticiasActivo({ titulo, noticias, vacio }: { titulo: string; no
 }
 
 /** Descripción del activo: texto (de Wikipedia, con su fuente, o propio) y una grilla de datos fijos. */
-export function AcercaDe({ titulo, texto, wikipedia, datos }: { titulo: string; texto: ReactNode | null; wikipedia?: string | null; datos: [string, ReactNode][] }) {
+export function AcercaDe({ titulo, texto, wikipedia, fuente, datos }: { titulo: string; texto: ReactNode | null; wikipedia?: string | null; fuente?: ReactNode; datos: [string, ReactNode][] }) {
   return (
     <section aria-labelledby="acerca" className="flex flex-col">
       <h2 id="acerca" className="mb-4 text-h3">
@@ -144,11 +144,12 @@ export function AcercaDe({ titulo, texto, wikipedia, datos }: { titulo: string; 
             (CC BY-SA 4.0).
           </p>
         )}
+        {fuente && <p className="mt-3 text-micro text-text-3">{fuente}</p>}
         <dl className="mt-4 grid grid-cols-2 gap-4 text-chico">
           {datos.map(([k, v]) => (
-            <div key={k}>
+            <div key={k} className="min-w-0">
               <dt className="text-text-3">{k}</dt>
-              <dd className="font-medium">{v}</dd>
+              <dd className="font-medium break-words">{v}</dd>
             </div>
           ))}
         </dl>

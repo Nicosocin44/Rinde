@@ -1,8 +1,8 @@
 "use client";
 
-import { Bell, Star } from "lucide-react";
+import { Bell } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MoneyInput } from "@/components/ui/money-input";
 import { SegmentedControl } from "@/components/ui/segmented";
@@ -10,9 +10,6 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { guardarAlerta, listarAlertas } from "@/lib/alertas/almacen";
 import { describir, LIMITE_GRATIS, type Alerta } from "@/lib/alertas/evaluar";
-import { ElegirGrupo } from "@/components/modules/mercados/elegir-grupo";
-import { alCambiarFavoritos, cambiarGrupo, dejarDeSeguir, listarFavoritos, seguir } from "@/lib/favoritos/almacen";
-import { gruposDisponibles } from "@/lib/favoritos/grupos";
 import { dolares, pesos } from "@/lib/format";
 
 type Props = {
@@ -24,52 +21,16 @@ type Props = {
 };
 
 /**
- * "Seguir" (favoritos, que se ven en Mercados) y "Avisame" (una alerta de precio del activo, que se suma a las de
- * /alertas y respeta el límite del plan gratuito). Todo se guarda en el navegador.
+ * "Avisame": una alerta de precio del activo, que se suma a las de /alertas y respeta el límite del plan gratuito. Se
+ * guarda en el navegador. (La lista de Siguiendo y el botón "Seguir" se sacaron el 19/11/2026 a pedido de los fundadores.)
  */
-export function SeguirActivo({ ticker, nombre, precio, moneda }: Props) {
+export function AvisoActivo({ ticker, nombre, precio, moneda }: Props) {
   const toast = useToast();
   const router = useRouter();
-  const [sigo, setSigo] = useState<boolean | null>(null);
-  const [grupo, setGrupo] = useState<string | null>(null);
-  const [grupos, setGrupos] = useState<string[]>([]);
   const [aviso, setAviso] = useState(false);
-
-  useEffect(() => {
-    let vivo = true;
-    const leer = () =>
-      void listarFavoritos().then((lista) => {
-        if (!vivo) return;
-        const yo = lista.find((f) => f.ticker === ticker);
-        setSigo(yo !== undefined);
-        setGrupo(yo?.grupo ?? null);
-        setGrupos(gruposDisponibles(lista));
-      });
-    leer();
-    const desuscribir = alCambiarFavoritos(leer);
-    return () => {
-      vivo = false;
-      desuscribir();
-    };
-  }, [ticker]);
-
-  const alternar = async () => {
-    if (sigo) {
-      await dejarDeSeguir(ticker);
-      toast(`Dejaste de seguir ${nombre}.`);
-    } else {
-      await seguir({ ticker, nombre });
-      toast(`Seguís ${nombre}: lo ves en Mercados, en Siguiendo. Si querés, ponelo en un grupo.`, { etiqueta: "Ver", onClick: () => router.push("/mercados") });
-    }
-  };
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Button variante={sigo ? "primario" : "secundario"} tamano="sm" onClick={alternar} disabled={sigo === null} aria-pressed={sigo ?? false}>
-        <Star className={sigo ? "fill-current" : undefined} />
-        {sigo ? "Siguiendo" : "Seguir"}
-      </Button>
-      {sigo && <ElegirGrupo compacto valor={grupo} grupos={grupos} etiqueta={`Grupo de ${nombre}`} onCambio={(g) => void cambiarGrupo(ticker, g)} className="max-w-[200px]" />}
       <Button variante="secundario" tamano="sm" onClick={() => setAviso(true)}>
         <Bell />
         Avisame

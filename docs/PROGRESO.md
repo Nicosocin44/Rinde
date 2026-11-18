@@ -165,7 +165,19 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Sin Siguiendo (rama `sin-siguiendo`, 19/11/2026)
+
+> Los fundadores probaron la lista de Siguiendo y no los convenció: se saca y Mercados vuelve a verse como antes, a todo el ancho.
+
+- Fuera la lista de Siguiendo (la columna de la derecha y el botón con estrella del celular), los grupos y el botón "Seguir" de cada ficha. Se borraron `favoritos.tsx`, `elegir-grupo.tsx`, `src/lib/favoritos/` y sus tests.
+- Se quedan: Bonos como solapa de Mercados, "Wall Street hoy" arriba de CEDEARs y el botón "Avisame" de cada ficha (las alertas de precio siguen igual).
+- Lo que alguien haya seguido queda guardado en su navegador (IndexedDB `rinde-favoritos`) sin usarse; no molesta.
+
+---
+
 ## Mercados más ordenado: bonos adentro, grupos y Wall Street (rama `mercados-bonos-grupos`, 18/11/2026)
+
+> **Actualización 19/11/2026:** los grupos y la lista de Siguiendo se sacaron (ver "Sin Siguiendo", arriba).
 
 > Pedido de Benja: pasar Bonos a Mercados para tener menos secciones arriba, armar grupos de seguimiento y mostrar los índices de EE.UU. en CEDEARs.
 

@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { MiniDia } from "@/components/charts/mini-dia";
 import { Delta } from "@/components/ui/delta";
+import type { RecorridoDelDia } from "@/lib/data/adapters/yahoo";
 import type { IndiceEEUU } from "@/lib/data/types";
 
 /**
  * Cómo viene hoy Wall Street: S&P 500, Nasdaq 100 y Dow Jones, medidos por el CEDEAR de su ETF. La cifra grande es la
  * variación en dólares (la que se parece a la del índice); abajo, la de pesos, que también suma lo que se movió el dólar.
+ * Al costado, el recorrido del día del ETF en Nueva York (Yahoo), en verde o rojo según la variación de la tarjeta.
  */
-export function IndicesEEUU({ indices }: { indices: IndiceEEUU[] }) {
+export function IndicesEEUU({ indices, recorridos = {} }: { indices: IndiceEEUU[]; recorridos?: Record<string, RecorridoDelDia> }) {
   if (indices.length === 0) return null;
   return (
     <section aria-labelledby="indices-eeuu" className="mb-12 lg:mb-16">
@@ -18,15 +21,18 @@ export function IndicesEEUU({ indices }: { indices: IndiceEEUU[] }) {
           <li key={i.ticker} className="shrink-0">
             <Link
               href={`/activo/${i.ticker}`}
-              className="presionable flex w-[220px] flex-col gap-1 rounded-(--radius-card) border border-border bg-surface px-4 py-3.5 hover:border-border-strong md:w-auto"
+              className="presionable flex w-[264px] items-stretch justify-between gap-3 rounded-(--radius-card) border border-border bg-surface px-4 py-3.5 hover:border-border-strong md:w-auto"
             >
-              <span className="flex items-baseline justify-between gap-2">
+              <span className="flex min-w-0 flex-col gap-1">
                 <span className="text-[15px] font-semibold">{i.nombre}</span>
-                <span className="font-mono text-[11px] text-text-3">vía {i.ticker}</span>
+                <Delta valor={i.variacionUsd} className="font-display text-[26px] leading-tight font-bold tracking-[-0.02em]" />
+                <span className="text-micro text-text-2">
+                  en dólares · en pesos <Delta valor={i.variacionArs} className="text-micro" />
+                </span>
               </span>
-              <Delta valor={i.variacionUsd} className="font-display text-[26px] leading-tight font-bold tracking-[-0.02em]" />
-              <span className="text-micro text-text-2">
-                en dólares · en pesos <Delta valor={i.variacionArs} className="text-micro" />
+              <span className="flex shrink-0 flex-col items-end justify-between gap-2">
+                <span className="font-mono text-[11px] text-text-3">vía {i.ticker}</span>
+                {recorridos[i.ticker] && <MiniDia puntos={recorridos[i.ticker]!.puntos} previo={recorridos[i.ticker]!.previo} positivo={(i.variacionUsd ?? 0) >= 0} ancho={84} alto={36} />}
               </span>
             </Link>
           </li>

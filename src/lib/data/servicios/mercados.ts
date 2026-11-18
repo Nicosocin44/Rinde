@@ -5,6 +5,7 @@ import { resolverProveedor } from "@data/ar/proveedores";
 import { cronograma, d, fechaLiquidacion, hoyAR, metricasBono, spread } from "@/lib/calculos";
 import * as criptoya from "../adapters/criptoya";
 import * as d912 from "../adapters/data912";
+import * as yahoo from "../adapters/yahoo";
 import * as wikidata from "../adapters/wikidata";
 import { conRespaldo } from "../cache";
 import { mercadoAbierto } from "../freshness";
@@ -160,6 +161,19 @@ export const INDICES_EEUU = [
  * Cómo vienen hoy los índices de EE.UU., medidos por el CEDEAR de su ETF. La variación en dólares sale de la especie
  * D (dólar MEP): es la que se parece a la del índice. La de pesos suma, además, lo que se movió el dólar.
  */
+/**
+ * Recorrido del día de cada ETF de "Wall Street hoy" en Nueva York (Yahoo, cada 5 minutos), para el minigráfico de la
+ * tarjeta. Si Yahoo no responde, la tarjeta se muestra igual, sin gráfico.
+ */
+export async function cargarRecorridosEEUU(): Promise<Record<string, yahoo.RecorridoDelDia>> {
+  const resultados = await Promise.allSettled(INDICES_EEUU.map((i) => yahoo.recorridoDelDia(i.ticker)));
+  const salida: Record<string, yahoo.RecorridoDelDia> = {};
+  resultados.forEach((r, k) => {
+    if (r.status === "fulfilled" && r.value) salida[INDICES_EEUU[k]!.ticker] = r.value;
+  });
+  return salida;
+}
+
 export function indicesEEUU(panel: Panel): IndiceEEUU[] {
   const porSimbolo = new Map(panel.map((p) => [p.symbol, p]));
   const pct = (p: Panel[number] | undefined) => (p && precio(p) && typeof p.pct_change === "number" ? d(p.pct_change).div(100).toNumber() : null);

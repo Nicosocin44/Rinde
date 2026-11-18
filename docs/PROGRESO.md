@@ -159,6 +159,18 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Wall Street hoy con el gráfico del día (rama `wall-street-graficos`, 19/11/2026)
+
+- Cada tarjeta de "Wall Street hoy" (S&P 500, Nasdaq 100, Dow Jones) suma un minigráfico del día, como el de Yahoo: el recorrido de la rueda cada 5 minutos, una línea punteada en el cierre anterior y el área entre las dos, en verde si la tarjeta viene positiva y en rojo si no.
+- Fuente nueva: **Yahoo Finance** (`/v8/finance/chart/{SPY,QQQ,DIA}?range=1d&interval=5m`), verificada el 18/11/2026: 79 puntos y el cierre anterior. Caché de 5 minutos. Si no responde, la tarjeta se muestra igual, sin gráfico. data912 no tiene recorrido del día y el de Nasdaq vino incompleto (1 punto para SPY y DIA fuera de horario).
+- Yahoo se sumó a las fuentes del pie.
+
+### Decisiones para revisar
+1. **El gráfico es el del ETF en Nueva York; la cifra grande, la del CEDEAR en BYMA.** Casi siempre van en el mismo sentido; el color sigue a la cifra de la tarjeta.
+2. **Yahoo no es una API oficial**: antes del lanzamiento comercial hay que revisar sus condiciones o pasar a un servicio pago.
+
+---
+
 ## Sin Siguiendo (rama `sin-siguiendo`, 19/11/2026)
 
 > Los fundadores probaron la lista de Siguiendo y no los convenció: se saca y Mercados vuelve a verse como antes, a todo el ancho.

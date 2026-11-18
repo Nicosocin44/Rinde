@@ -15,6 +15,7 @@ export function Cifra({
   className,
   claseDecimales,
   compuesta = true,
+  uniforme = false,
 }: {
   valor: number | null | undefined;
   moneda?: string | null;
@@ -26,6 +27,8 @@ export function Cifra({
   claseDecimales?: string;
   /** false para tamaños chicos: el signo va en línea y del mismo tamaño. */
   compuesta?: boolean;
+  /** true: el signo y los decimales van del mismo color que el número (no atenuados). */
+  uniforme?: boolean;
 }) {
   const p = valor === null || valor === undefined ? null : partes(valor, decimales);
   if (!p) return <span className={cn("tabular text-text-3", className)}>{SIN_DATO}</span>;
@@ -34,13 +37,13 @@ export function Cifra({
     <span className={cn("tabular inline-flex items-baseline whitespace-nowrap", className)}>
       {moneda &&
         (compuesta ? (
-          <span className="mr-[0.14em] self-start pt-[0.12em] text-[0.6em] leading-none font-medium text-text-2">{moneda}</span>
+          <span className={cn("mr-[0.14em] self-start pt-[0.12em] text-[0.6em] leading-none font-medium", !uniforme && "text-text-2")}>{moneda}</span>
         ) : (
-          <span className="mr-[0.25em] text-text-2">{moneda}</span>
+          <span className={cn("mr-[0.25em]", !uniforme && "text-text-2")}>{moneda}</span>
         ))}
       {animado ? <NumberTicker texto={entero} valor={valor ?? 0} /> : <span>{entero}</span>}
       {decimales > 0 && (
-        <span className={cn("text-text-2", claseDecimales)}>
+        <span className={cn(!uniforme && "text-text-2", claseDecimales)}>
           {animado ? <NumberTicker texto={`,${p.decimal}`} valor={valor ?? 0} /> : `,${p.decimal}`}
         </span>
       )}

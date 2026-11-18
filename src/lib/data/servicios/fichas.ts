@@ -162,6 +162,9 @@ export type FichaCripto = {
   cripto: Cripto;
   /** BTC y ETH: velas diarias en dólares (Binance). */
   velasUsd: Vela[];
+  /** Últimas 24 horas en velas de 5 minutos (Binance): BTC/ETH en dólares, y USDT en pesos (para USDT y para pasar a pesos). */
+  intradiaUsd: Vela[];
+  intradiaUsdtArs: Vela[];
   /** Dólar cripto (pesos por USDT), diario: para pasar a pesos y para la ficha de USDT y USDC. */
   dolarCripto: PuntoSerie[];
   mep: number | null;
@@ -171,9 +174,11 @@ export type FichaCripto = {
 
 export async function cargarFichaCripto(simbolo: SimboloCripto) {
   return conRespaldo<FichaCripto>(`ficha:cripto:${simbolo}`, [FUENTES.criptoya, FUENTES.binance, FUENTES.argentinadatos], async () => {
-    const [criptos, velasUsd, dolarCripto, cotizaciones, acerca, noticias] = await Promise.all([
+    const [criptos, velasUsd, intradiaUsd, intradiaUsdtArs, dolarCripto, cotizaciones, acerca, noticias] = await Promise.all([
       cargarCripto(),
       simbolo === "BTC" || simbolo === "ETH" ? binance.velasDiarias(simbolo).catch(() => [] as Vela[]) : Promise.resolve([] as Vela[]),
+      simbolo === "BTC" || simbolo === "ETH" ? binance.velasDelDia(`${simbolo}USDT`).catch(() => [] as Vela[]) : Promise.resolve([] as Vela[]),
+      binance.velasDelDia("USDTARS").catch(() => [] as Vela[]),
       ad.historicoDolar("cripto").catch(() => []),
       cargarCotizaciones(),
       wiki(simbolo),
@@ -189,6 +194,8 @@ export async function cargarFichaCripto(simbolo: SimboloCripto) {
       data: {
         cripto,
         velasUsd,
+        intradiaUsd,
+        intradiaUsdtArs,
         dolarCripto: dolarCripto.map((p) => ({ fecha: p.fecha.slice(0, 10), valor: p.venta })).sort((a, b) => a.fecha.localeCompare(b.fecha)),
         mep: cotizaciones.ok ? (cotizaciones.data.find((c) => c.id === "mep")?.venta ?? null) : null,
         acerca: acerca ? { texto: acerca.texto, url: acerca.url } : null,

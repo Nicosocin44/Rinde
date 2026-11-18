@@ -5,7 +5,7 @@ import { ErrorState } from "@/components/ui/estados";
 import { SourceNote } from "@/components/ui/frescura";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import { ratioAproximado } from "@/lib/activos/perfil";
-import { d, enDolares, hoyAR, maximaCaida, primaContraMep, rango, rendimientos, sumarDias, volatilidadAnual } from "@/lib/calculos";
+import { d, enDolares, hoyAR, maximaCaida, primaContraMep, rango, rendimientos, sumarDias, velasEnOtraMoneda, volatilidadAnual, compactar } from "@/lib/calculos";
 import type { FichaActivo } from "@/lib/data/servicios/activo";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
@@ -119,8 +119,15 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
           {!sinHistoria ? (
             <GraficoActivo
               series={[
-                { id: "ars", etiqueta: "En pesos", titulo: `${a.ticker} en pesos`, moneda: "$", serie: cierres.map((p) => [p.fecha, p.cierre]) },
-                { id: "usd", etiqueta: "En dólares", titulo: `${a.ticker} en dólares MEP`, moneda: "US$", serie: cierresUsd.map((p) => [p.fecha, p.cierre]) },
+                { id: "ars", etiqueta: "En pesos", titulo: `${a.ticker} en pesos`, moneda: "$", serie: cierres.map((p) => [p.fecha, p.cierre]), velas: compactar(a.velas), variacionDia: a.variacion },
+                {
+                  id: "usd",
+                  etiqueta: "En dólares",
+                  titulo: `${a.ticker} en dólares MEP`,
+                  moneda: "US$",
+                  serie: cierresUsd.map((p) => [p.fecha, p.cierre]),
+                  velas: compactar(velasEnOtraMoneda(a.velas, a.mep.map((p) => ({ fecha: p.fecha.slice(0, 10), valor: p.valor })), "dividir")),
+                },
               ]}
             />
           ) : (

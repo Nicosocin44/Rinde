@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/shell/page-header";
 import { Delta } from "@/components/ui/delta";
 import { ErrorState } from "@/components/ui/estados";
 import { SourceNote } from "@/components/ui/frescura";
-import { d, hoyAR, maximaCaida, rango, rendimientos, sumarDias, volatilidadAnual } from "@/lib/calculos";
+import { compactar, d, hoyAR, maximaCaida, rango, rendimientos, sumarDias, volatilidadAnual } from "@/lib/calculos";
 import type { FichaBono } from "@/lib/data/servicios/fichas";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { fechaCorta, numero, pesos, porcentaje } from "@/lib/format";
@@ -55,8 +55,8 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
           {cierresUsd.length > 1 || cierresArs.length > 1 ? (
             <GraficoActivo
               series={[
-                { id: "usd", etiqueta: "En dólares", titulo: `${b.ticker}D · US$ por 100 nominales`, moneda: "US$", serie: cierresUsd.map((p) => [p.fecha, p.cierre]) },
-                { id: "ars", etiqueta: "En pesos", titulo: `${b.ticker} · $ por 100 nominales`, moneda: "$", serie: cierresArs.map((p) => [p.fecha, p.cierre]) },
+                { id: "usd", etiqueta: "En dólares", titulo: `${b.ticker}D · US$ por 100 nominales`, moneda: "US$", serie: cierresUsd.map((p) => [p.fecha, p.cierre]), velas: compactar(f.velasUsd), variacionDia: b.variacion },
+                { id: "ars", etiqueta: "En pesos", titulo: `${b.ticker} · $ por 100 nominales`, moneda: "$", serie: cierresArs.map((p) => [p.fecha, p.cierre]), velas: compactar(f.velasArs) },
               ]}
             />
           ) : (

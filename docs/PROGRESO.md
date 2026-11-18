@@ -117,6 +117,19 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 3. **BCRA, CNV e INDEC:** no tienen RSS. Los comunicados del BCRA y los hechos relevantes de la CNV necesitan su propio adapter (etapa siguiente).
 4. **Qué mostramos de cada nota:** solo el título, un extracto de hasta 220 caracteres que el medio publica en su feed, la hora y el link. La nota completa queda en el sitio del medio. Conviene confirmarlo con un abogado antes de lanzar.
 
+### Gráficos de cada activo (18/11/2026, rama `graficos`)
+
+- **Variación de hoy siempre visible** al lado del precio ("▲ 1,84 % hoy"), además de la del período elegido ("−36,78 % en el año"). En cripto es "en 24 h".
+- **Área, Línea o Velas**, a elección. El sitio recuerda la elección de cada persona en su navegador.
+  - Las velas usan apertura, máximo, mínimo y cierre reales: acciones y CEDEARs (en pesos y en dólares MEP), bonos (en dólares y en pesos) y BTC/ETH.
+  - En 5 años y Máx, una vela por semana.
+  - El dólar, la brecha y las tasas solo tienen el cierre de cada día: ahí hay Área y Línea, sin velas inventadas.
+- **"1D" con el recorrido del día, solo en cripto:** BTC y ETH en dólares y en pesos, y USDT en pesos. Son las últimas 24 h en velas de 5 minutos, de Binance (verificado el 18/11/2026), con caché de 1 minuto.
+
+**Decisión pendiente:** "1D" para acciones, CEDEARs y bonos. data912 no tiene recorrido del día (lo verificamos). Hay dos caminos:
+1. Guardar nosotros el precio cada 5 minutos durante la rueda. Necesita la base de datos de la v2 y arranca vacío.
+2. Contratar una fuente intradiaria: Matba Rofex/Primary para Argentina, o un servicio pago para EE.UU.
+
 ### Lo que falta del rediseño
 
 - Rediseñar el cuerpo de cada página (cifra héroe, tablas y gráficos) con la misma profundidad que la home, empezando por /dolar.

@@ -2,11 +2,25 @@
 
 import { useState } from "react";
 import { PriceChart, type SerieCompacta } from "@/components/charts/price-chart";
+import type { VelaCompacta } from "@/lib/calculos";
 import { YieldCurve } from "@/components/charts/yield-curve";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { numero, porcentaje } from "@/lib/format";
 
-export type SerieGrafico = { id: string; etiqueta: string; titulo: string; moneda: string; serie: SerieCompacta };
+export type SerieGrafico = {
+  id: string;
+  etiqueta: string;
+  titulo: string;
+  moneda: string;
+  serie: SerieCompacta;
+  /** Velas diarias: habilitan el gráfico de velas. */
+  velas?: VelaCompacta[];
+  /** Recorrido del día: habilita el rango "1D". */
+  intradia?: VelaCompacta[];
+  /** Variación de hoy (fracción), siempre visible al lado del precio. */
+  variacionDia?: number | null;
+  etiquetaDia?: string;
+};
 
 /**
  * Gráfico de la ficha, con una o más series para elegir (en pesos / en dólares). En dólares se ve si el activo le ganó
@@ -22,7 +36,18 @@ export function GraficoActivo({ series }: { series: SerieGrafico[] }) {
       {validas.length > 1 && (
         <SegmentedControl etiqueta="Moneda del gráfico" tamano="sm" className="self-start" valor={actual.id} onChange={setId} opciones={validas.map((s) => ({ valor: s.id, etiqueta: s.etiqueta }))} />
       )}
-      <PriceChart key={actual.id} serie={actual.serie} titulo={actual.titulo} rangoInicial="1A" alto={320} moneda={actual.moneda} />
+      <PriceChart
+        key={actual.id}
+        serie={actual.serie}
+        velas={actual.velas}
+        intradia={actual.intradia}
+        variacionDia={actual.variacionDia}
+        etiquetaDia={actual.etiquetaDia}
+        titulo={actual.titulo}
+        rangoInicial="1A"
+        alto={320}
+        moneda={actual.moneda}
+      />
     </div>
   );
 }

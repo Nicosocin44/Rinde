@@ -12,7 +12,14 @@ export function ScrollSuave() {
   useCuandoEsteLibre(async () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const [{ default: Lenis }, { gsap, ScrollTrigger }] = await Promise.all([import("lenis"), import("./gsap")]);
-    const lenis = new Lenis({ lerp: 0.11, anchors: { offset: -96 }, autoRaf: false });
+    const lenis = new Lenis({
+      lerp: 0.11,
+      anchors: { offset: -96 },
+      autoRaf: false,
+      // Dentro de un panel o ventana abierta (buscador, menú "Más", sheets) la ruedita mueve ese panel,
+      // no la página de atrás.
+      prevent: (nodo) => nodo.closest('[role="dialog"], [data-lenis-prevent]') !== null,
+    });
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick);

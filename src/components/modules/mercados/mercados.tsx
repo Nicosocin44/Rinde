@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { DataTable, type Columna } from "@/components/ui/data-table";
+import { Cifra } from "@/components/ui/cifra";
 import { Delta } from "@/components/ui/delta";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import type { Accion, Cedear, Cripto } from "@/lib/data/types";
-import { dolares, numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
+import { numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 function Buscador({ valor, onChange, placeholder }: { valor: string; onChange: (v: string) => void; placeholder: string }) {
@@ -172,12 +173,12 @@ export function VistaCripto({ criptos }: { criptos: Cripto[] }) {
       <ul className="grid grid-cols-2 border-y border-border lg:grid-cols-4">
         {criptos.map((x, i) => (
           <li key={x.simbolo} className={cn("border-border", i % 2 === 1 && "border-l", i >= 2 && "border-t lg:border-t-0", i > 0 && "lg:border-l")}>
-            <button type="button" aria-pressed={sel === x.simbolo} onClick={() => setSel(x.simbolo)} className={cn("presionable flex w-full flex-col gap-1 px-4 py-5 text-left transition-colors lg:px-6", sel === x.simbolo && "bg-surface-2/60")}>
+            <button type="button" aria-pressed={sel === x.simbolo} onClick={() => setSel(x.simbolo)} className={cn("presionable flex w-full flex-col gap-2 px-4 py-5 text-left transition-colors lg:px-6", sel === x.simbolo && "bg-surface-2/60")}>
               <span className="flex items-center gap-2 text-label">
                 <ProviderMark activo={x.simbolo} sigla={x.simbolo.slice(0, 2)} tamano={28} />
                 {x.nombre}
               </span>
-              <span className="tabular text-[24px] font-medium tracking-[-0.02em] lg:text-[28px]">{x.precioUsd && x.precioUsd > 2 ? dolares(x.precioUsd, 0) : pesos(x.precioArs, 2)}</span>
+              {x.precioUsd && x.precioUsd > 2 ? <Cifra valor={x.precioUsd} moneda="US$" decimales={0} className="text-cifra max-sm:text-[26px]" /> : <Cifra valor={x.precioArs} decimales={2} className="text-cifra max-sm:text-[26px]" />}
               <span className="tabular text-chico text-text-2">{x.precioUsd && x.precioUsd > 2 ? pesos(x.precioArs) : "promedio entre exchanges"}</span>
             </button>
           </li>

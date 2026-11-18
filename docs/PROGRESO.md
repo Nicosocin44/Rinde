@@ -137,6 +137,32 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Primera tanda de ideas (rama `primera-tanda`, 18/11/2026)
+
+> Ideas de Benja para que la gente vuelva: favoritos y alertas desde la ficha, "¿qué hubiera pasado si…?", compartir el avance de una meta y empezar a guardar el historial de tasas.
+
+**1. Favoritos y alertas desde la ficha.** Cada ficha (CEDEAR, acción, bono, LECAP, cripto) tiene "Seguir" y "Avisame". Lo que seguís aparece en "Siguiendo", arriba de Mercados, con el precio de hoy. "Avisame" crea una alerta nueva (el precio de un activo sube o baja de un valor, en pesos o, para bonos, en US$ por 100 nominales) que se suma a las de /alertas y respeta el límite de 3 del plan gratuito. Endpoint nuevo `/api/precios?t=…` (solo recibe tickers validados, hasta 40) que usan los favoritos y el vigía. Todo en el navegador (IndexedDB `rinde-favoritos`).
+
+**2. ¿Qué hubiera pasado si…?** (`/calculadoras/que-hubiera-pasado`). Ponés un monto y hace cuánto (1 mes a 5 años): cuánto tendrías hoy quieto en pesos, en dólar MEP o blue, en un plazo fijo renovado cada 30 días, en una acción o CEDEAR (SPY, Apple, Nvidia, Mercado Libre, Galicia, YPF) o en bitcoin, y si le ganó a la inflación. Se puede compartir como imagen. Cálculos con 6 tests.
+
+**3. Compartir el avance de una meta.** "Compartir mi avance" genera una imagen para historias con el porcentaje, la barra y cuándo llega. No muestra montos.
+
+**4. Historial de tasas.** Un workflow de GitHub Actions (`.github/workflows/tasas-diarias.yml`) corre de lunes a viernes a las 19 y guarda una foto del día (plazo fijo por banco, billeteras y cuentas, LECAPs) en `data/historico/tasas/`, con un commit automático en `main`. La primera foto es la del 18/11/2026 (33 bancos, 21 cuentas, 8 letras). /pesos/plazo-fijo muestra cómo cambió cada banco cuando haya más de un día. Se puede correr a mano: `node scripts/guardar-tasas.mjs`.
+
+**Dos arreglos que salieron en el camino:**
+- **La tasa de plazo fijo de referencia de la cartera estaba mal en fechas de 2024:** la serie de depósitos a 30 días de ArgentinaDatos mezcla fracción (0,3443) y porcentaje (34,43) hasta enero de 2025, y la cartera dividía todo por 100. Lector nuevo que normaliza (`ad.depositos30Dias()`), con test.
+- **Cambios de ratio y splits ajustados, no cortados:** SPY cambió de ratio en mayo de 2026 (×3) e YPF tuvo un split en agosto (×10). Antes la historia se cortaba ahí; ahora los precios de antes se dividen por ese entero exacto (`ajustarRatios`, con tests) y la ficha lo aclara. Un salto que no da un número entero (hay uno en agosto de 2023 en varias acciones) sigue cortando la serie.
+
+### Decisiones de la primera tanda para revisar
+
+1. **El historial se guarda con commits automáticos en `main`** (uno por día hábil, solo en `data/historico/tasas/`). Es la forma más simple sin una base de datos; cuando haya Supabase se puede mover ahí. Hay que hacer `git pull` seguido, pero esos archivos no chocan con el código. **Para que corra, GitHub Actions tiene que estar habilitado en el repo** (pestaña Actions) y `main` no puede tener una protección que impida el push del bot.
+2. **Las alertas de un activo, como las demás, avisan solo con Rinde abierto** (revisa cada 3 minutos). Las push con la app cerrada necesitan las cuentas.
+3. **"¿Qué hubiera pasado?" usa el plazo fijo promedio** (tasa de depósitos a 30 días), no el mejor banco: es lo que conseguía cualquiera.
+4. **Los activos de "¿qué hubiera pasado?" son seis fijos**, elegidos por ser los más conocidos y con historia larga. Se pueden sumar más.
+5. **Bitcoin en pesos arranca en febrero de 2023** (desde ahí hay dólar cripto histórico).
+
+---
+
 ## Ficha de cada activo (rama `ficha-activo`, 18/11/2026)
 
 > Pedido de los fundadores: al tocar un activo, que traiga toda su info más sus noticias, como la página de un activo en Google Finance.

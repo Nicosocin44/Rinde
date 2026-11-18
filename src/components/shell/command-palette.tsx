@@ -38,6 +38,7 @@ const BASE: ItemBusqueda[] = [
   { id: "s-metas", titulo: "Mis metas de ahorro", detalle: "Un viaje, un auto, un depto", grupo: "Secciones", href: "/metas", claves: "objetivo ahorrar plan" },
   { id: "s-aprender", titulo: "Aprender: glosario", grupo: "Secciones", href: "/aprender", claves: "tna tea tem que es" },
   { id: "s-metodologia", titulo: "Metodología y fuentes", grupo: "Secciones", href: "/metodologia" },
+  { id: "c-qh", titulo: "¿Qué hubiera pasado si…?", detalle: "Dólar, plazo fijo, acciones o bitcoin hace un año", grupo: "Calculadoras", href: "/calculadoras/que-hubiera-pasado", claves: "si hubiera comprado invertido antes" },
   { id: "c-ic", titulo: "Interés compuesto", grupo: "Calculadoras", href: "/calculadoras/interes-compuesto" },
   { id: "c-jub", titulo: "Jubilación", grupo: "Calculadoras", href: "/calculadoras/jubilacion" },
   { id: "c-pf", titulo: "Calculadora de plazo fijo", grupo: "Calculadoras", href: "/calculadoras/plazo-fijo" },

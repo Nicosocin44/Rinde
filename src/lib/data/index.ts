@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { cargarActivo } from "./servicios/activo";
 import { cargarFichaBono, cargarFichaCripto, cargarFichaLetra } from "./servicios/fichas";
+import { cargarQueHubiera } from "./servicios/que-hubiera";
 import { cargarCotizaciones, cargarHistorico, cargarRanking } from "./servicios/dolar";
 import { cargarFeriados } from "./servicios/feriados";
 import { armarPulso } from "./servicios/inicio";
@@ -27,6 +28,7 @@ export const obtenerActivo = cache(cargarActivo);
 export const obtenerFichaBono = cache(cargarFichaBono);
 export const obtenerFichaLetra = cache(cargarFichaLetra);
 export const obtenerFichaCripto = cache(cargarFichaCripto);
+export const obtenerQueHubiera = cache(cargarQueHubiera);
 
 export const obtenerPulso = cache(async () => {
   const [c, m, p] = await Promise.all([obtenerCotizaciones(), obtenerMacro(), obtenerPesos()]);

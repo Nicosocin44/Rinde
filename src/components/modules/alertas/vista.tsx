@@ -14,9 +14,11 @@ import { describir, evaluar, LIMITE_GRATIS, type Alerta, type FotoMercado } from
 import type { TipoDolar } from "@/lib/data/types";
 import { hace } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { fotoConActivos, tickersDeAlertas } from "@/lib/alertas/foto";
 import { vencimientosLocales } from "./vigia";
 
-type TipoAlerta = Alerta["tipo"];
+/** Los tipos que se crean desde esta pantalla (la alerta de un activo se crea desde su ficha). */
+type TipoAlerta = Exclude<Alerta["tipo"], "activo">;
 
 /** Una alerta con su estado actual. Se usa también en Inicio (sección de producto) con datos de ejemplo. */
 export function FilaAlerta({ alerta, foto, onBorrar, onToggle }: { alerta: Alerta; foto: FotoMercado | null; onBorrar?: () => void; onToggle?: () => void }) {
@@ -75,15 +77,18 @@ export function AlertasVista() {
       desuscribir();
     };
   }, []);
+  // La foto se vuelve a pedir cuando cambia la lista: así una alerta nueva de un activo trae su precio.
+  const tickersAlertas = tickersDeAlertas(alertas ?? []).sort().join(",");
   useEffect(() => {
     let vivo = true;
-    Promise.all([fetch("/api/alertas/mercado").then((r) => r.json() as Promise<FotoMercado>), vencimientosLocales()])
-      .then(([f, v]) => vivo && setFoto({ ...f, vencimientos: v }))
+    vencimientosLocales()
+      .then((v) => fotoConActivos(tickersAlertas ? tickersAlertas.split(",") : [], v))
+      .then((f) => vivo && f && setFoto(f))
       .catch(() => {});
     return () => {
       vivo = false;
     };
-  }, []);
+  }, [tickersAlertas]);
 
   const activas = alertas?.filter((a) => a.activa).length ?? 0;
   const lleno = activas >= LIMITE_GRATIS;

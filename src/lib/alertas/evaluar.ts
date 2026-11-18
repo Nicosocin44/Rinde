@@ -1,4 +1,4 @@
-import { pesos, porcentaje } from "@/lib/format";
+import { dolares, pesos, porcentaje } from "@/lib/format";
 import type { TipoDolar } from "@/lib/data/types";
 
 /**
@@ -11,7 +11,9 @@ export type Alerta =
   | { id: string; tipo: "tasa"; condicion: "mayor"; valor: number; creada: string; activa: boolean; ultimaVez?: string }
   | { id: string; tipo: "comparacion"; creada: string; activa: boolean; ultimaVez?: string }
   | { id: string; tipo: "vencimiento"; dias: number; creada: string; activa: boolean; ultimaVez?: string }
-  | { id: string; tipo: "spread"; activo: "USD" | "USDT"; condicion: "menor"; valor: number; creada: string; activa: boolean; ultimaVez?: string };
+  | { id: string; tipo: "spread"; activo: "USD" | "USDT"; condicion: "menor"; valor: number; creada: string; activa: boolean; ultimaVez?: string }
+  /** El precio de un activo (se crea desde su ficha). Bonos en dólares por 100 nominales; el resto, en pesos. */
+  | { id: string; tipo: "activo"; ticker: string; nombre: string; moneda: "ARS" | "USD"; condicion: "mayor" | "menor"; valor: number; creada: string; activa: boolean; ultimaVez?: string };
 
 export type FotoMercado = {
   dolares: Partial<Record<TipoDolar, number>>;
@@ -23,6 +25,8 @@ export type FotoMercado = {
   mejorCompra: { USD: { precio: number; nombre: string } | null; USDT: { precio: number; nombre: string } | null };
   /** Vencimientos de la cartera (los arma el navegador con la cartera local). */
   vencimientos?: { nombre: string; fecha: string; dias: number }[];
+  /** Precio de hoy de los activos que tienen alerta (los pide el navegador a /api/precios). */
+  activos?: Record<string, { precio: number; moneda: "ARS" | "USD" }>;
   asOf: string;
 };
 
@@ -42,8 +46,12 @@ export function describir(a: Alerta): string {
       return `Algo de mi cartera vence en ${a.dias} ${a.dias === 1 ? "día" : "días"} o menos`;
     case "spread":
       return `Comprar ${a.activo} cuesta menos de ${pesos(a.valor, 0)}`;
+    case "activo":
+      return `${a.nombre} ${a.condicion === "mayor" ? "por encima de" : "por debajo de"} ${monto(a.valor, a.moneda)}`;
   }
 }
+
+const monto = (x: number, moneda: "ARS" | "USD") => (moneda === "USD" ? dolares(x, 2) : pesos(x, x < 1000 ? 2 : 0));
 
 export function evaluar(a: Alerta, f: FotoMercado): Resultado {
   switch (a.tipo) {
@@ -81,6 +89,13 @@ export function evaluar(a: Alerta, f: FotoMercado): Resultado {
       const m = f.mejorCompra[a.activo];
       if (!m) return { cumplida: false, actual: "Sin dato", mensaje: "" };
       return { cumplida: m.precio < a.valor, actual: `${pesos(m.precio, 2)} en ${m.nombre}`, mensaje: `En ${m.nombre}, ${a.activo} cuesta ${pesos(m.precio, 2)}.` };
+    }
+    case "activo": {
+      const p = f.activos?.[a.ticker];
+      // Un precio en otra moneda no se compara (por ejemplo, si cambió cómo cotiza).
+      if (!p || p.moneda !== a.moneda) return { cumplida: false, actual: "Sin dato", mensaje: "" };
+      const cumplida = a.condicion === "mayor" ? p.precio > a.valor : p.precio < a.valor;
+      return { cumplida, actual: monto(p.precio, p.moneda), mensaje: `${a.nombre} está en ${monto(p.precio, p.moneda)}.` };
     }
   }
 }

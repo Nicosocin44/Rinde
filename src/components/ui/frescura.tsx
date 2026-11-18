@@ -1,7 +1,7 @@
-import Link from "next/link";
 import type { EstadoDato, Fuente } from "@/lib/data/types";
-import { fechaCorta, hora } from "@/lib/format";
+import { fechaCorta } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { EstadoDiscreto } from "./estado-dato";
 
 const ETIQUETA: Record<EstadoDato, string> = {
   live: "En vivo",
@@ -22,7 +22,7 @@ export function PuntoVivo({ estado = "live", className }: { estado?: EstadoDato;
   );
 }
 
-/** Punto + estado: "En vivo" / "Demorado 20 min" / "Cierre 16 nov" / "Datos de ejemplo". */
+/** Punto + estado con texto: "En vivo" / "Demorado 20 min" / "Cierre 16 nov". Solo donde el estado es el contenido (la escena de fuentes del Inicio); en el resto va `EstadoDiscreto`. */
 export function FreshnessBadge({ estado, asOf, className }: { estado: EstadoDato; asOf?: string | null; className?: string }) {
   const texto = estado === "close" && asOf ? `Cierre ${fechaCorta(asOf)}` : estado === "stale" && asOf ? `Último dato: ${fechaCorta(asOf)}` : ETIQUETA[estado];
   return (
@@ -33,14 +33,16 @@ export function FreshnessBadge({ estado, asOf, className }: { estado: EstadoDato
   );
 }
 
-/** Micro: "Fuente: BCRA · ArgentinaDatos · actualizado 18:41". */
+/**
+ * Lo que queda al pie de cada dato. Desde el 18/11/2026 (pedido de los fundadores) las fuentes no se escriben en cada
+ * pantalla: están en el pie del sitio y en /metodologia. Acá solo queda el estado, discreto: un punto que al tocarlo
+ * dice si el dato está demorado o es del cierre, y de qué hora. `fuentes`, `metodologia` y `children` se mantienen para
+ * no cambiar cada pantalla, pero ya no se muestran.
+ */
 export function SourceNote({
-  fuentes,
   actualizado,
   estado,
-  metodologia = "/metodologia",
   className,
-  children,
 }: {
   fuentes: Pick<Fuente, "name" | "url">[];
   actualizado?: string | null;
@@ -49,46 +51,10 @@ export function SourceNote({
   className?: string;
   children?: React.ReactNode;
 }) {
-  const unicas = [...new Map(fuentes.map((f) => [f.name, f])).values()];
+  if (!estado || estado === "live") return null;
   return (
-    <p className={cn("flex flex-wrap items-center gap-x-2 gap-y-1 text-micro", className)}>
-      {estado && <FreshnessBadge estado={estado} asOf={actualizado} />}
-      {estado && <span aria-hidden>·</span>}
-      <span>
-        Fuente:{" "}
-        {unicas.map((f, i) => (
-          <span key={f.name}>
-            {i > 0 && " · "}
-            {f.url.startsWith("http") ? (
-              <a href={f.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-6 items-center underline-offset-2 hover:text-text-2 hover:underline">
-                {f.name}
-              </a>
-            ) : (
-              f.name
-            )}
-          </span>
-        ))}
-      </span>
-      {actualizado && (
-        <>
-          <span aria-hidden>·</span>
-          <span>actualizado {esHoy(actualizado) ? hora(actualizado) : `${fechaCorta(actualizado)}${actualizado.length > 10 ? ` ${hora(actualizado)}` : ""}`}</span>
-        </>
-      )}
-      {children}
-      {metodologia && (
-        <>
-          <span aria-hidden>·</span>
-          <Link href={metodologia} className="inline-flex min-h-6 items-center underline-offset-2 hover:text-text-2 hover:underline">
-            ¿Cómo lo calculamos?
-          </Link>
-        </>
-      )}
+    <p className={cn("flex items-center", className)}>
+      <EstadoDiscreto estado={estado} asOf={actualizado} />
     </p>
   );
-}
-
-function esHoy(iso: string): boolean {
-  if (iso.length <= 10) return false;
-  return fechaCorta(iso) === fechaCorta(new Date());
 }

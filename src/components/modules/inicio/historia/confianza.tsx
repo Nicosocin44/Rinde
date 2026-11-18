@@ -27,7 +27,7 @@ export function EscenaConfianza({ fuentes }: { fuentes: FuenteEstado[] }) {
     >
       <div className="flex h-full flex-col justify-start gap-6 pt-20 pb-10 md:justify-center md:gap-12 md:pt-24 md:pb-14">
         <div data-titulo className="grid gap-2 md:grid-cols-[minmax(0,1.5fr)_minmax(0,0.7fr)] md:items-end md:gap-12">
-          <h2 className="text-h1 text-balance max-md:text-[36px]">Ningún número sin su fuente.</h2>
+          <h2 className="text-h1 text-balance max-md:text-[36px]">Todo sale de fuentes públicas.</h2>
           <p className="max-w-[40ch] text-[15px] leading-[22px] text-text-2 max-md:hidden md:text-[17px] md:leading-[26px]">
             Todo lo que viste hasta acá sale de estas fuentes públicas, en este momento. Así están ahora mismo:
           </p>

@@ -1,6 +1,5 @@
 import { Escena } from "@/components/escenas/escena";
 import { Director } from "./director";
-import { FreshnessBadge } from "@/components/ui/frescura";
 import { pesosCompacto } from "@/lib/format";
 import type { Pieza } from "./datos";
 
@@ -71,13 +70,11 @@ export function EscenaProblema({ piezas }: { piezas: Pieza[] }) {
               </div>
             );
           })}
-          <FreshnessBadge estado="sample" className="absolute right-0 bottom-0 max-md:hidden" />
         </div>
         <div data-cierre className="flex flex-col gap-1.5 md:hidden">
           <p className="font-display text-[19px] leading-[1.2] font-bold tracking-[-0.02em]">
             {piezas.length} lugares{total > 0 && <>, {pesosCompacto(total)} en total</>}. ¿Cuánto rinde todo junto?
           </p>
-          <FreshnessBadge estado="sample" />
         </div>
       </div>
     </Escena>

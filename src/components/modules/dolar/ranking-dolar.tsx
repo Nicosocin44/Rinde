@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import { proveedorPorId, resolverProveedor } from "@data/ar/proveedores";
 import { DataTable, EtiquetaMejor, type Columna } from "@/components/ui/data-table";
 import { ErrorState } from "@/components/ui/estados";
-import { FreshnessBadge } from "@/components/ui/frescura";
+import { EstadoDiscreto } from "@/components/ui/estado-dato";
 import { MetricExplainer } from "@/components/ui/metric-explainer";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import { SegmentedControl } from "@/components/ui/segmented";
@@ -179,10 +179,7 @@ export function RankingDolar({ rankings }: { rankings: Record<ActivoDolar, Carga
 
           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex flex-col gap-2">
-              <FreshnessBadge estado={r.status} asOf={r.asOf} />
-              <p className="text-micro">
-                Fuente: CriptoYa{activo === "USD" ? " y DolarAPI" : ""} · precios finales con las comisiones que informa cada proveedor · actualizado {hora(r.asOf)}
-              </p>
+              <EstadoDiscreto estado={r.status} asOf={r.asOf} className="self-start" />
             </div>
             {resumen && (
               <MetricExplainer

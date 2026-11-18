@@ -89,7 +89,7 @@ tests/
 ## Reglas no negociables
 
 1. **Dinero nunca en float.** decimal.js en todos los cálculos. Formato siempre con Intl `es-AR`: `$ 1.234.567,89`, `24,50 %`, `+0,25 %`.
-2. **Ningún número sin procedencia.** Todo dato de mercado muestra fuente, hora y estado: *En vivo*, *Demorado 20 min*, *Cierre del día* o *Datos de ejemplo*. Jamás inventar un valor ni mostrar datos de ejemplo como si fueran reales.
+2. **Ningún número sin procedencia, pero sin notas en pantalla.** Cada dato tiene fuente, hora y estado en el código (el `Envelope`). En pantalla, desde el 18/11/2026 (pedido de los fundadores), las fuentes no se escriben en cada widget: están en el pie del sitio y en /metodologia. El estado queda discreto: un punto junto al dato demorado, del cierre o desactualizado, que al tocarlo dice la hora (`EstadoDiscreto`); con el dato en vivo no se muestra nada. Jamás inventar un valor. Los datos de ejemplo que alguien podría confundir con los suyos (la cartera y la meta de ejemplo) siguen rotulados; los del Inicio, que son una demostración, no.
 3. **Cada fuente externa entra por un adapter** con schema Zod, timeout, caché y fallback. Si una fuente falla, ese widget se degrada con elegancia (último dato válido con su hora, o un estado de error diseñado). **Nunca se cae la página entera.** Cada módulo va dentro de su propio error boundary.
 4. **Validación de sanidad antes de mostrar.** Se excluyen instrumentos vencidos, tasas fuera de rango plausible y filas duplicadas. Ver `DATOS_Y_FORMULAS.md` §4. La competencia muestra una LECAP vencida con 13.426 % de TEM que rompe el gráfico: eso no nos puede pasar.
 5. **Los cálculos son funciones puras** en `src/lib/calculos/`, con golden tests. Si en esta carpeta ya existe un `src/lib/calculos.ts` de un proyecto anterior (con TWR y TIR testeadas), reutilizalo: migralo a la estructura nueva sin cambiar resultados y conservá sus tests.
@@ -125,4 +125,4 @@ tests/
 - [ ] Revisada en capturas a 375, 768 y 1440 px, en dark y en light.
 - [ ] Pasa el checklist de `DISENO.md` §13.
 - [ ] La lógica tiene tests y pasan. `typecheck`, `lint` y `build` limpios.
-- [ ] Muestra fuente y hora de cada dato.
+- [ ] Cada dato tiene su fuente en el pie y en /metodologia; si está demorado o es del cierre, lleva el punto de estado.

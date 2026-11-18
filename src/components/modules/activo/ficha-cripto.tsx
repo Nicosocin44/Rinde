@@ -188,7 +188,6 @@ export function FichaCriptoVista({ f, asOf, estado }: { f: FichaCripto; asOf: st
         <AcercaDe
           titulo="Qué es"
           texto={f.acerca ? <p>{f.acerca.texto}</p> : null}
-          wikipedia={f.acerca?.url ?? null}
           datos={[
             ["Tipo", estable ? "Stablecoin" : "Criptomoneda"],
             ["Símbolo", <span key="s" className="font-mono">{c.simbolo}</span>],

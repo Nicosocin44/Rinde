@@ -14,6 +14,6 @@
 14. Agregar balances, resultados y métricas importantes de las empresas
 15. Calendario con empresas que presentan estados contables, decisiones de tasas en USA o ARG, datos de inflación, datos de empleo
 16. Como se ve la web en el celu.
-17. Sacar las fuentes de cada dato.
+17. ~~Sacar las fuentes de cada dato.~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama fuentes-discretas)</span>
 
 

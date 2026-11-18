@@ -7,7 +7,7 @@ import { pais } from "@/config/countries/ar";
 import { PriceChart } from "@/components/charts/price-chart";
 import { Button } from "@/components/ui/button";
 import { EmptyState, ErrorState, Skeleton } from "@/components/ui/estados";
-import { FreshnessBadge } from "@/components/ui/frescura";
+import { EstadoDiscreto } from "@/components/ui/estado-dato";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
@@ -190,7 +190,7 @@ export function CarteraVista() {
         )}
         <div className="flex flex-wrap items-center justify-between gap-4">
           {acciones}
-          {precios && <FreshnessBadge estado={estado === "demo" ? "sample" : "delayed"} asOf={precios.asOf} />}
+          {precios && estado !== "demo" && <EstadoDiscreto estado="delayed" asOf={precios.asOf} />}
         </div>
       </section>
 

@@ -39,7 +39,7 @@ La idea en una línea: **calma con pulso.** Un fondo sereno y ordenado, donde lo
 4. **Aire antes que bordes.** Se separa con espacio y jerarquía, no con cajas dentro de cajas. Los bordes son líneas finas (*hairlines*), casi invisibles.
 5. **Movimiento con propósito.** Toda animación explica algo: de dónde viene un panel, qué cambió, adónde fuiste. Corta, suave y nunca bloquea.
 6. **Simple por defecto, profundo a demanda.** El modo Simple habla en pesos por mes; el modo Pro muestra TEM, TIR y duration. La misma pantalla, distinta densidad.
-7. **Confianza visible.** Fuente, hora y estado de cada dato, siempre, en tipografía chica y discreta. "¿De dónde sale este número?" a un click.
+7. **Confianza sin ruido.** Las fuentes van en el pie del sitio y en /metodologia, no en cada pantalla (pedido de los fundadores, 18/11/2026: las notas al pie se veían "hechas por IA"). El estado del dato es un punto discreto que al tocarlo dice si está demorado o es del cierre, y de qué hora. "¿De dónde sale este número?" a un click.
 
 ---
 
@@ -287,7 +287,8 @@ Consecuencias concretas:
 | **DataTable** | Encabezado pegajoso, label en mayúsculas `text-3`, filas de 52 px, sin cebra, hover `surface-2`, números a la derecha y tabulares, columnas ordenables (flecha que rota), la fila "mejor" con `accent-soft` y la etiqueta "Mejor". En mobile se convierte en lista |
 | **ProviderMark** | Monograma de 28 px: cuadrado de radio 8, fondo neutro y dos letras en peso 600. Mismo tamaño para todos. Los logos reales llegan después, con permiso y normalizados |
 | **FreshnessBadge** | Punto + "En vivo" / "Demorado 20 min" / "Cierre 16 nov" / "Datos de ejemplo" (este último en `warn`) |
-| **SourceNote** | Micro: "Fuente: BCRA · ArgentinaDatos · actualizado 18:41" |
+| **SourceNote** | Desde el 18/11/2026 solo muestra el `EstadoDiscreto` (punto de estado; nada si el dato está en vivo). Las fuentes están en el pie. |
+| **EstadoDiscreto** | Punto de 6 px (warn: demorado o desactualizado; text-3: cierre). Al tocarlo: "Demorado 20 min · 16:29" / "Cierre del 18 nov". |
 | **MetricExplainer** | "¿De dónde sale este número?": popover (sheet en mobile) con la fórmula escrita y **completada con los valores reales**, la fuente y un link a /metodologia. Es parte de la identidad del producto |
 | **CommandPalette (⌘K)** | Busca instrumentos (AL30, T15E7, AAPL), bancos, billeteras, calculadoras y acciones ("crear alerta"). Navegable con teclado |
 | **Sheet** | Mobile: desde abajo con *handle*, arrastre para cerrar y radio 20 arriba. Desktop: panel lateral derecho de 480 px |
@@ -442,6 +443,6 @@ Correr `pnpm shots` y, con las capturas abiertas, verificar:
 - [ ] Dark y light se ven igual de cuidados.
 - [ ] Mobile 375: sin scroll horizontal, títulos que no se cortan mal, zonas táctiles de 44 px.
 - [ ] Carga, vacío y error están diseñados (forzarlos para capturarlos).
-- [ ] Cada dato muestra fuente, hora y estado.
+- [ ] Sin notas de fuente en pantalla; los datos demorados o del cierre llevan su punto de estado.
 - [ ] Las interacciones firma de la §7 que aplican están implementadas y se sienten suaves (revisar en el navegador, no solo en capturas).
 - [ ] Pasó el test de las cinco preguntas de la §2.

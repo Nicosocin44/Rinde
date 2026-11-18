@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { navPrincipal, navSecundaria, site } from "@/config/site";
+import { FUENTES } from "@/lib/data/types";
 import { Wordmark } from "./wordmark";
 
-/** Footer con el disclaimer siempre visible. */
+/** Las fuentes de datos, en un solo lugar (desde el 18/11/2026 no se escriben en cada pantalla). */
+const FUENTES_PIE = [FUENTES.dolarapi, FUENTES.argentinadatos, FUENTES.bcra, FUENTES.cnv, FUENTES.data912, FUENTES.criptoya, FUENTES.binance].map((f) => ({ nombre: f.name, url: f.url }));
+
+/** Footer con el disclaimer siempre visible y las fuentes de los datos. */
 export function Footer() {
   return (
     <footer className="mt-24 border-t border-border bg-bg-raised pb-[calc(84px+env(safe-area-inset-bottom))] lg:mt-32 lg:pb-0">
@@ -24,7 +28,26 @@ export function Footer() {
           {site.name} no es un asesor financiero y nada de lo que ves acá es una recomendación de inversión. Mostramos comparaciones con la cuenta a la vista, a partir de datos públicos que
           pueden tener demoras o errores. Verificá las condiciones con cada entidad antes de operar.
         </p>
-        <p className="shrink-0">
+        <p className="max-w-md shrink-0 leading-[18px] lg:text-right">
+          Datos de{" "}
+          {FUENTES_PIE.map((f, i) => (
+            <span key={f.nombre}>
+              {i > 0 && (i === FUENTES_PIE.length - 1 ? " y " : ", ")}
+              <a href={f.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-text-2">
+                {f.nombre}
+              </a>
+            </span>
+          ))}
+          . Descripciones de empresas de{" "}
+          <a href="https://es.wikipedia.org" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-text-2">
+            Wikipedia
+          </a>{" "}
+          (CC BY-SA 4.0) y Wikidata. Cómo calculamos cada número:{" "}
+          <Link href="/metodologia" className="underline underline-offset-2 hover:text-text-2">
+            Metodología
+          </Link>
+          .
+          <br />
           Gráficos de precio con{" "}
           <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-text-2">
             TradingView Lightweight Charts

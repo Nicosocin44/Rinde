@@ -199,7 +199,7 @@ Calculados a mano (o en planilla) y versionados:
 
 ## 7. Términos de uso y atribución
 
-- Mostrar la fuente en cada widget y listar todas en /metodologia, con link.
+- Listar todas las fuentes en el pie del sitio y en /metodologia, con link (desde el 18/11/2026 no se escriben en cada widget).
 - Antes de lanzar comercialmente, **revisar los términos de cada fuente** (DolarAPI, ArgentinaDatos, CriptoYa, data912, BYMA, BCRA) y, donde no estén claros, escribirles. CriptoYa publica un contacto en su documentación.
 - TradingView Lightweight Charts pide atribución: incluirla como indica su licencia.
 - No hacer scraping de sitios que lo prohíban. Si un dato solo existe así, se carga manualmente con fecha de verificación.

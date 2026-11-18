@@ -106,10 +106,6 @@ export function EscenaCartera({ serie, inicio, vsInflacion, vsDolar }: { serie: 
             <ButtonLink href="/cartera" variante="primario" tamano="md" flecha>
               Armar mi cartera
             </ButtonLink>
-            <span className="flex items-start gap-1.5 text-[12px] leading-[16px] font-semibold">
-              <span aria-hidden className="mt-[5px] size-1.5 shrink-0 rounded-full bg-tinta" />
-              Datos de ejemplo: una cartera inventada, con precios reales.
-            </span>
           </div>
         </div>
       </div>

@@ -30,7 +30,11 @@ export type ContenidoImagen = {
   pie?: string;
   /** Color del tema de la cifra. */
   color?: keyof typeof COLORES;
+  /** Barra de avance (0 a 1), por ejemplo el de una meta. */
+  progreso?: number;
 };
+
+export const COLORES_IMAGEN = ["verde", "celeste", "sol", "lila", "coral"] as const;
 
 export async function imagenRinde(c: ContenidoImagen, { ancho = 1200, alto = 630 }: { ancho?: number; alto?: number } = {}) {
   const { display, displayMedia, texto } = await cargarFuentes();
@@ -65,6 +69,11 @@ export async function imagenRinde(c: ContenidoImagen, { ancho = 1200, alto = 630
             {c.cifra}
           </div>
           {c.detalle && <div style={{ fontFamily: "BricolageMedia", fontSize: 36 * escala, lineHeight: 1.25, letterSpacing: -0.6, maxWidth: ancho - 180, marginTop: 6 }}>{c.detalle}</div>}
+          {c.progreso !== undefined && (
+            <div style={{ display: "flex", width: ancho - (vertical ? 192 : 136), height: 28 * escala, borderRadius: 99, background: "#2a2a27", marginTop: 14, overflow: "hidden" }}>
+              <div style={{ display: "flex", width: `${Math.round(Math.min(1, Math.max(0, c.progreso)) * 100)}%`, height: "100%", borderRadius: 99, background: COLORES[c.color ?? "sol"] }} />
+            </div>
+          )}
           {c.filas && c.filas.length > 0 && (
             <div style={{ display: "flex", flexDirection: vertical ? "column" : "row", gap: vertical ? 18 : 56, marginTop: 6 }}>
               {c.filas.map((f) => (

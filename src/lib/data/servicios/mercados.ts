@@ -2,13 +2,13 @@ import { pais } from "@/config/countries/ar";
 import { bonoPorTicker, BONOS_USD } from "@data/ar/bonos-usd";
 import { ACCIONES_GENERAL, CEDEARS, PANEL_LIDER } from "@data/ar/mercados";
 import { resolverProveedor } from "@data/ar/proveedores";
-import { cronograma, fechaLiquidacion, hoyAR, metricasBono, spread } from "@/lib/calculos";
+import { cronograma, d, fechaLiquidacion, hoyAR, metricasBono, spread } from "@/lib/calculos";
 import * as criptoya from "../adapters/criptoya";
 import * as d912 from "../adapters/data912";
 import * as wikidata from "../adapters/wikidata";
 import { conRespaldo } from "../cache";
 import { mercadoAbierto } from "../freshness";
-import { FUENTES, type Accion, type BonoUsd, type Cedear, type Cripto, type Excluido, type ObligacionNegociable } from "../types";
+import { FUENTES, type Accion, type BonoUsd, type Cedear, type Cripto, type Excluido, type IndiceEEUU, type ObligacionNegociable } from "../types";
 import { enBanda, mediana } from "../validacion";
 import { cargarFeriados } from "./feriados";
 import type { z } from "zod";
@@ -149,6 +149,28 @@ export function normalizarAcciones(panel: Panel): Accion[] {
     .sort((a, b) => (a.panel === b.panel ? b.volumen - a.volumen : a.panel === "líder" ? -1 : 1));
 }
 
+/** Los índices de EE.UU. y el CEDEAR del ETF que replica a cada uno. */
+export const INDICES_EEUU = [
+  { nombre: "S&P 500", ticker: "SPY" },
+  { nombre: "Nasdaq 100", ticker: "QQQ" },
+  { nombre: "Dow Jones", ticker: "DIA" },
+] as const;
+
+/**
+ * Cómo vienen hoy los índices de EE.UU., medidos por el CEDEAR de su ETF. La variación en dólares sale de la especie
+ * D (dólar MEP): es la que se parece a la del índice. La de pesos suma, además, lo que se movió el dólar.
+ */
+export function indicesEEUU(panel: Panel): IndiceEEUU[] {
+  const porSimbolo = new Map(panel.map((p) => [p.symbol, p]));
+  const pct = (p: Panel[number] | undefined) => (p && precio(p) && typeof p.pct_change === "number" ? d(p.pct_change).div(100).toNumber() : null);
+  return INDICES_EEUU.flatMap(({ nombre, ticker }) => {
+    const ars = porSimbolo.get(ticker);
+    const precioArs = precio(ars);
+    if (!precioArs) return [];
+    return [{ nombre, ticker, precioArs, variacionArs: pct(ars), variacionUsd: pct(porSimbolo.get(`${ticker}D`)) }];
+  });
+}
+
 /**
  * Nombres de los tickers que no están en nuestras listas curadas (por ejemplo NBIS → Nebius Group), desde Wikidata.
  * Se piden todos los símbolos del panel (no solo los que operaron hoy) para que la consulta sea siempre la misma y quede
@@ -165,7 +187,7 @@ async function nombresFaltantes(panel: Panel, conocidos: Record<string, unknown>
 }
 
 export async function cargarMercados() {
-  return conRespaldo<{ cedears: Cedear[]; acciones: Accion[]; mepPromedio: number | null }>("mercados", [FUENTES.data912], async () => {
+  return conRespaldo<{ cedears: Cedear[]; acciones: Accion[]; mepPromedio: number | null; indices: IndiceEEUU[] }>("mercados", [FUENTES.data912], async () => {
     const [cedears, mep, ccl, acciones] = await Promise.all([
       d912.panel("arg_cedears"),
       d912.mepImplicitos().catch(() => [] as Mep),
@@ -180,7 +202,7 @@ export async function cargarMercados() {
     const lista = normalizarCedears(cedears, mep, cclMapa).map((c) => ({ ...c, nombre: c.nombre ?? nombresCedears[c.ticker] ?? null }));
     const meps = lista.slice(0, 30).map((c) => c.mepImplicito).filter((x): x is number => x !== null && x > 0);
     return {
-      data: { cedears: lista, acciones: normalizarAcciones(acciones).map((a) => ({ ...a, nombre: a.nombre ?? nombresAcciones[a.ticker] ?? null })), mepPromedio: meps.length ? mediana(meps) : null },
+      data: { cedears: lista, acciones: normalizarAcciones(acciones).map((a) => ({ ...a, nombre: a.nombre ?? nombresAcciones[a.ticker] ?? null })), mepPromedio: meps.length ? mediana(meps) : null, indices: indicesEEUU(cedears) },
       asOf: new Date().toISOString(),
       status: estadoData912(),
     };

@@ -14,7 +14,7 @@ const RUTAS = [
   "/pesos/caucion",
   "/pesos/lecaps",
   "/pesos/simulador",
-  "/bonos",
+  "/mercados/bonos",
   "/mercados",
   "/mercados/acciones",
   "/mercados/cripto",

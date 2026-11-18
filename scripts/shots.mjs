@@ -36,7 +36,7 @@ const RUTAS_POR_DEFECTO = [
   "/calculadoras/tasas",
   "/calculadoras/inflacion",
   "/cartera",
-  "/bonos",
+  "/mercados/bonos",
   "/mercados",
   "/mercados/acciones",
   "/mercados/cripto",

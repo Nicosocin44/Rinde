@@ -57,7 +57,7 @@ pnpm shots        # capturas de todas las rutas: 375 / 768 / 1440, dark y light 
 ```
 src/
   app/
-    (site)/                  # rutas públicas: /, /dolar, /pesos, /bonos, /mercados, /calculadoras, /cartera, /alertas, /calendario, /aprender, /metodologia, /legal
+    (site)/                  # rutas públicas: /, /dolar, /pesos, /mercados (con bonos), /calculadoras, /cartera, /alertas, /calendario, /aprender, /metodologia, /legal
     sistema/                 # vitrina interna del design system (noindex)
     api/                     # route handlers: normalizan, validan y cachean datos externos (BFF)
     manifest.ts

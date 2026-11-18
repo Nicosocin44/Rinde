@@ -45,7 +45,7 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
   return (
     <>
       <PageHeader
-        eyebrow={<Ruta seccion="Bonos" href="/bonos" ticker={b.ticker} />}
+        eyebrow={<Ruta seccion="Bonos" href="/mercados/bonos" ticker={b.ticker} />}
         titulo={b.nombre}
         acciones={<SeguirActivo ticker={b.ticker} nombre={b.nombre} precio={b.precioUsd} moneda="USD" />}
         bajada={`Bono del Tesoro en dólares · ${ley} · vence el ${fechaCorta(b.vencimiento, true)}`}

@@ -22,7 +22,6 @@ export const navPrincipal: NavItem[] = [
   { href: "/", label: "Inicio" },
   { href: "/dolar", label: "Dólar" },
   { href: "/pesos", label: "Pesos" },
-  { href: "/bonos", label: "Bonos" },
   { href: "/mercados", label: "Mercados" },
   { href: "/metas", label: "Metas" },
   { href: "/calculadoras", label: "Calculadoras" },

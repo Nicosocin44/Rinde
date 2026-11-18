@@ -249,6 +249,9 @@ export type Cedear = {
   volumenArs: number;
 };
 
+/** Un índice de EE.UU. medido por el CEDEAR de su ETF (S&P 500 → SPY). Variaciones del día, en fracción. */
+export type IndiceEEUU = { nombre: string; ticker: string; precioArs: number; variacionArs: number | null; variacionUsd: number | null };
+
 export type Accion = { ticker: string; nombre: string | null; panel: "líder" | "general"; precio: number; variacion: number | null; volumen: number };
 
 // ───────────────────────── Opciones ─────────────────────────

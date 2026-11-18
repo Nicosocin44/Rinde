@@ -63,7 +63,7 @@ El nicho es **el núcleo de valor**, no el techo. Nadie entra buscando "TEM de L
 /                       Inicio: la foto del día + "¿Dónde rinde más tu plata?"
 /dolar                  Cotizaciones · Dónde comprar (ranking por app) · Histórico y brecha · Conversor · Arbitraje
 /pesos                  Comparador · Plazo fijo · Billeteras y cuentas · FCI money market · Caución · LECAPs y BONCAPs · CER · Simulador
-/bonos                  Soberanos USD · ONs · Calculadora de flujos
+/mercados/bonos         Soberanos USD · ONs · Calculadora de flujos
 /mercados               CEDEARs · Acciones · Cripto · Global
 /calculadoras           Interés compuesto · Jubilación y metas · Plazo fijo · Conversor de tasas · Inflación · Sueldo en dólares
 /cartera                Resumen · Posiciones · Movimientos · Rendimiento · Ideas

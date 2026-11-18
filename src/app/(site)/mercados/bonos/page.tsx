@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import { Bonos, TablaOns } from "@/components/modules/bonos/bonos";
 import { Desplegable } from "@/components/modules/pesos/excluidos";
 import { Respuesta } from "@/components/modules/pesos/respuesta";
-import { PageHeader } from "@/components/shell/page-header";
 import { ErrorState } from "@/components/ui/estados";
 import { SourceNote } from "@/components/ui/frescura";
 import { obtenerBonos, obtenerMacro } from "@/lib/data";
@@ -31,8 +30,7 @@ export default async function BonosPage() {
   const [r, m] = await Promise.all([obtenerBonos(), obtenerMacro()]);
   return (
     <>
-      <PageHeader titulo="Bonos y ONs" bajada="Los bonos del Estado en dólares, con cuánto rinden si los tenés hasta el final y qué cobrás en cada fecha." />
-      <div className="pt-10 lg:pt-14">
+      <div>
         {!r.ok ? (
           <ErrorState titulo="No pudimos traer los bonos." detalle={r.error} />
         ) : (

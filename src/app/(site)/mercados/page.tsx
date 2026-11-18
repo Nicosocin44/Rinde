@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { IndicesEEUU } from "@/components/modules/mercados/indices";
 import { TablaCedears } from "@/components/modules/mercados/mercados";
 import { Cifra } from "@/components/ui/cifra";
 import { ErrorState } from "@/components/ui/estados";
@@ -17,6 +18,7 @@ export default async function Cedears() {
   const mep = c.ok ? c.data.find((x) => x.id === "mep")?.venta : null;
   return (
     <>
+      <IndicesEEUU indices={r.data.indices ?? []} />
       <section className="mb-12 flex flex-col gap-3 lg:mb-16">
         <p className="text-label">Dólar implícito en los CEDEARs</p>
         <Cifra valor={r.data.mepPromedio} className="text-hero" />

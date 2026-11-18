@@ -10,7 +10,9 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { guardarAlerta, listarAlertas } from "@/lib/alertas/almacen";
 import { describir, LIMITE_GRATIS, type Alerta } from "@/lib/alertas/evaluar";
-import { alCambiarFavoritos, dejarDeSeguir, esFavorito, seguir } from "@/lib/favoritos/almacen";
+import { ElegirGrupo } from "@/components/modules/mercados/elegir-grupo";
+import { alCambiarFavoritos, cambiarGrupo, dejarDeSeguir, listarFavoritos, seguir } from "@/lib/favoritos/almacen";
+import { gruposDisponibles } from "@/lib/favoritos/grupos";
 import { dolares, pesos } from "@/lib/format";
 
 type Props = {
@@ -29,11 +31,20 @@ export function SeguirActivo({ ticker, nombre, precio, moneda }: Props) {
   const toast = useToast();
   const router = useRouter();
   const [sigo, setSigo] = useState<boolean | null>(null);
+  const [grupo, setGrupo] = useState<string | null>(null);
+  const [grupos, setGrupos] = useState<string[]>([]);
   const [aviso, setAviso] = useState(false);
 
   useEffect(() => {
     let vivo = true;
-    const leer = () => void esFavorito(ticker).then((v) => vivo && setSigo(v));
+    const leer = () =>
+      void listarFavoritos().then((lista) => {
+        if (!vivo) return;
+        const yo = lista.find((f) => f.ticker === ticker);
+        setSigo(yo !== undefined);
+        setGrupo(yo?.grupo ?? null);
+        setGrupos(gruposDisponibles(lista));
+      });
     leer();
     const desuscribir = alCambiarFavoritos(leer);
     return () => {
@@ -48,7 +59,7 @@ export function SeguirActivo({ ticker, nombre, precio, moneda }: Props) {
       toast(`Dejaste de seguir ${nombre}.`);
     } else {
       await seguir({ ticker, nombre });
-      toast(`Seguís ${nombre}: lo ves arriba de todo en Mercados.`, { etiqueta: "Ver", onClick: () => router.push("/mercados") });
+      toast(`Seguís ${nombre}: lo ves en Mercados, en Siguiendo. Si querés, ponelo en un grupo.`, { etiqueta: "Ver", onClick: () => router.push("/mercados") });
     }
   };
 
@@ -58,6 +69,7 @@ export function SeguirActivo({ ticker, nombre, precio, moneda }: Props) {
         <Star className={sigo ? "fill-current" : undefined} />
         {sigo ? "Siguiendo" : "Seguir"}
       </Button>
+      {sigo && <ElegirGrupo compacto valor={grupo} grupos={grupos} etiqueta={`Grupo de ${nombre}`} onCambio={(g) => void cambiarGrupo(ticker, g)} className="max-w-[200px]" />}
       <Button variante="secundario" tamano="sm" onClick={() => setAviso(true)}>
         <Bell />
         Avisame

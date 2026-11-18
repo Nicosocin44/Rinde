@@ -298,6 +298,37 @@ Cripto: volatilidad anualizada con 365 días (opera todos los días); BTC y ETH 
     ),
   },
   {
+    id: "balances",
+    titulo: "Balances y resultados de las empresas",
+    contenido: (
+      <>
+        <p>
+          Salen de lo que cada empresa presenta ante la SEC de Estados Unidos (EDGAR, en formato XBRL): las de EE.UU. con el 10-K (anual) y el 10-Q (trimestral), las extranjeras con
+          el 20-F y el 6-K. Las acciones argentinas aparecen si tienen ADR en Nueva York (Galicia, YPF, Pampa, Macro y otras); las que no, y los ETF, no tienen esta sección. Cada concepto
+          (ingresos, ganancia, flujo de caja) se busca entre los nombres que usan las normas contables de EE.UU. y las internacionales (IFRS). Si un ejercicio aparece en varios balances,
+          usamos el más nuevo (las correcciones). Mostramos los ejercicios que traen los dos últimos balances anuales: más atrás aparecen cifras de antes de fusiones o reestructuraciones.
+        </p>
+        <Formula>{`Cuarto trimestre = ejercicio − primeros nueve meses           (las empresas no lo informan por separado)
+Últimos 12 meses = suma de los últimos 4 trimestres seguidos    (si no hay, el último ejercicio)
+Crecimiento = ejercicio / ejercicio anterior − 1                 (los dos del mismo balance)
+Margen neto = ganancia neta / ingresos       Margen operativo = ganancia operativa / ingresos
+Flujo de caja libre = flujo de caja operativo − inversión en bienes de uso
+Rentabilidad sobre el patrimonio (ROE) = ganancia de 12 meses / patrimonio del último balance
+Capitalización = precio de una acción en EE.UU. × acciones (promedio diluido del último período)
+PER = capitalización / ganancia de 12 meses     Precio/ventas = capitalización / ingresos de 12 meses
+Precio/valor libro = capitalización / patrimonio     Dividendo = dividendo por acción del último ejercicio / precio`}</Formula>
+        <ul>
+          <li>Los múltiplos (PER y demás) solo aparecen para empresas de EE.UU. con balances en dólares: en un ADR, un papel puede representar varias acciones.</li>
+          <li>
+            Balances en pesos: están ajustados por inflación a la fecha de cada balance, así que solo comparamos ejercicios que vienen en el mismo balance y no mostramos trimestres. Las
+            empresas argentinas presentan sus balances más nuevos en la CNV antes que en la SEC: si el último en la SEC tiene más de 15 meses, lo avisamos.
+          </li>
+          <li>Bancos: no informan &quot;ingresos&quot; como el resto, así que mostramos la ganancia, el patrimonio y la rentabilidad, sin flujo de caja libre.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
     id: "cartera",
     titulo: "Tu cartera",
     contenido: (

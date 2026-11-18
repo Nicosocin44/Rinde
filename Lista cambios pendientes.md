@@ -11,9 +11,10 @@
 11. Cotización Merval
 12. Cambiar dólar hoy
 13. Cambiar parte cripto
-14. Agregar balances, resultados y métricas importantes de las empresas
+14. ~~Agregar balances, resultados y métricas importantes de las empresas~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama balances)</span>
 15. Calendario con empresas que presentan estados contables, decisiones de tasas en USA o ARG, datos de inflación, datos de empleo
 16. Como se ve la web en el celu.
 17. ~~Sacar las fuentes de cada dato.~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama fuentes-discretas)</span>
+18. Pensar dónde poner "Siguiendo" (los activos que seguís) en Mercados. No convence: arriba de todo baja la página, y la columna al costado tampoco. Opciones: una solapa propia "★ Siguiendo", una línea fina debajo de las solapas o solo un botón ★ que abre la lista.
 
 

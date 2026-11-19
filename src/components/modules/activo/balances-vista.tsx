@@ -175,7 +175,7 @@ function Tabla({ e, anual, moneda, filas, comp }: { e: Estados; anual: boolean; 
     if (f.tipo === "acciones") return numero(x / 1e6, 0);
     return <span className={x < 0 ? "text-loss" : undefined}>{numero(x / 1e6, decimales)}</span>;
   };
-  if (visibles.length === 0) return <p className="text-chico text-text-2">La empresa no cargó este estado en la SEC con sus números en formato de datos.</p>;
+  if (visibles.length === 0) return <p className="text-chico text-text-2">La empresa no informó este estado con sus números en formato de datos.</p>;
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full min-w-[640px] text-[14px]">

@@ -148,6 +148,32 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Balances de las acciones argentinas desde la CNV (rama `balances-cnv`, 19/11/2026)
+
+> Pedido de los fundadores: los balances de las acciones argentinas estaban muy atrasados porque salían de la SEC (Galicia: marzo de 2025). Ahora salen de la CNV, al día, con la misma pantalla que los CEDEARs (anual y trimestral, gráfico, los tres estados y los números clave).
+
+- **Fuente:** el formulario de estados contables de la Autopista de Información Financiera de la CNV.
+  - La página de cada empresa (`cnv.gov.ar/SitioWeb/Empresas/Empresa/{cuit}`, unos 4 MB) lista sus presentaciones.
+  - La vista pública de cada una (`aif2.cnv.gov.ar/presentations/publicview/{guid}`) trae el formulario en XML: período, cierre, consolidado o individual, **unidad** ("Millones de $" o "Miles de $": cambia según la empresa), cantidad de acciones y cada rubro con su código fijo.
+  - Verificado el 19/11/2026 con YPF, Pampa, Banco Galicia, Grupo Galicia, Macro, Aluar, Cresud y Ternium. YPF, Aluar, Cresud y Ternium ya tienen el balance al 30/09/2026.
+- **Tabla de empresas** (`data/ar/cnv.ts`): 57 empresas del panel líder y del general, con el CUIT que devuelve el buscador de la propia CNV, revisado contra la razón social. GGAL es Grupo Financiero Galicia (el holding), no el banco.
+- **Cálculo** (`src/lib/calculos/balances-cnv.ts`, 8 tests): se arma el mismo resumen que con la SEC, así la pantalla es la misma.
+  - Todo en dólares al oficial mayorista del día de cierre.
+  - Los resultados vienen acumulados en el ejercicio. Cada trimestre se resta **en pesos**, con el acumulado anterior llevado por IPC a la moneda del cierre nuevo, y recién después se pasa a dólares. Restar ya en dólares deformaba el trimestre cuando el dólar saltó (YPF daba +76 % interanual en vez de +41 %).
+  - Bancos con su propio mapa de rubros (sin "ingresos" ni deuda financiera, como con la SEC).
+- **Múltiplos** para las acciones argentinas: el precio de hoy en BYMA pasado a dólares al mayorista y la cantidad de acciones del formulario (PER, precio / valor libro, valor de empresa / EBITDA).
+- **Respaldo:** si la CNV no responde, la ficha usa la SEC como antes (las que tienen ADR). Los CEDEARs siguen con la SEC.
+- Para el código compartido con la SEC (`calculos/balances.ts`) se separaron en funciones los "últimos 12 meses" y los indicadores, sin cambiar resultados: los 17 tests de Benja siguen pasando.
+
+### Decisiones para revisar
+1. **Las acciones argentinas se muestran en dólares** (al mayorista de cada cierre), no en pesos. En pesos no se pueden comparar balances de distintas fechas, y así quedan igual que los CEDEARs.
+2. **Mayorista y no MEP:** es el que usan las empresas para su contabilidad. En dólares MEP las cifras darían algo menores.
+3. **La ganancia por acción por período no se muestra** (YPF dividió sus acciones por 10 en 2026 y la serie informada no es comparable). La de 12 meses sale de la ganancia / la cantidad de acciones de hoy.
+4. **Los trimestres de empresas que llevan su contabilidad en dólares** (YPF, por ejemplo) también se reexpresan por IPC antes de restar; para ellas el ajuste correcto sería el tipo de cambio. La diferencia es chica salvo en trimestres con saltos fuertes del dólar.
+5. **Cada empresa nueva** se suma a mano en `data/ar/cnv.ts` (con el buscador de la CNV). Quedaron afuera Grupo Financiero Valores, Importadora Patagonia e Introductora: la CNV no las encontró con un nombre inequívoco.
+
+---
+
 ## Balances y resultados de las empresas (punto 14 de la lista, rama `balances`, 18/11/2026)
 
 > En la ficha de cada CEDEAR y de cada acción argentina con ADR, debajo del rendimiento. Datos reales de la SEC (EDGAR), gratis, sin cuenta y de dominio público.

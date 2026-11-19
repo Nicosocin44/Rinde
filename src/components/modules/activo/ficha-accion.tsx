@@ -191,7 +191,7 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
 
       {a.sector !== "ETF" && (
         <Suspense fallback={<EsperaBalances />}>
-          <BalancesEmpresa ticker={a.ticker} tipo={a.tipo} sector={a.sector} nombre={nombre} precioAccionUsd={a.tipo === "cedear" ? (a.subyacente?.precio ?? null) : null} />
+          <BalancesEmpresa ticker={a.ticker} tipo={a.tipo} sector={a.sector} nombre={nombre} precioAccionUsd={a.tipo === "cedear" ? (a.subyacente?.precio ?? null) : null} precioAccionArs={a.tipo === "accion" ? a.precio : null} />
         </Suspense>
       )}
 

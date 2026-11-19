@@ -139,11 +139,15 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ## Logos de bancos y billeteras que faltaban (rama `logos-proveedores`, 19/11/2026)
 
-> Benja vio a Prex, Banco Andina y Plaza Cambio sin ícono en "Dónde comprar".
+> Benja vio a Prex, Banco Andina y Plaza Cambio sin ícono en "Dónde comprar", y pidió buscar también en Google.
 
-- **9 proveedores más con logo (de 83 a 92):** Banco CMF, Banco Dino, Masventas, Meridian, Banco Piano, Carrefour Banco, Prex y Peanut, con el **ícono oficial de su app en el App Store de Argentina** (la búsqueda pública de Apple; en todos, la app la publica la propia empresa). Plaza Cambio, con la "P" de su logo, recortada del SVG de su sitio.
+- **14 proveedores más con logo (de 83 a 97):**
+  - Con el **ícono oficial de su app** (App Store; en todos, la app la publica la propia empresa): Banco CMF, Banco Dino, Masventas, Meridian, Banco Piano, Carrefour Banco, Prex, Peanut, Vesseo (ex Vibrant) y Plus Crypto (la app de Plus, de Plus Fintech).
+  - Plaza Cambio, Banco Julio y Andina Cambio: el símbolo de su logo, recortado del archivo de su propio sitio. CryptoMarket: su isotipo, de la foto de su cuenta oficial de X (@CryptoMKT).
+- **Vibrant pasó a llamarse Vesseo** (misma empresa, Sunship, y misma app): ahora se muestra como "Vesseo (ex Vibrant)".
 - Las fuentes quedan en `assets/logos-fuente/proveedores/` (con `app-store.json`, que dice de qué app sale cada uno), así que el script de logos los mantiene si se vuelve a correr.
-- **Siguen con monograma (7):** Banco Julio, Banco Andina, Bytelime, CryptoMarket y Plus Crypto (sin un ícono de buena calidad ni app propia), Adcap (su ícono es la palabra en letra chica) y Vibrant (su sitio ahora es Vesseo: el logo no coincidiría con el nombre).
+- **"Banco Andina" no era un banco:** el "andina" de CriptoYa es **Andina Cambio**, una casa de cambio de Bariloche y Villa La Angostura (así lo nombran DolarClaro, CotizaYa y otros que toman el mismo dato). Se corrigió el nombre y el tipo.
+- **Siguen con monograma (2):** Bytelime (es la agencia de cambio habilitada por el BCRA que opera el dólar oficial de Tienda Dólar, Buenbit y Manteca, sin una marca propia para el público: no sabemos de cuál es la cotización de CriptoYa, así que no ponemos un logo que podría ser de otro) y Adcap (su ícono es la palabra en letra chica, ilegible a 28 px).
 
 ---
 

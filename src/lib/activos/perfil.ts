@@ -15,6 +15,15 @@ const SUFIJOS = /\s*[,.]?\s*\b(inc|incorporated|corp|corporation|co|company|grou
 /** Palabras que también son comunes en castellano: con ese nombre no se puede buscar una empresa en las noticias. */
 const AMBIGUOS = new Set(["meta", "vale", "visa", "arm", "target", "block", "apple", "gap", "match", "snap", "ford", "shell", "oracle", "unity", "square", "nu"]);
 
+/**
+ * El nombre de la empresa sin sufijos societarios ni aclaraciones ("Alphabet (Google)" → "Alphabet"), aunque sea ambiguo:
+ * para buscar con contexto ("Apple" stock) en Google Noticias.
+ */
+export function nombreLimpio(nombre: string): string | null {
+  const limpio = nombre.replace(/\(.*?\)/g, "").replace(SUFIJOS, "").replace(/\s+/g, " ").trim();
+  return limpio.length >= 2 ? limpio : null;
+}
+
 /** El nombre con el que se busca a una empresa en las noticias, o null si es demasiado corto o ambiguo. */
 export function nombreParaBuscar(nombre: string): string | null {
   const limpio = nombre.replace(/\(.*?\)/g, "").replace(SUFIJOS, "").replace(/\s+/g, " ").trim();

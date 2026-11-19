@@ -191,12 +191,12 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
 
       {a.sector !== "ETF" && (
         <Suspense fallback={<EsperaBalances />}>
-          <BalancesEmpresa ticker={a.ticker} tipo={a.tipo} sector={a.sector} nombre={nombre} precioAccionUsd={a.tipo === "cedear" ? (a.subyacente?.precio ?? null) : null} />
+          <BalancesEmpresa ticker={a.ticker} tipo={a.tipo} sector={a.sector} nombre={nombre} precioAccionUsd={a.tipo === "cedear" ? (a.subyacente?.precio ?? null) : null} precioAccionArs={a.tipo === "accion" ? a.precio : null} />
         </Suspense>
       )}
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
-        <NoticiasActivo titulo={`Noticias de ${nombre}`} noticias={a.noticias} vacio={`No encontramos noticias de ${nombre} en los últimos tres días en los medios que seguimos.`} />
+        <NoticiasActivo titulo={`Noticias de ${nombre}`} noticias={a.noticias} vacio={`No encontramos noticias de ${nombre} ni de su mercado en los últimos días.`} />
         <AcercaDe
           titulo={a.sector === "ETF" ? "Qué es" : "Acerca de la empresa"}
           texto={a.acerca ? <p>{a.acerca.texto}</p> : null}

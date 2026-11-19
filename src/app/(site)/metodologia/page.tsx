@@ -280,7 +280,7 @@ CCL implícito = precio en pesos / precio de la especie C`}</Formula>,
           Precio, rango del día y volumen: data912 (BYMA con demora). La serie arranca en el último salto de más de 55 % en un día (cambio de ratio de un CEDEAR o split no
           ajustado), igual que en la cartera. La descripción de cada empresa sale de Wikipedia en castellano: del artículo que verificamos a mano para cada ticker o, si no está en nuestra
           lista, del que Wikidata asocia a la empresa de ese ticker. Si no hay artículo en castellano, armamos una línea con los datos de Wikidata
-          (industria, sede, fundación, bolsa). Sede, fundación, empleados y sitio web también salen de Wikidata. Los ETF los describimos nosotros. Las noticias son las de la sección Noticias que nombran a la empresa (en bonos, letras y cripto, las de su mercado). Bonos: precio de la especie D
+          (industria, sede, fundación, bolsa). Sede, fundación, empleados y sitio web también salen de Wikidata. Los ETF los describimos nosotros. Noticias: las de nuestros medios que nombran al activo, más una búsqueda en Google Noticias en castellano y, para las empresas de EE.UU. y las argentinas con ADR, en inglés (CNBC, CNN, Reuters, Bloomberg y otros), con el nombre del activo y contexto (“Apple” stock). Sacamos las páginas de cotización, los gráficos y las notas automáticas sobre compras de fondos, y unimos la misma noticia publicada en varios medios. Si hay menos de cuatro que lo nombren, completamos con las del mercado que lo mueve (Wall Street, el Merval, el riesgo país, las tasas en pesos o cripto), en un bloque aparte. Bonos: precio de la especie D
           y flujos del prospecto del canje 2020. LECAPs: no hay historia de precios en nuestra fuente, por eso la ficha muestra la curva del día. Cripto: el precio en pesos es la
           mediana entre exchanges (CriptoYa); el precio en dólares de BTC y ETH es el de Binance, porque el promedio en dólares de los exchanges locales trae sobreprecio.
         </p>
@@ -303,8 +303,23 @@ Cripto: volatilidad anualizada con 365 días (opera todos los días); BTC y ETH 
     contenido: (
       <>
         <p>
-          Salen de lo que cada empresa presenta ante la SEC de Estados Unidos (EDGAR, en formato XBRL): las de EE.UU. con el 10-K (anual) y el 10-Q (trimestral), las extranjeras con
-          el 20-F y el 6-K. Las acciones argentinas aparecen si tienen ADR en Nueva York (Galicia, YPF, Pampa, Macro y otras); las que no, y los ETF, no tienen esta sección. Cada concepto
+          <strong>Acciones argentinas: de la CNV.</strong> Salen del formulario de estados contables que cada empresa presenta en la Autopista de Información Financiera de la CNV, con un
+          código fijo para cada rubro (total del activo, ingresos, ganancia del período, flujo de las operaciones, EBITDA…). Usamos el balance consolidado si la empresa lo presenta y, si
+          corrigió uno, la versión más nueva. La unidad (miles o millones de pesos) sale del propio formulario.
+        </p>
+        <Formula>{`Cada balance, en dólares = monto en pesos / dólar oficial mayorista del día de cierre
+Trimestre = (acumulado − acumulado anterior × IPC del cierre / IPC del cierre anterior) / dólar del cierre
+  (los resultados vienen acumulados en el ejercicio y cada balance está en pesos de su propia fecha)
+Cuarto trimestre = ejercicio − nueve meses, de la misma forma
+Amortizaciones = EBITDA − EBIT   (los dos vienen calculados en el formulario)
+Precio de una acción en dólares = precio de hoy en BYMA / dólar oficial mayorista de hoy`}</Formula>
+        <p>
+          Pasamos todo a dólares para poder comparar balances de distintas fechas: en pesos, cada uno está expresado en moneda de su propia fecha (ajuste por inflación), y algunas
+          empresas llevan su contabilidad en dólares y la convierten a pesos para presentarla. Si la CNV no responde, usamos la SEC (las que tienen ADR, con atraso).
+        </p>
+        <p>
+          <strong>CEDEARs: de la SEC.</strong> Salen de lo que cada empresa presenta ante la SEC de Estados Unidos (EDGAR, en formato XBRL): las de EE.UU. con el 10-K (anual) y el 10-Q
+          (trimestral), las extranjeras con el 20-F y el 6-K. Los ETF no tienen esta sección. Cada concepto
           (ingresos, ganancia, flujo de caja) se busca entre los nombres que usan las normas contables de EE.UU. y las internacionales (IFRS). Si un ejercicio aparece en varios balances,
           usamos el más nuevo (las correcciones). Mostramos los ejercicios que traen los dos últimos balances anuales: más atrás aparecen cifras de antes de fusiones o reestructuraciones.
         </p>
@@ -328,7 +343,7 @@ Precio/valor libro = capitalización / patrimonio     Valor de empresa / EBITDA
 Rendimiento del dividendo = dividendo por acción del último ejercicio / precio
 Rendimiento del flujo libre = flujo de caja libre de 12 meses / capitalización`}</Formula>
         <ul>
-          <li>Los múltiplos (PER y demás) solo aparecen para empresas de EE.UU. con balances en dólares: en un ADR, un papel puede representar varias acciones.</li>
+          <li>Los múltiplos (PER y demás) aparecen para empresas de EE.UU. con balances en dólares y para las acciones argentinas con balances de la CNV (con la cantidad de acciones que informa el formulario). No para los ADR: un papel puede representar varias acciones.</li>
           <li>
             Balances en pesos: están ajustados por inflación a la fecha de cada balance, así que solo comparamos ejercicios que vienen en el mismo balance y no mostramos trimestres. Las
             empresas argentinas presentan sus balances más nuevos en la CNV antes que en la SEC: si el último en la SEC tiene más de 15 meses, lo avisamos.

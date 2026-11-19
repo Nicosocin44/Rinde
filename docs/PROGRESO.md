@@ -148,6 +148,33 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Balances de las acciones argentinas desde la CNV (rama `balances-cnv`, 19/11/2026)
+
+> Pedido de los fundadores: los balances de las acciones argentinas estaban muy atrasados porque salían de la SEC (Galicia: marzo de 2025). Ahora salen de la CNV, al día, con la misma pantalla que los CEDEARs (anual y trimestral, gráfico, los tres estados y los números clave).
+
+- **Fuente:** el formulario de estados contables de la Autopista de Información Financiera de la CNV.
+  - La página de cada empresa (`cnv.gov.ar/SitioWeb/Empresas/Empresa/{cuit}`, unos 4 MB) lista sus presentaciones.
+  - La vista pública de cada una (`aif2.cnv.gov.ar/presentations/publicview/{guid}`) trae el formulario en XML: período, cierre, consolidado o individual, **unidad** ("Millones de $" o "Miles de $": cambia según la empresa), cantidad de acciones y cada rubro con su código fijo.
+  - Verificado el 19/11/2026 con YPF, Pampa, Banco Galicia, Grupo Galicia, Macro, Aluar, Cresud y Ternium. YPF, Aluar, Cresud y Ternium ya tienen el balance al 30/09/2026.
+- **Tabla de empresas** (`data/ar/cnv.ts`): 57 empresas del panel líder y del general, con el CUIT que devuelve el buscador de la propia CNV, revisado contra la razón social. GGAL es Grupo Financiero Galicia (el holding), no el banco.
+- **Cálculo** (`src/lib/calculos/balances-cnv.ts`, 8 tests): se arma el mismo resumen que con la SEC, así la pantalla es la misma.
+  - Todo en dólares al oficial mayorista del día de cierre.
+  - Los resultados vienen acumulados en el ejercicio. Cada trimestre se resta **en pesos**, con el acumulado anterior llevado por IPC a la moneda del cierre nuevo, y recién después se pasa a dólares. Restar ya en dólares deformaba el trimestre cuando el dólar saltó (YPF daba +76 % interanual en vez de +41 %).
+  - Bancos con su propio mapa de rubros (sin "ingresos" ni deuda financiera, como con la SEC).
+- **Estados completos:** las tablas de Resultados, Balance y Flujo de caja muestran todos los rubros del formulario de la CNV, en su orden oficial (YPF: 22, 34 y 4; Banco Macro: 24, 35 y 6), y no solo los que coinciden con las filas fijas de la SEC. Los bancos tienen los suyos (depósitos, préstamos, intereses, comisiones, incobrabilidad). Gastos y costos con signo negativo, como en el formulario. El flujo de caja de las empresas es corto porque el formulario solo trae los totales de operaciones, inversión y financiación (no la inversión en bienes de uso ni los dividendos).
+- **Múltiplos** para las acciones argentinas: el precio de hoy en BYMA pasado a dólares al mayorista y la cantidad de acciones del formulario (PER, precio / valor libro, valor de empresa / EBITDA).
+- **Respaldo:** si la CNV no responde, la ficha usa la SEC como antes (las que tienen ADR). Los CEDEARs siguen con la SEC.
+- Para el código compartido con la SEC (`calculos/balances.ts`) se separaron en funciones los "últimos 12 meses" y los indicadores, sin cambiar resultados: los 17 tests de Benja siguen pasando.
+
+### Decisiones para revisar
+1. **Las acciones argentinas se muestran en dólares** (al mayorista de cada cierre), no en pesos. En pesos no se pueden comparar balances de distintas fechas, y así quedan igual que los CEDEARs.
+2. **Mayorista y no MEP:** es el que usan las empresas para su contabilidad. En dólares MEP las cifras darían algo menores.
+3. **La ganancia por acción por período no se muestra** (YPF dividió sus acciones por 10 en 2026 y la serie informada no es comparable). La de 12 meses sale de la ganancia / la cantidad de acciones de hoy.
+4. **Los trimestres de empresas que llevan su contabilidad en dólares** (YPF, por ejemplo) también se reexpresan por IPC antes de restar; para ellas el ajuste correcto sería el tipo de cambio. La diferencia es chica salvo en trimestres con saltos fuertes del dólar.
+5. **Cada empresa nueva** se suma a mano en `data/ar/cnv.ts` (con el buscador de la CNV). Quedaron afuera Grupo Financiero Valores, Importadora Patagonia e Introductora: la CNV no las encontró con un nombre inequívoco.
+
+---
+
 ## Balances y resultados de las empresas (punto 14 de la lista, rama `balances`, 18/11/2026)
 
 > En la ficha de cada CEDEAR y de cada acción argentina con ADR, debajo del rendimiento. Datos reales de la SEC (EDGAR), gratis, sin cuenta y de dominio público.
@@ -173,6 +200,44 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 7. **Bancos:** no informan "ingresos" como el resto; se muestran ganancia, patrimonio y rentabilidad, sin flujo libre, EBITDA ni deuda neta.
 8. **Deuda financiera:** en US GAAP, la deuda de largo plazo con su porción corriente más los papeles comerciales; en IFRS, los préstamos y, si los informa aparte, los bonos. No incluye arrendamientos salvo que la empresa los sume en el mismo concepto (Coca-Cola).
 9. **El trimestre de cierre de ejercicio y el flujo trimestral se derivan** restando acumulados (las empresas no los informan por separado). La ganancia por acción de ese trimestre queda vacía: no es una resta exacta.
+
+---
+
+## Todos los logos que faltaban (punto 19, 19/11/2026)
+
+- **De 106 a 459 logos de activos.** Casi todos los CEDEARs que operan (392 de los 404 de hoy) y las acciones argentinas del panel general que se pudieron verificar. Fuente: el logo por ticker de **Financial Modeling Prep** (`financialmodelingprep.com/image-stock/{ticker}.png`, sin cuenta; si no lo tiene responde 404, así que nunca entra una imagen genérica). CEDEARs con su ticker de EE.UU.; las brasileñas con `.SA`; las argentinas con su ADR o con `.BA`.
+- **De 6 a 147 logos de medios:** los que más aparecen en las noticias de los activos (Yahoo Finance, The Motley Fool, CNBC, CNN, Reuters, Bloomberg, WSJ, FT, Forbes, Barron's, Clarín, TN, Página/12…), en `scripts/medios.json`. En cada nota de Google Noticias el medio se identifica por su dominio ("cnbc.com"), que es el nombre del logo.
+- **Bancos, billeteras y exchanges: de 75 a 83.** Allaria, Banexcoin, Bibank, Eluter, Personal Pay, Saldo, SBS y Tria, con el ícono grande de su sitio. Quedan con monograma los que no publican un ícono usable (Carrefour Banco, CMF, Julio, Piano, Prex, CryptoMarket y algunos más).
+- **Logos claros sobre fondo oscuro:** varios logos vienen en blanco (IBM, Ferrari, Disney, UnitedHealth…). `scripts/logos.py` los detecta y los pone sobre fondo casi negro, para que se vean.
+- **Revisados a ojo** con hojas de contacto. Se descartaron los que estaban mal (Fiplasto traía el logo de Mastodon y Rosenbusch el de WordPress), los genéricos (un cuadrado gris con una letra) y los de las especies cable (BA.C es Boeing en dólar cable, no Bank of America). Coca-Cola pasó del ícono de su sitio a su logo.
+- Todo con `python scripts/logos_extra.py` y después `python scripts/logos.py`. Una empresa nueva toma su logo la próxima vez que se corren.
+
+### Decisiones para revisar
+1. **Financial Modeling Prep e icon.horse no son fuentes oficiales de logos.** Se bajan una sola vez y se sirven desde nuestro sitio, como los íconos de Google de antes. Los logos son marcas de cada empresa: se usan solo para identificarla.
+2. **Prefiero el monograma a un logo dudoso:** unas 20 acciones chicas del panel general (Carlos Casado, Carboclor, Domec…) y 12 proveedores quedan sin logo hasta conseguir uno verificado.
+
+---
+
+## Noticias en todos los activos (punto 21, rama `noticias-activos`, 19/11/2026)
+
+> Pedido de los fundadores: faltaban noticias en muchos activos. Sumar más fuentes, sobre todo de EE.UU. (CNN, CNBC…). Todos los activos tienen que tener noticias, directas o del mercado que los afecta.
+
+- **Fuente nueva: Google Noticias** (RSS de búsqueda, sin autenticación), en castellano (edición Argentina) y en inglés (edición EE.UU.). Verificada el 19/11/2026: "Nvidia" trajo 100 notas de 3 días con su medio (Reuters, CNBC, The Motley Fool…). Así entran CNN, CNBC, Reuters, Bloomberg, Barron's, Seeking Alpha y cientos más, sin tener que sumar los feeds de a uno.
+- **Qué se busca** (`src/lib/data/servicios/noticias-activo.ts`):
+  - CEDEARs: la empresa en inglés (`"Nvidia" stock`) y en castellano (`"Nvidia" acciones`). Con contexto, "Apple" encuentra la empresa y no la fruta.
+  - ETF: el ticker.
+  - Acciones argentinas: el nombre en castellano y, si tienen ADR, también en inglés.
+  - Bonos: el ticker (`"AL30" bonos`). LECAPs: el ticker.
+  - Cripto: Bitcoin, Ethereum, "Tether" stablecoin, "USDC" stablecoin.
+- **Si hay menos de 4 notas que lo nombren**, se completa con las del mercado que lo mueve, en un bloque aparte ("Lo que lo afecta"): Wall Street, el Merval, el riesgo país, las tasas en pesos o cripto. En bonos, LECAPs y cripto, las notas generales de nuestros medios pasan a ese bloque.
+- **Limpieza** (`src/lib/noticias/activo.ts`, 11 tests): sin páginas de cotización ni de gráficos, sin series de opciones, sin notas automáticas de compras de fondos y cambios de precio objetivo, y sin los sitios que solo publican eso (MarketBeat, TradingView y otros). La misma noticia en varios medios queda una, con "también en N medios".
+- **En la ficha:** cada nota con su medio y la marca "En inglés" cuando corresponde.
+- Probado con Nvidia, Apple, Coca-Cola, SPY, Mercado Libre, Nebius, Galicia, Aluar, Transener, Morixe, AL30, GD35, S30N6, Bitcoin y USDT: todos con noticias (de 2 a 8).
+
+### Decisiones para revisar
+1. **Google Noticias y los medios de EE.UU. no tienen una licencia comercial clara** para mostrar sus titulares (igual que los feeds de CNBC o Seeking Alpha que habíamos dejado afuera). Mostramos título, medio, hora y link, y la nota se lee en el sitio de cada medio. **Antes del lanzamiento comercial hay que revisarlo** o pasar a un servicio pago de noticias.
+2. **Los titulares en inglés no se traducen.** Llevan la marca "En inglés".
+3. **El link pasa por Google** (news.google.com) y de ahí a la nota original.
 
 ---
 

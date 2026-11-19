@@ -89,7 +89,7 @@ export function FichaLetraVista({ f, asOf, estado }: { f: FichaLetra; asOf: stri
       </section>
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
-        <NoticiasActivo titulo="Noticias de tasas y pesos" noticias={f.noticias} vacio="No hay noticias de tasas en los últimos tres días en los medios que seguimos." />
+        <NoticiasActivo titulo="Noticias de LECAPs y tasas" noticias={f.noticias} vacio="No encontramos noticias de tasas en los últimos días." />
         <AcercaDe
           titulo={`Qué es una ${l.tipo}`}
           texto={

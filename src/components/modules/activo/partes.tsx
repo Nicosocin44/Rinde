@@ -88,8 +88,13 @@ export function TablaRendimiento({ filas, anio, nota }: { filas: [string, Rendim
 }
 
 /** Noticias del activo (o de su mercado), con el medio, la hora y el link a la nota. */
+/**
+ * Noticias de un activo: primero las que hablan de él (de nuestros medios y de Google Noticias, en castellano y en
+ * inglés) y, si son pocas, las del mercado que lo mueve, en un bloque aparte ("Lo que lo afecta").
+ */
 export function NoticiasActivo({ titulo, noticias, vacio }: { titulo: string; noticias: Noticia[]; vacio: string }) {
-  const nombreMedio = (id: string) => MEDIOS.find((m) => m.id === id)?.nombre ?? id;
+  const directas = noticias.filter((n) => !n.indirecta);
+  const indirectas = noticias.filter((n) => n.indirecta);
   return (
     <section aria-labelledby="noticias-activo" className="flex min-w-0 flex-col">
       <h2 id="noticias-activo" className="mb-4 text-h3">
@@ -103,26 +108,49 @@ export function NoticiasActivo({ titulo, noticias, vacio }: { titulo: string; no
           </Link>
         </p>
       ) : (
-        <ol>
-          {noticias.map((n) => (
-            <li key={n.id} className="flex flex-col gap-1.5 border-t border-border py-4">
-              <p className="flex items-center gap-2 text-[13px] text-text-2">
-                <ProviderMark medio={n.medioId} sigla={nombreMedio(n.medioId).slice(0, 2)} tamano={20} className="rounded-[6px]" />
-                <span className="font-semibold text-text">{nombreMedio(n.medioId)}</span>
-                <span className="tabular">
-                  {fechaCorta(n.fecha)}, {hora(n.fecha)}
-                </span>
-                {n.tambienEn.length > 0 && <span>· también en {n.tambienEn.length === 1 ? "otro medio" : `${n.tambienEn.length} medios`}</span>}
-              </p>
-              <a href={n.url} target="_blank" rel="noopener noreferrer" className="font-display text-[18px] leading-[1.25] font-bold tracking-[-0.015em] text-pretty hover:underline hover:underline-offset-4">
-                {n.titulo}
-              </a>
-              {n.resumen && <p className="line-clamp-2 text-chico text-text-2">{n.resumen}</p>}
-            </li>
-          ))}
-        </ol>
+        <>
+          {directas.length > 0 && <ListaNoticias noticias={directas} />}
+          {indirectas.length > 0 && (
+            <>
+              <h3 className="mt-6 mb-1 text-label">{directas.length > 0 ? "Y lo que lo afecta" : "Lo que lo afecta"}</h3>
+              <p className="mb-2 text-micro text-text-3">{directas.length > 0 ? "Pocas noticias lo nombran: estas son del mercado que lo mueve." : "Ninguna noticia lo nombra estos días: estas son del mercado que lo mueve."}</p>
+              <ListaNoticias noticias={indirectas} />
+            </>
+          )}
+        </>
       )}
     </section>
+  );
+}
+
+function ListaNoticias({ noticias }: { noticias: Noticia[] }) {
+  const nombreMedio = (n: Noticia) => MEDIOS.find((m) => m.id === n.medioId)?.nombre ?? n.fuente ?? n.medioId;
+  return (
+    <ol>
+      {noticias.map((n) => (
+        <li key={n.id} className="flex flex-col gap-1.5 border-t border-border py-4">
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-text-2">
+            <ProviderMark medio={n.medioId} sigla={nombreMedio(n).slice(0, 2).toUpperCase()} tamano={20} className="rounded-[6px]" />
+            <span className="font-semibold text-text">{nombreMedio(n)}</span>
+            <span className="tabular">
+              {fechaCorta(n.fecha)}, {hora(n.fecha)}
+            </span>
+            {n.idioma === "en" && <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-text-2">En inglés</span>}
+            {n.tambienEn.length > 0 && <span>· también en {n.tambienEn.length === 1 ? "otro medio" : `${n.tambienEn.length} medios`}</span>}
+          </p>
+          <a
+            href={n.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            lang={n.idioma === "en" ? "en" : undefined}
+            className="font-display text-[18px] leading-[1.25] font-bold tracking-[-0.015em] text-pretty hover:underline hover:underline-offset-4"
+          >
+            {n.titulo}
+          </a>
+          {n.resumen && <p className="line-clamp-2 text-chico text-text-2">{n.resumen}</p>}
+        </li>
+      ))}
+    </ol>
   );
 }
 

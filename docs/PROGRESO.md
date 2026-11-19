@@ -137,6 +137,16 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Logos de bancos y billeteras que faltaban (rama `logos-proveedores`, 19/11/2026)
+
+> Benja vio a Prex, Banco Andina y Plaza Cambio sin ícono en "Dónde comprar".
+
+- **9 proveedores más con logo (de 83 a 92):** Banco CMF, Banco Dino, Masventas, Meridian, Banco Piano, Carrefour Banco, Prex y Peanut, con el **ícono oficial de su app en el App Store de Argentina** (la búsqueda pública de Apple; en todos, la app la publica la propia empresa). Plaza Cambio, con la "P" de su logo, recortada del SVG de su sitio.
+- Las fuentes quedan en `assets/logos-fuente/proveedores/` (con `app-store.json`, que dice de qué app sale cada uno), así que el script de logos los mantiene si se vuelve a correr.
+- **Siguen con monograma (7):** Banco Julio, Banco Andina, Bytelime, CryptoMarket y Plus Crypto (sin un ícono de buena calidad ni app propia), Adcap (su ícono es la palabra en letra chica) y Vibrant (su sitio ahora es Vesseo: el logo no coincidiría con el nombre).
+
+---
+
 ## El dólar implícito deja de ser la cifra principal de CEDEARs (rama `dolar-implicito-chico`, 19/11/2026)
 
 > Pregunta de Benja: ¿importa tanto como para estar arriba de todo? Casi siempre es igual al MEP (hoy, 0,6 % menos), así que no cambia ninguna decisión.

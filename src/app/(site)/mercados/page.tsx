@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { DolarImplicito } from "@/components/modules/mercados/dolar-implicito";
 import { IndicesEEUU } from "@/components/modules/mercados/indices";
 import { TablaCedears } from "@/components/modules/mercados/mercados";
-import { Cifra } from "@/components/ui/cifra";
 import { ErrorState } from "@/components/ui/estados";
 import { SourceNote } from "@/components/ui/frescura";
 import { obtenerCotizaciones, obtenerMercados, obtenerRecorridosEEUU } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
-import { porcentaje } from "@/lib/format";
 
 export const revalidate = 120;
 export const metadata: Metadata = { title: "CEDEARs: precios y dólar implícito", description: "Precio de los CEDEARs en pesos y dólares, con el MEP y el CCL implícitos." };
@@ -15,18 +14,12 @@ export const metadata: Metadata = { title: "CEDEARs: precios y dólar implícito
 export default async function Cedears() {
   const [r, c, recorridos] = await Promise.all([obtenerMercados(), obtenerCotizaciones(), obtenerRecorridosEEUU().catch(() => ({}))]);
   if (!r.ok) return <ErrorState titulo="No pudimos traer los CEDEARs." detalle={r.error} />;
-  const mep = c.ok ? c.data.find((x) => x.id === "mep")?.venta : null;
+  const mep = c.ok ? (c.data.find((x) => x.id === "mep")?.venta ?? null) : null;
   return (
     <>
       <IndicesEEUU indices={r.data.indices ?? []} recorridos={recorridos} />
-      <section className="mb-12 flex flex-col gap-3 lg:mb-16">
-        <p className="text-label">Dólar implícito en los CEDEARs</p>
-        <Cifra valor={r.data.mepPromedio} className="text-hero" />
-        <p className="max-w-2xl text-text-2">
-          Es lo que pagás por cada dólar cuando comprás un CEDEAR (mediana de los 30 más operados).
-          {mep && r.data.mepPromedio && ` Es ${porcentaje(Math.abs(r.data.mepPromedio / mep - 1), 1)} ${r.data.mepPromedio < mep ? "menos" : "más"} que el MEP con bonos.`} En modo Pro ves el MEP y el CCL implícitos de cada uno.
-        </p>
-      </section>
+      {/* El dólar implícito casi siempre es igual al MEP: una línea arriba de la tabla, o un aviso si se separa 2 % o más. */}
+      <DolarImplicito implicito={r.data.mepPromedio} mep={mep} />
       <Suspense fallback={null}>
         <TablaCedears cedears={r.data.cedears} />
       </Suspense>

@@ -152,6 +152,17 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## El dólar implícito deja de ser la cifra principal de CEDEARs (rama `dolar-implicito-chico`, 19/11/2026)
+
+> Pregunta de Benja: ¿importa tanto como para estar arriba de todo? Casi siempre es igual al MEP (hoy, 0,6 % menos), así que no cambia ninguna decisión.
+
+- **Ya no es una cifra gigante:** es una línea arriba de la tabla ("Dólar implícito de los CEDEARs: $ 1.619,43 · 0,6 % menos que el MEP · mediana de los 30 más operados"). Wall Street hoy queda como lo principal y la tabla sube.
+- **Aviso solo cuando importa:** si se separa 2 % o más del MEP, la línea pasa a ser un aviso de color (rojo si comprar CEDEARs en pesos sale más caro, verde si sale más barato) con el implícito y el MEP. Regla en `estadoDolarImplicito()` (`src/lib/calculos/activo.ts`), con test.
+
+**Para revisar:** el umbral del 2 % (`UMBRAL_AVISO_IMPLICITO`). Es una diferencia que ya se nota en una compra; se puede subir o bajar.
+
+---
+
 ## Balances y resultados de las empresas (punto 14 de la lista, rama `balances`, 18/11/2026)
 
 > En la ficha de cada CEDEAR y de cada acción argentina con ADR, debajo del rendimiento. Datos reales de la SEC (EDGAR), gratis, sin cuenta y de dominio público.

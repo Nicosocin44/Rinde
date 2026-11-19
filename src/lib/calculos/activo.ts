@@ -112,6 +112,20 @@ export function primaContraMep(implicito: Num, mep: Num): number | null {
   return d(implicito).div(mep).minus(1).toNumber();
 }
 
+/** Desde qué diferencia con el MEP vale la pena avisar: por debajo, el dólar implícito es casi el mismo que el MEP. */
+export const UMBRAL_AVISO_IMPLICITO = 0.02;
+
+/**
+ * ¿El dólar implícito de los CEDEARs se separó del MEP lo suficiente como para avisar? "caro": comprar CEDEARs en pesos
+ * sale más caro que el MEP; "barato": sale más barato; "normal": la diferencia es chica (menos del 2 %).
+ */
+export function estadoDolarImplicito(prima: number | null): "caro" | "barato" | "normal" | null {
+  if (prima === null || !Number.isFinite(prima)) return null;
+  if (prima >= UMBRAL_AVISO_IMPLICITO) return "caro";
+  if (prima <= -UMBRAL_AVISO_IMPLICITO) return "barato";
+  return "normal";
+}
+
 /** La serie en pesos: cada cierre en dólares por el dólar de esa fecha (o el último anterior). Sin dólar previo, se saltea. */
 export function aPesos(serie: { fecha: FechaISO; cierre: number }[], dolar: { fecha: FechaISO; valor: number }[]): { fecha: FechaISO; cierre: number }[] {
   const ordenado = [...dolar].filter((m) => m.valor > 0).sort((a, b) => a.fecha.localeCompare(b.fecha));

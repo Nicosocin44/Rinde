@@ -184,7 +184,7 @@ export function FichaCriptoVista({ f, asOf, estado }: { f: FichaCripto; asOf: st
       />
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
-        <NoticiasActivo titulo={`Noticias de ${estable ? "cripto y stablecoins" : c.nombre}`} noticias={f.noticias} vacio="No hay noticias de cripto en los últimos tres días en los medios que seguimos." />
+        <NoticiasActivo titulo={`Noticias de ${estable ? "cripto y stablecoins" : c.nombre}`} noticias={f.noticias} vacio="No encontramos noticias de cripto en los últimos días." />
         <AcercaDe
           titulo="Qué es"
           texto={f.acerca ? <p>{f.acerca.texto}</p> : null}

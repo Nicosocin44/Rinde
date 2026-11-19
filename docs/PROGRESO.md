@@ -203,6 +203,21 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Todos los logos que faltaban (punto 19, 19/11/2026)
+
+- **De 106 a 459 logos de activos.** Casi todos los CEDEARs que operan (392 de los 404 de hoy) y las acciones argentinas del panel general que se pudieron verificar. Fuente: el logo por ticker de **Financial Modeling Prep** (`financialmodelingprep.com/image-stock/{ticker}.png`, sin cuenta; si no lo tiene responde 404, así que nunca entra una imagen genérica). CEDEARs con su ticker de EE.UU.; las brasileñas con `.SA`; las argentinas con su ADR o con `.BA`.
+- **De 6 a 147 logos de medios:** los que más aparecen en las noticias de los activos (Yahoo Finance, The Motley Fool, CNBC, CNN, Reuters, Bloomberg, WSJ, FT, Forbes, Barron's, Clarín, TN, Página/12…), en `scripts/medios.json`. En cada nota de Google Noticias el medio se identifica por su dominio ("cnbc.com"), que es el nombre del logo.
+- **Bancos, billeteras y exchanges: de 75 a 83.** Allaria, Banexcoin, Bibank, Eluter, Personal Pay, Saldo, SBS y Tria, con el ícono grande de su sitio. Quedan con monograma los que no publican un ícono usable (Carrefour Banco, CMF, Julio, Piano, Prex, CryptoMarket y algunos más).
+- **Logos claros sobre fondo oscuro:** varios logos vienen en blanco (IBM, Ferrari, Disney, UnitedHealth…). `scripts/logos.py` los detecta y los pone sobre fondo casi negro, para que se vean.
+- **Revisados a ojo** con hojas de contacto. Se descartaron los que estaban mal (Fiplasto traía el logo de Mastodon y Rosenbusch el de WordPress), los genéricos (un cuadrado gris con una letra) y los de las especies cable (BA.C es Boeing en dólar cable, no Bank of America). Coca-Cola pasó del ícono de su sitio a su logo.
+- Todo con `python scripts/logos_extra.py` y después `python scripts/logos.py`. Una empresa nueva toma su logo la próxima vez que se corren.
+
+### Decisiones para revisar
+1. **Financial Modeling Prep e icon.horse no son fuentes oficiales de logos.** Se bajan una sola vez y se sirven desde nuestro sitio, como los íconos de Google de antes. Los logos son marcas de cada empresa: se usan solo para identificarla.
+2. **Prefiero el monograma a un logo dudoso:** unas 20 acciones chicas del panel general (Carlos Casado, Carboclor, Domec…) y 12 proveedores quedan sin logo hasta conseguir uno verificado.
+
+---
+
 ## Noticias en todos los activos (punto 21, rama `noticias-activos`, 19/11/2026)
 
 > Pedido de los fundadores: faltaban noticias en muchos activos. Sumar más fuentes, sobre todo de EE.UU. (CNN, CNBC…). Todos los activos tienen que tener noticias, directas o del mercado que los afecta.

@@ -23,9 +23,9 @@ const RUIDO = [
   /price target (raised|cut|lowered|increased|decreased|boosted)/i,
 ];
 
-/** Sitios que publican notas automáticas (movimientos de fondos, gráficos) en vez de noticias. */
+/** Sitios que publican notas automáticas (movimientos de fondos, gráficos, pronósticos de precio) en vez de noticias. */
 const MEDIOS_RUIDO = new Set(
-  ["MarketBeat", "TradingView", "ad-hoc-news.de", "Defense World", "ETF Daily News", "Ticker Report", "Zolmax", "Dispatch Tribunal", "WKRB News", "Daily Political", "Transcript Daily", "The Cerbat Gem", "Markets Daily", "American Banking News", "Modern Readers", "The Enterprise Leader", "Watchlist News", "Week Herald", "The Lincolnian Online"].map((m) => m.toLowerCase()),
+  ["MarketBeat", "TradingView", "Traders Union", "TIKR.com", "StockInvest.us", "BigGo Finance", "Pluang", "Gotrade", "TradingKey", "ad-hoc-news.de", "Defense World", "ETF Daily News", "Ticker Report", "Zolmax", "Dispatch Tribunal", "WKRB News", "Daily Political", "Transcript Daily", "The Cerbat Gem", "Markets Daily", "American Banking News", "Modern Readers", "The Enterprise Leader", "Watchlist News", "Week Herald", "The Lincolnian Online"].map((m) => m.toLowerCase()),
 );
 
 export const esRuido = (titulo: string, fuente = "") => MEDIOS_RUIDO.has(fuente.toLowerCase()) || RUIDO.some((r) => r.test(titulo));
@@ -37,12 +37,27 @@ export const idMedio = (fuente: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-/** Nuestros medios, como los nombra Google (para usar su logo). */
-const NUESTROS: Record<string, string> = { infobae: "infobae", "la-nacion": "lanacion", ambito: "ambito", "ambito-financiero": "ambito", "el-cronista": "cronista", iprofesional: "iprofesional", "bloomberg-linea": "bloomberglinea" };
+/** Nuestros medios, como los nombra Google o por su dominio (para usar su logo). */
+const NUESTROS: Record<string, string> = {
+  infobae: "infobae",
+  "la-nacion": "lanacion",
+  ambito: "ambito",
+  "ambito-financiero": "ambito",
+  "el-cronista": "cronista",
+  iprofesional: "iprofesional",
+  "bloomberg-linea": "bloomberglinea",
+  "infobae.com": "infobae",
+  "lanacion.com.ar": "lanacion",
+  "ambito.com": "ambito",
+  "cronista.com": "cronista",
+  "iprofesional.com": "iprofesional",
+  "bloomberglinea.com": "bloomberglinea",
+};
 
 /** Un resultado de la búsqueda, como noticia. */
 export function desdeBusqueda(b: NoticiaBuscada, indirecta: boolean): Noticia {
-  const id = idMedio(b.fuente);
+  // El id del medio es su dominio ("cnbc.com"), que es el nombre de su logo; sin dominio, su nombre.
+  const id = b.dominio ?? idMedio(b.fuente);
   return {
     id: b.url,
     titulo: limpiarTexto(b.titulo),

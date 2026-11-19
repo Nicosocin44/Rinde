@@ -14,8 +14,8 @@ describe("Google Noticias · lectura del RSS", () => {
   </channel></rss>`;
   it("lee título (sin el medio pegado al final), medio, fecha e idioma", () => {
     expect(leerBusqueda(xml, "en")).toEqual([
-      { titulo: "Jensen Huang's legal exposure balloons", url: "https://news.google.com/rss/articles/abc", fecha: "2026-11-19T17:30:25.000Z", fuente: "CNBC", idioma: "en" },
-      { titulo: "Trump bought Nvidia stock", url: "https://news.google.com/rss/articles/def", fecha: "2026-11-19T18:37:35.000Z", fuente: "Reuters", idioma: "en" },
+      { titulo: "Jensen Huang's legal exposure balloons", url: "https://news.google.com/rss/articles/abc", fecha: "2026-11-19T17:30:25.000Z", fuente: "CNBC", idioma: "en", dominio: "cnbc.com" },
+      { titulo: "Trump bought Nvidia stock", url: "https://news.google.com/rss/articles/def", fecha: "2026-11-19T18:37:35.000Z", fuente: "Reuters", idioma: "en", dominio: "reuters.com" },
     ]);
   });
   it("una búsqueda sin resultados no es un error", () => {

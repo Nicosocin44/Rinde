@@ -17,6 +17,8 @@ export type NoticiaBuscada = {
   fecha: string;
   /** El medio que publicó la nota ("CNBC", "Infobae"…). */
   fuente: string;
+  /** Su dominio, sin www ("cnbc.com"): es el id de su logo en public/logos/medios/. */
+  dominio?: string;
   idioma: Idioma;
 };
 
@@ -27,7 +29,7 @@ const itemSchema = z.object({
   title: texto,
   link: texto,
   pubDate: texto,
-  source: z.union([texto, z.object({ "#text": texto.optional() }).passthrough()]).optional(),
+  source: z.union([texto, z.object({ "#text": texto.optional(), "@_url": texto.optional() }).passthrough()]).optional(),
 });
 const rssSchema = z.object({ rss: z.object({ channel: z.object({ item: z.union([itemSchema, z.array(itemSchema)]).optional() }) }) });
 
@@ -46,9 +48,16 @@ export function leerBusqueda(xml: string, idioma: Idioma): NoticiaBuscada[] {
   const items = r.data.rss.channel.item;
   return (items === undefined ? [] : Array.isArray(items) ? items : [items]).flatMap((i) => {
     const fuente = typeof i.source === "string" ? i.source : (i.source?.["#text"] ?? "");
+    const sitio = typeof i.source === "string" ? undefined : i.source?.["@_url"];
     const fecha = new Date(i.pubDate);
     if (!fuente || !Number.isFinite(fecha.getTime())) return [];
-    return [{ titulo: sinMedio(i.title, fuente), url: i.link, fecha: fecha.toISOString(), fuente, idioma }];
+    let dominio: string | undefined;
+    try {
+      dominio = sitio ? new URL(sitio).hostname.replace(/^www\./, "") : undefined;
+    } catch {
+      dominio = undefined;
+    }
+    return [{ titulo: sinMedio(i.title, fuente), url: i.link, fecha: fecha.toISOString(), fuente, idioma, ...(dominio ? { dominio } : {}) }];
   });
 }
 

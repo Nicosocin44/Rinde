@@ -16,9 +16,10 @@
 16. Como se ve la web en el celu.
 17. ~~Sacar las fuentes de cada dato.~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama fuentes-discretas)</span>
 18. Pensar dónde poner "Siguiendo" (los activos que seguís) en Mercados. No convence: arriba de todo baja la página, y la columna al costado tampoco. Opciones: una solapa propia "★ Siguiendo", una línea fina debajo de las solapas o solo un botón ★ que abre la lista.
-19. Agregar todos los lgos de empresas, bancos, etc, que faltan.
+19. ~~Agregar todos los lgos de empresas, bancos, etc, que faltan.~~ ✅ <span style="color:red">HECHO (en la rama balances-cnv)</span>
 20. Cada cuanto se actualizcan las contizaciones de todo, no se ven moviminetos, ni colores en tiempo real.
 21. ~~Faltan noticias en muchos de los activos, no puede pasar. se pueden agregar mas fuentes de informacion? sobre todo de USA, como CNN, CNBC, etc. En todos los activos tienen que haber notiicas, ya sea directas de ellos, o que los afecten de forma indirecta.~~ ✅ <span style="color:red">HECHO (en la rama noticias-activos)</span>
+22. Cambiar promedio del dia de acciones, por card de indice merval como hicimos en CEDEARs.
 
 
 

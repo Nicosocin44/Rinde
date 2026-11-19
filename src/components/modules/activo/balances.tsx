@@ -160,7 +160,7 @@ export async function BalancesEmpresa({
         ))}
       </ul>
 
-      <ResultadosEmpresa moneda={b.moneda} anual={b.anual} trimestral={b.trimestral} financiera={b.financiera} />
+      <ResultadosEmpresa moneda={b.moneda} anual={b.anual} trimestral={b.trimestral} financiera={b.financiera} detalle={b.detalle} />
 
       <div className="mt-10">
         <h3 className="mb-4 text-h3">Números clave</h3>

@@ -1,4 +1,4 @@
-import { armarEstados, derivar, indicadoresDe, ultimosDoce, type Clave, type ClaveCuenta, type Estados, type Periodo, type ResumenBalances } from "./balances";
+import { armarEstados, derivar, indicadoresDe, ultimosDoce, type Clave, type ClaveCuenta, type DetalleFormulario, type Estados, type LineaFormulario, type Periodo, type ResumenBalances } from "./balances";
 import { d } from "./decimal";
 import { diasEntre, type FechaISO } from "./fechas";
 import { nivelEnFecha, type PuntoIndice } from "./inflacion";
@@ -29,6 +29,8 @@ export type FormularioEntrada = {
   cuentas: Record<string, number | null>;
   presentada: FechaISO;
   guid: string;
+  /** Los rubros en el orden del formulario, con su nombre (para las tablas completas). */
+  rubros?: { codigo: string; nombre: string }[];
 };
 
 type Mapa = Partial<Record<ClaveCuenta, (c: Record<string, number | null>) => number | null>>;
@@ -101,6 +103,8 @@ type Fila = {
   pesos: Partial<Record<ClaveCuenta, number | null>>;
   /** En dólares al cierre. */
   valores: Partial<Record<ClaveCuenta, number | null>>;
+  /** Cada rubro del formulario, en pesos de la fecha de cierre. */
+  pesosPorCodigo: Record<string, number | null>;
   f: FormularioEntrada;
 };
 
@@ -135,7 +139,9 @@ export function resumirCnv(p: {
       pesos[c] = v == null ? null : d(v).mul(f.factor).toNumber();
       valores[c] = v == null ? null : d(v).mul(f.factor).div(dolar).toNumber();
     }
-    filas.push({ cierre: f.cierre, meses: 0, anual: f.periodicidad === "anual", dolar, pesos, valores, f });
+    const pesosPorCodigo: Record<string, number | null> = {};
+    for (const [codigo, v] of Object.entries(f.cuentas)) pesosPorCodigo[codigo] = v == null ? null : d(v).mul(f.factor).toNumber();
+    filas.push({ cierre: f.cierre, meses: 0, anual: f.periodicidad === "anual", dolar, pesos, valores, pesosPorCodigo, f });
   }
   const anuales = filas.filter((x) => x.anual);
   if (anuales.length === 0) return null;
@@ -161,7 +167,7 @@ export function resumirCnv(p: {
   );
 
   // ── Trimestres (hasta 8): cada acumulado menos el anterior del mismo ejercicio, en pesos del cierre nuevo ──
-  const trimestres: { periodo: Periodo; valores: Partial<Record<ClaveCuenta, number | null>> }[] = [];
+  const trimestres: { periodo: Periodo; valores: Partial<Record<ClaveCuenta, number | null>>; fila: Fila; previo: Fila | null; reexpresion: ReturnType<typeof d> }[] = [];
   for (const x of filas) {
     if (x.meses % 3 !== 0) continue;
     const previo = x.meses === 3 ? null : filas.find((y) => y.meses === x.meses - 3 && mesesEntre(y.cierre, x.cierre) === 3);
@@ -180,7 +186,7 @@ export function resumirCnv(p: {
       const antes = previo.pesos[c];
       valores[c] = ahora == null || antes == null ? null : d(ahora).minus(d(antes).mul(reexpresion)).div(x.dolar).toNumber();
     }
-    trimestres.push({ periodo: { fin: x.cierre, derivado: !!previo }, valores });
+    trimestres.push({ periodo: { fin: x.cierre, derivado: !!previo }, valores, fila: x, previo: previo ?? null, reexpresion });
   }
   const ultimos8 = trimestres.slice(-8);
   const trimestral: Estados | null =
@@ -207,6 +213,27 @@ export function resumirCnv(p: {
   };
   const acciones = ultima.f.acciones;
 
+  // ── Los tres estados completos, rubro por rubro ──
+  const enDolares = (x: Fila, codigo: string) => (x.pesosPorCodigo[codigo] == null ? null : d(x.pesosPorCodigo[codigo]!).div(x.dolar).toNumber());
+  const detalleAnual = armarDetalle(
+    ultimosAnuales.map((x) => ({ fin: x.cierre, derivado: false })),
+    ultimosAnuales.map((x) => (codigo: string) => enDolares(x, codigo)),
+    filas,
+  );
+  const detalleTrimestral =
+    ultimos8.length >= 2
+      ? armarDetalle(
+          ultimos8.map((t) => t.periodo),
+          ultimos8.map((t) => (codigo: string) => {
+            if (esSaldo(codigo) || !t.previo) return enDolares(t.fila, codigo);
+            const ahora = t.fila.pesosPorCodigo[codigo];
+            const antes = t.previo.pesosPorCodigo[codigo];
+            return ahora == null || antes == null ? null : d(ahora).minus(d(antes).mul(t.reexpresion)).div(t.fila.dolar).toNumber();
+          }),
+          filas,
+        )
+      : null;
+
   return {
     fuente: "cnv",
     empresa: p.empresa,
@@ -223,5 +250,76 @@ export function resumirCnv(p: {
     balance: { fecha: ultima.cierre, valores: saldos },
     indicadores: indicadoresDe({ ultimos12, balance: { fecha: ultima.cierre, valores: saldos }, trimestral, financiera, acciones, crecimientoIngresos: crece("ingresos"), crecimientoGanancia: crece("gananciaNeta") }),
     acciones,
+    detalle: { anual: detalleAnual, trimestral: detalleTrimestral },
   };
+}
+
+// ───────────────────────── Tablas completas ─────────────────────────
+
+/** Balance (1xxxxxx activo, 2xxxxxx pasivo y patrimonio): fotos al cierre. Lo demás son flujos del período. */
+const esSaldo = (codigo: string) => codigo.startsWith("1") || codigo.startsWith("2");
+/** Resultados: 30xxxxx, más EBIT y EBITDA (vienen calculados en el formulario). Flujo de efectivo: 32xxxxx. */
+const seccionDe = (codigo: string): keyof Omit<DetalleFormulario, "periodos"> | null =>
+  esSaldo(codigo) ? "balance" : codigo.startsWith("30") || codigo === "8000003" || codigo === "8000004" ? "resultados" : codigo.startsWith("32") ? "flujo" : null;
+
+/** Rubros con un nombre poco claro en el formulario de empresas (el de bancos ya los nombra así). */
+const NOMBRES_CLAROS: Record<string, string> = {
+  "3241100": "Flujo de las actividades operativas",
+  "3241200": "Flujo de las actividades de inversión",
+  "3241300": "Flujo de las actividades de financiación",
+};
+
+/** Palabras que el formulario escribe sin tilde (y algún error de tipeo). */
+const TILDES: Record<string, string> = {
+  administracion: "administración", comercializacion: "comercialización", distribucion: "distribución", inversion: "inversión", financiacion: "financiación",
+  disminucion: "disminución", perdida: "pérdida", periodo: "período", sindicos: "síndicos", accion: "acción", depositos: "depósitos", prestamos: "préstamos",
+  titulos: "títulos", credito: "crédito", creditos: "créditos", medicion: "medición", cotizacion: "cotización", operacion: "operación", basica: "básica",
+  analisis: "análisis", acida: "ácida", rotacion: "rotación", inmovilizacion: "inmovilización", ganacias: "ganancias", garantia: "garantía",
+  depreciacion: "depreciación", emision: "emisión", tecnica: "técnica", deficit: "déficit", reexpresion: "reexpresión", valuacion: "valuación",
+  participacion: "participación", produccion: "producción", explotacion: "explotación", realizacion: "realización",
+};
+const SIGLAS = new Set(["recpam", "ebit", "ebitda", "bcra", "niif", "pn", "y/o"]);
+
+/** "GANANCIA (PERDIDA) DE ACTIVIDADES OPERATIVAS" → "Ganancia (pérdida) de actividades operativas". */
+export function nombreRubro(texto: string): string {
+  // La CNV manda algunas tildes rotas (MEDICI?N, COTIZACI?N, con el carácter de reemplazo U+FFFD): casi siempre son la ó de -ción.
+  const palabras = texto
+    .replace(/CI�N/gi, "CIÓN")
+    .replace(/�/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .map((w) => {
+      const limpia = w.replace(/[^a-záéíóúñ/]/g, "");
+      if (SIGLAS.has(limpia)) return w.toUpperCase().replace("Y/O", "y/o");
+      const conTilde = TILDES[limpia];
+      return conTilde ? w.replace(limpia, conTilde) : w;
+    })
+    .join(" ");
+  return palabras.charAt(0).toUpperCase() + palabras.slice(1);
+}
+
+/** Totales y subtotales: los códigos que terminan en 9999 (activo corriente, total del activo, ganancia bruta, operativa, neta…), la variación del efectivo y el EBITDA. */
+const esTotal = (codigo: string) => /9999$|^3240000$|^8000004$/.test(codigo);
+
+/**
+ * Las tablas completas: cada rubro en el orden del formulario más nuevo (los que solo aparecen en formularios viejos, al
+ * final), con su valor en cada período. Los rubros vacíos en todos los períodos no se muestran.
+ */
+function armarDetalle(periodos: Periodo[], valorDe: ((codigo: string) => number | null)[], filas: Fila[]): DetalleFormulario {
+  const nombres = new Map<string, string>();
+  for (const x of [...filas].reverse()) for (const r of x.f.rubros ?? []) if (!nombres.has(r.codigo)) nombres.set(r.codigo, r.nombre);
+  const detalle: DetalleFormulario = { periodos, resultados: [], balance: [], flujo: [] };
+  for (const [codigo, nombre] of nombres) {
+    const seccion = seccionDe(codigo);
+    if (!seccion) continue;
+    const valores = valorDe.map((v) => v(codigo));
+    if (valores.every((x) => x === null || x === 0)) continue;
+    const linea: LineaFormulario = { codigo, nombre: NOMBRES_CLAROS[codigo] ?? nombreRubro(nombre), total: esTotal(codigo), valores };
+    detalle[seccion].push(linea);
+  }
+  // EBIT y EBITDA al final de los resultados.
+  detalle.resultados.sort((a, b) => Number(a.codigo.startsWith("8")) - Number(b.codigo.startsWith("8")));
+  return detalle;
 }

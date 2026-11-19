@@ -77,6 +77,8 @@ export type FormularioCnv = {
   acciones: number | null;
   /** Código de rubro → monto en la unidad del formulario (null si vino vacío: "-"). */
   cuentas: Record<string, number | null>;
+  /** Los rubros en el orden del formulario, con su nombre. */
+  rubros: { codigo: string; nombre: string }[];
 };
 
 const propiedad = (xml: string, id: string) => new RegExp(`<propiedad id="${id}"[^>]*>([^<]*)</propiedad>`).exec(xml)?.[1]?.trim() ?? "";
@@ -95,9 +97,12 @@ export function leerFormulario(html: string): FormularioCnv | null {
   const enPesos = /\$/.test(unidad) && !/US\$|U\$S|d[óo]lar/i.test(unidad);
   const factor = /millon/i.test(unidad) ? 1e6 : /miles/i.test(unidad) ? 1e3 : 1;
   const cuentas: Record<string, number | null> = {};
+  const rubros: { codigo: string; nombre: string }[] = [];
   for (const [, fila] of xml.matchAll(/<fila[^>]*>([\s\S]*?)<\/fila>/g)) {
     const nro = propiedad(fila!, "Nro");
-    if (/^\d{7}$/.test(nro)) cuentas[nro] = numero(propiedad(fila!, "Monto"));
+    if (!/^\d{7}$/.test(nro)) continue;
+    cuentas[nro] = numero(propiedad(fila!, "Monto"));
+    rubros.push({ codigo: nro, nombre: propiedad(fila!, "Rubro") });
   }
   const periodo = propiedad(xml, "PeriodoBalance");
   const datos = {
@@ -109,6 +114,7 @@ export function leerFormulario(html: string): FormularioCnv | null {
     factor,
     acciones: numero(propiedad(xml, "ODBCantidadAcciones")),
     cuentas,
+    rubros,
   };
   return formularioSchema.safeParse(datos).success && Object.keys(cuentas).length > 10 ? datos : null;
 }

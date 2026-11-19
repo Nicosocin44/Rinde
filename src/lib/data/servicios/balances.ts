@@ -53,7 +53,7 @@ const resumenCnv = unstable_cache(
       elegidas.map(async (x): Promise<FormularioEntrada | null> => {
         const f = await cnv.formulario(x.guid).catch(() => null);
         // Solo formularios en pesos con la unidad reconocida.
-        return f && f.moneda === "ARS" ? { cierre: f.cierre, periodicidad: x.periodicidad, factor: f.factor, acciones: f.acciones, cuentas: f.cuentas, presentada: x.presentada, guid: x.guid } : null;
+        return f && f.moneda === "ARS" ? { cierre: f.cierre, periodicidad: x.periodicidad, factor: f.factor, acciones: f.acciones, cuentas: f.cuentas, rubros: f.rubros, presentada: x.presentada, guid: x.guid } : null;
       }),
     );
     return resumirCnv({
@@ -66,7 +66,7 @@ const resumenCnv = unstable_cache(
       hoy,
     });
   },
-  ["balances-cnv-v2"],
+  ["balances-cnv-v5"],
   { revalidate: 43_200 },
 );
 

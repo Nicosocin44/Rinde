@@ -214,6 +214,11 @@ export type Indicadores = {
   payout: number | null;
 };
 
+/** Un rubro del formulario de la CNV con su valor en cada período (en la moneda del resumen). */
+export type LineaFormulario = { codigo: string; nombre: string; /** Totales y resultados: van destacados. */ total: boolean; valores: (number | null)[] };
+/** Los tres estados completos, rubro por rubro, tal como vienen en el formulario de la CNV. */
+export type DetalleFormulario = { periodos: Periodo[]; resultados: LineaFormulario[]; balance: LineaFormulario[]; flujo: LineaFormulario[] };
+
 export type ResumenBalances = {
   /** De dónde salen: la SEC (XBRL de EDGAR) o la CNV (formulario de estados contables). */
   fuente: "sec" | "cnv";
@@ -242,6 +247,8 @@ export type ResumenBalances = {
   indicadores: Indicadores;
   /** Acciones (promedio diluido del último período informado). */
   acciones: number | null;
+  /** Solo CNV: los tres estados con todos los rubros del formulario (la SEC usa las filas fijas de la pantalla). */
+  detalle?: { anual: DetalleFormulario; trimestral: DetalleFormulario | null };
 };
 
 const div = (a: number | null | undefined, b: number | null | undefined) => (a == null || b == null || b === 0 ? null : d(a).div(b).toNumber());

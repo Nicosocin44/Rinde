@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { construirIndice, dolarDelCierre, resumirCnv, type FormularioEntrada } from "@/lib/calculos";
+import { construirIndice, dolarDelCierre, nombreRubro, resumirCnv, type FormularioEntrada } from "@/lib/calculos";
 import { leerFormulario, leerPresentaciones } from "@/lib/data/adapters/cnv";
 
 const fila = (fecha: string, hora: string, descripcion: string, guid: string) =>
@@ -98,5 +98,14 @@ describe("CNV · resumen en dólares", () => {
   it("sin ningún balance anual no hay resumen; un balance de hace más de 15 meses queda marcado como viejo", () => {
     expect(resumirCnv({ empresa: "X", bancaria: false, formularios: formularios.slice(1), dolar, hoy: "2026-11-19" })).toBeNull();
     expect(resumirCnv({ empresa: "X", bancaria: false, formularios: formularios.slice(0, 1), dolar, hoy: "2027-06-30" })!.desactualizado).toBe(true);
+  });
+});
+
+describe("CNV · nombres de los rubros", () => {
+  it("de mayúsculas sin tilde a una frase prolija, con las siglas y las tildes rotas corregidas", () => {
+    expect(nombreRubro("GANANCIA (PERDIDA)  DE ACTIVIDADES OPERATIVAS")).toBe("Ganancia (pérdida) de actividades operativas");
+    expect(nombreRubro("GASTOS DE COMERCIALIZACION Y/O DISTRIBUCION")).toBe("Gastos de comercialización y/o distribución");
+    expect(nombreRubro("RECPAM")).toBe("RECPAM");
+    expect(nombreRubro("DIFERENCIA DE COTIZACI�N DE ORO Y MONEDA EXTRANJERA")).toBe("Diferencia de cotización de oro y moneda extranjera");
   });
 });

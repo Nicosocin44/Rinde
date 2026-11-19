@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Delta } from "@/components/ui/delta";
 import { SegmentedControl } from "@/components/ui/segmented";
-import type { Clave, Estados } from "@/lib/calculos/balances";
+import type { Clave, DetalleFormulario, Estados, LineaFormulario } from "@/lib/calculos/balances";
 import { cn } from "@/lib/cn";
 import { mesAnio, numero, pesosCompacto, porcentaje } from "@/lib/format";
 
@@ -88,7 +88,20 @@ function valoresDe(e: Estados, clave: Fila["clave"]): (number | null)[] {
   return e.valores[clave];
 }
 
-export function ResultadosEmpresa({ moneda, anual, trimestral, financiera }: { moneda: string; anual: Estados; trimestral: Estados | null; financiera: boolean }) {
+export function ResultadosEmpresa({
+  moneda,
+  anual,
+  trimestral,
+  financiera,
+  detalle,
+}: {
+  moneda: string;
+  anual: Estados;
+  trimestral: Estados | null;
+  financiera: boolean;
+  /** CNV: los tres estados con todos los rubros del formulario. */
+  detalle?: { anual: DetalleFormulario; trimestral: DetalleFormulario | null };
+}) {
   const [periodicidad, setPeriodicidad] = useState<"trimestral" | "anual">(trimestral ? "trimestral" : "anual");
   const [estado, setEstado] = useState<QueEstado>("resultados");
   const esAnual = periodicidad === "anual" || !trimestral;
@@ -146,7 +159,11 @@ export function ResultadosEmpresa({ moneda, anual, trimestral, financiera }: { m
             ]}
           />
         </div>
-        <Tabla e={e} anual={esAnual} moneda={moneda} filas={ESTADOS[estado]} comp={comp} />
+        {detalle ? (
+          <TablaFormulario d={esAnual || !detalle.trimestral ? detalle.anual : detalle.trimestral} anual={esAnual} moneda={moneda} lineas={(esAnual || !detalle.trimestral ? detalle.anual : detalle.trimestral)[estado]} comp={comp} />
+        ) : (
+          <Tabla e={e} anual={esAnual} moneda={moneda} filas={ESTADOS[estado]} comp={comp} />
+        )}
       </div>
     </div>
   );
@@ -224,6 +241,69 @@ function Tabla({ e, anual, moneda, filas, comp }: { e: Estados; anual: boolean; 
       {e.periodos.some((p) => p.derivado) && (
         <p className="mt-2 text-micro text-text-3">Los trimestres de cierre de ejercicio (y el flujo de cada trimestre) salen de restar acumulados: las empresas no los informan por separado.</p>
       )}
+    </div>
+  );
+}
+
+/**
+ * Tabla de un estado con todos los rubros del formulario de la CNV, en su orden oficial. Los gastos vienen con signo
+ * negativo, como en el formulario; la variación de dos negativos (un gasto que crece) va sin color, para no pintar de
+ * verde un costo más alto.
+ */
+function TablaFormulario({ d, anual, moneda, lineas, comp }: { d: DetalleFormulario; anual: boolean; moneda: string; lineas: LineaFormulario[]; comp: number | null }) {
+  if (lineas.length === 0) return <p className="text-chico text-text-2">La empresa no informó este estado en el formulario de la CNV.</p>;
+  const montos = lineas.flatMap((l) => l.valores.filter((x): x is number => x !== null));
+  const decimales = Math.max(0, ...montos.map(Math.abs)) < 1e8 ? 1 : 0;
+  const ultimo = d.periodos.length - 1;
+  return (
+    <div className="relative overflow-x-auto">
+      <table className="w-full min-w-[640px] text-[14px]">
+        <caption className="sr-only">Estado contable completo, {anual ? "por ejercicio" : "por trimestre"}, en millones de {simbolo(moneda)}</caption>
+        <thead>
+          <tr className="text-left text-micro text-text-3">
+            <th className="sticky left-0 z-10 bg-bg pr-3 pb-2 font-normal">Millones de {simbolo(moneda)}</th>
+            {d.periodos.map((p) => (
+              <th key={p.fin} className="pb-2 pl-3 text-right font-normal whitespace-nowrap">
+                {etiquetaPeriodo(p.fin, anual)}
+              </th>
+            ))}
+            {comp !== null && <th className="pb-2 pl-4 text-right font-normal whitespace-nowrap">{anual ? "Contra el anterior" : "Interanual"}</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {lineas.map((l) => {
+            const nuevo = l.valores[ultimo] ?? null;
+            const viejo = comp !== null ? (l.valores[comp] ?? null) : null;
+            return (
+              <tr key={l.codigo} className="border-t border-border">
+                <th scope="row" className={cn("sticky left-0 z-10 max-w-[260px] min-w-[170px] bg-bg py-2.5 pr-3 text-left font-normal", l.total ? "font-semibold text-text" : "text-text-2")}>
+                  {l.nombre}
+                </th>
+                {l.valores.map((x, k) => (
+                  <td key={d.periodos[k]!.fin} className={cn("tabular py-2.5 pl-3 text-right whitespace-nowrap", l.total && "font-semibold", l.total && x !== null && x < 0 && "text-loss")}>
+                    {x === null ? <span className="text-text-3">—</span> : numero(x / 1e6, decimales)}
+                  </td>
+                ))}
+                {comp !== null && (
+                  <td className="py-2.5 pl-4 text-right">
+                    {nuevo !== null && viejo !== null && nuevo > 0 && viejo > 0 ? (
+                      <Delta valor={nuevo / viejo - 1} decimales={1} className="text-micro" />
+                    ) : nuevo !== null && viejo !== null && nuevo < 0 && viejo < 0 ? (
+                      <span className="tabular text-micro text-text-3">{porcentaje(nuevo / viejo - 1, 1)}</span>
+                    ) : (
+                      <span className="text-text-3">—</span>
+                    )}
+                  </td>
+                )}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <p className="mt-2 text-micro text-text-3">
+        Todos los rubros del formulario de la CNV, en su orden. Gastos y costos con signo negativo, como los informa la empresa.
+        {d.periodos.some((p) => p.derivado) ? " Los trimestres salen de restar acumulados del ejercicio." : ""}
+      </p>
     </div>
   );
 }

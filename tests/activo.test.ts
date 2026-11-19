@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ajustarRatios, aPesos, cortarEnSalto, enDolares, inflacionEsperadaHasta, maximaCaida, primaContraMep, rango, rendimientos, resumenBono, variacionDesde, volatilidadAnual, type Vela } from "@/lib/calculos";
+import { ajustarRatios, aPesos, cortarEnSalto, enDolares, estadoDolarImplicito, inflacionEsperadaHasta, maximaCaida, primaContraMep, rango, rendimientos, resumenBono, variacionDesde, volatilidadAnual, type Vela } from "@/lib/calculos";
 
 // Golden tests de la ficha de un activo, calculados a mano.
 
@@ -67,6 +67,15 @@ describe("ficha de activo", () => {
     expect(primaContraMep(1650, 1500)).toBeCloseTo(0.1, 12);
     expect(primaContraMep(1350, 1500)).toBeCloseTo(-0.1, 12);
     expect(primaContraMep(1500, 0)).toBeNull();
+  });
+
+  it("aviso del dólar implícito: solo si se separa 2 % o más del MEP", () => {
+    expect(estadoDolarImplicito(primaContraMep(1619.43, 1629.2))).toBe("normal"); // −0,6 %, el caso del 19/11/2026
+    expect(estadoDolarImplicito(0.0199)).toBe("normal");
+    expect(estadoDolarImplicito(0.02)).toBe("caro");
+    expect(estadoDolarImplicito(0.031)).toBe("caro");
+    expect(estadoDolarImplicito(-0.02)).toBe("barato");
+    expect(estadoDolarImplicito(null)).toBeNull();
   });
 });
 

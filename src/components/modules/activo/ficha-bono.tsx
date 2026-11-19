@@ -102,7 +102,7 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
       />
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
-        <NoticiasActivo titulo="Noticias de bonos y deuda" noticias={f.noticias} vacio="No hay noticias de bonos ni deuda en los últimos tres días en los medios que seguimos." />
+        <NoticiasActivo titulo={`Noticias de ${b.ticker} y la deuda`} noticias={f.noticias} vacio="No encontramos noticias de bonos ni de deuda en los últimos días." />
         <AcercaDe
           titulo="Acerca del bono"
           texto={

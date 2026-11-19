@@ -176,6 +176,29 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Noticias en todos los activos (punto 21, rama `noticias-activos`, 19/11/2026)
+
+> Pedido de los fundadores: faltaban noticias en muchos activos. Sumar más fuentes, sobre todo de EE.UU. (CNN, CNBC…). Todos los activos tienen que tener noticias, directas o del mercado que los afecta.
+
+- **Fuente nueva: Google Noticias** (RSS de búsqueda, sin autenticación), en castellano (edición Argentina) y en inglés (edición EE.UU.). Verificada el 19/11/2026: "Nvidia" trajo 100 notas de 3 días con su medio (Reuters, CNBC, The Motley Fool…). Así entran CNN, CNBC, Reuters, Bloomberg, Barron's, Seeking Alpha y cientos más, sin tener que sumar los feeds de a uno.
+- **Qué se busca** (`src/lib/data/servicios/noticias-activo.ts`):
+  - CEDEARs: la empresa en inglés (`"Nvidia" stock`) y en castellano (`"Nvidia" acciones`). Con contexto, "Apple" encuentra la empresa y no la fruta.
+  - ETF: el ticker.
+  - Acciones argentinas: el nombre en castellano y, si tienen ADR, también en inglés.
+  - Bonos: el ticker (`"AL30" bonos`). LECAPs: el ticker.
+  - Cripto: Bitcoin, Ethereum, "Tether" stablecoin, "USDC" stablecoin.
+- **Si hay menos de 4 notas que lo nombren**, se completa con las del mercado que lo mueve, en un bloque aparte ("Lo que lo afecta"): Wall Street, el Merval, el riesgo país, las tasas en pesos o cripto. En bonos, LECAPs y cripto, las notas generales de nuestros medios pasan a ese bloque.
+- **Limpieza** (`src/lib/noticias/activo.ts`, 11 tests): sin páginas de cotización ni de gráficos, sin series de opciones, sin notas automáticas de compras de fondos y cambios de precio objetivo, y sin los sitios que solo publican eso (MarketBeat, TradingView y otros). La misma noticia en varios medios queda una, con "también en N medios".
+- **En la ficha:** cada nota con su medio y la marca "En inglés" cuando corresponde.
+- Probado con Nvidia, Apple, Coca-Cola, SPY, Mercado Libre, Nebius, Galicia, Aluar, Transener, Morixe, AL30, GD35, S30N6, Bitcoin y USDT: todos con noticias (de 2 a 8).
+
+### Decisiones para revisar
+1. **Google Noticias y los medios de EE.UU. no tienen una licencia comercial clara** para mostrar sus titulares (igual que los feeds de CNBC o Seeking Alpha que habíamos dejado afuera). Mostramos título, medio, hora y link, y la nota se lee en el sitio de cada medio. **Antes del lanzamiento comercial hay que revisarlo** o pasar a un servicio pago de noticias.
+2. **Los titulares en inglés no se traducen.** Llevan la marca "En inglés".
+3. **El link pasa por Google** (news.google.com) y de ahí a la nota original.
+
+---
+
 ## Calendario de la semana (punto 15, rama `calendario-semanal`, 19/11/2026)
 
 > Pedido de los fundadores: inspirado en el calendario de resultados de Earnings Whispers, pero también con datos como el IPC. Sin sección nueva: arriba a la derecha de Mercados. Semanal y con muy pocas palabras.

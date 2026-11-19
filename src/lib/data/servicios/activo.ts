@@ -1,4 +1,5 @@
 import { CEDEARS, ACCIONES_GENERAL, PANEL_LIDER } from "@data/ar/mercados";
+import { TICKER_EEUU_DE_CEDEAR } from "@data/ar/sec";
 import { DESCRIPCION_ETF, WIKIPEDIA } from "@data/ar/wikipedia";
 import { ajustarRatios, type Vela } from "@/lib/calculos";
 import { describirEmpresa, menciona, nombreParaBuscar } from "@/lib/activos/perfil";
@@ -7,6 +8,7 @@ import * as d912 from "../adapters/data912";
 import * as wikidata from "../adapters/wikidata";
 import type { PerfilEmpresa } from "../adapters/wikidata";
 import * as wikipedia from "../adapters/wikipedia";
+import * as yahoo from "../adapters/yahoo";
 import { conRespaldo } from "../cache";
 import { mercadoAbierto } from "../freshness";
 import { FUENTES, type Accion, type Cedear, type PuntoSerie } from "../types";
@@ -40,6 +42,11 @@ export type FichaActivo = {
   parecidosPor: "sector" | "panel" | "volumen";
   /** Cierres diarios desde el último cambio de ratio (o split no ajustado). */
   velas: Vela[];
+  /**
+   * CEDEAR sin historia en data912 (en general, uno nuevo): la historia de la acción en EE.UU., en dólares (Yahoo).
+   * Vacío si el CEDEAR tiene su propia historia.
+   */
+  velasEeuu: Vela[];
   /** Si la serie se cortó por un salto que no es un cambio de ratio: la fecha desde la que arranca. null si no se cortó. */
   serieCortada: string | null;
   /** Cambios de ratio o splits ajustados en la serie: fecha del primer precio nuevo y cuántas veces cambió. */
@@ -131,7 +138,7 @@ export async function cargarActivo(ticker: string) {
   const ubicado = await ubicar(ticker, cedears, acciones);
   if (!ubicado) return null;
 
-  return conRespaldo<FichaActivo>(`activo:${ticker}`, [FUENTES.data912, FUENTES.argentinadatos, FUENTES.wikipedia, FUENTES.wikidata], async () => {
+  return conRespaldo<FichaActivo>(`activo:${ticker}`, [FUENTES.data912, FUENTES.argentinadatos, FUENTES.wikipedia, FUENTES.wikidata, FUENTES.yahoo], async () => {
     const perfil = await perfilDe(ticker);
     const [serie, historicoDolar, acerca, noticias, usa, panelHoy] = await Promise.all([
       velasDe(ubicado.tipo, ticker),
@@ -141,6 +148,8 @@ export async function cargarActivo(ticker: string) {
       ubicado.tipo === "cedear" ? d912.panel("usa_stocks").catch(() => []) : Promise.resolve([]),
       d912.panel(ubicado.tipo === "cedear" ? "arg_cedears" : "arg_stocks").catch(() => []),
     ]);
+    // Sin historia del CEDEAR en data912: la de la acción en EE.UU. (si también falla, la ficha sigue sin gráfico).
+    const velasEeuu = ubicado.tipo === "cedear" && serie.velas.length < 2 ? await yahoo.historicoDiario(TICKER_EEUU_DE_CEDEAR[ticker] ?? ticker).catch(() => []) : [];
     const c = ubicado.cedear;
     const a = ubicado.accion;
     const enUsa = usa.find((p) => p.symbol === ticker);
@@ -182,6 +191,7 @@ export async function cargarActivo(ticker: string) {
         perfil,
         parecidosPor,
         velas: serie.velas,
+        velasEeuu,
         serieCortada: serie.cortada,
         cambiosRatio: serie.cambios,
         mep: historicoDolar.ok ? historicoDolar.data.mep : [],

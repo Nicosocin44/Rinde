@@ -16,5 +16,8 @@
 16. Como se ve la web en el celu.
 17. ~~Sacar las fuentes de cada dato.~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama fuentes-discretas)</span>
 18. Pensar dónde poner "Siguiendo" (los activos que seguís) en Mercados. No convence: arriba de todo baja la página, y la columna al costado tampoco. Opciones: una solapa propia "★ Siguiendo", una línea fina debajo de las solapas o solo un botón ★ que abre la lista.
+19. ~~Muchos activos siguen sin logo o sin gráfico: revisar y buscar una solución.~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama logos-y-graficos): de 106 a 281 activos con logo y gráfico de la acción en EE.UU. para los CEDEARs nuevos. Quedan 46 con monograma (ver PROGRESO).</span>
+20. Poder tocar (o pasar el mouse por) ciertos conceptos, como el PER, el EBITDA o la TIR, y que aparezca un cuadro chico que explique qué son. Se puede armar con el glosario de /aprender (25 términos) para que la explicación sea la misma en todo el sitio.
+21. Comparar activos: poner dos o más acciones, CEDEARs (u otros activos) en el mismo gráfico, en porcentaje desde una misma fecha, y ver sus números lado a lado (rendimiento, PER, márgenes, etc.), como "Comparar" en Google Finance.
 
 

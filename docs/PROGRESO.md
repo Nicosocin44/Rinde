@@ -137,6 +137,21 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Logos y gráficos para muchos más activos (tarea 19, rama `logos-y-graficos`, 19/11/2026)
+
+> Pedido de Benja: muchos activos seguían sin logo o sin gráfico.
+
+- **Logos: de 106 a 281 activos.** Se sumaron 175 (CEDEARs, ETF y acciones argentinas), con el mismo método de siempre: el ícono oficial del sitio de cada empresa. El sitio sale de Wikidata (la empresa con ese ticker en NYSE o Nasdaq); los ETF, de su emisora (iShares, Vanguard, VanEck, ProShares…); las argentinas, verificadas a mano con el título de su sitio. Todos revisados a ojo en una hoja de contactos.
+  - Como en esta compu no hay Python, se bajaron con un script de Node equivalente (sin dependencias nuevas). Los dominios quedaron anotados en `scripts/logos.py` para que el script de siempre los mantenga.
+  - **Siguen con monograma (46):** las que solo tienen un ícono de 16 px o bloquean la descarga (Ford, Verizon, Cisco, 3M, UnitedHealth, Newmont, Berkshire, Nu…), los ETF de State Street (su logo es texto chico, ya descartado) y las argentinas que no pudimos verificar (Carlos Casado, Celulosa, Autopistas del Oeste, Rosenbusch, Polledo, Boldt Gaming). GCDI se descartó: su ícono es un cuadrado vacío. El paso siguiente sería sumarlos a mano desde Wikimedia Commons, como hizo Nico con los bancos.
+- **Gráficos de los CEDEARs nuevos:** cuando data912 no publica la historia del CEDEAR (NBIS, NU, Robinhood, Rocket Lab, Booking, Cameco…), la ficha muestra el gráfico de la acción en Estados Unidos, en dólares (5 años, de Yahoo Finance, que ya usamos para Wall Street hoy), con una línea que lo aclara. También salen de ahí el rendimiento, el rango de 52 semanas, la volatilidad y la máxima caída, rotulados "en EE.UU.". Las acciones argentinas no tenían este problema: data912 tiene su historia.
+
+**Para revisar:**
+1. **El gráfico de un CEDEAR nuevo es el de la acción en EE.UU.**, no el del CEDEAR en pesos (no hay de dónde sacarlo). Está aclarado debajo.
+2. **Yahoo no es una API oficial** (igual que para Wall Street hoy): revisar sus condiciones antes del lanzamiento comercial.
+
+---
+
 ## Balances y resultados de las empresas (punto 14 de la lista, rama `balances`, 18/11/2026)
 
 > En la ficha de cada CEDEAR y de cada acción argentina con ADR, debajo del rendimiento. Datos reales de la SEC (EDGAR), gratis, sin cuenta y de dominio público.

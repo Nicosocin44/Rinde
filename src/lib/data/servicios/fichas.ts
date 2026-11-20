@@ -14,6 +14,7 @@ import { cargarCotizaciones } from "./dolar";
 import { cargarMacro } from "./macro";
 import { cargarBonos, cargarCripto } from "./mercados";
 import { cargarNoticias } from "./noticias";
+import { noticiasDeActivo } from "./noticias-activo";
 import { cargarPesos } from "./pesos";
 
 /**
@@ -35,7 +36,7 @@ export function claseDeFicha(ticker: string): ClaseFicha | null {
   return null;
 }
 
-async function velas912(clase: "bonds", ticker: string): Promise<Vela[]> {
+export async function velas912(clase: "bonds", ticker: string): Promise<Vela[]> {
   try {
     const h = await d912.historico(clase, ticker);
     const todas = h
@@ -89,7 +90,7 @@ export async function cargarFichaBono(ticker: string) {
     if (!def || !bonos.ok) throw new Error("No pudimos traer los bonos");
     const bono = bonos.data.bonos.find((b) => b.ticker === ticker);
     if (!bono) throw new Error(`${ticker} no tiene precio en dólares hoy`);
-    const [velasUsd, velasArs, noticias] = await Promise.all([velas912("bonds", `${ticker}D`), velas912("bonds", ticker), noticiasDe((n) => n.mercados.includes("bonos"))]);
+    const [velasUsd, velasArs, noticias] = await Promise.all([velas912("bonds", `${ticker}D`), velas912("bonds", ticker), noticiasDe((n) => n.mercados.includes("bonos")).then((p) => noticiasDeActivo({ tipo: "bono", ticker, nombre: def?.nombre ?? null }, [], p))]);
     return {
       data: {
         bono,
@@ -124,7 +125,7 @@ export type FichaLetra = {
 
 export async function cargarFichaLetra(ticker: string) {
   return conRespaldo<FichaLetra>(`ficha:lecap:${ticker}`, [FUENTES.data912, FUENTES.argentinadatos], async () => {
-    const [pesos, macro, noticias] = await Promise.all([cargarPesos(), cargarMacro(), noticiasDe((n) => n.mercados.includes("tasas"))]);
+    const [pesos, macro, noticias] = await Promise.all([cargarPesos(), cargarMacro(), noticiasDe((n) => n.mercados.includes("tasas")).then((p) => noticiasDeActivo({ tipo: "lecap", ticker, nombre: null }, [], p))]);
     if (!pesos.ok) throw new Error("No pudimos traer las letras");
     const { curva } = pesos.data;
     const letra = curva.letras.find((l) => l.ticker === ticker);
@@ -185,6 +186,12 @@ export async function cargarFichaCripto(simbolo: SimboloCripto) {
       noticiasDe(
         (n) => n.mercados.includes("cripto"),
         (n) => (PALABRAS_CRIPTO[simbolo].test(n.titulo) ? 2 : 0) + (PALABRAS_CRIPTO[simbolo].test(n.resumen) ? 1 : 0),
+      ).then((p) =>
+        noticiasDeActivo(
+          { tipo: "cripto", ticker: simbolo, nombre: null },
+          p.filter((n) => PALABRAS_CRIPTO[simbolo].test(n.titulo)),
+          p.filter((n) => !PALABRAS_CRIPTO[simbolo].test(n.titulo)),
+        ),
       ),
     ]);
     if (!criptos.ok) throw new Error("No pudimos traer los precios de cripto");

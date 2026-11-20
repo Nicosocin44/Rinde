@@ -15,4 +15,5 @@ export * from "./activo";
 export * from "./que-hubiera";
 export * from "./opciones";
 export * from "./balances";
+export * from "./balances-cnv";
 export { resolverTasa } from "./raices";

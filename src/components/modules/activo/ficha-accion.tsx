@@ -11,6 +11,7 @@ import { d, enDolares, hoyAR, maximaCaida, primaContraMep, rango, rendimientos, 
 import type { FichaActivo } from "@/lib/data/servicios/activo";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
+import { BotonComparar } from "./comparar-boton";
 import { BalancesEmpresa } from "./balances";
 import { AvisoActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
@@ -116,7 +117,12 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
       <PageHeader
         eyebrow={<Ruta seccion={a.tipo === "cedear" ? "CEDEARs" : "Acciones"} href={a.tipo === "cedear" ? "/mercados" : "/mercados/acciones"} ticker={a.ticker} />}
         titulo={nombre}
-        acciones={a.precio ? <AvisoActivo ticker={a.ticker} nombre={nombre} precio={a.precio} moneda="ARS" /> : undefined}
+        acciones={
+          <div className="flex flex-wrap gap-2">
+            {a.precio ? <AvisoActivo ticker={a.ticker} nombre={nombre} precio={a.precio} moneda="ARS" /> : null}
+            <BotonComparar ticker={a.ticker} />
+          </div>
+        }
         bajada={
           <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <ProviderMark activo={a.ticker} sigla={a.ticker.slice(0, 2)} tamano={32} />
@@ -224,12 +230,12 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
 
       {a.sector !== "ETF" && (
         <Suspense fallback={<EsperaBalances />}>
-          <BalancesEmpresa ticker={a.ticker} tipo={a.tipo} sector={a.sector} nombre={nombre} precioAccionUsd={a.tipo === "cedear" ? (a.subyacente?.precio ?? null) : null} />
+          <BalancesEmpresa ticker={a.ticker} tipo={a.tipo} sector={a.sector} nombre={nombre} precioAccionUsd={a.tipo === "cedear" ? (a.subyacente?.precio ?? null) : null} precioAccionArs={a.tipo === "accion" ? a.precio : null} />
         </Suspense>
       )}
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
-        <NoticiasActivo titulo={`Noticias de ${nombre}`} noticias={a.noticias} vacio={`No encontramos noticias de ${nombre} en los últimos tres días en los medios que seguimos.`} />
+        <NoticiasActivo titulo={`Noticias de ${nombre}`} noticias={a.noticias} vacio={`No encontramos noticias de ${nombre} ni de su mercado en los últimos días.`} />
         <AcercaDe
           titulo={a.sector === "ETF" ? "Qué es" : "Acerca de la empresa"}
           texto={a.acerca ? <p>{a.acerca.texto}</p> : null}

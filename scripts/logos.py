@@ -123,18 +123,32 @@ MEDIOS = {
     "infobae": "infobae.com", "lanacion": "lanacion.com.ar", "ambito": "ambito.com", "cronista": "cronista.com",
     "iprofesional": "iprofesional.com", "bloomberglinea": "bloomberglinea.com",
 }
+# Los medios que más aparecen en las noticias de los activos (Google Noticias): el id es el dominio ("cnbc.com").
+MEDIOS.update({dominio: dominio for dominio in json.loads((Path(__file__).resolve().parent / "medios.json").read_text(encoding="utf-8"))})
 
 RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "public" / "logos"
 FUENTE_MANUAL = RAIZ / "assets" / "logos-fuente"
 
 
+def es_claro(im: Image.Image) -> bool:
+    """¿Es un logo blanco o muy claro, pensado para fondo oscuro? (sobre blanco no se vería)."""
+    alfa = im.getchannel("A")
+    gris = im.convert("L")
+    opacos = [g for g, a in zip(gris.getdata(), alfa.getdata()) if a > 128]
+    return len(opacos) > 50 and sum(opacos) / len(opacos) > 225
+
+
 def normalizar_manual(origen: Path, recorte: tuple[float, float, float, float] | None) -> Image.Image:
-    """Saca los márgenes, recorta el símbolo si hace falta y lo centra en un cuadrado blanco de 96 px."""
+    """Saca los márgenes, recorta el símbolo si hace falta y lo centra en un cuadrado de 96 px: blanco o, si el logo es
+    claro (de los que vienen en blanco para fondo oscuro), casi negro."""
     im = Image.open(origen).convert("RGBA")
-    fondo = Image.new("RGBA", im.size, "white")
-    plano = Image.alpha_composite(fondo, im).convert("RGB")
-    caja = ImageOps.invert(plano).getbbox()  # lo que no es blanco
+    alfa = im.getchannel("A")
+    if alfa.getextrema()[0] < 250:  # tiene transparencia: el recorte sale de lo que no es transparente
+        caja = alfa.point(lambda a: 255 if a > 16 else 0).getbbox()
+    else:
+        plano = Image.alpha_composite(Image.new("RGBA", im.size, "white"), im).convert("RGB")
+        caja = ImageOps.invert(plano).getbbox()  # lo que no es blanco
     if caja:
         im = im.crop(caja)
     if recorte:
@@ -145,7 +159,7 @@ def normalizar_manual(origen: Path, recorte: tuple[float, float, float, float] |
             im = im.crop(caja)
     lado = 96
     im.thumbnail((lado - 12, lado - 12), Image.LANCZOS)
-    salida = Image.new("RGBA", (lado, lado), "white")
+    salida = Image.new("RGBA", (lado, lado), "#161616" if es_claro(im) else "white")
     salida.paste(im, ((lado - im.width) // 2, (lado - im.height) // 2), im)
     return salida
 

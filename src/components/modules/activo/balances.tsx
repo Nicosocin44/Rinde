@@ -2,12 +2,12 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Delta } from "@/components/ui/delta";
 import { valuar, type Valuacion } from "@/lib/calculos";
-import { obtenerBalances } from "@/lib/data";
+import { obtenerBalances, obtenerCotizaciones } from "@/lib/data";
 import { dolares, fechaCorta, mesAnio, numero, pesosCompacto, porcentaje } from "@/lib/format";
 import { ResultadosEmpresa } from "./balances-vista";
 
 /**
- * Balances y resultados de la empresa, de lo que presenta ante la SEC: las cifras principales, los resultados por
+ * Balances y resultados de la empresa, de lo que presenta ante la SEC (CEDEARs) o la CNV (acciones argentinas): las cifras principales, los resultados por
  * trimestre y por ejercicio, los tres estados contables completos y los números clave (valuación, rentabilidad,
  * crecimiento, salud financiera y accionistas). Va en su propio <Suspense>: la ficha se muestra sin esperarlo.
  */
@@ -17,6 +17,7 @@ export async function BalancesEmpresa({
   sector,
   nombre,
   precioAccionUsd,
+  precioAccionArs = null,
 }: {
   ticker: string;
   tipo: "cedear" | "accion";
@@ -24,13 +25,18 @@ export async function BalancesEmpresa({
   nombre: string;
   /** Precio de una acción en EE.UU. (CEDEAR), para los múltiplos. */
   precioAccionUsd: number | null;
+  /** Precio de hoy de la acción en BYMA (acciones argentinas), para los múltiplos con los balances de la CNV. */
+  precioAccionArs?: number | null;
 }) {
-  const r = await obtenerBalances(ticker, tipo, sector);
+  const [r, cot] = await Promise.all([obtenerBalances(ticker, tipo, sector), precioAccionArs ? obtenerCotizaciones() : null]);
   if (!r.ok || !r.data.resumen) return null;
   const b = r.data.resumen;
-  // Múltiplos solo con balances en dólares de una empresa de EE.UU. (10-K) y el precio de una acción: en los ADR un
-  // papel puede ser varias acciones, y en pesos el precio de hoy contra un balance de hace meses engaña.
-  const v = b.moneda === "USD" && b.formularioAnual.startsWith("10-K") && precioAccionUsd ? valuar(b, precioAccionUsd) : null;
+  // Múltiplos solo con balances en dólares y el precio de una acción: en los ADR un papel puede ser varias acciones, y en
+  // pesos el precio de hoy contra un balance de hace meses engaña. CEDEARs: empresas de EE.UU. (10-K) con el precio de
+  // allá. Acciones argentinas (CNV): el precio de hoy en BYMA pasado a dólares al mayorista, como los balances.
+  const mayorista = cot?.ok ? (cot.data.find((x) => x.id === "mayorista")?.venta ?? null) : null;
+  const precioUsd = b.fuente === "cnv" ? (precioAccionArs && mayorista ? precioAccionArs / mayorista : null) : b.formularioAnual.startsWith("10-K") ? precioAccionUsd : null;
+  const v = b.moneda === "USD" && precioUsd ? valuar(b, precioUsd) : null;
   const m = (x: number | null | undefined) => (x == null ? "—" : pesosCompacto(x, simbolo(b.moneda)));
   const anioUltimo = etiquetaEjercicio(b.anual.periodos.at(-1)!.fin);
   const u = b.ultimos12.valores;
@@ -139,7 +145,7 @@ export async function BalancesEmpresa({
 
       {b.desactualizado && (
         <p className="mb-4 max-w-3xl rounded-(--radius-card) bg-surface-2 px-4 py-3 text-chico text-text-2">
-          <span className="font-semibold text-text">Ojo, es un balance viejo.</span> Es el último que {nombre} cargó en la SEC con sus números en formato de datos.
+          <span className="font-semibold text-text">Ojo, es un balance viejo.</span> Es el último que {nombre} cargó {b.fuente === "cnv" ? "en la CNV" : "en la SEC con sus números en formato de datos"}.
           {tipo === "accion" ? " Las empresas argentinas presentan sus balances más nuevos en la CNV y en la Bolsa de Buenos Aires." : " Algunas empresas extranjeras los cargan con atraso."}
         </p>
       )}
@@ -154,7 +160,7 @@ export async function BalancesEmpresa({
         ))}
       </ul>
 
-      <ResultadosEmpresa moneda={b.moneda} anual={b.anual} trimestral={b.trimestral} financiera={b.financiera} />
+      <ResultadosEmpresa moneda={b.moneda} anual={b.anual} trimestral={b.trimestral} financiera={b.financiera} detalle={b.detalle} />
 
       <div className="mt-10">
         <h3 className="mb-4 text-h3">Números clave</h3>
@@ -169,10 +175,19 @@ export async function BalancesEmpresa({
       </div>
 
       <p className="mt-6 max-w-3xl text-micro text-text-3">
-        {b.moneda === "USD" ? "En dólares" : b.moneda === "ARS" ? "En pesos" : `En la moneda del balance (${b.moneda})`}, tal como la empresa los presenta ante la SEC
-        {b.ajustadoPorInflacion ? ", ajustados por inflación a la fecha del balance: por eso solo comparamos ejercicios que vienen en el mismo balance y no mostramos trimestres" : ""}.
+        {b.fuente === "cnv" ? (
+          <>
+            De lo que la empresa presenta ante la CNV{b.financiera ? "" : ", el balance consolidado si lo hay"}, pasado a dólares al tipo de cambio oficial mayorista del día de cierre de cada balance: así se pueden comparar
+            balances de distintas fechas. Los resultados vienen acumulados en el ejercicio; cada trimestre es la diferencia entre dos.
+          </>
+        ) : (
+          <>
+            {b.moneda === "USD" ? "En dólares" : b.moneda === "ARS" ? "En pesos" : `En la moneda del balance (${b.moneda})`}, tal como la empresa los presenta ante la SEC
+            {b.ajustadoPorInflacion ? ", ajustados por inflación a la fecha del balance: por eso solo comparamos ejercicios que vienen en el mismo balance y no mostramos trimestres" : ""}.
+          </>
+        )}
         {b.ultimos12.fuente === "trimestres" ? " Últimos 12 meses: la suma de los últimos cuatro trimestres." : ""}
-        {v ? ` La valuación usa el precio de hoy de una acción en EE.UU. (${dolares(precioAccionUsd!, 2)}).` : ""}{" "}
+        {v && b.fuente === "cnv" ? ` La valuación usa el precio de hoy en BYMA (${dolares(precioUsd!, 2)} por acción al mayorista).` : v ? ` La valuación usa el precio de hoy de una acción en EE.UU. (${dolares(precioAccionUsd!, 2)}).` : ""}{" "}
         <Link href="/metodologia#balances" className="underline decoration-dotted underline-offset-4 hover:text-text-2">
           Cómo lo calculamos
         </Link>

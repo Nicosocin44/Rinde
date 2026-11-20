@@ -14,7 +14,9 @@ import { mercadoAbierto } from "../freshness";
 import { FUENTES, type Accion, type Cedear, type PuntoSerie } from "../types";
 import { cargarHistorico } from "./dolar";
 import { cargarMercados } from "./mercados";
+import { ADR_DE_ACCION } from "@data/ar/sec";
 import { cargarNoticias } from "./noticias";
+import { noticiasDeActivo } from "./noticias-activo";
 
 export type TipoActivo = "cedear" | "accion";
 
@@ -80,7 +82,7 @@ async function ubicar(ticker: string, cedears: Cedear[], acciones: Accion[]): Pr
   return null;
 }
 
-async function velasDe(tipo: TipoActivo, ticker: string): Promise<{ velas: Vela[]; cortada: string | null; cambios: { fecha: string; veces: number }[] }> {
+export async function velasDe(tipo: TipoActivo, ticker: string): Promise<{ velas: Vela[]; cortada: string | null; cambios: { fecha: string; veces: number }[] }> {
   try {
     const h = await d912.historico(tipo === "cedear" ? "cedears" : "stocks", ticker);
     const todas: Vela[] = h
@@ -173,6 +175,8 @@ export async function cargarActivo(ticker: string) {
     const delActivo = noticias.ok ? noticias.data.noticias.filter((n) => n.tickers.includes(ticker) || (buscar !== null && menciona(`${n.titulo} ${n.resumen}`, buscar))) : [];
 
     if (!c && !a && !ubicado.precioPanel && !ultimo) throw new Error("Sin precio ni serie para este activo");
+    // Más las de Google Noticias (castellano e inglés) y, si son pocas, las del mercado que lo mueve.
+    const noticiasFicha = await noticiasDeActivo({ tipo: ubicado.tipo, ticker, nombre, sector: meta?.sector ?? null, conAdr: !!ADR_DE_ACCION[ticker] }, delActivo.slice(0, 8));
 
     return {
       data: {
@@ -196,7 +200,7 @@ export async function cargarActivo(ticker: string) {
         cambiosRatio: serie.cambios,
         mep: historicoDolar.ok ? historicoDolar.data.mep : [],
         acerca,
-        noticias: delActivo.slice(0, 8),
+        noticias: noticiasFicha,
         parecidos: parecidos.slice(0, 6),
       },
       asOf: new Date().toISOString(),

@@ -8,6 +8,7 @@ import { compactar, d, hoyAR, maximaCaida, rango, rendimientos, sumarDias, volat
 import type { FichaBono } from "@/lib/data/servicios/fichas";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { fechaCorta, numero, pesos, porcentaje } from "@/lib/format";
+import { BotonComparar } from "./comparar-boton";
 import { AvisoActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
@@ -47,7 +48,12 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
       <PageHeader
         eyebrow={<Ruta seccion="Bonos" href="/mercados/bonos" ticker={b.ticker} />}
         titulo={b.nombre}
-        acciones={<AvisoActivo ticker={b.ticker} nombre={b.nombre} precio={b.precioUsd} moneda="USD" />}
+        acciones={
+          <div className="flex flex-wrap gap-2">
+            <AvisoActivo ticker={b.ticker} nombre={b.nombre} precio={b.precioUsd} moneda="USD" />
+            <BotonComparar ticker={b.ticker} />
+          </div>
+        }
         bajada={`Bono del Tesoro en dólares · ${ley} · vence el ${fechaCorta(b.vencimiento, true)}`}
         className="mb-8 lg:mb-12"
       />
@@ -102,7 +108,7 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
       />
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
-        <NoticiasActivo titulo="Noticias de bonos y deuda" noticias={f.noticias} vacio="No hay noticias de bonos ni deuda en los últimos tres días en los medios que seguimos." />
+        <NoticiasActivo titulo={`Noticias de ${b.ticker} y la deuda`} noticias={f.noticias} vacio="No encontramos noticias de bonos ni de deuda en los últimos días." />
         <AcercaDe
           titulo="Acerca del bono"
           texto={

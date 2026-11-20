@@ -214,9 +214,17 @@ export type Indicadores = {
   payout: number | null;
 };
 
+/** Un rubro del formulario de la CNV con su valor en cada período (en la moneda del resumen). */
+export type LineaFormulario = { codigo: string; nombre: string; /** Totales y resultados: van destacados. */ total: boolean; valores: (number | null)[] };
+/** Los tres estados completos, rubro por rubro, tal como vienen en el formulario de la CNV. */
+export type DetalleFormulario = { periodos: Periodo[]; resultados: LineaFormulario[]; balance: LineaFormulario[]; flujo: LineaFormulario[] };
+
 export type ResumenBalances = {
+  /** De dónde salen: la SEC (XBRL de EDGAR) o la CNV (formulario de estados contables). */
+  fuente: "sec" | "cnv";
   empresa: string;
-  cik: number;
+  /** Solo en la SEC. */
+  cik: number | null;
   moneda: string;
   /** El documento más reciente con resultados (anual o trimestral). */
   ultimo: Documento;
@@ -239,6 +247,8 @@ export type ResumenBalances = {
   indicadores: Indicadores;
   /** Acciones (promedio diluido del último período informado). */
   acciones: number | null;
+  /** Solo CNV: los tres estados con todos los rubros del formulario (la SEC usa las filas fijas de la pantalla). */
+  detalle?: { anual: DetalleFormulario; trimestral: DetalleFormulario | null };
 };
 
 const div = (a: number | null | undefined, b: number | null | undefined) => (a == null || b == null || b === 0 ? null : d(a).div(b).toNumber());
@@ -248,7 +258,7 @@ const variacion = (nuevo: number | null | undefined, viejo: number | null | unde
 const positivo = (x: number | null | undefined) => (x != null && x > 0 ? x : null);
 
 /** Completa las derivadas de un período: ganancia bruta si falta, flujo libre, EBITDA, deuda total y pasivos si faltan. */
-function derivar(v: Partial<Record<Clave, number | null>>, financiera: boolean): void {
+export function derivar(v: Partial<Record<Clave, number | null>>, financiera: boolean): void {
   v.gananciaBruta ??= resta(v.ingresos, v.costoVentas);
   v.flujoLibre = financiera ? null : resta(v.flujoOperativo, v.inversion);
   // En bancos el EBITDA no se usa (los intereses son su negocio).
@@ -329,21 +339,7 @@ export function resumirBalances(hechos: HechosEmpresa, hoy: FechaISO): ResumenBa
   }
 
   // ── Últimos 12 meses ──
-  const n = anual.periodos.length - 1;
-  const delAnio = (c: Clave) => anual.valores[c][n] ?? null;
-  let ultimos12: ResumenBalances["ultimos12"] = { hasta: anual.periodos[n]!.fin, fuente: "ejercicio", valores: {} };
-  const tp = trimestral?.periodos ?? [];
-  const cuatro = tp.slice(-4);
-  const seguidos = cuatro.length === 4 && cuatro.every((p, k) => k === 0 || unTrimestreDespues(cuatro[k - 1]!.fin, p.fin));
-  const usarTrimestres = seguidos && cuatro.at(-1)!.fin > anual.periodos[n]!.fin;
-  if (usarTrimestres) ultimos12 = { hasta: cuatro.at(-1)!.fin, fuente: "trimestres", valores: {} };
-  for (const c of [...CLAVES.filter((c) => tipoDe(c) === "flujo"), "flujoLibre", "ebitda"] as Clave[]) {
-    if (!usarTrimestres) ultimos12.valores[c] = delAnio(c);
-    else {
-      const ultimos = trimestral!.valores[c].slice(-4);
-      ultimos12.valores[c] = ultimos.every((x) => x !== null) ? ultimos.reduce<ReturnType<typeof d>>((s, x) => s.plus(x!), d(0)).toNumber() : null;
-    }
-  }
+  const ultimos12 = ultimosDoce(anual, trimestral);
 
   // ── Último balance: la foto más reciente ──
   const fechaBalance = [...porCierre(de("activos").filter(esInstante)).keys()].sort().at(-1) ?? null;
@@ -361,17 +357,6 @@ export function resumirBalances(hechos: HechosEmpresa, hoy: FechaISO): ResumenBa
   const acciones = de("acciones").filter((h) => !esInstante(h)).sort((a, b) => b.end.localeCompare(a.end) || duracion(a) - duracion(b) || b.filed.localeCompare(a.filed))[0]?.val ?? null;
 
   // ── Indicadores ──
-  const u = ultimos12.valores;
-  const b = balance?.valores ?? {};
-  const patrimonio = positivo(b.patrimonio);
-  // En bancos la deuda neta no significa nada (la caja es la plata de los depositantes).
-  const deudaNeta = financiera || b.deudaTotal == null ? null : d(b.deudaTotal).minus(b.caja ?? 0).minus(b.inversionesCortoPlazo ?? 0).toNumber();
-  const interanual = (c: Clave) => {
-    if (!trimestral || tp.length < 5) return null;
-    const ultimo = tp.length - 1;
-    const anterior = tp.findIndex((p) => unAnioDespues(p.fin, tp[ultimo]!.fin));
-    return anterior < 0 ? null : variacion(trimestral.valores[c][ultimo], trimestral.valores[c][anterior]);
-  };
   const delMismo = (c: "ingresos" | "gananciaNeta") => {
     const anuales = de(c).filter(esAnual);
     const ultimoFin = anuales.reduce((m, h) => (h.end > m ? h.end : m), "");
@@ -384,30 +369,10 @@ export function resumirBalances(hechos: HechosEmpresa, hoy: FechaISO): ResumenBa
     const v = (fin: string) => lista.filter((h) => h.end === fin).sort((a, x) => a.prioridad - x.prioridad)[0]?.val ?? null;
     return variacion(v(ultimoFin), v(lista.find((h) => unAnioDespues(h.end, ultimoFin))!.end));
   };
-
-  const indicadores: Indicadores = {
-    margenBruto: div(u.gananciaBruta, positivo(u.ingresos)),
-    margenOperativo: div(u.gananciaOperativa, positivo(u.ingresos)),
-    margenEbitda: div(u.ebitda, positivo(u.ingresos)),
-    margenNeto: div(u.gananciaNeta, positivo(u.ingresos)),
-    roe: div(u.gananciaNeta, patrimonio),
-    roa: div(u.gananciaNeta, positivo(b.activos)),
-    crecimientoIngresos: delMismo("ingresos"),
-    crecimientoGanancia: delMismo("gananciaNeta"),
-    ingresosInteranual: interanual("ingresos"),
-    gananciaInteranual: interanual("gananciaNeta"),
-    liquidezCorriente: div(b.activoCorriente, positivo(b.pasivoCorriente)),
-    pruebaAcida: b.activoCorriente == null ? null : div(d(b.activoCorriente).minus(b.inventarios ?? 0).toNumber(), positivo(b.pasivoCorriente)),
-    deudaNeta,
-    deudaPatrimonio: div(b.deudaTotal, patrimonio),
-    pasivosPatrimonio: div(b.pasivos, patrimonio),
-    deudaNetaEbitda: div(deudaNeta, positivo(u.ebitda)),
-    coberturaIntereses: financiera ? null : div(u.gananciaOperativa, positivo(u.intereses)),
-    bpa12m: div(u.gananciaNeta, positivo(acciones)),
-    payout: div(u.dividendosPagados, positivo(u.gananciaNeta)),
-  };
+  const indicadores = indicadoresDe({ ultimos12, balance, trimestral, financiera, acciones, crecimientoIngresos: delMismo("ingresos"), crecimientoGanancia: delMismo("gananciaNeta") });
 
   return {
+    fuente: "sec",
     empresa: hechos.entityName,
     cik: hechos.cik,
     moneda,
@@ -425,7 +390,74 @@ export function resumirBalances(hechos: HechosEmpresa, hoy: FechaISO): ResumenBa
   };
 }
 
-function armarEstados(periodos: Periodo[], valor: (c: ClaveCuenta, fin: string) => number | null, financiera: boolean): Estados {
+/** Últimos 12 meses: la suma de los últimos cuatro trimestres seguidos (si son más nuevos que el ejercicio) o el último ejercicio. */
+export function ultimosDoce(anual: Estados, trimestral: Estados | null): ResumenBalances["ultimos12"] {
+  const n = anual.periodos.length - 1;
+  const delAnio = (c: Clave) => anual.valores[c][n] ?? null;
+  let ultimos12: ResumenBalances["ultimos12"] = { hasta: anual.periodos[n]!.fin, fuente: "ejercicio", valores: {} };
+  const tp = trimestral?.periodos ?? [];
+  const cuatro = tp.slice(-4);
+  const seguidos = cuatro.length === 4 && cuatro.every((p, k) => k === 0 || unTrimestreDespues(cuatro[k - 1]!.fin, p.fin));
+  const usarTrimestres = seguidos && cuatro.at(-1)!.fin > anual.periodos[n]!.fin;
+  if (usarTrimestres) ultimos12 = { hasta: cuatro.at(-1)!.fin, fuente: "trimestres", valores: {} };
+  for (const c of [...CLAVES.filter((c) => tipoDe(c) === "flujo"), "flujoLibre", "ebitda"] as Clave[]) {
+    if (!usarTrimestres) ultimos12.valores[c] = delAnio(c);
+    else {
+      const ultimos = trimestral!.valores[c].slice(-4);
+      ultimos12.valores[c] = ultimos.every((x) => x !== null) ? ultimos.reduce<ReturnType<typeof d>>((s, x) => s.plus(x!), d(0)).toNumber() : null;
+    }
+  }
+  return ultimos12;
+}
+
+/** Los indicadores, a partir de los 12 meses, el último balance y los trimestres. El crecimiento anual lo calcula quien llama. */
+export function indicadoresDe(p: {
+  ultimos12: ResumenBalances["ultimos12"];
+  balance: ResumenBalances["balance"];
+  trimestral: Estados | null;
+  financiera: boolean;
+  acciones: number | null;
+  crecimientoIngresos: number | null;
+  crecimientoGanancia: number | null;
+}): Indicadores {
+  const { ultimos12, balance, trimestral, financiera, acciones } = p;
+  const tp = trimestral?.periodos ?? [];
+  const u = ultimos12.valores;
+  const b = balance?.valores ?? {};
+  const patrimonio = positivo(b.patrimonio);
+  // En bancos la deuda neta no significa nada (la caja es la plata de los depositantes).
+  const deudaNeta = financiera || b.deudaTotal == null ? null : d(b.deudaTotal).minus(b.caja ?? 0).minus(b.inversionesCortoPlazo ?? 0).toNumber();
+  const interanual = (c: Clave) => {
+    if (!trimestral || tp.length < 5) return null;
+    const ultimo = tp.length - 1;
+    const anterior = tp.findIndex((p) => unAnioDespues(p.fin, tp[ultimo]!.fin));
+    return anterior < 0 ? null : variacion(trimestral.valores[c][ultimo], trimestral.valores[c][anterior]);
+  };
+
+  return {
+    margenBruto: div(u.gananciaBruta, positivo(u.ingresos)),
+    margenOperativo: div(u.gananciaOperativa, positivo(u.ingresos)),
+    margenEbitda: div(u.ebitda, positivo(u.ingresos)),
+    margenNeto: div(u.gananciaNeta, positivo(u.ingresos)),
+    roe: div(u.gananciaNeta, patrimonio),
+    roa: div(u.gananciaNeta, positivo(b.activos)),
+    crecimientoIngresos: p.crecimientoIngresos,
+    crecimientoGanancia: p.crecimientoGanancia,
+    ingresosInteranual: interanual("ingresos"),
+    gananciaInteranual: interanual("gananciaNeta"),
+    liquidezCorriente: div(b.activoCorriente, positivo(b.pasivoCorriente)),
+    pruebaAcida: b.activoCorriente == null ? null : div(d(b.activoCorriente).minus(b.inventarios ?? 0).toNumber(), positivo(b.pasivoCorriente)),
+    deudaNeta,
+    deudaPatrimonio: div(b.deudaTotal, patrimonio),
+    pasivosPatrimonio: div(b.pasivos, patrimonio),
+    deudaNetaEbitda: div(deudaNeta, positivo(u.ebitda)),
+    coberturaIntereses: financiera ? null : div(u.gananciaOperativa, positivo(u.intereses)),
+    bpa12m: div(u.gananciaNeta, positivo(acciones)),
+    payout: div(u.dividendosPagados, positivo(u.gananciaNeta)),
+  };
+}
+
+export function armarEstados(periodos: Periodo[], valor: (c: ClaveCuenta, fin: string) => number | null, financiera: boolean): Estados {
   const valores = Object.fromEntries([...CLAVES, "flujoLibre", "ebitda", "deudaCorriente", "deudaNoCorriente", "deudaTotal"].map((c) => [c, [] as (number | null)[]])) as Estados["valores"];
   for (const p of periodos) {
     const v: Partial<Record<Clave, number | null>> = {};

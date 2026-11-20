@@ -63,14 +63,14 @@ export async function traerJson<S extends z.ZodType>(url: string, schema: S, opc
  * Igual que `traerJson`, pero devuelve el texto crudo (RSS/XML). La validación la hace quien lo parsea.
  */
 export async function traerTexto(url: string, opciones: Opciones): Promise<string> {
-  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1, headers = {} } = opciones;
+  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1, headers = {}, sinCache = false } = opciones;
   let ultimoError: unknown;
   for (let intento = 0; intento <= reintentos; intento++) {
     try {
       const respuesta = await fetch(url, {
         headers: { accept: "application/rss+xml, application/xml, text/xml", "user-agent": "Mozilla/5.0 (compatible; RindeNoticias/1.0)", ...headers },
         signal: AbortSignal.timeout(timeoutMs),
-        next: { revalidate },
+        ...(sinCache ? { cache: "no-store" as const } : { next: { revalidate } }),
       });
       if (!respuesta.ok) throw new ErrorDeFuente(fuente, url, `respondió ${respuesta.status}`);
       return await respuesta.text();

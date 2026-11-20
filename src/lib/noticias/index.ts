@@ -34,6 +34,11 @@ export type Noticia = {
   tambienEn: { medioId: string; url: string }[];
   /** Para elegir la destacada: cuántos medios la cubren y si el título habla de un mercado. */
   relevancia: number;
+  /** Medios que no son los nuestros (vienen de Google Noticias): su nombre tal cual ("CNBC", "Reuters"). */
+  fuente?: string;
+  idioma?: "es" | "en";
+  /** En la ficha de un activo: no lo nombra, pero es del mercado que lo mueve. */
+  indirecta?: boolean;
 };
 
 const ENTIDADES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", aacute: "á", eacute: "é", iacute: "í", oacute: "ó", uacute: "ú", ntilde: "ñ", uuml: "ü", iexcl: "¡", iquest: "¿", ldquo: "“", rdquo: "”", lsquo: "‘", rsquo: "’", hellip: "…", ndash: "–", mdash: "—" };

@@ -28,3 +28,4 @@
     - El rendimiento de la cartera (contra la inflación y el dólar) se calcula solo con las inversiones: los gastos de Mercado Pago no son decisiones de inversión.
     - Subir el resumen del mes (idea de Benja) queda para más adelante: cada app exporta distinto y el archivo trae todos los gastos, información muy privada para algo que solo necesita un número.
 26. Agrandar calendario a un mes. Un boton chico donde esta ubicado ahora, que diga calendario y un logito. Te abre una semi pantalla grande en el medio, con un calendario del mes. Contenido queda igual.
+27. Estrategias de opciones en ingles. POner las mas comunes.

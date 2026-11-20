@@ -137,6 +137,24 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Precios que se actualizan solos y el Merval en Acciones (puntos 20 y 22, rama `en-vivo-merval`, 20/11/2026)
+
+> Pedido: que las cotizaciones cambien todo el tiempo, sin recargar ni cambiar de sección, con colores cuando se mueven (sin el indicador "En vivo"). Y en Acciones, cambiar el promedio del día por una tarjeta del Merval como las de Wall Street.
+
+- **Sin recargar:** Mercados (todas las solapas), Dólar, LECAPs y las fichas de cada activo vuelven a pedir sus datos cada 15 segundos mientras la pestaña está a la vista (`RefrescoEnVivo`, con `router.refresh`). Lo que la persona está haciendo (filtros, orden, búsqueda, lo que escribió) queda igual. La barra de arriba (MEP, oficial, riesgo país) pasó de 1 minuto a 15 segundos.
+  - Para que haya algo nuevo cada vez, esas páginas se regeneran cada 15 s y el caché de dólar y mercado bajó de 60 s a 15 s en horario. data912 renueva sus precios cada 30 s, así que un precio llega con hasta ~45 s de atraso sobre data912 (que a su vez tiene la demora de BYMA).
+  - El Inicio no se refresca solo (salvo la barra de arriba): la historia animada se re-armaría con cada cambio y el scroll ya tiene un problema anotado (punto 3).
+- **Destello:** cuando un precio cambia, se marca un segundo con fondo verde si subió o rojo si bajó, y en las cifras grandes los dígitos ruedan al valor nuevo. Está en las tablas de CEDEARs, acciones, bonos y ONs (también en el celular), cripto, los dólares, Dónde comprar, la ficha y las tarjetas de Wall Street y del Merval. En la ficha sigue al último precio, no al que se ve al pasar el cursor por el gráfico.
+- **Merval:** el S&P Merval dejó de existir el 16/10/2026: desde el 19/10 es el **MSCI Merval**, con base 100.000 (por eso Yahoo `^MERV` y Ámbito quedaron congelados en 2.848.945). El nuevo está en Yahoo como `^768692-ARS-STRD` (pesos) y `^768692-USD-STRD` (dólares), al minuto. Verificado el 20/11/2026: 80.122 puntos, −0,8 % en el día; contra el 16/10 bajó ~20 %, en línea con GGAL (−22 %), YPF (−31 %), Pampa (−18 %) y Macro (−13 %) en data912. BYMA Open Data no respondió (timeout).
+  - La tarjeta: variación en pesos grande, los puntos y la variación en dólares abajo, y el recorrido de la rueda al costado (5 minutos, verde o rojo). Antes de que abra el mercado muestra la rueda anterior. Si Yahoo no responde, no se muestra y la tabla sigue igual.
+  - Función pura `ultimaRueda()` en `adapters/yahoo.ts`, con 3 tests.
+
+### Decisiones para revisar
+1. **15 segundos:** es el mínimo que tiene sentido con data912 (30 s). Cada página abierta pide al servidor 4 veces por minuto; con muchas visitas, en Vercel conviene mirar el consumo (las páginas se sirven del caché, así que muchas personas comparten la misma regeneración).
+2. **Yahoo para el Merval** (como para Wall Street): no es una API oficial; revisar sus condiciones antes del lanzamiento comercial. La alternativa oficial (BYMA Open Data) no respondió.
+
+---
+
 ## Logos y gráficos para muchos más activos (tarea 19, rama `logos-y-graficos`, 19/11/2026)
 
 > Pedido de Benja: muchos activos seguían sin logo o sin gráfico.

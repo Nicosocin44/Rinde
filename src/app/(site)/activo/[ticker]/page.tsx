@@ -9,7 +9,7 @@ import { obtenerActivo, obtenerCotizaciones, obtenerFichaBono, obtenerFichaCript
 import { normalizarTicker } from "@/lib/data/servicios/activo";
 import { claseDeFicha, esCripto } from "@/lib/data/servicios/fichas";
 
-export const revalidate = 120;
+export const revalidate = 15;
 
 type Props = { params: Promise<{ ticker: string }> };
 

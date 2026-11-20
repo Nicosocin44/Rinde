@@ -5,7 +5,7 @@ import { SourceNote } from "@/components/ui/frescura";
 import { obtenerCotizaciones } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
 
-export const revalidate = 60;
+export const revalidate = 15;
 export const metadata: Metadata = { title: "Conversor de pesos a dólares", description: "Cuántos dólares comprás con tus pesos en cada tipo de cambio, y al revés." };
 
 export default async function ConversorPage() {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { aVelas } from "@/lib/data/adapters/yahoo";
+import { aVelas, ultimaRueda } from "@/lib/data/adapters/yahoo";
 
 /** Historia diaria de Yahoo → velas (para los CEDEARs sin historia en data912). */
 describe("Yahoo: historia diaria a velas", () => {
@@ -15,5 +15,30 @@ describe("Yahoo: historia diaria a velas", () => {
   it("si falta apertura, máximo o mínimo, usa el cierre; un día repetido queda una vez", () => {
     const v = aVelas([t[0]!, t[0]! + 60], { close: [50, 51] });
     expect(v).toEqual([{ fecha: "2026-11-18", apertura: 51, maximo: 51, minimo: 51, cierre: 51, volumen: 0 }]);
+  });
+});
+
+/** Merval en Yahoo: la serie de 5 minutos trae todo el día de Nueva York; nos quedamos con la rueda de BYMA. */
+describe("Yahoo: última rueda de un índice argentino", () => {
+  const rueda = { abre: 11, cierra: 17.1, utcOffset: -3 };
+  // Hora argentina → timestamp (UTC = AR + 3).
+  const t = (dia: number, h: number, m = 0) => Date.UTC(2026, 10, dia, h + 3, m) / 1000;
+  it("toma la última rueda con datos y, de base, el último dato de la rueda anterior", () => {
+    const ts = [t(19, 9), t(19, 11), t(19, 16, 55), t(19, 20), t(20, 3), t(20, 11), t(20, 11, 5), t(20, 11, 10)];
+    const v = [100, 100, 102, 102, 102, 101, null, 99.96];
+    const r = ultimaRueda(ts, v, rueda);
+    expect(r?.previo).toBe(102);
+    expect(r?.puntos).toEqual([101, 99.96]);
+    expect(r?.ultimo).toBe(99.96);
+    expect(r?.variacion).toBeCloseTo(99.96 / 102 - 1, 10);
+    expect(r?.hora).toBe(new Date(t(20, 11, 10) * 1000).toISOString());
+  });
+  it("antes de que abra el mercado, muestra la rueda anterior completa", () => {
+    const ts = [t(18, 16, 55), t(19, 11), t(19, 17), t(20, 9), t(20, 10)];
+    const r = ultimaRueda(ts, [90, 92, 95, 95, 95], rueda);
+    expect(r).toMatchObject({ previo: 90, puntos: [92, 95], ultimo: 95 });
+  });
+  it("sin una rueda anterior para comparar, no hay dato", () => {
+    expect(ultimaRueda([t(20, 11), t(20, 12)], [1, 2], rueda)).toBeNull();
   });
 });

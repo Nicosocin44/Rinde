@@ -8,7 +8,7 @@ import { SourceNote } from "@/components/ui/frescura";
 import { obtenerCotizaciones, obtenerMercados, obtenerRecorridosEEUU } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
 
-export const revalidate = 120;
+export const revalidate = 15;
 export const metadata: Metadata = { title: "CEDEARs: precios y dólar implícito", description: "Precio de los CEDEARs en pesos y dólares, con el MEP y el CCL implícitos." };
 
 export default async function Cedears() {

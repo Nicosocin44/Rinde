@@ -76,14 +76,16 @@ Fuente externa ──► Adapter (fetch + timeout + reintento) ──► Schema 
 
 | Dato | Revalidate (horario de mercado) | Fuera de horario |
 |---|---|---|
-| Dólares y cripto | 60 s | 5 min |
-| data912 live (bonos, letras, CEDEARs, acciones) | 60 s | 15 min |
+| Dólares y cripto | 15 s | 1 min |
+| data912 live (bonos, letras, CEDEARs, acciones) | 15 s (data912 renueva cada 30 s) | 15 min |
+| Merval (MSCI Merval, Yahoo) | 15 s | 15 s |
 | Plazo fijo, billeteras, FCI, caución | 1 h | 6 h |
 | Variables del BCRA | 6 h | 6 h |
 | Inflación, REM, UVA, CER | 12 h | 24 h |
 | Feriados | 7 días | 7 días |
 | Históricos | 24 h | 24 h |
 
+- **Actualización sin recargar (20/11/2026):** Mercados, Dólar, LECAPs y las fichas se piden de nuevo cada 15 s con la pestaña visible (`RefrescoEnVivo`, `router.refresh`), y esas páginas se regeneran cada 15 s (`revalidate = 15`). Un precio que cambia destella un segundo en verde o rojo (`Destello`).
 - Horario de mercado de referencia: días hábiles de 11 a 17 h (hora de Argentina). Que sea configurable.
 - **Estado de frescura:** si un dato "en vivo" tiene más de 15 min en horario de mercado → `delayed`; si tiene más de un día hábil → `stale`.
 - Respetar los límites de cada fuente. Si una pide más de lo que su límite permite, se agranda la ventana de caché.

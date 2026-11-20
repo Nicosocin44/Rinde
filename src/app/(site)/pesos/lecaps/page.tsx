@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RefrescoEnVivo } from "@/components/shell/refresco-en-vivo";
 import { Suspense } from "react";
 import { Lecaps } from "@/components/modules/pesos/lecaps";
 import { Excluidos } from "@/components/modules/pesos/excluidos";
@@ -9,7 +10,7 @@ import { obtenerPesos } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
 import { porcentaje } from "@/lib/format";
 
-export const revalidate = 120;
+export const revalidate = 15;
 export const metadata: Metadata = { title: "LECAPs y BONCAPs: curva de tasas y calculadora", description: "Curva de letras capitalizables del Tesoro con TNA, TEA y TEM, y calculadora de cobro al vencimiento." };
 
 export default async function LecapsPage() {
@@ -26,6 +27,7 @@ export default async function LecapsPage() {
 
   return (
     <>
+      <RefrescoEnVivo />
       <Respuesta
         etiqueta="La curva hoy"
         fraccion={max}

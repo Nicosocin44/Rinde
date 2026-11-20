@@ -4,7 +4,7 @@ import { VistaCadena } from "@/components/modules/opciones/cadena";
 import { obtenerOpciones } from "@/lib/data";
 import { armarHistorial } from "@/lib/opciones/historial";
 
-export const revalidate = 120;
+export const revalidate = 15;
 export const metadata: Metadata = {
   title: "Opciones de GGAL: cadena y volatilidad implícita",
   description: "Calls y puts de GGAL en BYMA con volatilidad implícita, delta, sonrisa de volatilidad e historial de primas.",

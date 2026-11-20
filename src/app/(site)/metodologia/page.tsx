@@ -272,6 +272,23 @@ Paridad = P / valor técnico`}</Formula>
 CCL implícito = precio en pesos / precio de la especie C`}</Formula>,
   },
   {
+    id: "merval",
+    titulo: "Merval y actualización de los precios",
+    contenido: (
+      <>
+        <p>
+          El Merval de la solapa Acciones es el MSCI Merval: desde el 19 de octubre de 2026 lo calcula MSCI (antes era el S&amp;P Merval), con una base de 100.000 puntos al
+          16 de octubre de 2026. Puntos, variación del día en pesos y en dólares y recorrido de la rueda, de Yahoo Finance; la variación es contra el cierre de la rueda anterior.
+        </p>
+        <p>
+          Con el sitio abierto, Mercados, Dólar, LECAPs y las fichas piden los precios nuevos cada 15 segundos, sin recargar la página. Cuando un precio cambia, se marca un segundo
+          en verde si subió o en rojo si bajó. Cada fuente tiene su propio ritmo: data912 renueva sus precios cada 30 segundos (BYMA, con demora), y el dólar y las tasas, cuando
+          los publica cada fuente.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "activo",
     titulo: "Ficha de cada activo",
     contenido: (

@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Cifra } from "@/components/ui/cifra";
 import { Delta } from "@/components/ui/delta";
+import { Destello } from "@/components/ui/destello";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import type { Accion, Cedear, Cripto } from "@/lib/data/types";
@@ -55,7 +56,7 @@ export function TablaCedears({ cedears }: { cedears: Cedear[] }) {
       ),
     },
     { id: "sector", encabezado: "Sector", solo: "desktop", celda: (c) => <span className="text-chico text-text-2">{c.sector ?? "—"}</span> },
-    { id: "ars", encabezado: "Precio $", alineacion: "derecha", valorOrden: (c) => c.precioArs, celda: (c) => <span>{pesos(c.precioArs, 2)}</span> },
+    { id: "ars", encabezado: "Precio $", alineacion: "derecha", valorOrden: (c) => c.precioArs, celda: (c) => <Destello valor={c.precioArs}>{pesos(c.precioArs, 2)}</Destello> },
     { id: "usd", encabezado: "Precio US$", alineacion: "derecha", solo: "desktop", valorOrden: (c) => c.precioUsd, celda: (c) => <span className="text-text-2">{c.precioUsd ? numero(c.precioUsd, 2) : "—"}</span> },
     { id: "var", encabezado: "Var.", alineacion: "derecha", valorOrden: (c) => c.variacion, celda: (c) => <Delta valor={c.variacion} en="tabla" className="text-chico" /> },
     { id: "mep", encabezado: "MEP implícito", alineacion: "derecha", solo: "pro", valorOrden: (c) => c.mepImplicito, celda: (c) => <span className="text-text-2">{c.mepImplicito ? pesos(c.mepImplicito, 2) : "—"}</span> },
@@ -86,7 +87,7 @@ export function TablaCedears({ cedears }: { cedears: Cedear[] }) {
               <span className="block font-mono text-[12px] text-text-3">{c.ticker}</span>
             </span>
             <span className="text-right">
-              <span className="tabular block text-[15px] font-medium">{pesos(c.precioArs, 2)}</span>
+              <span className="tabular block text-[15px] font-medium"><Destello valor={c.precioArs}>{pesos(c.precioArs, 2)}</Destello></span>
               <Delta valor={c.variacion} className="text-micro" />
             </span>
           </span>
@@ -121,7 +122,7 @@ export function TablaAcciones({ acciones }: { acciones: Accion[] }) {
         </span>
       ),
     },
-    { id: "precio", encabezado: "Precio", alineacion: "derecha", valorOrden: (a) => a.precio, celda: (a) => <span>{pesos(a.precio, 2)}</span> },
+    { id: "precio", encabezado: "Precio", alineacion: "derecha", valorOrden: (a) => a.precio, celda: (a) => <Destello valor={a.precio}>{pesos(a.precio, 2)}</Destello> },
     { id: "var", encabezado: "Var.", alineacion: "derecha", valorOrden: (a) => a.variacion, celda: (a) => <Delta valor={a.variacion} en="tabla" className="text-chico" /> },
     { id: "vol", encabezado: "Volumen", alineacion: "derecha", solo: "desktop", valorOrden: (a) => a.volumen, celda: (a) => <span className="text-chico text-text-3">{pesosCompacto(a.volumen)}</span> },
   ];
@@ -154,7 +155,7 @@ export function TablaAcciones({ acciones }: { acciones: Accion[] }) {
               <span className="block font-mono text-[12px] text-text-3">{a.ticker}</span>
             </span>
             <span className="text-right">
-              <span className="tabular block text-[15px] font-medium">{pesos(a.precio, 2)}</span>
+              <span className="tabular block text-[15px] font-medium"><Destello valor={a.precio}>{pesos(a.precio, 2)}</Destello></span>
               <Delta valor={a.variacion} className="text-micro" />
             </span>
           </span>
@@ -178,7 +179,9 @@ export function VistaCripto({ criptos }: { criptos: Cripto[] }) {
                 <ProviderMark activo={x.simbolo} sigla={x.simbolo.slice(0, 2)} tamano={28} />
                 {x.nombre}
               </span>
-              {x.precioUsd && x.precioUsd > 2 ? <Cifra valor={x.precioUsd} moneda="US$" decimales={0} className="text-cifra max-sm:text-[26px]" /> : <Cifra valor={x.precioArs} decimales={2} className="text-cifra max-sm:text-[26px]" />}
+              <Destello valor={x.precioUsd && x.precioUsd > 2 ? x.precioUsd : x.precioArs} className="self-start">
+                {x.precioUsd && x.precioUsd > 2 ? <Cifra valor={x.precioUsd} moneda="US$" decimales={0} animado className="text-cifra max-sm:text-[26px]" /> : <Cifra valor={x.precioArs} decimales={2} animado className="text-cifra max-sm:text-[26px]" />}
+              </Destello>
               <span className="tabular text-chico text-text-2">{x.precioUsd && x.precioUsd > 2 ? pesos(x.precioArs) : "promedio entre exchanges"}</span>
             </button>
           </li>
@@ -199,7 +202,7 @@ export function VistaCripto({ criptos }: { criptos: Cripto[] }) {
               <span className={cn("tabular text-chico", i === 0 ? "font-semibold text-accent" : "text-text-3")}>{i + 1}</span>
               <ProviderMark proveedorId={e.id} />
               <span className="truncate text-[15px] font-medium">{e.nombre}</span>
-              <span className="tabular text-right text-[15px] font-medium">{pesos(e.compras, 2)}</span>
+              <span className="tabular text-right text-[15px] font-medium"><Destello valor={e.compras}>{pesos(e.compras, 2)}</Destello></span>
               <span className="tabular hidden text-right text-text-2 md:block">{pesos(e.vendes, 2)}</span>
               <span className="tabular hidden text-right text-chico text-text-3 md:block">{porcentaje(e.spread, 2)}</span>
             </li>

@@ -10,7 +10,7 @@ import { ajusteLogaritmico } from "@/lib/data/validacion";
 import { FUENTES, type BonoUsd } from "@/lib/data/types";
 import { porcentaje } from "@/lib/format";
 
-export const revalidate = 120;
+export const revalidate = 15;
 export const metadata: Metadata = { title: "Bonos en dólares y ONs: TIR, duration y flujos", description: "Bonares y Globales con TIR, duration, paridad y calculadora de flujos. Obligaciones negociables." };
 
 /** Curva por ley: y = a + b·ln(duration). Redondeada para que servidor y cliente dibujen exactamente lo mismo. */

@@ -44,6 +44,64 @@ export async function recorridoDelDia(ticker: string): Promise<RecorridoDelDia |
   return { previo, puntos };
 }
 
+// ───────────────────────── Última rueda de un índice argentino ─────────────────────────
+
+export type RuedaDelDia = RecorridoDelDia & {
+  /** Último valor de la rueda. */
+  ultimo: number;
+  /** Variación contra el cierre de la rueda anterior (fracción). */
+  variacion: number;
+  /** Hora del último dato (ISO). */
+  hora: string;
+};
+
+/**
+ * Se queda con la última rueda (de `abre` a `cierra`, en la hora de `utcOffset`) que tenga al menos dos datos, y toma
+ * como base el último dato de la rueda anterior. Hace falta para los índices de BYMA en Yahoo: la serie de 5 minutos
+ * trae todo el día de Nueva York, con el valor quieto antes y después de la rueda. Puro (se testea aparte).
+ */
+export function ultimaRueda(timestamps: number[], cierres: (number | null)[], { abre, cierra, utcOffset }: { abre: number; cierra: number; utcOffset: number }): RuedaDelDia | null {
+  const porDia = new Map<string, { t: number; v: number }[]>();
+  timestamps.forEach((t, i) => {
+    const v = cierres[i];
+    if (typeof v !== "number" || !(v > 0)) return;
+    const local = new Date((t + utcOffset * 3600) * 1000);
+    const hora = local.getUTCHours() + local.getUTCMinutes() / 60;
+    if (hora < abre || hora > cierra) return;
+    const dia = local.toISOString().slice(0, 10);
+    porDia.set(dia, [...(porDia.get(dia) ?? []), { t, v }]);
+  });
+  const dias = [...porDia.keys()].sort();
+  const k = dias.findLastIndex((d) => porDia.get(d)!.length >= 2);
+  if (k < 1) return null;
+  const rueda = porDia.get(dias[k]!)!;
+  const previo = porDia.get(dias[k - 1]!)!.at(-1)!.v;
+  const ultimo = rueda.at(-1)!;
+  return { previo, puntos: rueda.map((p) => p.v), ultimo: ultimo.v, variacion: ultimo.v / previo - 1, hora: new Date(ultimo.t * 1000).toISOString() };
+}
+
+/**
+ * Última rueda de un índice de BYMA (el MSCI Merval: ^768692-ARS-STRD en pesos, ^768692-USD-STRD en dólares).
+ * Verificado el 20/11/2026: dato minuto a minuto, en línea con BYMA. Caché de 15 segundos.
+ */
+export async function ruedaIndiceAr(simbolo: string, rueda: { abre: number; cierra: number; utcOffset: number }): Promise<RuedaDelDia | null> {
+  const r = await traerJson(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(simbolo)}?range=5d&interval=5m`, graficoSchema, {
+    fuente: "yahoo",
+    revalidate: 15,
+    timeoutMs: 6000,
+    headers: { "user-agent": "Mozilla/5.0" },
+  });
+  const res = r.chart.result?.[0];
+  if (!res?.timestamp) return null;
+  const salida = ultimaRueda(res.timestamp, res.indicators.quote[0]?.close ?? [], rueda);
+  // El último precio de la serie de 5 minutos puede tener hasta 5 minutos: el de `meta` es el del momento.
+  const ahora = res.meta.regularMarketPrice;
+  if (salida && ahora && ahora > 0 && Date.now() - new Date(salida.hora).getTime() < 6 * 3600_000) {
+    return { ...salida, ultimo: ahora, variacion: ahora / salida.previo - 1, puntos: [...salida.puntos.slice(0, -1), ahora] };
+  }
+  return salida;
+}
+
 // ───────────────────────── Historia diaria ─────────────────────────
 
 const serieNum = z.array(z.number().nullable()).optional();

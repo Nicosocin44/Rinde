@@ -18,6 +18,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Cifra } from "@/components/ui/cifra";
 import { Delta } from "@/components/ui/delta";
+import { Destello } from "@/components/ui/destello";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { fechaCorta, hora, numero } from "@/lib/format";
 import type { VelaCompacta } from "@/lib/calculos";
@@ -284,7 +285,10 @@ export function PriceChart({
         ) : (
           <div className="flex flex-col gap-1">
             <div className="text-label">{titulo}</div>
-            {formato ? <span className="tabular text-cifra">{mostrado !== null ? formato(mostrado) : "—"}</span> : <Cifra valor={mostrado} moneda={moneda} decimales={decimales} className="text-cifra" />}
+            {/* El destello sigue al último precio (el que se actualiza solo), no al que se ve al pasar el cursor. */}
+            <Destello valor={actual?.[1] ?? null} className="self-start">
+              {formato ? <span className="tabular text-cifra">{mostrado !== null ? formato(mostrado) : "—"}</span> : <Cifra valor={mostrado} moneda={moneda} decimales={decimales} className="text-cifra" />}
+            </Destello>
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-chico text-text-2">
               {mostrarDia && !scrub && (
                 <span className="inline-flex items-center gap-1.5">

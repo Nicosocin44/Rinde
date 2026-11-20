@@ -4,7 +4,7 @@ import { RankingDolar } from "@/components/modules/dolar/ranking-dolar";
 import { Skeleton } from "@/components/ui/estados";
 import { obtenerRanking } from "@/lib/data";
 
-export const revalidate = 60;
+export const revalidate = 15;
 export const metadata: Metadata = {
   title: "Dónde comprar dólares: ranking por app y banco",
   description: "Comparamos el precio final del dólar, USDT y USDC en bancos, casas de cambio, billeteras y exchanges, con comisiones. Cuánto te cuestan USD 1.000.",

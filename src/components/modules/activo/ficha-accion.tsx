@@ -11,6 +11,7 @@ import { d, enDolares, hoyAR, maximaCaida, primaContraMep, rango, rendimientos, 
 import type { FichaActivo } from "@/lib/data/servicios/activo";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
+import { BotonComparar } from "./comparar-boton";
 import { BalancesEmpresa } from "./balances";
 import { AvisoActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
@@ -98,7 +99,12 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
       <PageHeader
         eyebrow={<Ruta seccion={a.tipo === "cedear" ? "CEDEARs" : "Acciones"} href={a.tipo === "cedear" ? "/mercados" : "/mercados/acciones"} ticker={a.ticker} />}
         titulo={nombre}
-        acciones={a.precio ? <AvisoActivo ticker={a.ticker} nombre={nombre} precio={a.precio} moneda="ARS" /> : undefined}
+        acciones={
+          <div className="flex flex-wrap gap-2">
+            {a.precio ? <AvisoActivo ticker={a.ticker} nombre={nombre} precio={a.precio} moneda="ARS" /> : null}
+            <BotonComparar ticker={a.ticker} />
+          </div>
+        }
         bajada={
           <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <ProviderMark activo={a.ticker} sigla={a.ticker.slice(0, 2)} tamano={32} />

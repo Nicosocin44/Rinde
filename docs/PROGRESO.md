@@ -137,6 +137,16 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## La home ya no muestra las fuentes (rama `portada-sin-fuentes`, 19/11/2026)
+
+> Pedido de Benja: sacar de la portada la escena "Todo sale de fuentes públicas.". Quien quiera ver las fuentes las tiene en el pie de cada página y en /metodologia.
+
+- Se sacó la escena de confianza (la lista de fuentes con su estado y los principios "Neutral", "Con la cuenta a la vista" y "Sin números de relleno"). La home pasa de "La misma plata, dos destinos" al cierre "Empezá gratis.".
+- Se borró su componente y su coreografía, y la home dejó de pedir las cotizaciones del dólar, que solo usaba esa escena.
+- Las fuentes siguen en el pie del sitio (con el link a la Metodología) y en /metodologia#fuentes.
+
+---
+
 ## Comparar activos en el mismo gráfico (punto 23, rama `comparar-activos`, 19/11/2026)
 
 > Pedido de Benja: poder poner acciones, CEDEARs y otros activos en el mismo gráfico, como "Comparar" en Google Finance.

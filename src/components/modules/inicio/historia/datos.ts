@@ -4,10 +4,10 @@ import { tasaPorPeriodo, valorFuturo, valorReal } from "@/lib/calculos/interes-c
 import { gananciaConTope } from "@/lib/calculos/tasas";
 import { describir, evaluar, type Alerta } from "@/lib/alertas/evaluar";
 import { analizarCartera, valorEn } from "@/lib/cartera/valuacion";
-import { obtenerCotizaciones, obtenerMacro, obtenerPesos, obtenerRanking } from "@/lib/data";
+import { obtenerMacro, obtenerPesos, obtenerRanking } from "@/lib/data";
 import { cargarPreciosCartera } from "@/lib/data/servicios/cartera";
 import { fotoMercado } from "@/lib/data/servicios/alertas";
-import type { Cargado, EstadoDato, OpcionPesos, TipoOpcionPesos } from "@/lib/data/types";
+import type { EstadoDato, OpcionPesos, TipoOpcionPesos } from "@/lib/data/types";
 import { ordenarProveedores } from "@/lib/rankings/dolar";
 import { mejorDeCadaTipo, mejoresDelDia } from "@/lib/rankings/pesos";
 
@@ -24,7 +24,6 @@ export type ProveedorPrecio = { id: string; nombre: string; compras: number; cos
 export type PuntoComparacion = { fecha: string; cartera: number; inflacion: number; dolar: number };
 export type AlertaDemo = { id: string; texto: string; cumplida: boolean; actual: string | null };
 export type MesMacizo = { mes: number; quietaReal: number; rindeNominal: number; rindeReal: number };
-export type FuenteEstado = { id: string; nombre: string; url: string; usadaPara: string; estado: EstadoDato | "error"; asOf: string | null };
 
 export type DatosHistoria = {
   piezas: Pieza[] | null;
@@ -33,7 +32,6 @@ export type DatosHistoria = {
   cartera: { serie: PuntoComparacion[]; inicio: string; carteraTotal: number; vsInflacion: number; vsDolar: number } | null;
   alertas: AlertaDemo[] | null;
   macizo: { monto: number; tea: number; nombre: string; inflacion: number; informeRem: string; meses: MesMacizo[] } | null;
-  fuentes: FuenteEstado[];
 };
 
 const ETIQUETA_TIPO: Record<TipoOpcionPesos, string> = {
@@ -59,15 +57,10 @@ function aTasa(o: OpcionPesos): OpcionTasa {
   };
 }
 
-function estadoDe<T>(c: Cargado<T>): { estado: EstadoDato | "error"; asOf: string | null } {
-  return c.ok ? { estado: c.status, asOf: c.asOf } : { estado: "error", asOf: null };
-}
-
 export async function armarHistoria(): Promise<DatosHistoria> {
   const hoy = hoyAR();
   const ids = CARTERA_DEMO.activos.filter((a) => !["billetera", "plazo_fijo", "fci", "efectivo_usd"].includes(a.tipo)).map((a) => a.id);
-  const [cotizaciones, pesos, ranking, macro, precios, foto] = await Promise.all([
-    obtenerCotizaciones(),
+  const [pesos, ranking, macro, precios, foto] = await Promise.all([
     obtenerPesos(),
     obtenerRanking("USD"),
     obtenerMacro(),
@@ -169,15 +162,5 @@ export async function armarHistoria(): Promise<DatosHistoria> {
         }
       : null;
 
-  // 7 · Confianza: cada fuente con su estado real en este momento.
-  const fuentes: FuenteEstado[] = [
-    { id: "dolarapi", nombre: "DolarAPI", url: "https://dolarapi.com", usadaPara: "Cotizaciones del dólar", ...estadoDe(cotizaciones) },
-    { id: "criptoya", nombre: "CriptoYa", url: "https://criptoya.com", usadaPara: "Precio del dólar en cada app y exchange", ...estadoDe(ranking) },
-    { id: "argentinadatos", nombre: "ArgentinaDatos", url: "https://argentinadatos.com", usadaPara: "Plazos fijos, billeteras, inflación y riesgo país", ...estadoDe(pesos) },
-    { id: "cnv", nombre: "CNV", url: "https://www.argentina.gob.ar/cnv", usadaPara: "Cuotapartes de los fondos money market", ...estadoDe(pesos) },
-    { id: "data912", nombre: "data912", url: "https://data912.com", usadaPara: "LECAPs, bonos, CEDEARs y acciones", ...estadoDe(pesos) },
-    { id: "bcra", nombre: "BCRA", url: "https://www.bcra.gob.ar", usadaPara: "Expectativas de inflación (REM) y tasas de referencia", ...estadoDe(macro) },
-  ];
-
-  return { piezas: piezas.length ? piezas : null, tasas, dolar, cartera, alertas, macizo, fuentes };
+  return { piezas: piezas.length ? piezas : null, tasas, dolar, cartera, alertas, macizo };
 }

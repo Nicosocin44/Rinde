@@ -21,6 +21,7 @@ const RUTAS = [
   "/mercados/opciones",
   "/mercados/opciones/tasas",
   "/mercados/opciones/estrategias",
+  "/mercados/comparar",
   "/calculadoras",
   "/calculadoras/interes-compuesto",
   "/calculadoras/que-hubiera-pasado",

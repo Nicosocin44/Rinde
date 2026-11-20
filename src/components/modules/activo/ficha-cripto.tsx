@@ -6,6 +6,7 @@ import { aPesos, compactar, hoyAR, maximaCaida, primaContraMep, rango, rendimien
 import type { FichaCripto } from "@/lib/data/servicios/fichas";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, porcentaje } from "@/lib/format";
+import { BotonComparar } from "./comparar-boton";
 import { AvisoActivo } from "./seguir";
 import { GraficoActivo, type SerieGrafico } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
@@ -104,7 +105,12 @@ export function FichaCriptoVista({ f, asOf, estado }: { f: FichaCripto; asOf: st
       <PageHeader
         eyebrow={<Ruta seccion="Cripto" href="/mercados/cripto" ticker={c.simbolo} />}
         titulo={c.nombre}
-        acciones={<AvisoActivo ticker={c.simbolo} nombre={c.nombre} precio={c.precioArs} moneda="ARS" />}
+        acciones={
+          <div className="flex flex-wrap gap-2">
+            <AvisoActivo ticker={c.simbolo} nombre={c.nombre} precio={c.precioArs} moneda="ARS" />
+            {(c.simbolo === "BTC" || c.simbolo === "ETH") && <BotonComparar ticker={c.simbolo} />}
+          </div>
+        }
         bajada={
           <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <ProviderMark activo={c.simbolo} sigla={c.simbolo.slice(0, 2)} tamano={32} />

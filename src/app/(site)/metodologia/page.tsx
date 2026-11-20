@@ -404,6 +404,32 @@ Equivalencia en dólares = monto / dólar MEP de hoy (venta)`}</Formula>
     ),
   },
   {
+    id: "comparar",
+    titulo: "Comparar activos",
+    contenido: (
+      <>
+        <p>
+          Hasta 5 activos: CEDEARs y acciones (data912, con los cambios de ratio ajustados), bonos en dólares (especie D, data912), Bitcoin y Ether (Binance). Si data912 no
+          publica la historia de un CEDEAR, se usa la de la acción en Estados Unidos (Yahoo Finance). Las LECAPs y los dólares cripto no tienen una historia de precios que sirva.
+          Los datos son diarios el último año y medio y semanales antes.
+        </p>
+        <Formula>{`En dólares = precio en pesos / dólar MEP de ese día (o el último anterior)
+En pesos = precio en dólares × dólar MEP de ese día
+Inicio = el comienzo del período elegido o, si la historia de algún activo arranca después, ese día (todos arrancan juntos)
+Variación de cada línea = precio / precio del inicio − 1
+Máxima caída = peor precio / máximo anterior − 1, dentro del período
+Volatilidad = desvío de ln(P_t / P_t−1) en el último año × √252 (√365 para cripto)
+Bonos, rendimiento total: el día de corte (hábil anterior al pago), cantidad × (1 + pago / precio de ese día)
+  precio ajustado = precio × cantidad / cantidad de hoy`}</Formula>
+        <p className="mt-3">
+          En los bonos, el día que dejan de cotizar con el pago el precio cae lo que pagan (en Bonares y Globales, cupón y amortización: alrededor de 8 % dos veces por año). Para que
+          esa caída no parezca una pérdida, cada pago (del cronograma del prospecto) se reinvierte en el mismo bono ese día; el precio de hoy no cambia. Las acciones y CEDEARs, sin
+          dividendos. Los números de cada empresa (PER, margen, rentabilidad, crecimiento) salen de sus balances, como en su ficha.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "que-hubiera",
     titulo: "¿Qué hubiera pasado si…?",
     contenido: (

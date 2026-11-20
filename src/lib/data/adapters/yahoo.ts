@@ -42,3 +42,53 @@ export async function recorridoDelDia(ticker: string): Promise<RecorridoDelDia |
   if (puntos.length < 2 || !previo || previo <= 0) return null;
   return { previo, puntos };
 }
+
+// ───────────────────────── Historia diaria ─────────────────────────
+
+const serieNum = z.array(z.number().nullable()).optional();
+const diarioSchema = z.object({
+  chart: z.object({
+    result: z
+      .array(
+        z.object({
+          timestamp: z.array(z.number()).optional(),
+          indicators: z.object({ quote: z.array(z.object({ open: serieNum, high: serieNum, low: serieNum, close: serieNum, volume: serieNum })) }),
+        }),
+      )
+      .nullable(),
+  }),
+});
+
+export type VelaYahoo = { fecha: string; apertura: number; maximo: number; minimo: number; cierre: number; volumen: number };
+
+/**
+ * Pasa la respuesta de Yahoo a velas diarias: descarta los días sin cierre y completa apertura, máximo y mínimo con el
+ * cierre si faltan. Puro (se testea aparte).
+ */
+export function aVelas(timestamps: number[], q: { open?: (number | null)[]; high?: (number | null)[]; low?: (number | null)[]; close?: (number | null)[]; volume?: (number | null)[] }): VelaYahoo[] {
+  const salida: VelaYahoo[] = [];
+  timestamps.forEach((t, i) => {
+    const cierre = q.close?.[i];
+    if (typeof cierre !== "number" || !(cierre > 0)) return;
+    const num = (x: number | null | undefined) => (typeof x === "number" && x > 0 ? x : cierre);
+    salida.push({ fecha: new Date(t * 1000).toISOString().slice(0, 10), apertura: num(q.open?.[i]), maximo: num(q.high?.[i]), minimo: num(q.low?.[i]), cierre, volumen: q.volume?.[i] ?? 0 });
+  });
+  // Un día puede venir repetido (la rueda en curso): queda el último.
+  return [...new Map(salida.map((v) => [v.fecha, v])).values()].sort((a, b) => a.fecha.localeCompare(b.fecha));
+}
+
+/**
+ * Cierres diarios de los últimos 5 años de una acción de EE.UU. (en dólares, ajustados por splits). Sirve para los
+ * CEDEARs cuya historia no publica data912 (verificado el 19/11/2026 con NBIS, BRK-B y otros). Caché de 6 horas.
+ */
+export async function historicoDiario(ticker: string): Promise<VelaYahoo[]> {
+  const r = await traerJson(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?range=5y&interval=1d`, diarioSchema, {
+    fuente: "yahoo",
+    revalidate: 21_600,
+    timeoutMs: 9000,
+    headers: { "user-agent": "Mozilla/5.0" },
+  });
+  const res = r.chart.result?.[0];
+  if (!res?.timestamp) return [];
+  return aVelas(res.timestamp, res.indicators.quote[0] ?? {});
+}

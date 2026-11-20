@@ -41,8 +41,11 @@ export function EscenaAlertas({ alertas }: { alertas: AlertaDemo[] }) {
                   a.cumplida ? "sobre-color border-transparent bg-verde" : "border-border bg-surface",
                 )}
               >
+                {/* El ícono de la notificación: la "r" del logo con su punto de sol, en las mismas proporciones que "rinde.". */}
                 <span aria-hidden className={cn("mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-[11px] font-display text-[17px] font-extrabold", a.cumplida ? "bg-tinta text-papel" : "bg-inverse text-on-inverse")}>
-                  r
+                  <span className="inline-flex items-baseline leading-none tracking-[-0.06em]">
+                    r<span className="ml-[0.08em] inline-block size-[5px] rounded-full bg-sol" />
+                  </span>
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="flex items-center justify-between gap-3 text-[12px] font-semibold text-text-3">

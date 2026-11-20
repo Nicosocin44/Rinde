@@ -20,6 +20,13 @@
 20. Cada cuanto se actualizcan las contizaciones de todo, no se ven moviminetos, ni colores en tiempo real.
 21. ~~Faltan noticias en muchos de los activos, no puede pasar. se pueden agregar mas fuentes de informacion? sobre todo de USA, como CNN, CNBC, etc. En todos los activos tienen que haber notiicas, ya sea directas de ellos, o que los afecten de forma indirecta.~~ ✅ <span style="color:red">HECHO (en la rama noticias-activos)</span>
 22. Cambiar promedio del dia de acciones, por card de indice merval como hicimos en CEDEARs.
+23. ~~Comparar activos: poner dos o más acciones, CEDEARs, bonos o cripto en el mismo gráfico, en porcentaje desde una misma fecha, y ver sus números lado a lado (rendimiento, caída máxima, PER, márgenes, etc.), como "Comparar" en Google Finance.~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama comparar-activos): Mercados → Comparar, y un botón "Comparar" en cada ficha.</span>
+24. Poder tocar (o pasar el mouse por) ciertos conceptos, como el PER, el EBITDA o la TIR, y que aparezca un cuadro chico que explique qué son. Se puede armar con el glosario de /aprender (25 términos) para que la explicación sea la misma en todo el sitio.
+25. **(Para hablar con Nico)** Cartera: qué hacer con las billeteras como Mercado Pago. Hoy la app calcula sobre lo que pusiste al principio con la tasa de ese día, pero esa plata se gasta en el medio, así que el saldo y el "+14 % desde la compra" no son reales. Propuesta: incluir todo, pero en dos bloques.
+    - **Inversiones** (acciones, CEDEARs, bonos, LECAPs, cripto, fondos, plazo fijo): se valúan solas con precios públicos y muestran rendimiento.
+    - **Cuentas y efectivo** (billeteras, cuentas remuneradas, dólares guardados): el saldo que dice la persona, con un botón "Actualizar saldo" (5 segundos: abrís la app y escribís cuánto tenés). Entre actualizaciones, interés estimado con la tasa del día, rotulado como estimado. Sin "rendimiento desde la compra". Aviso si pasa más de un mes sin actualizar.
+    - El rendimiento de la cartera (contra la inflación y el dólar) se calcula solo con las inversiones: los gastos de Mercado Pago no son decisiones de inversión.
+    - Subir el resumen del mes (idea de Benja) queda para más adelante: cada app exporta distinto y el archivo trae todos los gastos, información muy privada para algo que solo necesita un número.
 
 
 

@@ -137,6 +137,32 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Comparar activos en el mismo gráfico (punto 23, rama `comparar-activos`, 19/11/2026)
+
+> Pedido de Benja: poder poner acciones, CEDEARs y otros activos en el mismo gráfico, como "Comparar" en Google Finance.
+
+- **Dónde:** Mercados → **Comparar** (`/mercados/comparar`), y un botón "Comparar" al lado de "Avisame" en la ficha de cada acción, CEDEAR, bono, Bitcoin y Ether.
+  - Los activos elegidos viven en la URL (`?t=MELI,GGAL,SPY,BTC`), así una comparación se puede compartir.
+  - Sin activos, ejemplos de un toque ("S&P 500 contra Nasdaq", "Bonar 2030 contra Global 2030"…). Con uno solo (como se llega desde la ficha), sugerencias para sumarle otro.
+- **Qué se puede comparar:** hasta 5 entre CEDEARs, acciones argentinas, bonos en dólares, Bitcoin y Ether. Las LECAPs y los dólares cripto no, porque no tienen una historia de precios que sirva.
+- **El gráfico:** todas las líneas arrancan en 0 % el mismo día, en pesos o en dólares MEP, de 1 mes a 5 años. Al pasar el cursor, la leyenda muestra cada valor en esa fecha.
+- **La tabla de abajo:** rendimiento, máxima caída y volatilidad del período, y precio de hoy.
+- **Números de las empresas:** si hay acciones o CEDEARs, PER, margen neto, ROE, crecimiento de ingresos, dividendo y fecha del último balance, lado a lado. Salen de los mismos balances que la ficha (SEC o CNV).
+- **Bonos, rendimiento total:** el día de corte (el hábil anterior al pago), el precio de los Bonares y Globales cae lo que pagan, alrededor de 8 % dos veces por año. Comparar solo el precio daba que el AL30 "perdió 23 %" en dólares en el último año, cuando con los pagos cobrados quedó en +0,4 % (verificado a mano contra data912).
+  - Ahora cada pago del cronograma (el mismo de la ficha) se reinvierte en el mismo bono ese día. El precio de hoy no cambia.
+  - Función `conPagosReinvertidos()` en `src/lib/calculos/comparar.ts`, con tests.
+- **Fuentes:** las mismas de cada ficha (data912, Binance). Para los CEDEARs que data912 no tiene, la acción en EE.UU. (Yahoo), con una nota. La fórmula de cada número está en Metodología.
+- **De paso:** las solapas de sección en el celular ahora muestran la solapa activa al cargar. Antes la última quedaba fuera de la pantalla: pasaba con "Opciones" y ahora con "Comparar".
+- 7 tests nuevos (`tests/comparar.test.ts`).
+- Revisado en 1440 y 375 px, oscuro y claro. Las tablas anchas dejan fija la columna del nombre al deslizar, como en los balances.
+
+### Decisiones para revisar
+1. **Inicio común:** si un activo tiene menos historia que el período elegido (por ejemplo NVDA, cuya historia en data912 arranca en noviembre de 2025 por el cambio de ratio), todos arrancan ese día y una nota lo explica. La alternativa sería que cada línea arranque cuando puede, pero entonces dejan de ser comparables.
+2. **Acciones y CEDEARs sin dividendos:** no tenemos los dividendos de todas. En las que pagan mucho, el rendimiento real es algo mayor. Lo dice la nota debajo del gráfico.
+3. **El ROE de GGAL da 1,6 %** con los datos de la CNV (en la ficha da igual). Parece bajo para Galicia; vale revisarlo en `balances-cnv` (¿patrimonio de otro período o resultado de un trimestre solo?).
+
+---
+
 ## El dólar implícito deja de ser la cifra principal de CEDEARs (rama `dolar-implicito-chico`, 19/11/2026)
 
 > Pregunta de Benja: ¿importa tanto como para estar arriba de todo? Casi siempre es igual al MEP (hoy, 0,6 % menos), así que no cambia ninguna decisión.

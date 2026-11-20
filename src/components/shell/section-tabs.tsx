@@ -16,11 +16,18 @@ export function SectionTabs({ solapas, etiqueta }: { solapas: Solapa[]; etiqueta
   const pathname = usePathname();
   const activa = [...solapas].sort((a, b) => b.href.length - a.href.length).find((s) => pathname === s.href || pathname.startsWith(`${s.href}/`))?.href ?? solapas[0]?.href;
   const contenedor = useRef<HTMLDivElement>(null);
+  const primera = useRef(true);
 
-  // En mobile, la solapa activa siempre queda a la vista dentro del carrusel.
+  // En mobile, la solapa activa siempre queda a la vista (centrada) dentro del carrusel. Se mueve solo el carrusel, no
+  // la página; al cargar, sin animación (un scroll suave al cargar se corta y la última solapa quedaba fuera de la vista).
   useEffect(() => {
-    const el = contenedor.current?.querySelector<HTMLElement>('[aria-current="page"]');
-    el?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+    const c = contenedor.current;
+    const el = c?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!c || !el) return;
+    const r = el.getBoundingClientRect();
+    const left = c.scrollLeft + r.left - c.getBoundingClientRect().left - (c.clientWidth - r.width) / 2;
+    c.scrollTo({ left, behavior: primera.current ? "auto" : "smooth" });
+    primera.current = false;
   }, [activa]);
 
   return (

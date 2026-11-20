@@ -75,7 +75,7 @@ async function ubicar(ticker: string, cedears: Cedear[], acciones: Accion[]): Pr
   return null;
 }
 
-async function velasDe(tipo: TipoActivo, ticker: string): Promise<{ velas: Vela[]; cortada: string | null; cambios: { fecha: string; veces: number }[] }> {
+export async function velasDe(tipo: TipoActivo, ticker: string): Promise<{ velas: Vela[]; cortada: string | null; cambios: { fecha: string; veces: number }[] }> {
   try {
     const h = await d912.historico(tipo === "cedear" ? "cedears" : "stocks", ticker);
     const todas: Vela[] = h

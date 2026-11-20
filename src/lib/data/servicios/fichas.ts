@@ -36,7 +36,7 @@ export function claseDeFicha(ticker: string): ClaseFicha | null {
   return null;
 }
 
-async function velas912(clase: "bonds", ticker: string): Promise<Vela[]> {
+export async function velas912(clase: "bonds", ticker: string): Promise<Vela[]> {
   try {
     const h = await d912.historico(clase, ticker);
     const todas = h

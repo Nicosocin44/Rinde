@@ -397,6 +397,40 @@
   0%, 30% { color: color-mix(in oklab, var(--c-loss) 70%, currentColor); }
 }
 
+/* Destello de una cotización que cambió (componente Destello): un segundo de fondo verde o rojo que se apaga. */
+.destello {
+  border-radius: 4px;
+  box-decoration-break: clone;
+}
+.destello-sube-0 {
+  animation: destello-sube-0 1200ms var(--ease-standard);
+}
+.destello-sube-1 {
+  animation: destello-sube-1 1200ms var(--ease-standard);
+}
+.destello-baja-0 {
+  animation: destello-baja-0 1200ms var(--ease-standard);
+}
+.destello-baja-1 {
+  animation: destello-baja-1 1200ms var(--ease-standard);
+}
+@keyframes destello-sube-0 {
+  0%, 35% { background-color: color-mix(in oklab, var(--c-gain) 22%, transparent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--c-gain) 22%, transparent); }
+  100% { background-color: transparent; box-shadow: 0 0 0 3px transparent; }
+}
+@keyframes destello-sube-1 {
+  0%, 35% { background-color: color-mix(in oklab, var(--c-gain) 22%, transparent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--c-gain) 22%, transparent); }
+  100% { background-color: transparent; box-shadow: 0 0 0 3px transparent; }
+}
+@keyframes destello-baja-0 {
+  0%, 35% { background-color: color-mix(in oklab, var(--c-loss) 22%, transparent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--c-loss) 22%, transparent); }
+  100% { background-color: transparent; box-shadow: 0 0 0 3px transparent; }
+}
+@keyframes destello-baja-1 {
+  0%, 35% { background-color: color-mix(in oklab, var(--c-loss) 22%, transparent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--c-loss) 22%, transparent); }
+  100% { background-color: transparent; box-shadow: 0 0 0 3px transparent; }
+}
+
 /* Revelado al scrollear: fundido + 12 px, una sola vez. */
 /* Solo se oculta si hay JS (sin JS, el contenido se ve igual). */
 [data-js] .revelar {

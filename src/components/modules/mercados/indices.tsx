@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { MiniDia } from "@/components/charts/mini-dia";
 import { Delta } from "@/components/ui/delta";
+import { Destello } from "@/components/ui/destello";
 import type { RecorridoDelDia } from "@/lib/data/adapters/yahoo";
+import type { Merval } from "@/lib/data/servicios/mercados";
 import type { IndiceEEUU } from "@/lib/data/types";
+import { numero } from "@/lib/format";
 
 /**
  * Cómo viene hoy Wall Street: S&P 500, Nasdaq 100 y Dow Jones, medidos por el CEDEAR de su ETF. La cifra grande es la
@@ -25,7 +28,9 @@ export function IndicesEEUU({ indices, recorridos = {} }: { indices: IndiceEEUU[
             >
               <span className="flex min-w-0 flex-col gap-1">
                 <span className="text-[15px] font-semibold">{i.nombre}</span>
-                <Delta valor={i.variacionUsd} className="font-display text-[26px] leading-tight font-bold tracking-[-0.02em]" />
+                <Destello valor={i.variacionUsd} className="self-start">
+                  <Delta valor={i.variacionUsd} className="font-display text-[26px] leading-tight font-bold tracking-[-0.02em]" />
+                </Destello>
                 <span className="text-micro text-text-2">
                   en dólares · en pesos <Delta valor={i.variacionArs} className="text-micro" />
                 </span>
@@ -39,6 +44,46 @@ export function IndicesEEUU({ indices, recorridos = {} }: { indices: IndiceEEUU[
         ))}
       </ul>
       <p className="mt-2 text-micro text-text-3">Variación de hoy del CEDEAR del ETF que replica cada índice, en la rueda de BYMA. No es el índice en sí, pero se mueve casi igual.</p>
+    </section>
+  );
+}
+
+/**
+ * El Merval de hoy, con la misma tarjeta que Wall Street: la variación en pesos grande, los puntos y la variación en
+ * dólares abajo, y el recorrido de la rueda al costado (verde o rojo según el día). Es el MSCI Merval (Yahoo).
+ */
+export function MervalHoy({ merval }: { merval: Merval | null }) {
+  if (!merval) return null;
+  return (
+    <section aria-labelledby="merval-hoy" className="mb-12 lg:mb-16">
+      <h2 id="merval-hoy" className="mb-3 text-label">
+        Merval hoy
+      </h2>
+      <div className="grid md:grid-cols-3">
+        <div className="flex items-stretch justify-between gap-3 rounded-(--radius-card) border border-border bg-surface px-4 py-3.5">
+          <span className="flex min-w-0 flex-col gap-1">
+            <span className="text-[15px] font-semibold">Merval</span>
+            <Destello valor={merval.puntos} className="self-start">
+              <Delta valor={merval.variacion} className="font-display text-[26px] leading-tight font-bold tracking-[-0.02em]" />
+            </Destello>
+            <span className="text-micro text-text-2">
+              <span className="tabular">
+                <Destello valor={merval.puntos}>{numero(merval.puntos, 0)}</Destello>
+              </span>{" "}
+              puntos{merval.variacionUsd !== null && (
+                <>
+                  {" "}
+                  · en dólares <Delta valor={merval.variacionUsd} className="text-micro" />
+                </>
+              )}
+            </span>
+          </span>
+          <span className="flex shrink-0 flex-col items-end justify-between gap-2">
+            <span className="font-mono text-[11px] text-text-3">MSCI</span>
+            <MiniDia puntos={merval.recorrido.puntos} previo={merval.recorrido.previo} positivo={merval.variacion >= 0} ancho={84} alto={36} />
+          </span>
+        </div>
+      </div>
     </section>
   );
 }

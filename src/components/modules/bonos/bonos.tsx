@@ -5,6 +5,7 @@ import { bonoPorTicker } from "@data/ar/bonos-usd";
 import { YieldCurve } from "@/components/charts/yield-curve";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Delta } from "@/components/ui/delta";
+import { Destello } from "@/components/ui/destello";
 import { MoneyInput } from "@/components/ui/money-input";
 import { calculadoraFlujos, metricasBono } from "@/lib/calculos";
 import type { BonoUsd, ObligacionNegociable } from "@/lib/data/types";
@@ -31,7 +32,7 @@ export function Bonos({ bonos, ajustes }: { bonos: BonoUsd[]; ajustes: { ny: { x
       ),
     },
     { id: "ley", encabezado: "Ley", solo: "desktop", valorOrden: (b) => b.ley, celda: (b) => <span className="text-chico text-text-2">{b.ley === "Nueva York" ? "Nueva York" : "Argentina"}</span> },
-    { id: "precio", encabezado: "Precio US$", alineacion: "derecha", valorOrden: (b) => b.precioUsd, celda: (b) => <span>{numero(b.precioUsd, 2)}</span> },
+    { id: "precio", encabezado: "Precio US$", alineacion: "derecha", valorOrden: (b) => b.precioUsd, celda: (b) => <Destello valor={b.precioUsd}>{numero(b.precioUsd, 2)}</Destello> },
     { id: "var", encabezado: "Var.", alineacion: "derecha", solo: "desktop", valorOrden: (b) => b.variacion, celda: (b) => <Delta valor={b.variacion} className="text-chico" /> },
     { id: "tir", encabezado: "TIR", alineacion: "derecha", valorOrden: (b) => b.tir, celda: (b) => <span className="font-medium">{porcentaje(b.tir, 2)}</span> },
     { id: "duration", encabezado: "Duration", alineacion: "derecha", solo: "pro", valorOrden: (b) => b.duration, celda: (b) => <span className="text-text-2">{numero(b.duration, 2)}</span> },
@@ -147,7 +148,7 @@ export function CalculadoraFlujos({ b, liquidacion }: { b: BonoUsd; liquidacion:
 export function TablaOns({ ons }: { ons: ObligacionNegociable[] }) {
   const columnas: Columna<ObligacionNegociable>[] = [
     { id: "ticker", encabezado: "ON", valorOrden: (o) => o.ticker, celda: (o) => <span className="font-mono text-[14px] font-medium">{o.ticker}</span> },
-    { id: "usd", encabezado: "Precio US$", alineacion: "derecha", valorOrden: (o) => o.precioUsd, celda: (o) => <span>{numero(o.precioUsd, 2)}</span> },
+    { id: "usd", encabezado: "Precio US$", alineacion: "derecha", valorOrden: (o) => o.precioUsd, celda: (o) => <Destello valor={o.precioUsd}>{numero(o.precioUsd, 2)}</Destello> },
     { id: "var", encabezado: "Var.", alineacion: "derecha", valorOrden: (o) => o.variacion, celda: (o) => <Delta valor={o.variacion} className="text-chico" /> },
     { id: "ops", encabezado: "Operaciones", alineacion: "derecha", solo: "desktop", valorOrden: (o) => o.operaciones, celda: (o) => <span className="text-text-2">{numero(o.operaciones, 0)}</span> },
     { id: "vol", encabezado: "Volumen (nominales)", alineacion: "derecha", solo: "desktop", valorOrden: (o) => o.volumen, celda: (o) => <span className="text-text-2">{pesosCompacto(o.volumen, "")}</span> },
@@ -163,7 +164,9 @@ export function TablaOns({ ons }: { ons: ObligacionNegociable[] }) {
         <span className="flex items-center justify-between gap-3">
           <span className="font-mono text-[15px] font-medium">{o.ticker}</span>
           <span className="text-right">
-            <span className="tabular block text-[15px] font-medium">US$ {numero(o.precioUsd, 2)}</span>
+            <span className="tabular block text-[15px] font-medium">
+                <Destello valor={o.precioUsd}>US$ {numero(o.precioUsd, 2)}</Destello>
+              </span>
             <Delta valor={o.variacion} className="text-micro" />
           </span>
         </span>

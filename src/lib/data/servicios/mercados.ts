@@ -174,6 +174,19 @@ export async function cargarRecorridosEEUU(): Promise<Record<string, yahoo.Recor
   return salida;
 }
 
+/**
+ * El Merval de hoy: el MSCI Merval (desde el 19/10/2026 lo calcula MSCI, con base 100.000 al 16/10/2026), en pesos y
+ * en dólares, de Yahoo. null si no responde: la tarjeta no se muestra y la tabla sigue igual.
+ */
+export async function cargarMerval(): Promise<Merval | null> {
+  const rueda = { abre: pais.mercado.abre, cierra: pais.mercado.cierra + 0.1, utcOffset: pais.utcOffset };
+  const [ars, usd] = await Promise.all([yahoo.ruedaIndiceAr("^768692-ARS-STRD", rueda).catch(() => null), yahoo.ruedaIndiceAr("^768692-USD-STRD", rueda).catch(() => null)]);
+  if (!ars) return null;
+  return { puntos: ars.ultimo, variacion: ars.variacion, variacionUsd: usd?.variacion ?? null, recorrido: { previo: ars.previo, puntos: ars.puntos }, hora: ars.hora };
+}
+
+export type Merval = { puntos: number; variacion: number; variacionUsd: number | null; recorrido: yahoo.RecorridoDelDia; hora: string };
+
 export function indicesEEUU(panel: Panel): IndiceEEUU[] {
   const porSimbolo = new Map(panel.map((p) => [p.symbol, p]));
   const pct = (p: Panel[number] | undefined) => (p && precio(p) && typeof p.pct_change === "number" ? d(p.pct_change).div(100).toNumber() : null);

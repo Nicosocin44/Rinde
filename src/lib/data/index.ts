@@ -8,7 +8,7 @@ import { cargarCotizaciones, cargarHistorico, cargarRanking } from "./servicios/
 import { cargarFeriados } from "./servicios/feriados";
 import { armarPulso } from "./servicios/inicio";
 import { cargarMacro } from "./servicios/macro";
-import { cargarBonos, cargarCripto, cargarMercados, cargarRecorridosEEUU } from "./servicios/mercados";
+import { cargarBonos, cargarCripto, cargarMercados, cargarMerval, cargarRecorridosEEUU } from "./servicios/mercados";
 import { cargarNoticias } from "./servicios/noticias";
 import { cargarOpciones } from "./servicios/opciones";
 import { cargarPesos } from "./servicios/pesos";
@@ -26,6 +26,7 @@ export const obtenerBonos = cache(cargarBonos);
 export const obtenerMercados = cache(cargarMercados);
 export const obtenerSemana = cache(cargarSemana);
 export const obtenerRecorridosEEUU = cache(cargarRecorridosEEUU);
+export const obtenerMerval = cache(cargarMerval);
 export const obtenerCripto = cache(cargarCripto);
 export const obtenerFeriados = cache(cargarFeriados);
 export const obtenerNoticias = cache(cargarNoticias);

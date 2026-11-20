@@ -7,7 +7,7 @@ import { SourceNote } from "@/components/ui/frescura";
 import { obtenerOpciones } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
 
-export const revalidate = 120;
+export const revalidate = 15;
 
 /** Marco de Opciones: el precio de GGAL, las tres solapas (cadena, tasas, estrategias), la fuente y el aviso de riesgo. */
 export default async function OpcionesLayout({ children }: { children: React.ReactNode }) {

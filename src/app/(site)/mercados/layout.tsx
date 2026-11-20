@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { CalendarioSemanal, CalendarioSemanalCargando } from "@/components/modules/mercados/semana";
 import { PageHeader } from "@/components/shell/page-header";
+import { RefrescoEnVivo } from "@/components/shell/refresco-en-vivo";
 import { SectionTabs } from "@/components/shell/section-tabs";
 
 export default function MercadosLayout({ children }: { children: React.ReactNode }) {
@@ -27,6 +28,7 @@ export default function MercadosLayout({ children }: { children: React.ReactNode
         ]}
       />
       <div className="pt-8 lg:pt-12">{children}</div>
+      <RefrescoEnVivo />
     </>
   );
 }

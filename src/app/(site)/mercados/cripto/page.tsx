@@ -5,7 +5,7 @@ import { SourceNote } from "@/components/ui/frescura";
 import { obtenerCripto } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
 
-export const revalidate = 60;
+export const revalidate = 15;
 export const metadata: Metadata = { title: "Cripto: Bitcoin, Ether, USDT y USDC en pesos", description: "Precio de las principales criptomonedas en pesos y dólares, y dónde conviene comprarlas." };
 
 export default async function CriptoPage() {

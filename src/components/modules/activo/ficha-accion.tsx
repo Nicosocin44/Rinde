@@ -3,6 +3,7 @@ import { Suspense, type ReactNode } from "react";
 import { SUBYACENTES_OPCIONES } from "@data/ar/opciones";
 import { PageHeader } from "@/components/shell/page-header";
 import { Delta } from "@/components/ui/delta";
+import { Destello } from "@/components/ui/destello";
 import { ErrorState, Skeleton } from "@/components/ui/estados";
 import { SourceNote } from "@/components/ui/frescura";
 import { ProviderMark } from "@/components/ui/provider-mark";
@@ -141,7 +142,9 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
           {sinHistoria && (
             <div className="flex flex-col gap-1">
               <p className="text-label">{a.ticker} en pesos</p>
-              <p className="tabular text-hero">{a.precio ? pesos(a.precio, 2) : "—"}</p>
+              <p className="tabular text-hero">
+                <Destello valor={a.precio}>{a.precio ? pesos(a.precio, 2) : "—"}</Destello>
+              </p>
               <Delta valor={a.variacion} className="text-chico" />
             </div>
           )}

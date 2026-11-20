@@ -3,6 +3,7 @@ import { ViewTransition } from "react";
 import { Sparkline } from "@/components/charts/sparkline";
 import { Cifra } from "@/components/ui/cifra";
 import { Delta } from "@/components/ui/delta";
+import { Destello } from "@/components/ui/destello";
 import { ErrorState } from "@/components/ui/estados";
 import { SourceNote } from "@/components/ui/frescura";
 import { obtenerCotizaciones } from "@/lib/data";
@@ -10,7 +11,7 @@ import { FUENTES, type CotizacionDolar } from "@/lib/data/types";
 import { pesos, porcentaje } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
-export const revalidate = 60;
+export const revalidate = 15;
 export const metadata: Metadata = {
   title: "Dólar hoy: MEP, blue, oficial, CCL y cripto",
   description: "Cotización del dólar hoy en Argentina: oficial, MEP, CCL, blue, cripto, tarjeta y mayorista, con variación y brecha.",
@@ -30,7 +31,9 @@ export default async function Cotizaciones() {
           <div className="flex flex-col gap-3">
             <p className="text-label">Dólar MEP · para comprar</p>
             <ViewTransition name="cifra-mep" share="morph" default="none">
-              <Cifra valor={mep.venta} className="text-hero" />
+              <Destello valor={mep.venta}>
+                <Cifra valor={mep.venta} animado className="text-hero" />
+              </Destello>
             </ViewTransition>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[15px]">
               <Delta valor={mep.variacion} className="font-medium" />
@@ -84,10 +87,18 @@ function FilaDolar({ c, destacado }: { c: CotizacionDolar; destacado: boolean })
       </div>
       <div className="text-right">
         <p className="text-micro md:hidden">Comprás a</p>
-        <Cifra valor={c.venta} compuesta={false} className="text-[17px] font-medium" claseDecimales="text-text" />
+        <Destello valor={c.venta}>
+          <Cifra valor={c.venta} animado compuesta={false} className="text-[17px] font-medium" claseDecimales="text-text" />
+        </Destello>
       </div>
       <div className="hidden text-right md:block">
-        {c.compra ? <Cifra valor={c.compra} compuesta={false} className="text-[17px] text-text-2" claseDecimales="text-text-2" /> : <span className="text-text-3">—</span>}
+        {c.compra ? (
+          <Destello valor={c.compra}>
+            <Cifra valor={c.compra} animado compuesta={false} className="text-[17px] text-text-2" claseDecimales="text-text-2" />
+          </Destello>
+        ) : (
+          <span className="text-text-3">—</span>
+        )}
       </div>
       <div className="flex items-center gap-3 md:block md:text-right">
         <Delta valor={c.variacion} className="text-chico" />

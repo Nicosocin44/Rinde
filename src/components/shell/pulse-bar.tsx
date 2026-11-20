@@ -9,7 +9,7 @@ import { porcentaje } from "@/lib/format";
 
 /**
  * Barra de pulso (desktop): MEP, oficial, riesgo país y la mejor tasa, con number ticker.
- * No es un marquee: son cuatro valores quietos que se actualizan cada minuto.
+ * No es un marquee: son cuatro valores quietos que se actualizan cada 15 segundos.
  */
 export function PulseBar({ inicial }: { inicial: Pulso }) {
   const [pulso, setPulso] = useState(inicial);
@@ -24,7 +24,7 @@ export function PulseBar({ inicial }: { inicial: Pulso }) {
         // Sin conexión: quedan los últimos valores.
       }
     };
-    const id = setInterval(actualizar, 60_000);
+    const id = setInterval(actualizar, 15_000);
     return () => clearInterval(id);
   }, []);
 

@@ -1,3 +1,4 @@
+import { RefrescoEnVivo } from "@/components/shell/refresco-en-vivo";
 import { SectionTabs } from "@/components/shell/section-tabs";
 import { PageHeader } from "@/components/shell/page-header";
 
@@ -15,6 +16,7 @@ export default function DolarLayout({ children }: { children: React.ReactNode })
         ]}
       />
       <div className="pt-8 lg:pt-12">{children}</div>
+      <RefrescoEnVivo />
     </>
   );
 }

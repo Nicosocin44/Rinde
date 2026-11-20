@@ -17,8 +17,8 @@ export const ar = {
 
   /** Segundos de caché por tipo de dato: [en horario de mercado, fuera de horario]. Ver DATOS_Y_FORMULAS.md §3. */
   cache: {
-    dolar: [60, 300],
-    mercado: [60, 900],
+    dolar: [15, 60],
+    mercado: [15, 900],
     tasas: [3600, 21600],
     bcra: [21600, 21600],
     macro: [43200, 86400],

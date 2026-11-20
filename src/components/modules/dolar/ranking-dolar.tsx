@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { proveedorPorId, resolverProveedor } from "@data/ar/proveedores";
 import { DataTable, EtiquetaMejor, type Columna } from "@/components/ui/data-table";
+import { Destello } from "@/components/ui/destello";
 import { ErrorState } from "@/components/ui/estados";
 import { EstadoDiscreto } from "@/components/ui/estado-dato";
 import { MetricExplainer } from "@/components/ui/metric-explainer";
@@ -62,8 +63,8 @@ export function RankingDolar({ rankings }: { rankings: Record<ActivoDolar, Carga
         </span>
       ),
     },
-    { id: "compras", encabezado: "Comprás a", alineacion: "derecha", celda: (p) => <span className={cn(criterio === "comprar" && "font-medium")}>{pesos(p.compras, 2)}</span> },
-    { id: "vendes", encabezado: "Vendés a", alineacion: "derecha", celda: (p) => <span className={cn(criterio === "vender" ? "font-medium" : "text-text-2")}>{pesos(p.vendes, 2)}</span> },
+    { id: "compras", encabezado: "Comprás a", alineacion: "derecha", celda: (p) => <Destello valor={p.compras} className={cn(criterio === "comprar" && "font-medium")}>{pesos(p.compras, 2)}</Destello> },
+    { id: "vendes", encabezado: "Vendés a", alineacion: "derecha", celda: (p) => <Destello valor={p.vendes} className={cn(criterio === "vender" ? "font-medium" : "text-text-2")}>{pesos(p.vendes, 2)}</Destello> },
     { id: "spread", encabezado: "Spread", alineacion: "derecha", celda: (p) => <span className={cn(criterio === "spread" ? "font-medium" : "text-text-2")}>{porcentaje(p.spread, 2)}</span> },
     {
       id: "costo",

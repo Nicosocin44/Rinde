@@ -60,7 +60,8 @@ export const PROVEEDORES: Proveedor[] = [
   P({ id: "supervielle", nombre: "Supervielle", sigla: "SU", tipo: "banco", regulador: "BCRA", garantiaDepositos: true, alias: ["supervielle hit iol"] }),
   P({ id: "columbia", nombre: "Banco Columbia", sigla: "CL", tipo: "banco", regulador: "BCRA", garantiaDepositos: true }),
   P({ id: "carrefour", nombre: "Carrefour Banco", sigla: "CB", tipo: "banco", regulador: "BCRA", garantiaDepositos: true, alias: ["carrefour banco"] }),
-  P({ id: "andina", nombre: "Banco Andina", sigla: "AN", tipo: "banco", regulador: "BCRA" }),
+  // No es un banco: el "andina" de CriptoYa es Andina Cambio, casa de cambio de Bariloche y Villa La Angostura (verificado el 19/11/2026).
+  P({ id: "andina", nombre: "Andina Cambio", sigla: "AC", tipo: "casa_de_cambio", regulador: "BCRA", sitio: "https://www.andinacambio.com.ar" }),
 
   // ───── Casas de cambio ─────
   P({ id: "pluscambio", nombre: "Plus Cambio", sigla: "PC", tipo: "casa_de_cambio", regulador: "BCRA" }),
@@ -82,7 +83,8 @@ export const PROVEEDORES: Proveedor[] = [
   P({ id: "saldo", nombre: "Saldo", sigla: "SD", tipo: "billetera", opera247: true }),
   P({ id: "airtm", nombre: "Airtm", sigla: "AT", tipo: "billetera", opera247: true }),
   P({ id: "peanut", nombre: "Peanut", sigla: "PN", tipo: "billetera", opera247: true }),
-  P({ id: "vibrant", nombre: "Vibrant", sigla: "VB", tipo: "billetera", opera247: true }),
+  // Vibrant pasó a llamarse Vesseo (misma empresa, Sunship, y misma app; verificado el 19/11/2026). El id sigue siendo el de CriptoYa.
+  P({ id: "vibrant", nombre: "Vesseo (ex Vibrant)", sigla: "VE", tipo: "billetera", opera247: true, sitio: "https://vibrantapp.com" }),
   P({ id: "vitawallet", nombre: "Vita Wallet", sigla: "VW", tipo: "billetera", opera247: true }),
 
   // ───── Exchanges cripto ─────

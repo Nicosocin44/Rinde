@@ -154,6 +154,30 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Logos de bancos y billeteras que faltaban (rama `logos-proveedores`, 19/11/2026)
+
+> Benja vio a Prex, Banco Andina y Plaza Cambio sin ícono en "Dónde comprar", y pidió buscar también en Google.
+
+- **14 proveedores más con logo (de 83 a 97):**
+  - Con el **ícono oficial de su app** (App Store; en todos, la app la publica la propia empresa): Banco CMF, Banco Dino, Masventas, Meridian, Banco Piano, Carrefour Banco, Prex, Peanut, Vesseo (ex Vibrant) y Plus Crypto (la app de Plus, de Plus Fintech).
+  - Plaza Cambio, Banco Julio y Andina Cambio: el símbolo de su logo, recortado del archivo de su propio sitio. CryptoMarket: su isotipo, de la foto de su cuenta oficial de X (@CryptoMKT).
+- **Vibrant pasó a llamarse Vesseo** (misma empresa, Sunship, y misma app): ahora se muestra como "Vesseo (ex Vibrant)".
+- Las fuentes quedan en `assets/logos-fuente/proveedores/` (con `app-store.json`, que dice de qué app sale cada uno), así que el script de logos los mantiene si se vuelve a correr.
+- **"Banco Andina" no era un banco:** el "andina" de CriptoYa es **Andina Cambio**, una casa de cambio de Bariloche y Villa La Angostura (así lo nombran DolarClaro, CotizaYa y otros que toman el mismo dato). Se corrigió el nombre y el tipo.
+- **Siguen con monograma (2):** Bytelime (es la agencia de cambio habilitada por el BCRA que opera el dólar oficial de Tienda Dólar, Buenbit y Manteca, sin una marca propia para el público: no sabemos de cuál es la cotización de CriptoYa, así que no ponemos un logo que podría ser de otro) y Adcap (su ícono es la palabra en letra chica, ilegible a 28 px).
+
+---
+
+## La home ya no muestra las fuentes (rama `portada-sin-fuentes`, 19/11/2026)
+
+> Pedido de Benja: sacar de la portada la escena "Todo sale de fuentes públicas.". Quien quiera ver las fuentes las tiene en el pie de cada página y en /metodologia.
+
+- Se sacó la escena de confianza (la lista de fuentes con su estado y los principios "Neutral", "Con la cuenta a la vista" y "Sin números de relleno"). La home pasa de "La misma plata, dos destinos" al cierre "Empezá gratis.".
+- Se borró su componente y su coreografía, y la home dejó de pedir las cotizaciones del dólar, que solo usaba esa escena.
+- Las fuentes siguen en el pie del sitio (con el link a la Metodología) y en /metodologia#fuentes.
+
+---
+
 ## Comparar activos en el mismo gráfico (punto 23, rama `comparar-activos`, 19/11/2026)
 
 > Pedido de Benja: poder poner acciones, CEDEARs y otros activos en el mismo gráfico, como "Comparar" en Google Finance.

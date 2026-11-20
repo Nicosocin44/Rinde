@@ -129,20 +129,11 @@ const macizo: Coreografia = (tl, q, { datos }) => {
   tl.from(q("[data-cierre]"), { y: 24, opacity: 0, duration: 0.08 }, 0.74);
 };
 
-const confianza: Coreografia = (tl, q) => {
-  entrarTitulo(tl, q);
-  q("[data-fuente]").forEach((f, i) => {
-    tl.from(f, { y: 26, opacity: 0, duration: 0.08, ease: "power2.out" }, 0.1 + i * 0.05);
-    tl.from(f.querySelector("[data-estado]"), { opacity: 0, x: 10, duration: 0.05 }, 0.16 + i * 0.05);
-  });
-  tl.from(q("[data-regla]"), { y: 24, opacity: 0, duration: 0.08, stagger: 0.05, ease: "power2.out" }, 0.18);
-};
-
 const cierre: Coreografia = (tl, q) => {
   tl.from(q(".escena-interior"), { yPercent: 18, duration: 0.6, ease: "power2.out" }, 0);
   tl.from(q("[data-gigante]"), { scale: 0.9, transformOrigin: "0% 100%", duration: 0.7, ease: "power2.out" }, 0.1);
   tl.from(q("[data-acciones]"), { y: 30, opacity: 0, duration: 0.25, ease: "power2.out" }, 0.55);
 };
 
-export const COREOGRAFIAS = { problema, respuesta, dolar, cartera, alertas, macizo, confianza, cierre } satisfies Record<string, Coreografia>;
+export const COREOGRAFIAS = { problema, respuesta, dolar, cartera, alertas, macizo, cierre } satisfies Record<string, Coreografia>;
 export type NombreCoreografia = keyof typeof COREOGRAFIAS;

@@ -7,7 +7,6 @@ import { armarHistoria } from "@/components/modules/inicio/historia/datos";
 import { EscenaAlertas } from "@/components/modules/inicio/historia/alertas";
 import { EscenaCartera } from "@/components/modules/inicio/historia/cartera";
 import { EscenaCierre } from "@/components/modules/inicio/historia/cierre";
-import { EscenaConfianza } from "@/components/modules/inicio/historia/confianza";
 import { EscenaDolar } from "@/components/modules/inicio/historia/dolar";
 import { EscenaMacizo } from "@/components/modules/inicio/historia/macizo";
 import { EscenaProblema } from "@/components/modules/inicio/historia/problema";
@@ -105,9 +104,6 @@ export default async function Inicio() {
           <EscenaMacizo {...historia.macizo} />
         </LimiteError>
       )}
-      <LimiteError nombre="Confianza">
-        <EscenaConfianza fuentes={historia.fuentes} />
-      </LimiteError>
       <LimiteError nombre="Empezá">
         <EscenaCierre />
       </LimiteError>

@@ -46,7 +46,11 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
   const sinHistoria = cierres.length < 2;
   const rendPesos = rendimientos(cierres, hoy);
   const rendUsd = rendimientos(cierresUsd, hoy);
-  const hayRendimiento = [...Object.values(rendPesos), ...Object.values(rendUsd)].some((x) => x !== null);
+  // CEDEAR sin historia propia en data912 (en general, uno nuevo): la de la acción en EE.UU., en dólares (Yahoo).
+  const eeuu = sinHistoria && a.velasEeuu.length >= 2 ? a.velasEeuu : null;
+  const cierresEeuu = eeuu ? eeuu.map((v) => ({ fecha: v.fecha, cierre: v.cierre })) : [];
+  const rendEeuu = eeuu ? rendimientos(cierresEeuu, hoy) : null;
+  const hayRendimiento = [...Object.values(rendPesos), ...Object.values(rendUsd), ...Object.values(rendEeuu ?? {})].some((x) => x !== null);
 
   const datos: Dato[] = [
     {
@@ -67,6 +71,20 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
     { etiqueta: "Volatilidad anual", valor: vol !== null ? porcentaje(vol, 1) : "—", ayuda: "Cuánto se mueve el precio: el desvío de las variaciones diarias del último año, anualizado." },
     { etiqueta: "Máxima caída (1 año)", valor: caida ? <span className="text-loss">{porcentaje(caida.caida, 1)}</span> : "—", ayuda: caida ? `Del ${fechaCorta(caida.pico, true)} al ${fechaCorta(caida.piso, true)}.` : undefined },
   ];
+  if (eeuu) {
+    const r52 = rango(eeuu, unAnioAtras);
+    const volEeuu = volatilidadAnual(eeuu);
+    const caidaEeuu = maximaCaida(cierresEeuu, unAnioAtras);
+    datos.push(
+      { etiqueta: "Rango de 52 semanas en EE.UU.", valor: r52 ? `${dolares(r52.minimo, 2)} – ${dolares(r52.maximo, 2)}` : "—", ayuda: "Mínimo y máximo de la acción en su mercado, en dólares." },
+      { etiqueta: "Volatilidad anual (en EE.UU.)", valor: volEeuu !== null ? porcentaje(volEeuu, 1) : "—", ayuda: "Cuánto se mueve el precio de la acción: el desvío de las variaciones diarias del último año, anualizado." },
+      {
+        etiqueta: "Máxima caída en 1 año (en EE.UU.)",
+        valor: caidaEeuu ? <span className="text-loss">{porcentaje(caidaEeuu.caida, 1)}</span> : "—",
+        ayuda: caidaEeuu ? `Del ${fechaCorta(caidaEeuu.pico, true)} al ${fechaCorta(caidaEeuu.piso, true)}.` : undefined,
+      },
+    );
+  }
   if (a.tipo === "cedear") {
     datos.push(
       { etiqueta: "Un CEDEAR, en dólares", valor: a.precioUsd ? dolares(a.precioUsd, 2) : "—", ayuda: "Su precio en la especie en dólares (D). Un CEDEAR puede ser una fracción de la acción, por eso no coincide con el precio en EE.UU." },
@@ -141,6 +159,13 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
                 },
               ]}
             />
+          ) : eeuu ? (
+            <>
+              <GraficoActivo series={[{ id: "eeuu", etiqueta: "En EE.UU.", titulo: `${a.ticker} en EE.UU., en dólares`, moneda: "US$", serie: cierresEeuu.map((p) => [p.fecha, p.cierre]), velas: compactar(eeuu) }]} />
+              <p className="text-micro text-text-3">
+                data912 no publica la historia de este CEDEAR (en general, porque es nuevo): el gráfico es el de la acción en Estados Unidos, en dólares. El CEDEAR sigue ese precio, pasado a pesos con el dólar CCL.
+              </p>
+            </>
           ) : (
             <ErrorState
               compacto
@@ -187,11 +212,19 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
       {hayRendimiento && (
         <TablaRendimiento
           anio={hoy.slice(0, 4)}
-          filas={[
-            ["En pesos", rendPesos],
-            ["En dólares MEP", rendUsd],
-          ]}
-          nota="En dólares, cada precio se divide por el dólar MEP de ese día: muestra si el activo le ganó a la devaluación. Rendimientos pasados, sin dividendos."
+          filas={
+            rendEeuu
+              ? [["Acción en EE.UU., en dólares", rendEeuu]]
+              : [
+                  ["En pesos", rendPesos],
+                  ["En dólares MEP", rendUsd],
+                ]
+          }
+          nota={
+            rendEeuu
+              ? "De la acción en Estados Unidos, en dólares: data912 no publica la historia de este CEDEAR. Rendimientos pasados, sin dividendos."
+              : "En dólares, cada precio se divide por el dólar MEP de ese día: muestra si el activo le ganó a la devaluación. Rendimientos pasados, sin dividendos."
+          }
         />
       )}
 

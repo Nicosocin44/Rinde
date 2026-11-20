@@ -137,6 +137,23 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Logos y gráficos para muchos más activos (tarea 19, rama `logos-y-graficos`, 19/11/2026)
+
+> Pedido de Benja: muchos activos seguían sin logo o sin gráfico.
+
+- **Logos: de 106 a 281 activos.** Se sumaron 175 (CEDEARs, ETF y acciones argentinas), con el mismo método de siempre: el ícono oficial del sitio de cada empresa. El sitio sale de Wikidata (la empresa con ese ticker en NYSE o Nasdaq); los ETF, de su emisora (iShares, Vanguard, VanEck, ProShares…); las argentinas, verificadas a mano con el título de su sitio. Todos revisados a ojo en una hoja de contactos.
+  - Como en esta compu no hay Python, se bajaron con un script de Node equivalente (sin dependencias nuevas). Los dominios quedaron anotados en `scripts/logos.py` para que el script de siempre los mantenga.
+  - **Siguen con monograma (46):** las que solo tienen un ícono de 16 px o bloquean la descarga (Ford, Verizon, Cisco, 3M, UnitedHealth, Newmont, Berkshire, Nu…), los ETF de State Street (su logo es texto chico, ya descartado) y las argentinas que no pudimos verificar (Carlos Casado, Celulosa, Autopistas del Oeste, Rosenbusch, Polledo, Boldt Gaming). GCDI se descartó: su ícono es un cuadrado vacío. El paso siguiente sería sumarlos a mano desde Wikimedia Commons, como hizo Nico con los bancos.
+- **Gráficos de los CEDEARs nuevos:** cuando data912 no publica la historia del CEDEAR (NBIS, NU, Robinhood, Rocket Lab, Booking, Cameco…), la ficha muestra el gráfico de la acción en Estados Unidos, en dólares (5 años, de Yahoo Finance, que ya usamos para Wall Street hoy), con una línea que lo aclara. También salen de ahí el rendimiento, el rango de 52 semanas, la volatilidad y la máxima caída, rotulados "en EE.UU.". Las acciones argentinas no tenían este problema: data912 tiene su historia.
+
+- **Al juntarla con `main` (20/11/2026):** Nico había hecho el mismo punto en paralelo (rama `balances-cnv`, "Todos los logos que faltaban", más abajo). En los 167 activos que habíamos hecho los dos quedó el de Financial Modeling Prep, que es el logo completo y no el ícono del sitio (por ejemplo, IBM: el ícono de ibm.com es una abeja). De esta rama se sumaron los 8 que no estaban: Carboclor, Fiplasto, Dos Anclas, Juramento, La Anónima, Southern Copper, Semino y Xerox. Total: 467 activos con logo.
+
+**Para revisar:**
+1. **El gráfico de un CEDEAR nuevo es el de la acción en EE.UU.**, no el del CEDEAR en pesos (no hay de dónde sacarlo). Está aclarado debajo.
+2. **Yahoo no es una API oficial** (igual que para Wall Street hoy): revisar sus condiciones antes del lanzamiento comercial.
+
+---
+
 ## Logos de bancos y billeteras que faltaban (rama `logos-proveedores`, 19/11/2026)
 
 > Benja vio a Prex, Banco Andina y Plaza Cambio sin ícono en "Dónde comprar", y pidió buscar también en Google.
@@ -264,7 +281,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ### Decisiones para revisar
 1. **Financial Modeling Prep e icon.horse no son fuentes oficiales de logos.** Se bajan una sola vez y se sirven desde nuestro sitio, como los íconos de Google de antes. Los logos son marcas de cada empresa: se usan solo para identificarla.
-2. **Prefiero el monograma a un logo dudoso:** unas 20 acciones chicas del panel general (Carlos Casado, Carboclor, Domec…) y 12 proveedores quedan sin logo hasta conseguir uno verificado.
+2. **Prefiero el monograma a un logo dudoso:** unas 20 acciones chicas del panel general (Carlos Casado, Domec…) quedan sin logo hasta conseguir uno verificado. (Carboclor, Fiplasto, Juramento y Semino los sumó Benja en `logos-y-graficos`, verificados con su sitio.)
 
 ---
 

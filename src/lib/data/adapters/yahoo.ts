@@ -2,7 +2,8 @@ import { z } from "zod";
 import { traerJson } from "../http";
 
 /**
- * Yahoo Finance (API de gráficos, sin autenticación): recorrido del día de un ETF de EE.UU. en velas de 5 minutos.
+ * Yahoo Finance (API de gráficos, sin autenticación): recorrido del día de un ETF de EE.UU. en velas de 5 minutos y,
+ * más abajo, la historia diaria de una acción de EE.UU.
  * Verificado el 18/11/2026 con SPY, QQQ y DIA: 79 puntos de la rueda regular y el cierre anterior.
  * No es una API oficial: antes del lanzamiento comercial hay que revisar sus condiciones (ver PROGRESO.md).
  */

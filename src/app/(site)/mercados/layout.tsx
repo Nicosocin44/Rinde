@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { CalendarioSemanal, CalendarioSemanalCargando } from "@/components/modules/mercados/semana";
+import { CalendarioMercados, CalendarioMercadosCargando } from "@/components/modules/mercados/calendario";
 import { PageHeader } from "@/components/shell/page-header";
 import { RefrescoEnVivo } from "@/components/shell/refresco-en-vivo";
 import { SectionTabs } from "@/components/shell/section-tabs";
@@ -11,8 +11,8 @@ export default function MercadosLayout({ children }: { children: React.ReactNode
         titulo="Mercados"
         bajada="CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL."
         acciones={
-          <Suspense fallback={<CalendarioSemanalCargando />}>
-            <CalendarioSemanal />
+          <Suspense fallback={<CalendarioMercadosCargando />}>
+            <CalendarioMercados />
           </Suspense>
         }
       />

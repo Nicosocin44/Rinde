@@ -137,6 +137,31 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Calendario del mes en Mercados (punto 26, rama `calendario-mes`, 21/11/2026)
+
+> Pedido: en vez de la semana arriba de Mercados, un botón chico "Calendario" que abra el mes entero en una ventana grande en el medio, con el mismo contenido. Benja eligió esta opción (la A) entre cuatro maquetas.
+
+- **El botón:** "Calendario · 6 esta semana", con lo que pasa en la semana (la que viene, si es fin de semana). Ocupa el lugar de la semana, que se sacó (`semana.tsx` y `semana-cliente.tsx`).
+- **En la compu:** una ventana de hasta 1120 × 800 px en el medio.
+  - La grilla del mes de lunes a viernes. En cada día, arriba el número con hasta 3 logos de las empresas que presentan resultados ("+N" si hay más), y abajo hasta 2 eventos con un punto de color ("+N más"). El resto se ve en el detalle. Hoy, resaltado.
+  - Cada semana ocupa al menos 100 px: entran las 5 semanas en una notebook de 1366 × 768. En pantallas más bajas, la grilla se desliza en vez de cortar los días.
+  - Al costado, el detalle del día elegido en filas grandes: bandera, qué es, a qué hora y el link a su página.
+  - Flechas para cambiar de mes y Esc para cerrar; al cerrar, el foco vuelve al botón.
+- **En el celular:** sube desde abajo (el mismo panel que las alertas y la cartera). El mes en números con puntos de colores, y abajo la lista del día. Los días son botones de 48 px, fáciles de tocar.
+- **Filtros:** por tipo (datos, tasas, empresas, bonos y letras, opciones) y por país (Argentina, EE.UU.). Los feriados se ven con cualquier tipo, porque explican por qué ese día no hay nada.
+- **Colores:** un color por tipo, el mismo en los filtros, la grilla y el detalle. Son los categóricos del sitio, más oscuros en el tema claro.
+- **Datos:** los mismos de la semana (INDEC, Fed, Nasdaq, feriados, opciones de GGAL, pagos de bonos y LECAPs), semana por semana. Si una semana falla, el mes se muestra igual.
+  - `/api/calendario?mes=AAAA-MM`: se puede ir un mes para atrás y dos para adelante.
+  - El mes se pide recién al abrir (o al pasar el mouse por el botón), y después se trae el siguiente de fondo. La primera vez que se pide un mes tarda unos segundos; después queda en caché.
+- **Cálculo** (`src/lib/calendario/mes.ts`, 6 tests): las semanas que cubren cada mes, el mes que se muestra al abrir, los meses permitidos, los filtros y la cuenta del botón.
+- Revisado en 1440, 1366 × 768 y 375 px, oscuro y claro.
+
+### Para revisar
+1. **Se sacó la semana a la vista:** ahora hay que tocar el botón para ver qué pasa. Era lo que pedía el punto 26; si se extraña, el botón puede decir el próximo evento ("Mañana · Inflación").
+2. **Hasta dos meses para adelante:** más allá, las fuentes casi no publican fechas.
+
+---
+
 ## Escenas de la home que no entran en la pantalla (rama `home-escenas-sin-fijar`, 20/11/2026)
 
 > Benja vio que en su notebook el título "El dólar más barato, app por app." quedaba cortado al terminar la tarjeta celeste de tasas. Un primer arreglo achicaba los títulos en pantallas bajas y se descartó: no quería tocar el diseño.

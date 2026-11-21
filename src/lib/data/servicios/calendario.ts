@@ -1,6 +1,7 @@
 import { BONOS_USD } from "@data/ar/bonos-usd";
 import { LECAPS } from "@data/ar/lecaps";
 import { CEDEARS } from "@data/ar/mercados";
+import { armarMes, lunesDelMes, type MesCalendario, type MesISO } from "@/lib/calendario/mes";
 import { armarSemana, diasHabiles, empresasDelDia, eventoEEUU, eventoFed, eventoIndec, type EventoCalendario, type SemanaCalendario } from "@/lib/calendario/semana";
 import { cronograma } from "@/lib/calculos";
 import * as ad from "../adapters/argentinadatos";
@@ -60,5 +61,27 @@ export async function cargarSemana(lunes: string) {
     const fallaron = [indecR, fedR, ...porDia].filter((r) => r.status === "rejected").length;
     if (fallaron === 2 + porDia.length) throw new Error("Ninguna fuente del calendario respondió");
     return { data: armarSemana(lunes, eventos, empresasPorDia), asOf: new Date().toISOString(), status: fallaron > 0 ? "stale" : "close" };
+  });
+}
+
+/**
+ * El mes del calendario (punto 26): las semanas que lo cubren, cada una con sus fuentes. Si una semana no se puede
+ * traer, queda vacía y el mes se muestra igual, marcado como dato viejo; si no se puede ninguna, falla.
+ */
+export async function cargarMes(mes: MesISO) {
+  const fuentes = [FUENTES.indec, FUENTES.fed, FUENTES.nasdaq, FUENTES.argentinadatos, FUENTES.data912];
+  return conRespaldo<MesCalendario>(`mes-${mes}`, fuentes, async () => {
+    const lunes = lunesDelMes(mes);
+    const semanas = await Promise.all(lunes.map((l) => cargarSemana(l)));
+    if (semanas.every((s) => !s.ok)) throw new Error("Ninguna semana del mes respondió");
+    const viejo = semanas.some((s) => !s.ok || s.status === "stale");
+    return {
+      data: armarMes(
+        mes,
+        semanas.map((s, k) => (s.ok ? s.data : armarSemana(lunes[k]!, [], {}))),
+      ),
+      asOf: new Date().toISOString(),
+      status: viejo ? "stale" : "close",
+    };
   });
 }

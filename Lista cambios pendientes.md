@@ -28,4 +28,11 @@
     - El rendimiento de la cartera (contra la inflación y el dólar) se calcula solo con las inversiones: los gastos de Mercado Pago no son decisiones de inversión.
     - Subir el resumen del mes (idea de Benja) queda para más adelante: cada app exporta distinto y el archivo trae todos los gastos, información muy privada para algo que solo necesita un número.
 26. Agrandar calendario a un mes. Un boton chico donde esta ubicado ahora, que diga calendario y un logito. Te abre una semi pantalla grande en el medio, con un calendario del mes. Contenido queda igual.
+    - **(Para hablar con Nico)** Hay 4 opciones de diseño dibujadas, en compu y celular, con pros y contras: https://claude.ai/artifact/L2JWepAT4nLqZ1zKFZUNZ7 (Benja la comparte).
+    - **A · Botón y ventana con el mes:** esta tarea tal cual. En el celular sube desde abajo, con el mes en puntos y la lista del día.
+    - **B · La semana a la vista, legible:** la de hoy, con letra y logos más grandes, y un link "Ver el mes".
+    - **C · Lo que viene, en lista:** los próximos 5 eventos en filas, más las empresas que presentan resultados. Es la que mejor se ve en el celular.
+    - **D · Solapa propia "Calendario":** una página nueva en Mercados, con link propio para compartir y para Google; en el celular, agenda por día.
+    - **Recomendación: C + A.** "Lo que viene" arriba de Mercados, con un botón "Calendario del mes" que abre la ventana de A.
+    - Motivo, además del mes: en el celular el calendario de hoy se lee mal (letra de 11 a 12,5 px, logos de 20 px difíciles de tocar, el lunes y el martes quedan afuera). Es parte del punto 16.
 27. ~~Estrategias de opciones en ingles. POner las mas comunes.~~ ✅ <span style="color:red">HECHO (en la rama estrategias-ingles): 17 estrategias con su nombre en inglés, agrupadas por lo que esperás del precio.</span>

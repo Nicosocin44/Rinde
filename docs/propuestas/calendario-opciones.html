@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Calendario de Mercados: opciones</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+  html { color-scheme: dark; }
+  body { margin: 0; background: #0d0d0c; color: #f4f3ef; font-family: 'Instrument Sans', system-ui, sans-serif; }
+  .pagina { max-width: 1760px; margin: 0 auto; padding: 32px 16px 80px; }
+  h1 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: clamp(32px, 6vw, 64px); letter-spacing: -0.04em; margin: 0 0 12px; }
+  .bajada { color: #aaa9a2; font-size: 17px; line-height: 26px; max-width: 760px; margin: 0 0 12px; }
+  .reco { background: #2a2414; border: 1px solid #ffc93c55; border-radius: 18px; padding: 16px 20px; max-width: 760px; margin: 20px 0 8px; font-size: 16px; line-height: 24px; }
+  .reco p { margin: 0 0 8px; } .reco p:last-child { margin: 0; }
+  .opcion { margin-top: 56px; }
+  h2 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: clamp(24px, 3.4vw, 36px); letter-spacing: -0.03em; margin: 0 0 10px; }
+  .nota { color: #cfcec8; font-size: 16px; line-height: 24px; max-width: 760px; }
+  .nota p { margin: 0 0 10px; }
+  .lienzo { margin-top: 16px; overflow-x: auto; overflow-y: hidden; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); }
+  .marco { overflow: hidden; }
+  .escala { width: 1728px; height: 910px; transform-origin: 0 0; }
+  .ayuda { color: #8b8a84; font-size: 14px; margin: 0; }
+</style>
+</head>
+<body>
+<div class="pagina">
+  <h1>Calendario de Mercados: opciones</h1>
+  <p class="bajada">Cuatro formas de mostrar el calendario: la del mes que pedía el punto 26 y otras para que se lea bien en el celular. Cada una, en compu (izquierda) y celular (derecha). Los eventos son de ejemplo.</p>
+  <div class="reco"><p>Recomendación: C + A</p><p>Arriba de Mercados, «Lo que viene» en lista (C): se lee bien en el celular y ocupa poco. Con un botón «Calendario del mes» que abre la ventana de A, que es lo que pedía la tarea 26.</p><p>Si más adelante el calendario crece (licitaciones, dividendos), esa ventana se puede convertir en la solapa de D sin rehacer nada.</p></div>
+  <p class="ayuda">En el celular, cada maqueta se puede deslizar para el costado o agrandar con los dedos.</p>
+  
+<section class="opcion">
+  <h2>Hoy: cómo se ve</h2>
+  <div class="nota"><p>En la compu se entiende, pero en el celular:<br>• Letra de 11 a 12,5 px: cuesta leerla.<br>• Los logos de las empresas miden 20 px: difíciles de tocar con el dedo (lo cómodo es 44).<br>• La semana no entra: el lunes y el martes quedan afuera y hay que deslizar.<br>• El detalle aparece en una línea chica debajo, lejos de lo que tocaste.</p><p>Los eventos de todas las maquetas son de ejemplo.</p></div>
+  <div class="lienzo"><div class="marco"><div class="escala" data-tablero="0"></div></div></div>
+</section>
+
+<section class="opcion">
+  <h2>A · Botón y ventana con el mes</h2>
+  <div class="nota"><p>Arriba queda un botón chico «Calendario». Abre una ventana grande con el mes entero; en el celular sube desde abajo, con el mes en puntos y la lista del día elegido.</p><p>+ Libera el encabezado de Mercados.<br>+ Se ve el mes completo y se puede filtrar.<br>− El calendario queda escondido detrás de un botón: menos gente lo va a ver.<br>− En el celular el mes en grilla no entra: por eso puntos + lista.</p></div>
+  <div class="lienzo"><div class="marco"><div class="escala" data-tablero="1"></div></div></div>
+</section>
+
+<section class="opcion">
+  <h2>B · La semana a la vista, legible, y «Ver el mes»</h2>
+  <div class="nota"><p>Queda la semana como hoy, pero con letra de 14 px y logos de 28. En el celular, los días son botones grandes y abajo aparece la lista del día. «Ver el mes» abre la ventana de la opción A.</p><p>+ Se sigue viendo de un vistazo, sin tocar nada.<br>+ En el celular se lee y se toca bien.<br>+ El mes, para el que lo quiere.<br>− Sigue ocupando lugar arriba de Mercados.</p></div>
+  <div class="lienzo"><div class="marco"><div class="escala" data-tablero="2"></div></div></div>
+</section>
+
+<section class="opcion">
+  <h2>C · Lo que viene, en lista</h2>
+  <div class="nota"><p>En vez de una grilla, los próximos 4 o 5 eventos en filas: cuándo, qué y a qué hora. Las empresas que presentan resultados, juntas en una fila. Un link abre el calendario completo.</p><p>+ Responde lo que importa: ¿qué pasa pronto?<br>+ Lo mejor para el celular: filas grandes, fáciles de tocar.<br>+ Ocupa poco.<br>− No se ve la semana entera de un vistazo.<br>− Necesita el mes en otro lado (la ventana de A o la solapa de D).</p></div>
+  <div class="lienzo"><div class="marco"><div class="escala" data-tablero="3"></div></div></div>
+</section>
+
+<section class="opcion">
+  <h2>D · Solapa propia «Calendario»</h2>
+  <div class="nota"><p>Una página nueva en Mercados, con el mes en grande, filtros por tipo y país y el detalle del día al costado. En el celular, una agenda por día. Arriba de Mercados queda una sola línea con lo próximo.</p><p>+ Tiene su propio link: se comparte y puede aparecer en Google («calendario económico Argentina»).<br>+ Lugar para crecer: licitaciones del Tesoro, pagos de bonos, dividendos.<br>− Una solapa más (ya hay 6).<br>− Es la de más trabajo.</p></div>
+  <div class="lienzo"><div class="marco"><div class="escala" data-tablero="4"></div></div></div>
+</section>
+</div>
+<template id="t0"><div style="width: 1728px; height: 910px; box-sizing: border-box; padding: 28px; display: flex; gap: 60px; background: #0d0d0c; color: #f4f3ef; font-family: 'Instrument Sans', system-ui, sans-serif">
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Compu</p>
+    <div style="width: 1220px; height: 820px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c; display: flex; flex-direction: column">
+      <div style="margin: 16px 24px 0; height: 56px; border-radius: 999px; background: #141413; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 10px 0 22px">
+        <div style="display: flex; align-items: center; gap: 22px">
+          <p style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.06em">rinde<span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #ffc93c; margin-left: 2px"></span></p>
+          <div style="display: flex; gap: 6px; font-size: 14px; font-weight: 600; color: #aaa9a2">
+            <span style="padding: 8px 12px">Inicio</span><span style="padding: 8px 12px">Dólar</span><span style="padding: 8px 12px">Pesos</span><span style="padding: 8px 14px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">Mercados</span><span style="padding: 8px 12px">Metas</span><span style="padding: 8px 12px">Calculadoras</span>
+          </div>
+        </div>
+        <span style="padding: 9px 16px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c; font-size: 14px; font-weight: 600">Mi cartera</span>
+      </div>
+
+      <div style="padding: 40px 48px 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px">
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 72px; line-height: 0.95; letter-spacing: -0.04em">Mercados</h1>
+          <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 26px; color: #aaa9a2">CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL.</p>
+        </div>
+        <div style="width: 540px; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <p style="margin: 0; font-size: 13px; font-weight: 600; color: #aaa9a2">Esta semana</p>
+            <div style="display: flex; gap: 4px">
+              <span style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #aaa9a2"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg></span>
+              <span style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #aaa9a2"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></span>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; background: #191917">
+            <sc-for list="{{ semana }}" as="d" hint-placeholder-count="5">
+              <div style="{{ d.celda }}">
+                <p style="{{ d.etiquetaEstilo }}">{{ d.dia }}</p>
+                <sc-for list="{{ d.eventos }}" as="e" hint-placeholder-count="1">
+                  <p style="margin: 0; display: flex; align-items: center; gap: 6px; font-size: 12.5px; line-height: 16px; font-weight: 600">
+                    <sc-if value="{{ e.ar }}" hint-placeholder-val="{{ true }}"><span style="flex: none; display: inline-block; width: 14px; height: 10px; border-radius: 2px; background: linear-gradient(#74acdf 0 33%, #ffffff 33% 67%, #74acdf 67%)"></span></sc-if>
+                    <sc-if value="{{ e.us }}" hint-placeholder-val="{{ false }}"><span style="flex: none; position: relative; display: inline-block; width: 14px; height: 10px; border-radius: 2px; overflow: hidden; background: repeating-linear-gradient(#c8102e 0 1.43px, #ffffff 1.43px 2.86px)"><span style="position: absolute; left: 0; top: 0; width: 6px; height: 5px; background: #0a3161"></span></span></sc-if>
+                    {{ e.texto }}
+                  </p>
+                </sc-for>
+                <div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 4px">
+                  <sc-for list="{{ d.logos }}" as="l" hint-placeholder-count="2">
+                    <span style="width: 20px; height: 20px; border-radius: 6px; background: #f4f3ef; color: #0d0d0c; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{ l }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <p style="margin: 0; font-size: 12px; color: #8b8a84">Tocá un evento o un logo para ver el detalle. Horarios de Argentina.</p>
+        </div>
+      </div>
+
+      <div style="margin: 8px 48px 0; align-self: flex-start; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #23231f; font-size: 15px; font-weight: 600; color: #aaa9a2">
+        <span style="padding: 12px 20px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">CEDEARs</span><span style="padding: 12px 20px">Acciones</span><span style="padding: 12px 20px">Bonos</span><span style="padding: 12px 20px">Cripto</span><span style="padding: 12px 20px">Opciones</span><span style="padding: 12px 20px">Comparar</span>
+      </div>
+      <div style="margin: 32px 48px 0; display: flex; flex-direction: column; gap: 14px; opacity: 0.35">
+        <p style="margin: 0; font-size: 15px; font-weight: 600; color: #aaa9a2">Wall Street hoy</p>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+          <div style="height: 150px; border-radius: 20px; background: #191917; border: 1px solid rgba(255,255,255,0.08)"></div>
+          <div style="height: 150px; border-radius: 20px; background: #191917; border: 1px solid rgba(255,255,255,0.08)"></div>
+          <div style="height: 150px; border-radius: 20px; background: #191917; border: 1px solid rgba(255,255,255,0.08)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Celular</p>
+    <div style="position: relative; width: 390px; height: 820px; border-radius: 44px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c">
+      <div style="margin: 14px 14px 0; height: 54px; border-radius: 999px; background: #141413; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 18px">
+        <p style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.06em">rinde<span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #ffc93c; margin-left: 2px"></span></p>
+        <span style="width: 22px; height: 22px; border-radius: 50%; border: 2px solid #aaa9a2"></span>
+      </div>
+      <div style="padding: 28px 20px 0; display: flex; flex-direction: column; gap: 10px">
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 46px; line-height: 1; letter-spacing: -0.04em">Mercados</h1>
+        <p style="margin: 0; font-size: 15px; line-height: 22px; color: #aaa9a2">CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL.</p>
+        <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center">
+          <p style="margin: 0; font-size: 13px; font-weight: 600; color: #aaa9a2">Esta semana</p>
+          <span style="font-size: 18px; color: #aaa9a2; letter-spacing: 12px">‹›</span>
+        </div>
+      </div>
+      <div style="margin-top: 8px; overflow: hidden; padding-left: 20px">
+        <div style="width: 520px; margin-left: -170px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; background: #191917">
+          <sc-for list="{{ semana }}" as="d" hint-placeholder-count="5">
+            <div style="{{ d.celda }}">
+              <p style="{{ d.etiquetaEstilo }}">{{ d.dia }}</p>
+              <sc-for list="{{ d.eventos }}" as="e" hint-placeholder-count="1">
+                <p style="margin: 0; font-size: 12.5px; line-height: 16px; font-weight: 600">{{ e.texto }}</p>
+              </sc-for>
+              <div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 4px">
+                <sc-for list="{{ d.logos }}" as="l" hint-placeholder-count="2">
+                  <span style="width: 20px; height: 20px; border-radius: 6px; background: #f4f3ef; color: #0d0d0c; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{ l }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <p style="margin: 8px 20px 0; font-size: 12px; line-height: 16px; color: #8b8a84">Tocá un evento o un logo para ver el detalle. Horarios de Argentina.</p>
+      <div style="margin: 24px 0 0 20px; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #23231f; font-size: 15px; font-weight: 600; color: #aaa9a2; width: 520px">
+        <span style="padding: 12px 18px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">CEDEARs</span><span style="padding: 12px 18px">Acciones</span><span style="padding: 12px 18px">Bonos</span><span style="padding: 12px 18px">Cripto</span>
+      </div>
+      <div style="position: absolute; left: 14px; right: 14px; bottom: 18px; height: 64px; border-radius: 999px; background: rgba(20,20,19,0.92); border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-around; align-items: center; font-size: 11px; font-weight: 600; color: #aaa9a2">
+        <span>Inicio</span><span>Dólar</span><span>Pesos</span><span>Cartera</span><span style="padding: 10px 14px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">Más</span>
+      </div>
+    </div>
+  </div>
+
+</div></template>
+<template id="t1"><div style="width: 1728px; height: 910px; box-sizing: border-box; padding: 28px; display: flex; gap: 60px; background: #0d0d0c; color: #f4f3ef; font-family: 'Instrument Sans', system-ui, sans-serif">
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Compu · la ventana abierta sobre Mercados</p>
+    <div style="position: relative; width: 1220px; height: 820px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c">
+      <div style="padding: 92px 48px 0; display: flex; justify-content: space-between; align-items: flex-start">
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 72px; line-height: 0.95; letter-spacing: -0.04em">Mercados</h1>
+          <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 26px; color: #aaa9a2">CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL.</p>
+        </div>
+        <button type="button" style="display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.16); background: #191917; color: #f4f3ef; font: 600 15px 'Instrument Sans', sans-serif">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>
+          Calendario
+          <span style="font-weight: 500; color: #aaa9a2">· 6 eventos esta semana</span>
+        </button>
+      </div>
+
+      <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.6)"></div>
+
+      <div style="position: absolute; left: 110px; top: 70px; width: 1000px; height: 680px; box-sizing: border-box; border-radius: 28px; background: #141413; border: 1px solid rgba(255,255,255,0.1); padding: 28px; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <div style="display: flex; align-items: center; gap: 14px">
+            <h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.03em">Noviembre 2026</h2>
+            <span style="display: flex; gap: 4px; color: #aaa9a2">
+              <span style="width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #23231f"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg></span>
+              <span style="width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #23231f"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></span>
+            </span>
+          </div>
+          <button type="button" aria-label="Cerrar" style="width: 40px; height: 40px; border-radius: 50%; border: 0; background: #23231f; color: #f4f3ef; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="6">
+            <span style="{{ f.estilo }}"><span style="{{ f.punto }}"></span>{{ f.texto }}</span>
+          </sc-for>
+        </div>
+        <div style="flex: 1; display: flex; gap: 20px; min-height: 0">
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+            <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); font-size: 12px; font-weight: 600; color: #8b8a84; padding: 0 2px">
+              <span>Lunes</span><span>Martes</span><span>Miércoles</span><span>Jueves</span><span>Viernes</span>
+            </div>
+            <div style="flex: 1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden">
+              <sc-for list="{{ dias }}" as="d" hint-placeholder-count="25">
+                <div style="{{ d.celda }}">
+                  <p style="{{ d.numero }}">{{ d.n }}</p>
+                  <sc-for list="{{ d.eventos }}" as="e" hint-placeholder-count="1">
+                    <p style="margin: 0; display: flex; align-items: center; gap: 6px; font-size: 13px; line-height: 16px; font-weight: 600; white-space: nowrap; overflow: hidden"><span style="{{ e.punto }}"></span>{{ e.texto }}</p>
+                  </sc-for>
+                  <div style="margin-top: auto; display: flex; gap: 4px">
+                    <sc-for list="{{ d.logos }}" as="l" hint-placeholder-count="2">
+                      <span style="width: 24px; height: 24px; border-radius: 7px; background: #f4f3ef; color: #0d0d0c; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{ l }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="width: 270px; display: flex; flex-direction: column; gap: 10px; padding: 18px; box-sizing: border-box; border-radius: 18px; background: #191917">
+            <p style="margin: 0; font-size: 13px; font-weight: 600; color: #aaa9a2">Jueves 19 de noviembre</p>
+            <sc-for list="{{ detalle }}" as="x" hint-placeholder-count="4">
+              <div style="display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.08)">
+                <span style="{{ x.punto }}"></span>
+                <div style="display: flex; flex-direction: column; gap: 2px">
+                  <p style="margin: 0; font-size: 15px; font-weight: 600">{{ x.titulo }}</p>
+                  <p style="margin: 0; font-size: 13px; line-height: 18px; color: #aaa9a2">{{ x.texto }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Celular · sube desde abajo</p>
+    <div style="position: relative; width: 390px; height: 820px; border-radius: 44px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c">
+      <div style="padding: 96px 20px 0; display: flex; flex-direction: column; gap: 14px">
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 46px; line-height: 1; letter-spacing: -0.04em">Mercados</h1>
+        <span style="align-self: flex-start; padding: 12px 16px; border-radius: 999px; background: #191917; border: 1px solid rgba(255,255,255,0.16); font-size: 15px; font-weight: 600">Calendario · 6 esta semana</span>
+      </div>
+      <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.6)"></div>
+      <div style="position: absolute; left: 0; right: 0; top: 120px; bottom: 0; border-radius: 28px 28px 0 0; background: #141413; border-top: 1px solid rgba(255,255,255,0.1); padding: 10px 20px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+        <span style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.25)"></span>
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.03em">Noviembre</h2>
+          <span style="font-size: 20px; color: #aaa9a2; letter-spacing: 14px">‹›</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 4px; text-align: center">
+          <span style="font-size: 12px; font-weight: 600; color: #8b8a84">L</span><span style="font-size: 12px; font-weight: 600; color: #8b8a84">M</span><span style="font-size: 12px; font-weight: 600; color: #8b8a84">M</span><span style="font-size: 12px; font-weight: 600; color: #8b8a84">J</span><span style="font-size: 12px; font-weight: 600; color: #8b8a84">V</span>
+          <sc-for list="{{ dias }}" as="d" hint-placeholder-count="25">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 3px; height: 50px; justify-content: center">
+              <span style="{{ d.circulo }}">{{ d.n }}</span>
+              <span style="display: flex; gap: 3px; height: 6px">
+                <sc-for list="{{ d.puntos }}" as="p" hint-placeholder-count="1"><span style="{{ p }}"></span></sc-for>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin: 4px 0 0; font-size: 13px; font-weight: 600; color: #aaa9a2">Jueves 19</p>
+        <div style="display: flex; flex-direction: column">
+          <sc-for list="{{ detalle }}" as="x" hint-placeholder-count="4">
+            <div style="display: flex; gap: 12px; align-items: flex-start; min-height: 56px; padding: 10px 0; box-sizing: border-box; border-top: 1px solid rgba(255,255,255,0.08)">
+              <span style="{{ x.punto }}"></span>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <p style="margin: 0; font-size: 15px; font-weight: 600">{{ x.titulo }}</p>
+                <p style="margin: 0; font-size: 13px; line-height: 18px; color: #aaa9a2">{{ x.texto }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></template>
+<template id="t2"><div style="width: 1728px; height: 910px; box-sizing: border-box; padding: 28px; display: flex; gap: 60px; background: #0d0d0c; color: #f4f3ef; font-family: 'Instrument Sans', system-ui, sans-serif">
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Compu</p>
+    <div style="width: 1220px; height: 820px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c; display: flex; flex-direction: column">
+      <div style="padding: 92px 48px 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px">
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 72px; line-height: 0.95; letter-spacing: -0.04em">Mercados</h1>
+          <p style="margin: 0; max-width: 380px; font-size: 17px; line-height: 26px; color: #aaa9a2">CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL.</p>
+        </div>
+        <div style="width: 640px; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <p style="margin: 0; font-size: 15px; font-weight: 600">Esta semana</p>
+            <div style="display: flex; align-items: center; gap: 6px">
+              <a href="#" style="font-size: 14px; font-weight: 600; text-decoration: none; margin-right: 8px">Ver el mes</a>
+              <span style="width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #191917; color: #aaa9a2"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg></span>
+              <span style="width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #191917; color: #aaa9a2"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></span>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; overflow: hidden; background: #191917">
+            <sc-for list="{{ semana }}" as="d" hint-placeholder-count="5">
+              <div style="{{ d.celda }}">
+                <p style="{{ d.etiqueta }}">{{ d.dia }}</p>
+                <sc-for list="{{ d.eventos }}" as="e" hint-placeholder-count="1">
+                  <p style="margin: 0; display: flex; align-items: flex-start; gap: 7px; font-size: 14px; line-height: 18px; font-weight: 600"><span style="{{ e.punto }}"></span>{{ e.texto }}</p>
+                </sc-for>
+                <div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 5px">
+                  <sc-for list="{{ d.logos }}" as="l" hint-placeholder-count="2">
+                    <span style="width: 28px; height: 28px; border-radius: 8px; background: #f4f3ef; color: #0d0d0c; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{ l }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 16px; background: #191917; border: 1px solid rgba(255,255,255,0.08)">
+            <span style="flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; background: #c3b1ff"></span>
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <p style="margin: 0; font-size: 15px; font-weight: 600">Jueves 19 · Walmart presenta resultados</p>
+              <p style="margin: 0; font-size: 14px; color: #aaa9a2">Antes de la apertura de Wall Street. <a href="#" style="text-decoration: none; font-weight: 600">Ver la ficha de WMT</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin: 30px 48px 0; align-self: flex-start; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #23231f; font-size: 15px; font-weight: 600; color: #aaa9a2">
+        <span style="padding: 12px 20px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">CEDEARs</span><span style="padding: 12px 20px">Acciones</span><span style="padding: 12px 20px">Bonos</span><span style="padding: 12px 20px">Cripto</span><span style="padding: 12px 20px">Opciones</span><span style="padding: 12px 20px">Comparar</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Celular</p>
+    <div style="position: relative; width: 390px; height: 820px; border-radius: 44px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c">
+      <div style="padding: 96px 20px 0; display: flex; flex-direction: column; gap: 14px">
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 46px; line-height: 1; letter-spacing: -0.04em">Mercados</h1>
+        <p style="margin: 0; font-size: 15px; line-height: 22px; color: #aaa9a2">CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL.</p>
+        <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center">
+          <p style="margin: 0; font-size: 15px; font-weight: 600">Esta semana</p>
+          <a href="#" style="font-size: 14px; font-weight: 600; text-decoration: none">Ver el mes</a>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px">
+          <sc-for list="{{ semana }}" as="d" hint-placeholder-count="5">
+            <button type="button" style="{{ d.boton }}">
+              <span style="font-size: 12px; font-weight: 600">{{ d.corto }}</span>
+              <span style="font-size: 18px; font-weight: 700">{{ d.num }}</span>
+              <span style="display: flex; gap: 3px; height: 6px">
+                <sc-for list="{{ d.puntos }}" as="p" hint-placeholder-count="1"><span style="{{ p }}"></span></sc-for>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <sc-for list="{{ detalle }}" as="x" hint-placeholder-count="4">
+            <div style="display: flex; gap: 12px; align-items: flex-start; min-height: 56px; padding: 10px 0; box-sizing: border-box; border-top: 1px solid rgba(255,255,255,0.08)">
+              <span style="{{ x.punto }}"></span>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <p style="margin: 0; font-size: 15px; font-weight: 600">{{ x.titulo }}</p>
+                <p style="margin: 0; font-size: 13px; line-height: 18px; color: #aaa9a2">{{ x.texto }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="position: absolute; left: 14px; right: 14px; bottom: 18px; height: 64px; border-radius: 999px; background: rgba(20,20,19,0.92); border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-around; align-items: center; font-size: 11px; font-weight: 600; color: #aaa9a2">
+        <span>Inicio</span><span>Dólar</span><span>Pesos</span><span>Cartera</span><span style="padding: 10px 14px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">Más</span>
+      </div>
+    </div>
+  </div>
+
+</div></template>
+<template id="t3"><div style="width: 1728px; height: 910px; box-sizing: border-box; padding: 28px; display: flex; gap: 60px; background: #0d0d0c; color: #f4f3ef; font-family: 'Instrument Sans', system-ui, sans-serif">
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Compu</p>
+    <div style="width: 1220px; height: 820px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c; display: flex; flex-direction: column">
+      <div style="padding: 92px 48px 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px">
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 72px; line-height: 0.95; letter-spacing: -0.04em">Mercados</h1>
+          <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 26px; color: #aaa9a2">CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL.</p>
+        </div>
+        <div style="width: 560px; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <p style="margin: 0; font-size: 15px; font-weight: 600">Lo que viene</p>
+            <a href="#" style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 999px; background: #191917; border: 1px solid rgba(255,255,255,0.16); color: #f4f3ef; font-size: 14px; font-weight: 600; text-decoration: none">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>
+              Calendario del mes
+            </a>
+          </div>
+          <div style="display: flex; flex-direction: column; border-radius: 18px; background: #191917; border: 1px solid rgba(255,255,255,0.08); padding: 4px 18px">
+            <sc-for list="{{ proximos }}" as="x" hint-placeholder-count="5">
+              <div style="{{ x.fila }}">
+                <span style="{{ x.cuando }}">{{ x.dia }}</span>
+                <span style="{{ x.punto }}"></span>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0">
+                  <p style="margin: 0; font-size: 15px; font-weight: 600">{{ x.titulo }}</p>
+                  <p style="margin: 0; font-size: 13px; color: #aaa9a2">{{ x.texto }}</p>
+                </div>
+                <span style="font-size: 14px; font-weight: 600; color: #aaa9a2">{{ x.hora }}</span>
+              </div>
+            </sc-for>
+            <div style="display: flex; align-items: center; gap: 14px; min-height: 60px; border-top: 1px solid rgba(255,255,255,0.08)">
+              <span style="width: 64px; flex: none; font-size: 14px; font-weight: 600; color: #aaa9a2">Semana</span>
+              <span style="flex: none; width: 10px; height: 10px; border-radius: 50%; background: #c3b1ff"></span>
+              <p style="margin: 0; flex: 1; font-size: 15px; font-weight: 600">Presentan resultados</p>
+              <div style="display: flex; gap: 5px; align-items: center">
+                <sc-for list="{{ logos }}" as="l" hint-placeholder-count="4">
+                  <span style="width: 28px; height: 28px; border-radius: 8px; background: #f4f3ef; color: #0d0d0c; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{ l }}</span>
+                </sc-for>
+                <span style="font-size: 13px; color: #aaa9a2; margin-left: 4px">y 3 más</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin: 30px 48px 0; align-self: flex-start; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #23231f; font-size: 15px; font-weight: 600; color: #aaa9a2">
+        <span style="padding: 12px 20px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">CEDEARs</span><span style="padding: 12px 20px">Acciones</span><span style="padding: 12px 20px">Bonos</span><span style="padding: 12px 20px">Cripto</span><span style="padding: 12px 20px">Opciones</span><span style="padding: 12px 20px">Comparar</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Celular</p>
+    <div style="position: relative; width: 390px; height: 820px; border-radius: 44px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c">
+      <div style="padding: 96px 20px 0; display: flex; flex-direction: column; gap: 14px">
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 46px; line-height: 1; letter-spacing: -0.04em">Mercados</h1>
+        <p style="margin: 0; font-size: 15px; line-height: 22px; color: #aaa9a2">CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL.</p>
+        <p style="margin: 10px 0 0; font-size: 15px; font-weight: 600">Lo que viene</p>
+        <div style="display: flex; flex-direction: column; border-radius: 18px; background: #191917; border: 1px solid rgba(255,255,255,0.08); padding: 2px 14px">
+          <sc-for list="{{ proximos }}" as="x" hint-placeholder-count="5">
+            <div style="{{ x.filaCelu }}">
+              <span style="{{ x.cuandoCelu }}">{{ x.dia }}</span>
+              <span style="{{ x.punto }}"></span>
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0">
+                <p style="margin: 0; font-size: 15px; font-weight: 600">{{ x.titulo }}</p>
+                <p style="margin: 0; font-size: 13px; color: #aaa9a2">{{ x.textoCelu }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border-radius: 999px; background: #191917; border: 1px solid rgba(255,255,255,0.16); color: #f4f3ef; font-size: 15px; font-weight: 600; text-decoration: none">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>
+          Calendario del mes
+        </a>
+      </div>
+      <div style="position: absolute; left: 14px; right: 14px; bottom: 18px; height: 64px; border-radius: 999px; background: rgba(20,20,19,0.92); border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-around; align-items: center; font-size: 11px; font-weight: 600; color: #aaa9a2">
+        <span>Inicio</span><span>Dólar</span><span>Pesos</span><span>Cartera</span><span style="padding: 10px 14px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">Más</span>
+      </div>
+    </div>
+  </div>
+
+</div></template>
+<template id="t4"><div style="width: 1728px; height: 910px; box-sizing: border-box; padding: 28px; display: flex; gap: 60px; background: #0d0d0c; color: #f4f3ef; font-family: 'Instrument Sans', system-ui, sans-serif">
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Compu · Mercados → Calendario</p>
+    <div style="width: 1220px; height: 820px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c; display: flex; flex-direction: column">
+      <div style="padding: 40px 48px 0; display: flex; justify-content: space-between; align-items: flex-end">
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 56px; line-height: 0.95; letter-spacing: -0.04em">Mercados</h1>
+        <p style="margin: 0; font-size: 14px; color: #aaa9a2"><span style="color: #f4f3ef; font-weight: 600">Próximo:</span> hoy vencen las opciones de GGAL · <a href="#" style="text-decoration: none; font-weight: 600">Ver calendario</a></p>
+      </div>
+      <div style="margin: 22px 48px 0; align-self: flex-start; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #23231f; font-size: 15px; font-weight: 600; color: #aaa9a2">
+        <span style="padding: 11px 18px">CEDEARs</span><span style="padding: 11px 18px">Acciones</span><span style="padding: 11px 18px">Bonos</span><span style="padding: 11px 18px">Cripto</span><span style="padding: 11px 18px">Opciones</span><span style="padding: 11px 18px">Comparar</span><span style="padding: 11px 18px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">Calendario</span>
+      </div>
+      <div style="margin: 24px 48px 0; display: flex; justify-content: space-between; align-items: center">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.03em">Noviembre 2026</h2>
+          <span style="font-size: 20px; color: #aaa9a2; letter-spacing: 14px">‹›</span>
+        </div>
+        <div style="display: flex; gap: 8px">
+          <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="6">
+            <span style="{{ f.estilo }}"><span style="{{ f.punto }}"></span>{{ f.texto }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div style="margin: 16px 48px 0; flex: 1; display: flex; gap: 20px; min-height: 0; padding-bottom: 32px">
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+          <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); font-size: 12px; font-weight: 600; color: #8b8a84; padding: 0 2px">
+            <span>Lunes</span><span>Martes</span><span>Miércoles</span><span>Jueves</span><span>Viernes</span>
+          </div>
+          <div style="flex: 1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; background: #141413">
+            <sc-for list="{{ dias }}" as="d" hint-placeholder-count="25">
+              <div style="{{ d.celda }}">
+                <p style="{{ d.numero }}">{{ d.n }}</p>
+                <sc-for list="{{ d.eventos }}" as="e" hint-placeholder-count="1">
+                  <p style="margin: 0; display: flex; align-items: center; gap: 6px; font-size: 13px; line-height: 16px; font-weight: 600; white-space: nowrap; overflow: hidden"><span style="{{ e.punto }}"></span>{{ e.texto }}</p>
+                </sc-for>
+                <div style="margin-top: auto; display: flex; gap: 4px">
+                  <sc-for list="{{ d.logos }}" as="l" hint-placeholder-count="2">
+                    <span style="width: 22px; height: 22px; border-radius: 7px; background: #f4f3ef; color: #0d0d0c; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{ l }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="width: 290px; display: flex; flex-direction: column; gap: 10px; padding: 18px; box-sizing: border-box; border-radius: 18px; background: #191917">
+          <p style="margin: 0; font-size: 13px; font-weight: 600; color: #aaa9a2">Jueves 19 de noviembre</p>
+          <sc-for list="{{ detalle }}" as="x" hint-placeholder-count="4">
+            <div style="display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.08)">
+              <span style="{{ x.punto }}"></span>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <p style="margin: 0; font-size: 15px; font-weight: 600">{{ x.titulo }}</p>
+                <p style="margin: 0; font-size: 13px; line-height: 18px; color: #aaa9a2">{{ x.texto }}</p>
+              </div>
+            </div>
+          </sc-for>
+          <a href="#" style="margin-top: auto; font-size: 14px; font-weight: 600; text-decoration: none">Agregar al calendario de mi celular</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #aaa9a2">Celular · agenda por día</p>
+    <div style="position: relative; width: 390px; height: 820px; border-radius: 44px; border: 1px solid rgba(255,255,255,0.16); overflow: hidden; background: #0d0d0c">
+      <div style="padding: 84px 20px 0; display: flex; flex-direction: column; gap: 12px">
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 40px; line-height: 1; letter-spacing: -0.04em">Calendario</h1>
+        <div style="display: flex; gap: 8px; overflow: hidden; width: 420px">
+          <sc-for list="{{ filtrosCelu }}" as="f" hint-placeholder-count="5">
+            <span style="{{ f.estilo }}"><span style="{{ f.punto }}"></span>{{ f.texto }}</span>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column; margin-top: 4px">
+          <sc-for list="{{ agenda }}" as="g" hint-placeholder-count="4">
+            <div style="display: flex; flex-direction: column">
+              <p style="{{ g.cabecera }}">{{ g.dia }}</p>
+              <sc-for list="{{ g.items }}" as="x" hint-placeholder-count="1">
+                <div style="display: flex; gap: 12px; align-items: flex-start; min-height: 56px; padding: 10px 0; box-sizing: border-box; border-top: 1px solid rgba(255,255,255,0.08)">
+                  <span style="{{ x.punto }}"></span>
+                  <div style="display: flex; flex-direction: column; gap: 2px">
+                    <p style="margin: 0; font-size: 15px; font-weight: 600">{{ x.titulo }}</p>
+                    <p style="margin: 0; font-size: 13px; line-height: 18px; color: #aaa9a2">{{ x.texto }}</p>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="position: absolute; left: 14px; right: 14px; bottom: 18px; height: 64px; border-radius: 999px; background: rgba(20,20,19,0.92); border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-around; align-items: center; font-size: 11px; font-weight: 600; color: #aaa9a2">
+        <span>Inicio</span><span>Dólar</span><span>Pesos</span><span>Cartera</span><span style="padding: 10px 14px; border-radius: 999px; background: #f4f3ef; color: #0d0d0c">Más</span>
+      </div>
+    </div>
+  </div>
+
+</div></template>
+<script>
+class DCLogic { constructor(props) { this.props = props || {}; this.state = {}; } setState(s) { Object.assign(this.state, s); } forceUpdate() {} }
+const LOGICAS = [];
+LOGICAS[0] = (function(){ class Component extends DCLogic {
+  renderVals() {
+    const celda = (k, hoy) => 'display: flex; flex-direction: column; gap: 6px; min-height: 112px; padding: 8px; box-sizing: border-box;' + (k > 0 ? ' border-left: 1px solid rgba(255,255,255,0.08);' : '') + (hoy ? ' background: #23231f;' : '');
+    const etiqueta = (hoy) => 'margin: 0; font-size: 12px;' + (hoy ? ' font-weight: 700; color: #f4f3ef;' : ' color: #8b8a84;');
+    const dias = [
+      { dia: 'Lun 16', eventos: [], logos: [] },
+      { dia: 'Mar 17', eventos: [{ ar: true, texto: 'Desocupación' }], logos: [] },
+      { dia: 'Mié 18', eventos: [{ ar: true, texto: 'Balanza comercial' }], logos: ['NV', 'TG'] },
+      { dia: 'Jue 19', eventos: [{ us: true, texto: 'Pedidos de desempleo' }], logos: ['WM', 'BA', 'PD'] },
+      { dia: 'Vie 20 ·', eventos: [{ ar: true, texto: 'Opciones GGAL' }], logos: [], hoy: true },
+    ];
+    return { semana: dias.map((d, k) => ({ ...d, celda: celda(k, d.hoy), etiquetaEstilo: etiqueta(d.hoy) })) };
+  }
+}
+ return Component; })();
+LOGICAS[1] = (function(){ class Component extends DCLogic {
+  renderVals() {
+    const COLOR = { dato: '#7dc1ff', tasa: '#ffc93c', empresa: '#c3b1ff', bonos: '#3ddc84', opciones: '#ff9b6b', feriado: '#8b8a84' };
+    const punto = (t, s) => `flex: none; width: ${s || 8}px; height: ${s || 8}px; border-radius: 50%; background: ${COLOR[t]};` + (s ? '' : ' margin-top: 0;');
+    const puntoLista = (t) => `flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; background: ${COLOR[t]}`;
+    const ev = (tipo, texto) => ({ tipo, texto });
+    const mes = [
+      [2, [], []], [3, [], []], [4, [], []], [5, [], ['MA']], [6, [ev('dato', 'Empleo EE.UU.')], []],
+      [9, [], []], [10, [], ['AL', 'PA']], [11, [], []], [12, [ev('dato', 'Inflación de octubre')], []], [13, [ev('dato', 'Inflación EE.UU.')], []],
+      [16, [], []], [17, [ev('dato', 'Desocupación')], []], [18, [ev('dato', 'Balanza comercial')], ['NV', 'TG']], [19, [ev('dato', 'Pedidos de desempleo')], ['WM', 'BA', 'PD']], [20, [ev('opciones', 'Opciones GGAL')], []],
+      [23, [ev('feriado', 'Feriado')], []], [24, [ev('dato', 'Actividad (EMAE)')], ['DE', 'HP']], [25, [ev('dato', 'PBI EE.UU.')], []], [26, [ev('feriado', 'Wall Street cerrado')], []], [27, [ev('bonos', 'Vence una LECAP')], []],
+      [30, [], []], [1, [], [], true], [2, [], [], true], [3, [], [], true], [4, [ev('dato', 'Empleo EE.UU.')], [], true],
+    ];
+    const dias = mes.map(([n, eventos, logos, fuera], k) => {
+      const hoy = n === 20 && !fuera;
+      const elegido = n === 19 && !fuera;
+      const tipos = eventos.map((e) => e.tipo).concat(logos.length ? ['empresa'] : []);
+      return {
+        n,
+        celda: 'display: flex; flex-direction: column; gap: 5px; padding: 8px 9px; box-sizing: border-box; min-width: 0;' + (k % 5 ? ' border-left: 1px solid rgba(255,255,255,0.08);' : '') + (k >= 5 ? ' border-top: 1px solid rgba(255,255,255,0.08);' : '') + (elegido ? ' background: #23231f; box-shadow: inset 0 0 0 2px #7dc1ff;' : '') + (fuera ? ' opacity: 0.35;' : ''),
+        numero: 'margin: 0; font-size: 13px; font-weight: 700;' + (hoy ? ' color: #0d0d0c; background: #7dc1ff; align-self: flex-start; padding: 1px 7px; border-radius: 999px;' : ' color: #aaa9a2;'),
+        eventos: eventos.map((e) => ({ ...e, punto: punto(e.tipo) })),
+        logos,
+        circulo: 'width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600;' + (elegido ? ' background: #f4f3ef; color: #0d0d0c;' : hoy ? ' box-shadow: inset 0 0 0 2px #7dc1ff; color: #f4f3ef;' : fuera ? ' color: #57564f;' : ' color: #f4f3ef;'),
+        puntos: tipos.slice(0, 3).map((t) => `width: 6px; height: 6px; border-radius: 50%; background: ${COLOR[t]}`),
+      };
+    });
+    const filtros = [['Todo', null, true], ['Datos', 'dato'], ['Tasas', 'tasa'], ['Empresas', 'empresa'], ['Bonos y letras', 'bonos'], ['Opciones', 'opciones'], ['Argentina', null], ['EE.UU.', null]].map(([texto, tipo, activo]) => ({
+      texto,
+      estilo: 'display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600;' + (activo ? ' background: #f4f3ef; color: #0d0d0c;' : ' background: #23231f; color: #f4f3ef;'),
+      punto: tipo ? punto(tipo) : 'display: none',
+    }));
+    const detalle = [
+      ['dato', 'Pedidos de desempleo · EE.UU.', '10:30 h · Cuántas personas pidieron el seguro por desempleo en la semana.'],
+      ['empresa', 'Walmart presenta resultados', 'Antes de la apertura · Ver la ficha de WMT'],
+      ['empresa', 'Alibaba presenta resultados', 'Antes de la apertura · Ver la ficha de BABA'],
+      ['empresa', 'PDD presenta resultados', 'Antes de la apertura · Ver la ficha de PDD'],
+    ].map(([t, titulo, texto]) => ({ titulo, texto, punto: puntoLista(t) }));
+    return { dias, filtros, detalle };
+  }
+}
+ return Component; })();
+LOGICAS[2] = (function(){ class Component extends DCLogic {
+  renderVals() {
+    const COLOR = { dato: '#7dc1ff', tasa: '#ffc93c', empresa: '#c3b1ff', bonos: '#3ddc84', opciones: '#ff9b6b', feriado: '#8b8a84' };
+    const dias = [
+      { dia: 'Lun 16', corto: 'Lun', num: 16, eventos: [], logos: [] },
+      { dia: 'Mar 17', corto: 'Mar', num: 17, eventos: [['dato', 'Desocupación']], logos: [] },
+      { dia: 'Mié 18', corto: 'Mié', num: 18, eventos: [['dato', 'Balanza comercial']], logos: ['NV', 'TG'] },
+      { dia: 'Jue 19', corto: 'Jue', num: 19, eventos: [['dato', 'Pedidos de desempleo']], logos: ['WM', 'BA', 'PD'], elegido: true },
+      { dia: 'Vie 20 · hoy', corto: 'Hoy', num: 20, eventos: [['opciones', 'Opciones GGAL']], logos: [], hoy: true },
+    ];
+    const semana = dias.map((d, k) => ({
+      ...d,
+      celda: 'display: flex; flex-direction: column; gap: 8px; min-height: 150px; padding: 12px; box-sizing: border-box;' + (k > 0 ? ' border-left: 1px solid rgba(255,255,255,0.08);' : '') + (d.hoy ? ' background: #23231f;' : ''),
+      etiqueta: 'margin: 0; font-size: 14px;' + (d.hoy ? ' font-weight: 700; color: #7dc1ff;' : ' font-weight: 600; color: #aaa9a2;'),
+      eventos: d.eventos.map(([t, texto]) => ({ texto, punto: `flex: none; width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; background: ${COLOR[t]}` })),
+      boton: 'height: 76px; border-radius: 18px; border: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: inherit;' + (d.elegido ? ' background: #f4f3ef; color: #0d0d0c;' : d.hoy ? ' background: #191917; color: #7dc1ff; box-shadow: inset 0 0 0 2px #7dc1ff;' : ' background: #191917; color: #f4f3ef;'),
+      puntos: d.eventos.map(([t]) => t).concat(d.logos.length ? ['empresa'] : []).map((t) => `width: 6px; height: 6px; border-radius: 50%; background: ${COLOR[t]}`),
+    }));
+    const detalle = [
+      ['dato', 'Pedidos de desempleo · EE.UU.', '10:30 h · Cuántas personas pidieron el seguro por desempleo.'],
+      ['empresa', 'Walmart presenta resultados', 'Antes de la apertura · Ver la ficha de WMT'],
+      ['empresa', 'Alibaba presenta resultados', 'Antes de la apertura · Ver la ficha de BABA'],
+      ['empresa', 'PDD presenta resultados', 'Antes de la apertura · Ver la ficha de PDD'],
+    ].map(([t, titulo, texto]) => ({ titulo, texto, punto: `flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; background: ${COLOR[t]}` }));
+    return { semana, detalle };
+  }
+}
+ return Component; })();
+LOGICAS[3] = (function(){ class Component extends DCLogic {
+  renderVals() {
+    const COLOR = { dato: '#7dc1ff', tasa: '#ffc93c', empresa: '#c3b1ff', bonos: '#3ddc84', opciones: '#ff9b6b', feriado: '#8b8a84' };
+    const filas = [
+      ['Hoy', 'opciones', 'Vencen las opciones de GGAL', 'Las de noviembre · Argentina', 'Cierre', true],
+      ['Lun 23', 'feriado', 'Feriado en Argentina', 'No opera la bolsa argentina; Wall Street, sí', ''],
+      ['Mar 24', 'dato', 'Actividad económica (EMAE)', 'INDEC · Argentina', '16 h'],
+      ['Mié 25', 'dato', 'PBI de EE.UU.', 'Segunda estimación del trimestre', '10:30 h'],
+      ['Jue 26', 'feriado', 'Wall Street cerrado', 'Acción de Gracias · EE.UU.', ''],
+    ];
+    const proximos = filas.map(([dia, t, titulo, texto, hora, hoy], k) => ({
+      dia, titulo, texto, hora,
+      textoCelu: hora ? `${hora} · ${texto}` : texto,
+      fila: 'display: flex; align-items: center; gap: 14px; min-height: 60px;' + (k > 0 ? ' border-top: 1px solid rgba(255,255,255,0.08);' : ''),
+      filaCelu: 'display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 8px 0; box-sizing: border-box;' + (k > 0 ? ' border-top: 1px solid rgba(255,255,255,0.08);' : ''),
+      cuando: 'width: 64px; flex: none; font-size: 14px; font-weight: 700;' + (hoy ? ' color: #7dc1ff;' : ' color: #f4f3ef;'),
+      cuandoCelu: 'width: 52px; flex: none; font-size: 14px; font-weight: 700;' + (hoy ? ' color: #7dc1ff;' : ' color: #f4f3ef;'),
+      punto: `flex: none; width: 10px; height: 10px; border-radius: 50%; background: ${COLOR[t]}`,
+    }));
+    return { proximos, logos: ['DE', 'HP', 'NV', 'WM'] };
+  }
+}
+ return Component; })();
+LOGICAS[4] = (function(){ class Component extends DCLogic {
+  renderVals() {
+    const COLOR = { dato: '#7dc1ff', tasa: '#ffc93c', empresa: '#c3b1ff', bonos: '#3ddc84', opciones: '#ff9b6b', feriado: '#8b8a84' };
+    const punto = (t) => `flex: none; width: 8px; height: 8px; border-radius: 50%; background: ${COLOR[t]}`;
+    const puntoLista = (t) => `flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; background: ${COLOR[t]}`;
+    const ev = (tipo, texto) => ({ tipo, texto });
+    const mes = [
+      [2, [], []], [3, [], []], [4, [], []], [5, [], ['MA']], [6, [ev('dato', 'Empleo EE.UU.')], []],
+      [9, [], []], [10, [], ['AL', 'PA']], [11, [], []], [12, [ev('dato', 'Inflación de octubre')], []], [13, [ev('dato', 'Inflación EE.UU.')], []],
+      [16, [], []], [17, [ev('dato', 'Desocupación')], []], [18, [ev('dato', 'Balanza comercial')], ['NV', 'TG']], [19, [ev('dato', 'Pedidos de desempleo')], ['WM', 'BA', 'PD']], [20, [ev('opciones', 'Opciones GGAL')], []],
+      [23, [ev('feriado', 'Feriado')], []], [24, [ev('dato', 'Actividad (EMAE)')], ['DE', 'HP']], [25, [ev('dato', 'PBI EE.UU.')], []], [26, [ev('feriado', 'Wall Street cerrado')], []], [27, [ev('bonos', 'Vence una LECAP')], []],
+      [30, [], []], [1, [], [], true], [2, [], [], true], [3, [], [], true], [4, [ev('dato', 'Empleo EE.UU.')], [], true],
+    ];
+    const dias = mes.map(([n, eventos, logos, fuera], k) => {
+      const hoy = n === 20 && !fuera;
+      const elegido = n === 19 && !fuera;
+      return {
+        n, logos,
+        celda: 'display: flex; flex-direction: column; gap: 5px; padding: 8px 9px; box-sizing: border-box; min-width: 0;' + (k % 5 ? ' border-left: 1px solid rgba(255,255,255,0.08);' : '') + (k >= 5 ? ' border-top: 1px solid rgba(255,255,255,0.08);' : '') + (elegido ? ' background: #23231f; box-shadow: inset 0 0 0 2px #7dc1ff;' : '') + (fuera ? ' opacity: 0.35;' : ''),
+        numero: 'margin: 0; font-size: 13px; font-weight: 700;' + (hoy ? ' color: #0d0d0c; background: #7dc1ff; align-self: flex-start; padding: 1px 7px; border-radius: 999px;' : ' color: #aaa9a2;'),
+        eventos: eventos.map((e) => ({ ...e, punto: punto(e.tipo) })),
+      };
+    });
+    const chip = ([texto, tipo, activo]) => ({
+      texto,
+      estilo: 'flex: none; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600;' + (activo ? ' background: #f4f3ef; color: #0d0d0c;' : ' background: #23231f; color: #f4f3ef;'),
+      punto: tipo ? punto(tipo) : 'display: none',
+    });
+    const filtros = [['Todo', null, true], ['Datos', 'dato'], ['Tasas', 'tasa'], ['Empresas', 'empresa'], ['Bonos y letras', 'bonos'], ['Opciones', 'opciones']].map(chip);
+    const filtrosCelu = [['Todo', null, true], ['Datos', 'dato'], ['Empresas', 'empresa'], ['Bonos y letras', 'bonos'], ['Opciones', 'opciones']].map(chip);
+    const detalle = [
+      ['dato', 'Pedidos de desempleo · EE.UU.', '10:30 h · Cuántas personas pidieron el seguro por desempleo en la semana.'],
+      ['empresa', 'Walmart presenta resultados', 'Antes de la apertura · Ver la ficha de WMT'],
+      ['empresa', 'Alibaba presenta resultados', 'Antes de la apertura · Ver la ficha de BABA'],
+      ['empresa', 'PDD presenta resultados', 'Antes de la apertura · Ver la ficha de PDD'],
+    ].map(([t, titulo, texto]) => ({ titulo, texto, punto: puntoLista(t) }));
+    const grupos = [
+      ['Hoy, viernes 20', [['opciones', 'Vencen las opciones de GGAL', 'Las de noviembre · Argentina']], true],
+      ['Lunes 23', [['feriado', 'Feriado en Argentina', 'No opera la bolsa argentina; Wall Street, sí']]],
+      ['Martes 24', [['dato', 'Actividad económica (EMAE)', '16 h · INDEC'], ['empresa', 'Dell y HP presentan resultados', 'Después del cierre']]],
+      ['Miércoles 25', [['dato', 'PBI de EE.UU.', '10:30 h · Segunda estimación']]],
+    ];
+    const agenda = grupos.map(([dia, items, hoy]) => ({
+      dia,
+      cabecera: 'margin: 14px 0 4px; font-size: 13px; font-weight: 700;' + (hoy ? ' color: #7dc1ff;' : ' color: #aaa9a2;'),
+      items: items.map(([t, titulo, texto]) => ({ titulo, texto, punto: puntoLista(t) })),
+    }));
+    return { dias, filtros, filtrosCelu, detalle, agenda };
+  }
+}
+ return Component; })();
+
+// Mini intérprete del formato de los tableros: {{ ruta }}, <sc-for> y <sc-if>.
+const buscar = (scope, ruta) => { ruta = ruta.trim(); if (ruta === 'true') return true; if (ruta === 'false') return false; return ruta.split('.').reduce((o, k) => (o == null ? undefined : o[k]), scope); };
+const completar = (texto, scope) => {
+  const solo = texto.match(/^\s*\{\{([^}]+)\}\}\s*$/);
+  if (solo) return buscar(scope, solo[1]);
+  return texto.replace(/\{\{([^}]+)\}\}/g, (_, r) => { const v = buscar(scope, r); return v == null ? '' : String(v); });
+};
+function render(nodo, scope, destino) {
+  for (const n of Array.from(nodo.childNodes)) {
+    if (n.nodeType === 3) { destino.appendChild(document.createTextNode(completar(n.textContent, scope))); continue; }
+    if (n.nodeType !== 1) continue;
+    const tag = n.tagName.toLowerCase();
+    if (tag === 'sc-for') {
+      const lista = completar(n.getAttribute('list'), scope) || [];
+      const como = n.getAttribute('as') || 'item';
+      lista.forEach((item, i) => render(n, Object.assign({}, scope, { [como]: item, $index: i }), destino));
+      continue;
+    }
+    if (tag === 'sc-if') { if (completar(n.getAttribute('value'), scope)) render(n, scope, destino); continue; }
+    const el = document.createElementNS(n.namespaceURI, n.tagName);
+    for (const a of Array.from(n.attributes)) if (!a.name.startsWith('hint-')) el.setAttribute(a.name, completar(a.value, scope));
+    render(n, scope, el);
+    destino.appendChild(el);
+  }
+}
+document.querySelectorAll('.escala').forEach((caja) => {
+  const i = Number(caja.dataset.tablero);
+  const scope = new LOGICAS[i]({}).renderVals();
+  render(document.getElementById('t' + i).content, scope, caja);
+});
+// En pantallas angostas, achica la maqueta (sin bajar de 45 %; el resto se ve deslizando).
+function ajustar() {
+  document.querySelectorAll('.lienzo').forEach((l) => {
+    const m = l.querySelector('.marco');
+    const e = l.querySelector('.escala');
+    const f = Math.max(0.45, Math.min(1, l.clientWidth / 1728));
+    e.style.transform = 'scale(' + f + ')';
+    m.style.width = Math.floor(1728 * f) + 'px';
+    m.style.height = Math.floor(910 * f) + 'px';
+  });
+}
+addEventListener('resize', ajustar); ajustar();
+</script>
+</body>
+</html>

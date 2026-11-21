@@ -13,14 +13,36 @@ import { CampoComision, EncabezadoVencimiento, useComision, useVencimiento } fro
 
 type PataEditable = Pata & { id: number };
 
+/**
+ * Las estrategias más usadas, con su nombre en inglés (como se conocen en el mercado) y, en la explicación, el de acá.
+ * Agrupadas por lo que esperás del precio.
+ */
 const ESTRATEGIAS = [
-  { id: "call", nombre: "Compra de call", idea: "Ganás si sube; como mucho perdés la prima." },
-  { id: "put", nombre: "Compra de put", idea: "Ganás si baja; como mucho perdés la prima." },
-  { id: "cubierto", nombre: "Lanzamiento cubierto", idea: "Tenés las acciones y cobrás una prima a cambio de limitar la suba." },
-  { id: "alcista", nombre: "Spread alcista", idea: "Call comprado y otro vendido más arriba: suba acotada, más barato." },
-  { id: "bajista", nombre: "Spread bajista", idea: "Put comprado y otro vendido más abajo: baja acotada, más barato." },
-  { id: "mariposa", nombre: "Mariposa", idea: "Ganás si al vencimiento queda cerca de la base del medio." },
-  { id: "cono", nombre: "Cono comprado", idea: "Call y put de la misma base: ganás si se mueve mucho, para cualquier lado." },
+  { id: "call", grupo: "alcista", nombre: "Long Call", idea: "Compra de call: ganás si sube; como mucho perdés la prima." },
+  { id: "cubierto", grupo: "alcista", nombre: "Covered Call", idea: "Lanzamiento cubierto: tenés las acciones y cobrás una prima a cambio de limitar la suba." },
+  { id: "putVendido", grupo: "alcista", nombre: "Short Put", idea: "Venta de put: cobrás la prima si no baja de la base; si baja, te toca comprar las acciones a la base." },
+  { id: "alcista", grupo: "alcista", nombre: "Bull Call Spread", idea: "Spread alcista con calls: comprás un call y vendés otro más arriba. Suba acotada, más barato que el call solo." },
+  { id: "bullPut", grupo: "alcista", nombre: "Bull Put Spread", idea: "Spread alcista con puts: vendés un put y comprás otro más abajo. Cobrás de entrada; la pérdida tiene techo." },
+  { id: "put", grupo: "bajista", nombre: "Long Put", idea: "Compra de put: ganás si baja; como mucho perdés la prima." },
+  { id: "bajista", grupo: "bajista", nombre: "Bear Put Spread", idea: "Spread bajista con puts: comprás un put y vendés otro más abajo. Baja acotada, más barato que el put solo." },
+  { id: "bearCall", grupo: "bajista", nombre: "Bear Call Spread", idea: "Spread bajista con calls: vendés un call y comprás otro más arriba. Cobrás de entrada; la pérdida tiene techo." },
+  { id: "protectivo", grupo: "cobertura", nombre: "Protective Put", idea: "Put de cobertura: tenés las acciones y comprás un put, como un seguro contra la baja." },
+  { id: "collar", grupo: "cobertura", nombre: "Collar", idea: "Tenés las acciones, comprás un put abajo y lo pagás vendiendo un call arriba: acotás la baja y la suba." },
+  { id: "cono", grupo: "volatil", nombre: "Long Straddle", idea: "Cono comprado: call y put de la misma base. Ganás si se mueve mucho, para cualquier lado." },
+  { id: "cuna", grupo: "volatil", nombre: "Long Strangle", idea: "Cuna comprada: un put abajo y un call arriba. Más barato que el straddle; necesita un movimiento más grande." },
+  { id: "conoVendido", grupo: "quieto", nombre: "Short Straddle", idea: "Cono vendido: vendés call y put de la misma base. Ganás si queda quieto; si se mueve mucho, la pérdida no tiene techo." },
+  { id: "cunaVendida", grupo: "quieto", nombre: "Short Strangle", idea: "Cuna vendida: vendés un put abajo y un call arriba. Ganás si queda entre las dos bases; la pérdida no tiene techo." },
+  { id: "condor", grupo: "quieto", nombre: "Iron Condor", idea: "Cuna vendida con protección: cobrás si queda entre las bases del medio, y las de afuera ponen techo a la pérdida." },
+  { id: "ironMariposa", grupo: "quieto", nombre: "Iron Butterfly", idea: "Cono vendido con protección: ganás más cuanto más cerca de la base del medio termine; la pérdida tiene techo." },
+  { id: "mariposa", grupo: "quieto", nombre: "Butterfly", idea: "Mariposa con calls: ganás si al vencimiento queda cerca de la base del medio. Costo y pérdida chicos." },
+] as const;
+
+const GRUPOS = [
+  { id: "alcista", nombre: "Si creés que sube" },
+  { id: "bajista", nombre: "Si creés que baja" },
+  { id: "cobertura", nombre: "Para cubrir tus acciones" },
+  { id: "volatil", nombre: "Si se va a mover mucho" },
+  { id: "quieto", nombre: "Si va a quedar quieto" },
 ] as const;
 
 type IdEstrategia = (typeof ESTRATEGIAS)[number]["id"];
@@ -62,6 +84,26 @@ function armar(id: IdEstrategia, v: VencimientoOpciones, precioAccion: number, l
       return [pata("call", "compra", base(i)), pata("call", "venta", base(i + 2))];
     case "bajista":
       return [pata("put", "compra", base(i)), pata("put", "venta", base(i - 2))];
+    case "putVendido":
+      return [pata("put", "venta", debajo)];
+    case "bullPut":
+      return [pata("put", "venta", base(i)), pata("put", "compra", base(i - 2))];
+    case "bearCall":
+      return [pata("call", "venta", base(i)), pata("call", "compra", base(i + 2))];
+    case "protectivo":
+      return [pata("accion", "compra", 0, lote), pata("put", "compra", debajo)];
+    case "collar":
+      return [pata("accion", "compra", 0, lote), pata("put", "compra", base(i - 1)), pata("call", "venta", base(i + 1))];
+    case "cuna":
+      return [pata("put", "compra", base(i - 1)), pata("call", "compra", base(i + 1))];
+    case "conoVendido":
+      return [pata("call", "venta", base(i)), pata("put", "venta", base(i))];
+    case "cunaVendida":
+      return [pata("put", "venta", base(i - 1)), pata("call", "venta", base(i + 1))];
+    case "condor":
+      return [pata("put", "compra", base(i - 2)), pata("put", "venta", base(i - 1)), pata("call", "venta", base(i + 1)), pata("call", "compra", base(i + 2))];
+    case "ironMariposa":
+      return [pata("put", "compra", base(i - 2)), pata("put", "venta", base(i)), pata("call", "venta", base(i)), pata("call", "compra", base(i + 2))];
     case "mariposa":
       return [pata("call", "compra", base(i - 1)), pata("call", "venta", base(i), 2), pata("call", "compra", base(i + 1))];
     case "cono":
@@ -152,20 +194,28 @@ export function VistaEstrategias({ cadena }: { cadena: CadenaOpciones }) {
 
       <div className="flex flex-col gap-3">
         <p className="text-label">Elegí una estrategia (después podés cambiar cada pata)</p>
-        <div className="flex flex-wrap gap-2">
-          {ESTRATEGIAS.map((e) => (
-            <button
-              key={e.id}
-              type="button"
-              onClick={() => elegirEstrategia(e.id)}
-              aria-pressed={estrategia === e.id}
-              className={cn(
-                "rounded-full border px-3.5 py-2 text-chico font-medium transition-colors",
-                estrategia === e.id ? "border-inverse bg-inverse text-on-inverse" : "border-border-strong text-text-2 hover:text-text",
-              )}
-            >
-              {e.nombre}
-            </button>
+        <div className="flex flex-col gap-3">
+          {GRUPOS.map((g) => (
+            <div key={g.id} className="flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:gap-4">
+              <p className="shrink-0 text-micro text-text-3 sm:w-48">{g.nombre}</p>
+              <div className="flex flex-wrap gap-2">
+                {ESTRATEGIAS.filter((e) => e.grupo === g.id).map((e) => (
+                  <button
+                    key={e.id}
+                    type="button"
+                    lang="en"
+                    onClick={() => elegirEstrategia(e.id)}
+                    aria-pressed={estrategia === e.id}
+                    className={cn(
+                      "rounded-full border px-3.5 py-2 text-chico font-medium transition-colors",
+                      estrategia === e.id ? "border-inverse bg-inverse text-on-inverse" : "border-border-strong text-text-2 hover:text-text",
+                    )}
+                  >
+                    {e.nombre}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
         <p className="text-chico text-text-2">{estrategia === "propia" ? "Estrategia propia: la armaste vos." : ESTRATEGIAS.find((e) => e.id === estrategia)?.idea}</p>

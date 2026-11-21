@@ -156,6 +156,26 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Estrategias de opciones en inglés y las más usadas (punto 27, rama `estrategias-ingles`, 21/11/2026)
+
+> Pedido: los nombres de las estrategias en inglés y sumar las que más se hacen.
+
+- **De 7 a 17 estrategias**, con el nombre en inglés en el botón y, en la explicación de abajo, el nombre de acá ("Covered Call" → "Lanzamiento cubierto: …"; "Long Straddle" → "Cono comprado: …").
+- **Agrupadas por lo que esperás del precio:**
+  - Si creés que sube: Long Call, Covered Call, Short Put, Bull Call Spread, Bull Put Spread.
+  - Si creés que baja: Long Put, Bear Put Spread, Bear Call Spread.
+  - Para cubrir tus acciones: Protective Put, Collar.
+  - Si se va a mover mucho: Long Straddle, Long Strangle.
+  - Si va a quedar quieto: Short Straddle, Short Strangle, Iron Condor, Iron Butterfly, Butterfly.
+- Cada una se arma sola con las bases más cercanas al precio y los precios de las puntas, como antes; después se puede cambiar cada pata. Probadas las 17 con GGAL a $ 4.550: ganancia y pérdida máximas y equilibrios coherentes con cada estrategia, sin errores.
+- No se sumó el **calendar spread**: usa dos vencimientos y la calculadora trabaja con uno.
+
+### Decisiones para revisar
+1. **Nombres en inglés en los botones** (pedido), aunque el resto del sitio esté en castellano: el nombre de acá queda en la explicación, para quien lo conozca así.
+2. **Las estrategias con ventas descubiertas** (Short Put, Short Straddle, Short Strangle) piden garantía en el broker; la calculadora ya avisa cuando hay ventas sin cubrir.
+
+---
+
 ## Precios que se actualizan solos y el Merval en Acciones (puntos 20 y 22, rama `en-vivo-merval`, 20/11/2026)
 
 > Pedido: que las cotizaciones cambien todo el tiempo, sin recargar ni cambiar de sección, con colores cuando se mueven (sin el indicador "En vivo"). Y en Acciones, cambiar el promedio del día por una tarjeta del Merval como las de Wall Street.

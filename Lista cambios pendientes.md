@@ -8,9 +8,9 @@
 8. ~~Cuando se quiere scrolear para abajo en el panel de búsqueda, se scrolea la pagina web que queda en el fondo, y no el panel de búsqueda, para poder ver los sugueridos que aparecen de forma predeterminada. La barra lateral para scrolear si funciona.~~ ✅ <span style="color:red">HECHO</span>
 9. ~~Opciones de GGAL~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama opciones)</span>
 10. Plan Pro pago
-11. Cotización Merval
-12. Cambiar dólar hoy
-13. Cambiar parte cripto
+11. ~~Cotización Merval~~ ✅ <span style="color:red">HECHO</span>
+12. ~~Cambiar dólar hoy~~ ✅ <span style="color:red">HECHO</span>
+13. ~~Cambiar parte cripto~~ ✅ <span style="color:red">HECHO</span>
 14. ~~Agregar balances, resultados y métricas importantes de las empresas~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama balances)</span>
 15. ~~Calendario con empresas que presentan estados contables, decisiones de tasas en USA o ARG, datos de inflación, datos de empleo~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama calendario-semanal)</span>
 16. Como se ve la web en el celu.
@@ -28,4 +28,4 @@
     - El rendimiento de la cartera (contra la inflación y el dólar) se calcula solo con las inversiones: los gastos de Mercado Pago no son decisiones de inversión.
     - Subir el resumen del mes (idea de Benja) queda para más adelante: cada app exporta distinto y el archivo trae todos los gastos, información muy privada para algo que solo necesita un número.
 26. Agrandar calendario a un mes. Un boton chico donde esta ubicado ahora, que diga calendario y un logito. Te abre una semi pantalla grande en el medio, con un calendario del mes. Contenido queda igual.
-27. Estrategias de opciones en ingles. POner las mas comunes.
+27. ~~Estrategias de opciones en ingles. POner las mas comunes.~~ ✅ <span style="color:red">HECHO (en la rama estrategias-ingles): 17 estrategias con su nombre en inglés, agrupadas por lo que esperás del precio.</span>

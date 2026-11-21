@@ -137,6 +137,25 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Escenas de la home que no entran en la pantalla (rama `home-escenas-sin-fijar`, 20/11/2026)
+
+> Benja vio que en su notebook el título "El dólar más barato, app por app." quedaba cortado al terminar la tarjeta celeste de tasas. Un primer arreglo achicaba los títulos en pantallas bajas y se descartó: no quería tocar el diseño.
+
+- **Qué pasaba:** cada escena queda fija una pantalla de alto mientras corre su animación. Si el contenido es más alto que la pantalla, se corta arriba y abajo, o queda debajo del menú.
+  - A 1366 × 680 se cortaban "La respuesta", "El dólar", "Tu cartera" y "Macizo o hueco".
+  - A 1366 × 768, las dos primeras.
+  - En un teléfono chico (375 × 667), cinco escenas. En 375 × 812, el cierre de las tasas quedaba debajo de la barra de abajo.
+- **Ahora:** cada escena mide su contenido. Si no entra, deja de quedar fija y fluye como una página común; nada se corta y el diseño es el mismo (mismos títulos, espacios y animaciones). Vuelve a medir al cambiar el tamaño de la ventana.
+  - En 1440 × 900 o más no cambia nada: todas siguen fijas.
+- **La animación en ese modo:** arranca cuando la escena asoma y termina con su centro en el centro de la pantalla. Así se ve completa (por ejemplo, las tasas ya ordenadas) mientras el título todavía está a la vista.
+- **Código:**
+  - `SiNoEntra` (`src/components/escenas/si-no-entra.tsx`) marca la escena con `data-bajo`.
+  - El CSS la suelta (`globals.css`). Sin `content-visibility`, para que la página no salte al llegar.
+  - El director usa el recorrido fluido y recalcula los recorridos si una escena cambia de modo.
+- **Lo que se pierde en esas pantallas:** el efecto de escena pegada. En las grandes sigue igual.
+
+---
+
 ## Precios que se actualizan solos y el Merval en Acciones (puntos 20 y 22, rama `en-vivo-merval`, 20/11/2026)
 
 > Pedido: que las cotizaciones cambien todo el tiempo, sin recargar ni cambiar de sección, con colores cuando se mueven (sin el indicador "En vivo"). Y en Acciones, cambiar el promedio del día por una tarjeta del Merval como las de Wall Street.

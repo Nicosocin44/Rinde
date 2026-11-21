@@ -604,6 +604,19 @@
   height: 100svh;
   overflow: hidden;
 }
+/* Si el contenido no entra en la pantalla (data-bajo, lo marca SiNoEntra), la escena fluye: nada se corta.
+   data-midiendo dura un instante, sin pintar: es para medir el alto natural del contenido. */
+.escena[data-bajo="true"] {
+  height: auto !important;
+  /* Con alto natural, el "no dibujar fuera de pantalla" reservaría una pantalla de alto y la página saltaría al llegar. */
+  content-visibility: visible;
+}
+.escena[data-bajo="true"] .escena-interior,
+.escena[data-midiendo] .escena-interior {
+  position: static;
+  height: auto;
+  overflow: visible;
+}
 /* Con movimiento reducido no hay coreografía: cada escena ocupa solo su alto natural. */
 @media (prefers-reduced-motion: reduce) {
   .escena {

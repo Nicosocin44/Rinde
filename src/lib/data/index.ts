@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { cargarActivo } from "./servicios/activo";
-import { cargarSemana } from "./servicios/calendario";
+import { cargarMes, cargarSemana } from "./servicios/calendario";
 import { cargarBalances } from "./servicios/balances";
 import { cargarFichaBono, cargarFichaCripto, cargarFichaLetra } from "./servicios/fichas";
 import { cargarQueHubiera } from "./servicios/que-hubiera";
@@ -25,6 +25,7 @@ export const obtenerMacro = cache(cargarMacro);
 export const obtenerBonos = cache(cargarBonos);
 export const obtenerMercados = cache(cargarMercados);
 export const obtenerSemana = cache(cargarSemana);
+export const obtenerMes = cache(cargarMes);
 export const obtenerRecorridosEEUU = cache(cargarRecorridosEEUU);
 export const obtenerMerval = cache(cargarMerval);
 export const obtenerCripto = cache(cargarCripto);

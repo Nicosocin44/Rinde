@@ -14,7 +14,7 @@ import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, pesosCompacto, porcentaje } from "@/lib/format";
 import { BotonComparar } from "./comparar-boton";
 import { BalancesEmpresa } from "./balances";
-import { AvisoActivo } from "./seguir";
+import { AvisoActivo, SeguirActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
 
@@ -120,6 +120,7 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
         titulo={nombre}
         acciones={
           <div className="flex flex-wrap gap-2">
+            <SeguirActivo ticker={a.ticker} nombre={nombre} />
             {a.precio ? <AvisoActivo ticker={a.ticker} nombre={nombre} precio={a.precio} moneda="ARS" /> : null}
             <BotonComparar ticker={a.ticker} />
           </div>

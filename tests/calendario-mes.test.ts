@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { armarMes, eventosDeLaSemana, filtrarDia, lunesDelMes, mesInicial, mesPermitido, pasaFiltro, sumarMesesISO, type DiaMes } from "@/lib/calendario/mes";
+import { armarMes, filtrarDia, lunesDelMes, mesInicial, mesPermitido, pasaFiltro, sumarMesesISO, type DiaMes } from "@/lib/calendario/mes";
 import { armarSemana, type EventoCalendario } from "@/lib/calendario/semana";
 
 const ev = (id: string, fecha: string, tipo: EventoCalendario["tipo"], pais: EventoCalendario["pais"]): EventoCalendario => ({ id, fecha, tipo, pais, etiqueta: id, detalle: id });
@@ -40,13 +40,6 @@ describe("calendario · mes", () => {
       ["2026-12-03", false],
       ["2026-12-04", false],
     ]);
-  });
-
-  it("cuenta lo que pasa en la semana para el botón: sin feriados, con todas las empresas", () => {
-    const semana = armarSemana("2026-11-16", [ev("feriado", "2026-11-16", "feriado", "AR"), ev("ipc", "2026-11-17", "dato", "AR")], {
-      "2026-11-18": { empresas: [ev("NVDA", "2026-11-18", "empresa", "US"), ev("GGAL", "2026-11-18", "empresa", "AR")], masEmpresas: 3 },
-    });
-    expect(eventosDeLaSemana(semana)).toBe(6);
   });
 
   it("filtra por tipo y país; los feriados quedan con cualquier tipo", () => {

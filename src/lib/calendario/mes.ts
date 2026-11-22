@@ -42,11 +42,6 @@ export function armarMes(mes: MesISO, semanas: SemanaCalendario[]): MesCalendari
   return { mes, semanas: semanas.map((s) => s.dias.map((d) => ({ ...d, enMes: d.fecha.startsWith(mes) }))) };
 }
 
-/** Cuánto pasa en una semana (para el botón: "6 esta semana"). Las empresas cuentan una por una. */
-export function eventosDeLaSemana(semana: SemanaCalendario): number {
-  return semana.dias.reduce((n, d) => n + d.eventos.filter((e) => e.tipo !== "feriado").length + d.empresas.length + d.masEmpresas, 0);
-}
-
 // ───────────────────────── Filtros ─────────────────────────
 
 export type FiltroTipo = "todo" | "dato" | "tasa" | "empresa" | "bonos" | "opciones";

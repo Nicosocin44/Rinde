@@ -6,6 +6,7 @@ import { cargarOpciones } from "./opciones";
 import { cargarBonos, cargarCripto, cargarMercados } from "./mercados";
 import { cargarPesos } from "./pesos";
 import { cargarCotizaciones } from "./dolar";
+import * as binance from "../adapters/binance";
 import { claseDeFicha } from "./fichas";
 
 export type ClaseActivo = "cedear" | "accion" | "bono" | "lecap" | "cripto" | "opcion";
@@ -73,9 +74,23 @@ export async function preciosDeActivos(tickers: string[]): Promise<Record<string
     const l = pesos?.ok ? pesos.data.curva.letras.find((x) => x.ticker === t) : undefined;
     if (l) salida[t] = { ticker: t, nombre: `${l.tipo} ${l.ticker}`, clase: "lecap", precio: l.precio, moneda: "ARS", variacion: l.variacion, otra: { precio: aUsd(l.precio), variacion: variacionEnOtra(l.variacion, mepVar, "USD") } };
   }
-  for (const t of porClase.get("cripto") ?? []) {
+  // Cripto: variación de las últimas 24 h de Binance, como la ficha. En pesos, BTC y ETH componen la de su precio en
+  // dólares con la del dólar cripto (USDT/ARS); USDT y USDC, la de su par en pesos.
+  const pedidosCripto = porClase.get("cripto") ?? [];
+  const par = async (p: Parameters<typeof binance.ticker24h>[0]) => (await binance.ticker24h(p).catch(() => null))?.variacion24h ?? null;
+  const [vBtc, vEth, vUsdt, vUsdc] = await Promise.all([
+    pedidosCripto.includes("BTC") ? par("BTCUSDT") : null,
+    pedidosCripto.includes("ETH") ? par("ETHUSDT") : null,
+    pedidosCripto.length ? par("USDTARS") : null,
+    pedidosCripto.includes("USDC") ? par("USDCARS") : null,
+  ]);
+  const compuesta = (a: number | null, b: number | null) => (a === null || b === null ? null : (1 + a) * (1 + b) - 1);
+  for (const t of pedidosCripto) {
     const k = cripto?.ok ? cripto.data.find((x) => x.simbolo === t) : undefined;
-    if (k) salida[t] = { ticker: t, nombre: k.nombre, clase: "cripto", precio: k.precioArs, moneda: "ARS", variacion: null, otra: { precio: k.precioUsd, variacion: null } };
+    if (!k) continue;
+    const enUsd = t === "BTC" ? vBtc : t === "ETH" ? vEth : null;
+    const enArs = t === "BTC" || t === "ETH" ? compuesta(enUsd, vUsdt) : t === "USDT" ? vUsdt : t === "USDC" ? vUsdc : null;
+    salida[t] = { ticker: t, nombre: k.nombre, clase: "cripto", precio: k.precioArs, moneda: "ARS", variacion: enArs, otra: { precio: k.precioUsd, variacion: enUsd } };
   }
   // Opciones: la prima de referencia (punto medio de las puntas, o el último si operó hoy).
   for (const t of porClase.get("opcion") ?? []) {

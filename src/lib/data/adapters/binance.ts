@@ -40,8 +40,14 @@ const tickerSchema = z.object({ lastPrice: z.string(), priceChangePercent: z.str
  * de todo el sitio (el de los exchanges locales trae sobreprecio). Verificado el 22/11/2026. Caché de 15 segundos.
  */
 export async function precioActual(simbolo: "BTC" | "ETH"): Promise<{ precio: number; variacion24h: number }> {
-  const t = await traerJson(`https://api.binance.com/api/v3/ticker/24hr?symbol=${simbolo}USDT`, tickerSchema, { fuente: "binance", revalidate: 15, timeoutMs: 6000 });
+  return ticker24h(`${simbolo}USDT`);
+}
+
+/** Precio y variación de 24 h de un par (BTCUSDT, USDTARS, USDCARS…). Verificado el 22/11/2026. Caché de 15 segundos. */
+export async function ticker24h(par: "BTCUSDT" | "ETHUSDT" | "USDTARS" | "USDCARS"): Promise<{ precio: number; variacion24h: number }> {
+  const t = await traerJson(`https://api.binance.com/api/v3/ticker/24hr?symbol=${par}`, tickerSchema, { fuente: "binance", revalidate: 15, timeoutMs: 6000 });
   const precio = Number(t.lastPrice);
-  if (!(precio > 0)) throw new Error(`Binance: precio inválido de ${simbolo}`);
-  return { precio, variacion24h: Number(t.priceChangePercent) / 100 };
+  const variacion24h = Number(t.priceChangePercent) / 100;
+  if (!(precio > 0) || !Number.isFinite(variacion24h)) throw new Error(`Binance: dato inválido de ${par}`);
+  return { precio, variacion24h };
 }

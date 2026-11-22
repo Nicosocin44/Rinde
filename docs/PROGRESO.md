@@ -137,6 +137,25 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Vuelve "Siguiendo", como un botón debajo del calendario (punto 18, rama `siguiendo`, 22/11/2026)
+
+> El 19/11 se sacó la lista de Siguiendo porque arriba bajaba la página y al costado tapaba. Benja propuso ponerla debajo del calendario; de las opciones dibujadas (fila con los seguidos, botón, franja, filtro en las tablas) eligió el botón.
+
+- **"★ Seguir" en cada ficha** (acciones, CEDEARs, bonos, LECAPs y cripto), al lado de "Avisame". Al tocarlo pasa a "★ Siguiendo" y un aviso ofrece ir a Mercados.
+- **En Mercados, "★ Siguiendo · N"** debajo de "Calendario", en todas las solapas.
+  - En la compu, uno arriba del otro; en el celular, uno al lado del otro.
+  - Si no seguís nada, no aparece.
+- **Al tocarlo, la lista de tus seguidos:** logo, ticker, nombre, precio y variación de hoy. Toda la fila lleva a la ficha y la cruz lo deja de seguir.
+  - En la compu, un panel debajo del botón; en el celular, sube desde abajo.
+  - Los precios se piden al abrir (o al pasar el mouse por el botón) y, mientras está abierta, cada 30 segundos (`/api/precios`).
+- **Se guarda en el navegador,** en la misma base que antes del 19/11 (`rinde-favoritos`): quien había seguido algo lo vuelve a ver. Los grupos no vuelven.
+- Revisado en 1366 × 768 (oscuro) y 375 px (claro), siguiendo y dejando de seguir activos reales.
+
+### Para revisar
+1. **La cripto no muestra la variación del día** en la lista: el servicio de precios no la trae para cripto (lo mismo pasa en las alertas).
+
+---
+
 ## Calendario del mes en Mercados (punto 26, rama `calendario-mes`, 21/11/2026)
 
 > Pedido: en vez de la semana arriba de Mercados, un botón chico "Calendario" que abra el mes entero en una ventana grande en el medio, con el mismo contenido. Benja eligió esta opción (la A) entre cuatro maquetas.

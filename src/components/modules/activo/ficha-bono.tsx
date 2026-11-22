@@ -9,7 +9,7 @@ import type { FichaBono } from "@/lib/data/servicios/fichas";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { fechaCorta, numero, pesos, porcentaje } from "@/lib/format";
 import { BotonComparar } from "./comparar-boton";
-import { AvisoActivo } from "./seguir";
+import { AvisoActivo, SeguirActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
 
@@ -50,6 +50,7 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
         titulo={b.nombre}
         acciones={
           <div className="flex flex-wrap gap-2">
+            <SeguirActivo ticker={b.ticker} nombre={b.nombre} />
             <AvisoActivo ticker={b.ticker} nombre={b.nombre} precio={b.precioUsd} moneda="USD" />
             <BotonComparar ticker={b.ticker} />
           </div>

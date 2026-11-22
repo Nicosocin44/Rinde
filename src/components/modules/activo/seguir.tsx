@@ -1,8 +1,8 @@
 "use client";
 
-import { Bell } from "lucide-react";
+import { Bell, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MoneyInput } from "@/components/ui/money-input";
 import { SegmentedControl } from "@/components/ui/segmented";
@@ -10,7 +10,46 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { guardarAlerta, listarAlertas } from "@/lib/alertas/almacen";
 import { describir, LIMITE_GRATIS, type Alerta } from "@/lib/alertas/evaluar";
+import { alCambiarFavoritos, dejarDeSeguir, listarFavoritos, seguir } from "@/lib/favoritos/almacen";
 import { dolares, pesos } from "@/lib/format";
+
+/**
+ * "★ Seguir" (punto 18): marca el activo para verlo en Mercados, en "★ Siguiendo". Se guarda en el navegador. Antes de
+ * leer el navegador el botón queda deshabilitado, para no mostrar "Seguir" a alguien que ya lo sigue.
+ */
+export function SeguirActivo({ ticker, nombre }: { ticker: string; nombre: string }) {
+  const toast = useToast();
+  const router = useRouter();
+  const [sigo, setSigo] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let vivo = true;
+    const leer = () => void listarFavoritos().then((lista) => vivo && setSigo(lista.some((f) => f.ticker === ticker)));
+    leer();
+    const desuscribir = alCambiarFavoritos(leer);
+    return () => {
+      vivo = false;
+      desuscribir();
+    };
+  }, [ticker]);
+
+  const alternar = async () => {
+    if (sigo) {
+      await dejarDeSeguir(ticker);
+      toast(`Dejaste de seguir ${nombre}.`);
+    } else {
+      await seguir({ ticker, nombre });
+      toast(`Seguís ${nombre}: lo ves en Mercados, en Siguiendo.`, { etiqueta: "Ver", onClick: () => router.push("/mercados") });
+    }
+  };
+
+  return (
+    <Button variante={sigo ? "primario" : "secundario"} tamano="sm" onClick={() => void alternar()} disabled={sigo === null} aria-pressed={sigo ?? false}>
+      <Star className={sigo ? "fill-current" : undefined} />
+      {sigo ? "Siguiendo" : "Seguir"}
+    </Button>
+  );
+}
 
 type Props = {
   ticker: string;
@@ -22,7 +61,7 @@ type Props = {
 
 /**
  * "Avisame": una alerta de precio del activo, que se suma a las de /alertas y respeta el límite del plan gratuito. Se
- * guarda en el navegador. (La lista de Siguiendo y el botón "Seguir" se sacaron el 19/11/2026 a pedido de los fundadores.)
+ * guarda en el navegador.
  */
 export function AvisoActivo({ ticker, nombre, precio, moneda }: Props) {
   const toast = useToast();

@@ -7,7 +7,7 @@ import type { FichaCripto } from "@/lib/data/servicios/fichas";
 import { FUENTES, type EstadoDato } from "@/lib/data/types";
 import { dolares, fechaCorta, numero, pesos, porcentaje } from "@/lib/format";
 import { BotonComparar } from "./comparar-boton";
-import { AvisoActivo } from "./seguir";
+import { AvisoActivo, SeguirActivo } from "./seguir";
 import { GraficoActivo, type SerieGrafico } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
 
@@ -107,6 +107,7 @@ export function FichaCriptoVista({ f, asOf, estado }: { f: FichaCripto; asOf: st
         titulo={c.nombre}
         acciones={
           <div className="flex flex-wrap gap-2">
+            <SeguirActivo ticker={c.simbolo} nombre={c.nombre} />
             <AvisoActivo ticker={c.simbolo} nombre={c.nombre} precio={c.precioArs} moneda="ARS" />
             {(c.simbolo === "BTC" || c.simbolo === "ETH") && <BotonComparar ticker={c.simbolo} />}
           </div>

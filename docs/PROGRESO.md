@@ -12,6 +12,21 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Siguiendo: sin la cantidad y en la moneda que elegís (rama `siguiendo-moneda`, 22/11/2026)
+
+> Correcciones de Nico: el botón sin el número de seguidos, y que cada activo se sume en la moneda que se estaba mirando (siguió BTC y se agregó en pesos).
+
+- **El botón dice solo "★ Siguiendo"**, sin "· N".
+- **Cada activo se sigue en la moneda que estás mirando** en el gráfico de la ficha ("En pesos" / "En dólares"): el gráfico la anota (`fijarMonedaVista`) y "★ Seguir" la guarda con el activo. El aviso lo dice ("Seguís Bitcoin en dólares"). Si la ficha no tiene selector, va en la moneda del activo (bonos en dólares; el resto en pesos).
+- **La lista muestra cada uno en su moneda.** El servicio de precios ahora trae también la otra moneda: CEDEARs con su especie en dólares, bonos con su especie en pesos, cripto con su precio en dólares; acciones y LECAPs pasadas al dólar MEP. La variación en la otra moneda compone la del activo con la del MEP del día. Los que se siguieron antes de este cambio quedan en la moneda del activo.
+- Probado: BTC (en dólares, como abre la ficha) → US$ 63.936; ETH en pesos → $ 3.039.900; GGAL en dólares → US$ 2,61; AL30 → US$ 47,50.
+
+### Decisiones para revisar
+1. **Acciones y LECAPs en dólares, al MEP:** no tienen especie en dólares con precio propio, así que se dividen por el MEP del momento.
+2. **Mismo activo en las dos monedas:** se sigue una sola vez. Para cambiarle la moneda, dejás de seguirlo y lo volvés a seguir mirando la otra.
+
+---
+
 ## Rediseño: la home como una historia (rama `rediseno`, sin subir todavía)
 
 > Pedido de los fundadores (17/11/2026): llevar el diseño al nivel de moahu.com.ar, Apple y Whoop. La parte de producto de la home se cuenta como una historia por secciones, con una idea por sección y componentes reales en modo demo.

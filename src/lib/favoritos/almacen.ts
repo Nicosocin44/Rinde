@@ -7,7 +7,13 @@ import Dexie, { type Table } from "dexie";
  * "★ Siguiendo". Se guardan en el navegador, como la cartera y las alertas. Es la misma base que se usó hasta el
  * 19/11/2026: quien había seguido algo, lo vuelve a ver.
  */
-export type Favorito = { ticker: string; nombre: string; agregado: string };
+export type Favorito = {
+  ticker: string;
+  nombre: string;
+  agregado: string;
+  /** En qué moneda se sigue: la que la persona estaba mirando en la ficha al tocar "Seguir". Los de antes no la tienen: van en la del activo. */
+  moneda?: "ARS" | "USD";
+};
 
 class BaseFavoritos extends Dexie {
   favoritos!: Table<Favorito, string>;
@@ -31,7 +37,7 @@ export async function listarFavoritos(): Promise<Favorito[]> {
 }
 
 export async function seguir(f: Omit<Favorito, "agregado">): Promise<void> {
-  await db().favoritos.put({ ticker: f.ticker, nombre: f.nombre, agregado: new Date().toISOString() });
+  await db().favoritos.put({ ticker: f.ticker, nombre: f.nombre, agregado: new Date().toISOString(), ...(f.moneda ? { moneda: f.moneda } : {}) });
   window.dispatchEvent(new Event(AVISO));
 }
 

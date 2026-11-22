@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "Las carteras de los fondos con más acciones argentinas y de los inversores más conocidos (Buffett, Druckenmiller, Dalio…), con sus últimas compras y ventas, según sus informes a la SEC.",
 };
 
-const VERBO: Record<TipoMovimiento, string> = { nueva: "compró", aumento: "sumó", reduccion: "vendió parte de", salida: "vendió todo" };
+const VERBO: Record<TipoMovimiento, string> = { nueva: "compró", aumento: "aumentó", reduccion: "redujo", salida: "redujo" };
 
 export default function Inversores() {
   const lista = inversores();

@@ -7,7 +7,7 @@ import { DonaConLogos, type Porcion } from "@/components/modules/inversores/dona
 import { MovimientosInversor, type TrimestreMovimientos } from "@/components/modules/inversores/movimientos";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import { obtenerTickersCedear } from "@/lib/data";
-import { enlaceDe, inversor, inversores, textoAcciones, tickerLogo, ultimo, type Posicion } from "@/lib/inversores/datos";
+import { enlaceDe, inversor, inversores, textoAcciones, tickerLogo, ultimo, type Movimiento, type Posicion } from "@/lib/inversores/datos";
 import { porcentaje } from "@/lib/format";
 
 export const revalidate = 3600;
@@ -51,15 +51,17 @@ export default async function FichaInversor({ params }: Props) {
       periodo: x.periodo,
       etiqueta: etiquetaTrimestre(x.periodo),
       presentado: x.presentado,
-      grupos: Object.fromEntries(
-        Object.entries(x.movimientos!).map(([tipo, filas]) => [
-          tipo,
-          filas
+      grupos: (() => {
+        const filas = (lista: Movimiento[]) =>
+          lista
             // Las posiciones mínimas (menos del 0,1 % antes y después) no dicen nada, salvo las argentinas.
             .filter((f) => f.argentino || Math.max(f.pesoAntes, f.pesoAhora) >= 0.001)
-            .map((f) => ({ clave: f.cusip, ticker: f.ticker, logo: tickerLogo(f), nombre: f.nombre, pesoAntes: f.pesoAntes, pesoAhora: f.pesoAhora, acciones: textoAcciones(f), href: href(f), argentino: f.argentino })),
-        ]),
-      ) as TrimestreMovimientos["grupos"],
+            .map((f) => ({ clave: f.cusip, ticker: f.ticker, logo: tickerLogo(f), nombre: f.nombre, pesoAntes: f.pesoAntes, pesoAhora: f.pesoAhora, acciones: textoAcciones(f), href: href(f), argentino: f.argentino }));
+        const m = x.movimientos!;
+        // Lo que vendió del todo va con lo que redujo (termina en 0 %), ordenado por cuánto bajó.
+        const redujo = [...m.reduccion, ...m.salida].sort((a, b) => b.pesoAntes - b.pesoAhora - (a.pesoAntes - a.pesoAhora));
+        return { nueva: filas(m.nueva), aumento: filas(m.aumento), reduccion: filas(redujo) };
+      })(),
     }));
 
   return (

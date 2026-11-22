@@ -5,14 +5,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import { SegmentedControl } from "@/components/ui/segmented";
-import type { TipoMovimiento } from "@/lib/inversores/datos";
 import { fechaCorta, porcentaje } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 export type FilaMovimiento = { clave: string; ticker: string | null; logo?: string; nombre: string; pesoAntes: number; pesoAhora: number; acciones: string | null; href: string | null; argentino: boolean };
-export type TrimestreMovimientos = { periodo: string; etiqueta: string; presentado: string; grupos: Record<TipoMovimiento, FilaMovimiento[]> };
+/** Tres grupos (pedido de Nico, 22/11/2026): lo que vendió del todo va en "Redujo", hasta 0 %. */
+export type GrupoMovimiento = "nueva" | "aumento" | "reduccion";
+export type TrimestreMovimientos = { periodo: string; etiqueta: string; presentado: string; grupos: Record<GrupoMovimiento, FilaMovimiento[]> };
 
-const TITULOS: Record<TipoMovimiento, string> = { nueva: "Posiciones nuevas", aumento: "Aumentó", reduccion: "Redujo", salida: "Vendió todo" };
+const TITULOS: Record<GrupoMovimiento, string> = { nueva: "Posiciones nuevas", aumento: "Aumentó", reduccion: "Redujo" };
 const VISIBLES = 6;
 
 /**
@@ -35,8 +36,8 @@ export function MovimientosInversor({ trimestres }: { trimestres: TrimestreMovim
       {vacio ? (
         <p className="text-text-2">No cambió nada en este informe.</p>
       ) : (
-        <div className="grid gap-x-12 gap-y-8 lg:grid-cols-2">
-          {(["nueva", "salida", "aumento", "reduccion"] as const).map((tipo) =>
+        <div className="grid gap-x-10 gap-y-8 lg:grid-cols-3">
+          {(["nueva", "aumento", "reduccion"] as const).map((tipo) =>
             t.grupos[tipo].length ? <Grupo key={`${t.periodo}-${tipo}`} titulo={TITULOS[tipo]} filas={t.grupos[tipo]} /> : null,
           )}
         </div>

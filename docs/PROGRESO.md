@@ -181,6 +181,13 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## DolarApp ahora es ARQ, con su logo (rama `logo-arq`, 21/11/2026)
+
+- CriptoYa publica "dolarapp" en USDC, pero no estaba en nuestra lista de proveedores: salía con iniciales y el nombre armado del id. DolarApp pasó a llamarse **ARQ** el 2/3/2026 (misma empresa, DolarApp Inc., y misma app; sitio arqfinance.com).
+- Ahora es "ARQ (ex DolarApp)", billetera que opera 24/7, con el ícono oficial de su app en el App Store de Argentina ("ARQ: Finanzas Globales", id 1567954123, anotado en `assets/logos-fuente/proveedores/app-store.json`).
+
+---
+
 ## Estrategias de opciones en inglés y las más usadas (punto 27, rama `estrategias-ingles`, 21/11/2026)
 
 > Pedido: los nombres de las estrategias en inglés y sumar las que más se hacen.

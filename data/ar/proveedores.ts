@@ -85,6 +85,8 @@ export const PROVEEDORES: Proveedor[] = [
   P({ id: "peanut", nombre: "Peanut", sigla: "PN", tipo: "billetera", opera247: true }),
   // Vibrant pasó a llamarse Vesseo (misma empresa, Sunship, y misma app; verificado el 19/11/2026). El id sigue siendo el de CriptoYa.
   P({ id: "vibrant", nombre: "Vesseo (ex Vibrant)", sigla: "VE", tipo: "billetera", opera247: true, sitio: "https://vibrantapp.com" }),
+  // DolarApp pasó a llamarse ARQ el 2/3/2026 (misma empresa, DolarApp Inc., y misma app; verificado el 21/11/2026). El id sigue siendo el de CriptoYa.
+  P({ id: "dolarapp", nombre: "ARQ (ex DolarApp)", sigla: "AQ", tipo: "billetera", opera247: true, sitio: "https://www.arqfinance.com", alias: ["arq", "dolar app"] }),
   P({ id: "vitawallet", nombre: "Vita Wallet", sigla: "VW", tipo: "billetera", opera247: true }),
 
   // ───── Exchanges cripto ─────

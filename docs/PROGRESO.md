@@ -12,20 +12,29 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Ícono nuevo en la pestaña (22/11/2026)
+
+- La "r" del logotipo, blanca, con el punto de sol amarillo, sobre un cuadrado casi negro (la imagen que mandó Nico), en vez de las tres barras. Lo arma `src/lib/icono.tsx` con la misma tipografía del logo (Bricolage extra negrita): la pestaña (64 px, puntas redondeadas), el ícono de iPhone (180 px) y los del manifest para instalar la app (192, 512 y maskable).
+
+---
+
 ## Carteras de grandes inversores (punto 28, rama `inversores`, 22/11/2026)
 
 > Pedido de Nico: las carteras de grandes inversores y fondos, sobre todo los que tienen activos argentinos. Para cada uno, una dona con los logos de sus posiciones (como las infografías de la cartera de Buffett) y sus últimos movimientos (como las apps que siguen carteras). Nada en las fichas de cada acción.
 
 - **Dónde:** Mercados → **Inversores** (`/mercados/inversores`), y una página por inversor (`/mercados/inversores/buffett`).
-- **Portada:** cuánto tienen en acciones argentinas los fondos con foco en Argentina (respuesta grande); los últimos movimientos llamativos de todos (posiciones nuevas o vendidas del todo que pesan 2 % o más, y cualquier movimiento en una acción argentina); el ranking "Con foco en Argentina" (cuánto, qué % de su cartera y en qué); y "Los grandes del mundo".
+- **Portada:** cuánto tienen en acciones argentinas los fondos con foco en Argentina (respuesta grande); el ranking "Con foco en Argentina" (cuánto, qué % de su cartera y en qué); y "Los grandes del mundo".
 - **Página de cada uno:** el total, cuánto tiene en Argentina, la fecha de la cartera y de la presentación, y el enlace al informe en la SEC; la dona con el logo de cada posición adentro y el % afuera (las 10 más grandes y el resto); la lista de posiciones (con "No cotiza en Argentina" si no hay CEDEAR); y los movimientos contra el informe anterior, en tres grupos, uno al lado del otro (posiciones nuevas, aumentó y redujo; lo que vendió del todo va en "redujo", hasta 0 %; pedido de Nico), con el % antes → ahora, cuántas acciones sumó o vendió y un selector para ver informes anteriores.
 - **Fuente:** formularios 13F de la SEC, leídos de EDGAR (últimos 5 informes de cada fondo, con las enmiendas aplicadas). Solo acciones y ETF comprados; sin opciones. El CUSIP de cada acción se pasa a ticker con OpenFIGI (gratis) y se guarda en `data/inversores/cusips.json`.
 - **Quiénes:**
   - Con foco en Argentina (lista fija, `data/inversores/lista.json`): Aquamarine Financial, Helikon, Westwood Global, VR Advisory, Ping Capital, PointState (Zach Schreiber), North of South, Discovery (Rob Citrone), MAK Capital, Thiel Macro (Peter Thiel) y Fundamenta Capital (Montevideo).
-  - Se suman solos cada trimestre los fondos que más tienen en acciones argentinas (al menos US$ 10 M y el 3 % de su cartera), según el data set trimestral de 13F de la SEC: hoy Abu Dhabi Investment Council, RWC, Route One, SPX (Brasil), Cape Ann, Gemsstock, Sagil y Equinox.
-  - Los grandes del mundo: Berkshire (Warren Buffett), Pershing Square (Bill Ackman), Duquesne (Stanley Druckenmiller), Bridgewater (fundado por Ray Dalio), Oaktree (Howard Marks), ARK (Cathie Wood) y la Fundación Gates.
+  - Se suman solos cada trimestre los fondos que más tienen en acciones argentinas (al menos US$ 10 M y el 3 % de su cartera), según el data set trimestral de 13F de la SEC: hoy Abu Dhabi Investment Council, RWC, Route One, Cape Ann, Gemsstock, Sagil y Equinox.
+  - Los grandes del mundo: Berkshire (Warren Buffett), Pershing Square (Bill Ackman), Bridgewater (fundado por Ray Dalio), Oaktree (Howard Marks), ARK (Cathie Wood) y la Fundación Gates.
+  - **Excluidos** (`excluidos` en `lista.json`, no entran ni solos): Duquesne (Stanley Druckenmiller), a pedido de Nico.
+  - Sin "Últimos movimientos" en la portada (pedido de Nico): los movimientos se ven en la página de cada uno.
 - **Actualización:** `scripts/inversores.py` (Python), con un workflow que corre todos los lunes (`.github/workflows/inversores.yml`) y sube los cambios solo si los hay. Baja también el logo de las acciones nuevas que no tienen (Financial Modeling Prep, como los demás); si no hay, queda el monograma.
-- **Con datos reales (22/11/2026):** 26 inversores, casi todos con la cartera al 30/9/2026 (Pershing al 31/3 y Oaktree al 30/6: todavía no presentaron el último). Los 19 con foco en Argentina tienen **US$ 3.606 M** en acciones argentinas; el que más, Aquamarine (US$ 857 M, 44 % de su cartera: YPF, Galicia, Macro, BBVA). 831 de las 844 acciones que se muestran tienen ticker (los códigos que empiezan con letra se buscan como CINS); 566 logos nuevos (de 467 a 1.033). Se descartaron 3 logos de FMP que no servían (una foto, uno vacío). Capturas en `.shots/inversores/` (375 y 1440 px, claro y oscuro).
+- **Con datos reales (22/11/2026):** 24 inversores, casi todos con la cartera al 30/9/2026 (Pershing al 31/3 y Oaktree al 30/6: todavía no presentaron el último). Los 18 con foco en Argentina tienen **US$ 3.463 M** en acciones argentinas; el que más, Aquamarine (US$ 857 M, 44 % de su cartera: YPF, Galicia, Macro, BBVA).
+- **Fondos que informan en miles:** desde 2023 el 13F va en dólares, pero algunos siguen informando en miles (Duquesne daba US$ 4,1 M en vez de US$ 4.149 M). `corregir_miles()` lo detecta por el precio por acción que resulta (mediana de menos de US$ 2) y multiplica por 1.000, también al buscar los fondos con foco en Argentina. 831 de las 844 acciones que se muestran tienen ticker (los códigos que empiezan con letra se buscan como CINS); 566 logos nuevos (de 467 a 1.033). Se descartaron 3 logos de FMP que no servían (una foto, uno vacío). Capturas en `.shots/inversores/` (375 y 1440 px, claro y oscuro).
 - **Activos argentinos:** 19 CUSIP verificados en los propios 13F (`data/inversores/argentinos.json`): YPF, Galicia, Macro, BBVA, Supervielle, Pampa, Vista, TGS, Central Puerto, Edenor, Telecom, Loma Negra, IRSA, Cresud, Corporación América, Adecoagro, Lithium Argentina, Bioceres y el ETF ARGT.
 
 ### Lo que no entra todavía

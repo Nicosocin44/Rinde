@@ -147,9 +147,16 @@ def descubrir(argentinos: dict[str, dict], previo: dict) -> dict:
             mejor[s["CIK"]] = acc
         validos = set(mejor.values())
         arg: dict[str, Counter] = defaultdict(Counter)
+        precios: dict[str, list[float]] = defaultdict(list)
         for r in tabla("INFOTABLE.tsv"):
             if r["ACCESSION_NUMBER"] not in validos:
                 continue
+            try:
+                v, n = float(r["VALUE"] or 0), float(r["SSHPRNAMT"] or 0)
+                if v > 0 and n > 0 and len(precios[r["ACCESSION_NUMBER"]]) < 60:
+                    precios[r["ACCESSION_NUMBER"]].append(v / n)
+            except ValueError:
+                pass
             a = argentinos.get(r["CUSIP"].upper())
             if not a or (r.get("PUTCALL") or "").strip() or (r.get("SSHPRNAMTTYPE") or "SH") != "SH":
                 continue
@@ -162,6 +169,9 @@ def descubrir(argentinos: dict[str, dict], previo: dict) -> dict:
     for acc, c in arg.items():
         total = float(resumen.get(acc, {}).get("TABLEVALUETOTAL") or 0)
         en_arg = sum(c.values())
+        muestra = sorted(precios.get(acc, []))
+        if muestra and muestra[len(muestra) // 2] < 2:  # informado en miles (ver corregir_miles)
+            total, en_arg = total * 1000, en_arg * 1000
         if total <= 0 or en_arg < MINIMO_ARG or en_arg / total < MINIMO_PESO:
             continue
         s = sub[acc]
@@ -249,6 +259,16 @@ def tabla_informe(cik: int, acc: str, nombres: list[str]) -> dict[str, dict]:
     return pos
 
 
+def corregir_miles(pos: dict[str, dict]) -> dict[str, dict]:
+    """Desde 2023 el 13F va en dólares, pero algunos fondos siguen informando en miles (Duquesne, por ejemplo). Se nota
+    en el precio por acción que resulta: si la mediana da menos de US$ 2, el informe está en miles y se multiplica."""
+    precios = sorted(p["valor"] / p["acciones"] for p in pos.values() if p["acciones"] > 0 and p["valor"] > 0)
+    if precios and precios[len(precios) // 2] < 2:
+        for p in pos.values():
+            p["valor"] *= 1000
+    return pos
+
+
 def cartera_por_periodo(cik: int, lista: list[dict]) -> list[dict]:
     """Los últimos PERIODOS trimestres, con las enmiendas aplicadas (la más nueva manda)."""
     periodos = sorted({f["periodo"] for f in lista if f["periodo"]}, reverse=True)[:PERIODOS]
@@ -277,6 +297,7 @@ def cartera_por_periodo(cik: int, lista: list[dict]) -> list[dict]:
                 pos = nuevas
             usado = e
         if pos and usado:
+            corregir_miles(pos)
             salida.append({"periodo": per, "presentado": usado["presentado"], "acc": usado["acc"], "posiciones": pos})
     return salida
 
@@ -424,13 +445,15 @@ def armar(inversor: dict, periodos: list[dict], cusips: dict[str, dict], argenti
 
 def main() -> None:
     argentinos = {k: v for k, v in leer_json(DATOS / "argentinos.json", {})["activos"].items()}
-    curados = leer_json(DATOS / "lista.json", {})["inversores"]
+    lista_json = leer_json(DATOS / "lista.json", {})
+    curados = lista_json["inversores"]
+    excluidos = {e["cik"] for e in lista_json.get("excluidos", [])}
     descubiertos_path = DATOS / "descubiertos.json"
     descubiertos = leer_json(descubiertos_path, {})
     if "--sin-zip" not in sys.argv:
         descubiertos = descubrir(argentinos, descubiertos)
         escribir_json(descubiertos_path, descubiertos)
-    ciks = {c["cik"] for c in curados}
+    ciks = {c["cik"] for c in curados} | excluidos  # los excluidos no entran ni solos
     lista = [dict(c) for c in curados]
     for f in descubiertos.get("fondos", []):
         if f["cik"] not in ciks:

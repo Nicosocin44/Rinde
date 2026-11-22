@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AvisoInversores, CifraMonto, etiquetaTrimestre, fechasInforme, LogosPosiciones, MarcaInversor, montoUsd } from "@/components/modules/inversores/comun";
-import { ProviderMark } from "@/components/ui/provider-mark";
-import { inversores, textoAcciones, tickerLogo, totalArgentina, ultimo, ultimosMovimientos, type TipoMovimiento } from "@/lib/inversores/datos";
+import { inversores, totalArgentina, ultimo } from "@/lib/inversores/datos";
 import { fechaCorta, porcentaje } from "@/lib/format";
 
 export const revalidate = 3600;
@@ -11,14 +10,11 @@ export const metadata: Metadata = {
   description: "Las carteras de los fondos con más acciones argentinas y de los inversores más conocidos (Buffett, Druckenmiller, Dalio…), con sus últimas compras y ventas, según sus informes a la SEC.",
 };
 
-const VERBO: Record<TipoMovimiento, string> = { nueva: "compró", aumento: "aumentó", reduccion: "redujo", salida: "redujo" };
-
 export default function Inversores() {
   const lista = inversores();
   const foco = lista.filter((i) => i.grupo === "argentina").sort((a, b) => ultimo(b).argentina - ultimo(a).argentina);
   const mundo = lista.filter((i) => i.grupo === "mundo").sort((a, b) => ultimo(b).total - ultimo(a).total);
   const { total, inversores: cuantos, hasta } = totalArgentina();
-  const movimientos = ultimosMovimientos(10);
 
   return (
     <div className="flex flex-col gap-14 lg:gap-20">
@@ -26,34 +22,8 @@ export default function Inversores() {
         <p className="text-label">Fondos con foco en Argentina</p>
         <CifraMonto valor={total} />
         <p className="text-[17px] font-medium">Es lo que tienen en acciones argentinas los {cuantos} fondos con más peso en Argentina.</p>
-        <p className="max-w-xl text-text-2">Según el último informe de cada uno a la SEC, con la cartera hasta el {fechaCorta(hasta, true)}. Abajo, qué compraron y vendieron, y la cartera completa de cada uno.</p>
+        <p className="max-w-xl text-text-2">Según el último informe de cada uno a la SEC, con la cartera hasta el {fechaCorta(hasta, true)}. Tocá cada uno para ver su cartera completa y qué compró y vendió.</p>
       </section>
-
-      {movimientos.length > 0 && (
-        <section aria-labelledby="ultimos" className="flex flex-col gap-4">
-          <h2 id="ultimos" className="text-h3">
-            Últimos movimientos
-          </h2>
-          <ul className="flex flex-col border-t border-border">
-            {movimientos.map(({ inversor: i, tipo, mov, presentado }) => (
-              <li key={`${i.slug}-${mov.cusip}`} className="border-b border-border">
-                <Link href={`/mercados/inversores/${i.slug}`} className="-mx-2 flex items-center gap-3 rounded-[14px] px-2 py-3 hover:bg-surface-2">
-                  <MarcaInversor inversor={i} tamano={32} />
-                  <ProviderMark activo={tickerLogo(mov)} sigla={(mov.ticker ?? mov.nombre).slice(0, 2)} tamano={32} />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[15px]">
-                      <span className="font-semibold">{i.persona && !i.persona.startsWith("Fundado") ? i.persona : i.nombre}</span> {VERBO[tipo]} <span className="font-semibold">{mov.nombre}</span>
-                    </span>
-                    <span className="block text-chico text-text-2">
-                      {[textoAcciones(mov), `${porcentaje(mov.pesoAntes, 1)} → ${porcentaje(mov.pesoAhora, 1)} de su cartera`, `informado el ${fechaCorta(presentado, true)}`].filter(Boolean).join(" · ")}
-                    </span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
 
       <section aria-labelledby="foco" className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">

@@ -44,6 +44,12 @@
    "peso": 0.25823145034209233
   },
   {
+   "cik": 1536411,
+   "nombre": "Duquesne Family Office",
+   "argentina": 184316000.0,
+   "peso": 0.03537151257182116
+  },
+  {
    "cik": 1520478,
    "nombre": "RWC Asset Management",
    "argentina": 178365103.0,
@@ -54,12 +60,6 @@
    "nombre": "Route One Investment Company",
    "argentina": 137360498.0,
    "peso": 0.05515684970490158
-  },
-  {
-   "cik": 1589176,
-   "nombre": "SPX Gestao de Recursos Ltda",
-   "argentina": 135091930.0,
-   "peso": 0.15044144774548932
   },
   {
    "cik": 2088289,

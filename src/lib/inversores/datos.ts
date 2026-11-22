@@ -107,30 +107,6 @@ export function totalArgentina(): { total: number; inversores: number; hasta: st
   };
 }
 
-export type MovimientoDestacado = { inversor: Inversor; tipo: TipoMovimiento; mov: Movimiento; presentado: string };
-
-/**
- * Los movimientos más llamativos de los últimos informes: posiciones nuevas o vendidas del todo que pesan al menos el
- * 1 % de la cartera, y cualquier movimiento en una acción argentina. Los más recientes primero.
- */
-export function ultimosMovimientos(cantidad = 10): MovimientoDestacado[] {
-  const salida: MovimientoDestacado[] = [];
-  for (const i of inversores()) {
-    const t = ultimo(i);
-    if (!t.movimientos) continue;
-    for (const tipo of ["nueva", "salida", "aumento", "reduccion"] as const) {
-      for (const mov of t.movimientos[tipo]) {
-        const pesa = Math.max(mov.pesoAntes, mov.pesoAhora);
-        const llamativo = mov.argentino ? pesa >= 0.005 : (tipo === "nueva" || tipo === "salida") && pesa >= 0.02;
-        if (llamativo) salida.push({ inversor: i, tipo, mov, presentado: t.presentado });
-      }
-    }
-  }
-  return salida
-    .sort((a, b) => b.presentado.localeCompare(a.presentado) || Number(b.mov.argentino) - Number(a.mov.argentino) || Math.max(b.mov.pesoAntes, b.mov.pesoAhora) - Math.max(a.mov.pesoAntes, a.mov.pesoAhora))
-    .slice(0, cantidad);
-}
-
 /** Ticker con el que se busca el logo (las argentinas, con el de BYMA). */
 export const tickerLogo = (p: Pick<Posicion, "ticker" | "byma">) => p.byma ?? p.ticker ?? undefined;
 

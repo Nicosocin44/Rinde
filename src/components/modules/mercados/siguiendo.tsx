@@ -29,7 +29,7 @@ function enSuMoneda(p: PrecioActivo, f: Favorito): { texto: string; variacion: n
 /**
  * "★ Siguiendo" (punto 18): debajo del botón del calendario (sin la cantidad, pedido de Nico del 22/11/2026). Al tocarlo, la lista con el
  * precio y la variación de hoy de cada uno: en la compu, un panel debajo del botón; en el celular, sube desde abajo.
- * Los activos se siguen con "★ Seguir" en su ficha y se guardan en el navegador. Si no seguís ninguno, no aparece.
+ * Los activos se siguen con "★ Seguir" en su ficha y se guardan en el navegador. Si no seguís ninguno, la lista lo explica.
  */
 export function SiguiendoMercados() {
   const esDesktop = useEsDesktop();
@@ -64,8 +64,6 @@ export function SiguiendoMercados() {
     };
   }, [abierto, tickers]);
 
-  if (favoritos.length === 0) return null;
-
   const boton = (
     <button
       type="button"
@@ -77,7 +75,9 @@ export function SiguiendoMercados() {
       Siguiendo
     </button>
   );
-  const lista = <ListaSiguiendo favoritos={favoritos} precios={precios} alNavegar={() => setAbierto(false)} />;
+  // Si no sigue nada, el botón está igual y la lista explica cómo sumar activos (pedido de Nico, 22/11/2026).
+  const vacio = favoritos.length === 0;
+  const lista = vacio ? <SinSeguidos /> : <ListaSiguiendo favoritos={favoritos} precios={precios} alNavegar={() => setAbierto(false)} />;
 
   if (esDesktop) {
     return (
@@ -89,7 +89,7 @@ export function SiguiendoMercados() {
           <Popover.Content align="end" sideOffset={8} collisionPadding={16} aria-label="Tus seguidos" className="z-50 flex max-h-[min(520px,var(--radix-popover-content-available-height))] w-[380px] flex-col rounded-(--radius-card) border border-border bg-surface p-3 shadow-(--shadow-overlay) outline-none">
             <p className="px-2 pt-1 pb-2 text-label">Tus seguidos · hoy</p>
             <div className="min-h-0 overflow-y-auto overscroll-contain">{lista}</div>
-            <p className="px-2 pt-2 text-micro text-text-3">Sumá o sacá activos con «Seguir» en su ficha.</p>
+            {!vacio && <p className="px-2 pt-2 text-micro text-text-3">Sumá o sacá activos con «Seguir» en su ficha.</p>}
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>
@@ -102,6 +102,17 @@ export function SiguiendoMercados() {
         {lista}
       </Sheet>
     </>
+  );
+}
+
+/** La lista vacía: qué es y cómo se suma un activo. */
+function SinSeguidos() {
+  return (
+    <div className="flex flex-col items-center gap-2 px-4 py-8 text-center">
+      <Star aria-hidden className="size-6 text-text-3" />
+      <p className="text-[15px] font-semibold">Todavía no seguís ningún activo</p>
+      <p className="max-w-[280px] text-chico text-text-2">Tocá «★ Seguir» en la ficha de una acción, un CEDEAR, un bono o una cripto, y lo ves acá con su precio de hoy.</p>
+    </div>
   );
 }
 

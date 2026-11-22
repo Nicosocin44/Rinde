@@ -56,6 +56,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 > Correcciones de Nico: el botón sin el número de seguidos, y que cada activo se sume en la moneda que se estaba mirando (siguió BTC y se agregó en pesos).
 
 - **El botón dice solo "★ Siguiendo"**, sin "· N".
+- **El botón está siempre** (22/11/2026, pedido de Nico): si no seguís nada, la lista lo dice y explica cómo sumar un activo (antes el botón no aparecía, y en Vercel parecía que faltaba: lo seguido se guarda en cada navegador y en cada dirección por separado).
 - **Cada activo se sigue en la moneda que estás mirando** en el gráfico de la ficha ("En pesos" / "En dólares"): el gráfico la anota (`fijarMonedaVista`) y "★ Seguir" la guarda con el activo. El aviso lo dice ("Seguís Bitcoin en dólares"). Si la ficha no tiene selector, va en la moneda del activo (bonos en dólares; el resto en pesos).
 - **La lista muestra cada uno en su moneda.** El servicio de precios ahora trae también la otra moneda: CEDEARs con su especie en dólares, bonos con su especie en pesos, cripto con su precio en dólares; acciones y LECAPs pasadas al dólar MEP. La variación en la otra moneda compone la del activo con la del MEP del día. Los que se siguieron antes de este cambio quedan en la moneda del activo.
 - Probado: BTC (en dólares, como abre la ficha) → US$ 63.936; ETH en pesos → $ 3.039.900; GGAL en dólares → US$ 2,61; AL30 → US$ 47,50.

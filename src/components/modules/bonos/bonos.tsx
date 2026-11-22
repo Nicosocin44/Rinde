@@ -119,17 +119,19 @@ export function CalculadoraFlujos({ b, liquidacion }: { b: BonoUsd; liquidacion:
           Comprás {numero(r.nominales.toNumber(), 0)} nominales a US$ {numero(b.precioUsd, 2)}. TIR {porcentaje(b.tir, 2)}, si se cumplen todos los pagos.
         </p>
       </div>
-      <div>
-        <div className="grid grid-cols-[1fr_auto_auto] gap-x-4 border-b border-border pb-2 text-label">
+      {/* El encabezado va dentro de la caja con scroll (fijo arriba) para que las columnas queden alineadas con o sin barra,
+          y el margen derecho separa los números de la barra de scroll. */}
+      <div className="max-h-[360px] overflow-y-auto">
+        <div className="sticky top-0 grid grid-cols-[1fr_auto_auto] gap-x-4 border-b border-border bg-bg pr-4 pb-2 text-label">
           <span>Fecha</span>
-          <span className="text-right">Interés</span>
+          <span className="w-20 text-right">Interés</span>
           <span className="w-24 text-right">Capital</span>
         </div>
-        <ul className="max-h-[320px] overflow-y-auto">
+        <ul>
           {r.cobros.map((c) => (
-            <li key={c.fecha} className="tabular grid grid-cols-[1fr_auto_auto] gap-x-4 border-b border-border py-2 text-chico last:border-0">
+            <li key={c.fecha} className="tabular grid grid-cols-[1fr_auto_auto] gap-x-4 border-b border-border py-2 pr-4 text-chico last:border-0">
               <span className="text-text-2">{fechaCorta(c.fecha, true)}</span>
-              <span className="text-right">{numero(c.cupon.toNumber(), 2)}</span>
+              <span className="w-20 text-right">{numero(c.cupon.toNumber(), 2)}</span>
               <span className={cn("w-24 text-right", c.amortizacion.isZero() && "text-text-3")}>{numero(c.amortizacion.toNumber(), 2)}</span>
             </li>
           ))}

@@ -3,6 +3,7 @@ import { bonoPorTicker, BONOS_USD } from "@data/ar/bonos-usd";
 import { ACCIONES_GENERAL, CEDEARS, PANEL_LIDER } from "@data/ar/mercados";
 import { resolverProveedor } from "@data/ar/proveedores";
 import { cronograma, d, fechaLiquidacion, hoyAR, metricasBono, spread } from "@/lib/calculos";
+import * as binance from "../adapters/binance";
 import * as criptoya from "../adapters/criptoya";
 import * as d912 from "../adapters/data912";
 import * as yahoo from "../adapters/yahoo";
@@ -260,7 +261,13 @@ export async function cargarCripto() {
     const ahora = Date.now() / 1000;
     const resultados = await Promise.all(
       CRIPTOS.map(async (c) => {
-        const [ars, usd] = await Promise.all([criptoya.exchanges(c.id, "ars"), c.id === "btc" || c.id === "eth" ? criptoya.exchanges(c.id, "usd").catch(() => null) : null]);
+        // En dólares, BTC y ETH al precio de Binance (como la ficha); los exchanges locales en dólares quedan de respaldo.
+        const principal = c.id === "btc" || c.id === "eth";
+        const [ars, usd, global] = await Promise.all([
+          criptoya.exchanges(c.id, "ars"),
+          principal ? criptoya.exchanges(c.id, "usd").catch(() => null) : null,
+          principal ? binance.precioActual(c.simbolo as "BTC" | "ETH").catch(() => null) : null,
+        ]);
         const exchanges = Object.entries(ars)
           .filter(([id, p]) => p.totalAsk > 0 && p.totalBid > 0 && ahora - p.time < pais.frescura.criptoMaxMin * 60 && !id.endsWith("p2p"))
           .map(([id, p]) => ({ id, nombre: resolverProveedor(id).nombre, compras: p.totalAsk, vendes: p.totalBid, spread: spread(p.totalAsk, p.totalBid).toNumber(), asOf: new Date(p.time * 1000).toISOString() }));
@@ -271,7 +278,7 @@ export async function cargarCripto() {
           simbolo: c.simbolo,
           nombre: c.nombre,
           precioArs: mediana(sanos.map((e) => (e.compras + e.vendes) / 2)),
-          precioUsd: usdMed && Number.isFinite(usdMed) ? usdMed : c.id === "usdt" || c.id === "usdc" ? 1 : null,
+          precioUsd: global ? global.precio : usdMed && Number.isFinite(usdMed) ? usdMed : c.id === "usdt" || c.id === "usdc" ? 1 : null,
           exchanges: sanos,
         } satisfies Cripto;
       }),

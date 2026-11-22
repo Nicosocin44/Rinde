@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PriceChart, type SerieCompacta } from "@/components/charts/price-chart";
 import type { VelaCompacta } from "@/lib/calculos";
 import { YieldCurve } from "@/components/charts/yield-curve";
 import { SegmentedControl } from "@/components/ui/segmented";
+import { fijarMonedaVista } from "@/lib/favoritos/moneda-vista";
 import { numero, porcentaje } from "@/lib/format";
 
 export type SerieGrafico = {
@@ -30,6 +31,12 @@ export function GraficoActivo({ series }: { series: SerieGrafico[] }) {
   const validas = series.filter((s) => s.serie.length > 1);
   const [id, setId] = useState(validas[0]?.id ?? "");
   const actual = validas.find((s) => s.id === id) ?? validas[0];
+  // La moneda que se está mirando: "★ Seguir" suma el activo a Siguiendo en esa moneda.
+  const monedaVista = actual ? (actual.moneda === "US$" ? "USD" : "ARS") : null;
+  useEffect(() => {
+    fijarMonedaVista(monedaVista);
+    return () => fijarMonedaVista(null);
+  }, [monedaVista]);
   if (!actual) return null;
   return (
     <div className="flex flex-col gap-4">

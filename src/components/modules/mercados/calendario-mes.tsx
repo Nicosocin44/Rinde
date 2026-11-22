@@ -4,7 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { CalendarDays, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { AnimatePresence, m } from "motion/react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/estados";
 import { ProviderMark } from "@/components/ui/provider-mark";
 import { SegmentedControl } from "@/components/ui/segmented";
@@ -21,6 +21,13 @@ const INICIALES = ["L", "M", "M", "J", "V"];
 /** Lo que entra en cada día de la grilla (el resto, en "+N" y en el detalle del día). */
 const LOGOS_POR_DIA = 3;
 const EVENTOS_POR_DIA = 2;
+/**
+ * Alto de una semana (px) desde el que entran dos eventos escritos (+ "+N más"), o uno; más bajo, puntos. Un día con
+ * dos eventos ocupa 97 px y con uno 57 (relleno, número, eventos y borde): unos píxeles de margen para no cortar nada.
+ */
+const ALTO_DOS_EVENTOS = 102;
+const ALTO_UN_EVENTO = 62;
+type Espacio = "amplio" | "justo" | "minimo";
 
 /** Un color por tipo de evento (los categóricos del sitio, más oscuros en el tema claro): el mismo en los filtros, la grilla y el detalle. */
 const COLOR: Record<TipoEvento, string> = { dato: "bg-(--cat-1)", tasa: "bg-(--cat-3)", empresa: "bg-(--cat-4)", bonos: "bg-(--cat-2)", lecap: "bg-(--cat-2)", opciones: "bg-(--cat-5)", feriado: "bg-(--cat-6)" };
@@ -49,15 +56,16 @@ const fechaLarga = (f: string) => `${DIAS[indiceDia(f)] ?? ""} ${Number(f.slice(
 const cuantosEn = (d: DiaMes) => d.eventos.length + d.empresas.length + d.masEmpresas;
 
 /** Banderas chicas en SVG (los emojis de banderas no se ven en Windows). */
-function Bandera({ pais }: { pais: PaisEvento }) {
+function Bandera({ pais, decorativa = false }: { pais: PaisEvento; decorativa?: boolean }) {
+  const accesible = decorativa ? ({ "aria-hidden": true } as const) : ({ role: "img", "aria-label": pais === "AR" ? "Argentina" : "Estados Unidos" } as const);
   return pais === "AR" ? (
-    <svg width="14" height="10" viewBox="0 0 14 10" aria-label="Argentina" role="img" className="shrink-0 rounded-[2px] ring-1 ring-border">
+    <svg width="14" height="10" viewBox="0 0 14 10" {...accesible} className="shrink-0 rounded-[2px] ring-1 ring-border">
       <rect width="14" height="10" fill="#74acdf" />
       <rect y="3.33" width="14" height="3.34" fill="#fff" />
       <circle cx="7" cy="5" r="1.1" fill="#f6b40e" />
     </svg>
   ) : (
-    <svg width="14" height="10" viewBox="0 0 14 10" aria-label="Estados Unidos" role="img" className="shrink-0 rounded-[2px] ring-1 ring-border">
+    <svg width="14" height="10" viewBox="0 0 14 10" {...accesible} className="shrink-0 rounded-[2px] ring-1 ring-border">
       <rect width="14" height="10" fill="#fff" />
       {[0, 2, 4, 6, 8].map((y) => (
         <rect key={y} y={y} width="14" height="1" fill="#b22234" />
@@ -74,7 +82,7 @@ const Punto = ({ tipo, className }: { tipo: TipoEvento; className?: string }) =>
  * la grilla y el detalle del día al costado; en el celular, un panel que sube desde abajo con el mes en puntos y la lista
  * del día. Mismo contenido que la semana (datos, tasas, empresas, bonos y letras, opciones, feriados), con filtros.
  */
-export function CalendarioMes({ hoy, inicial, cuantos, cuando }: { hoy: string; inicial: MesISO; cuantos: number; cuando: string }) {
+export function CalendarioMes({ hoy, inicial }: { hoy: string; inicial: MesISO }) {
   const esDesktop = useEsDesktop();
   const [abierto, setAbierto] = useState(false);
   const [mes, setMes] = useState(inicial);
@@ -85,6 +93,20 @@ export function CalendarioMes({ hoy, inicial, cuantos, cuando }: { hoy: string; 
   const [pais, setPais] = useState<FiltroPais>("todos");
   const pedidos = useRef(new Set<MesISO>());
   const boton = useRef<HTMLButtonElement>(null);
+
+  // Compu: la grilla reparte el alto de la ventana entre las semanas y nunca se desliza. Cada día muestra lo que entra
+  // en su alto: con lugar, dos eventos escritos; más justo, uno y "+N"; muy justo, puntos de colores.
+  const [altoFila, setAltoFila] = useState(120);
+  const observador = useRef<ResizeObserver | null>(null);
+  const refGrilla = useCallback((el: HTMLDivElement | null) => {
+    observador.current?.disconnect();
+    if (!el) return;
+    const medir = () => setAltoFila(el.clientHeight / Math.max(1, Math.round(el.childElementCount / 5)));
+    observador.current = new ResizeObserver(medir);
+    observador.current.observe(el);
+    medir();
+  }, []);
+  const espacio: Espacio = altoFila >= ALTO_DOS_EVENTOS ? "amplio" : altoFila >= ALTO_UN_EVENTO ? "justo" : "minimo";
 
   const traer = async (destino: MesISO): Promise<boolean> => {
     if (meses[destino] || pedidos.current.has(destino) || !mesPermitido(destino, hoy)) return false;
@@ -180,11 +202,6 @@ export function CalendarioMes({ hoy, inicial, cuantos, cuando }: { hoy: string; 
       >
         <CalendarDays aria-hidden className="size-[18px]" />
         Calendario
-        {cuantos > 0 && (
-          <span className="font-medium text-text-2">
-            · {cuantos} {cuando}
-          </span>
-        )}
       </button>
 
       {/* Compu: ventana grande en el medio. */}
@@ -205,24 +222,48 @@ export function CalendarioMes({ hoy, inicial, cuantos, cuando }: { hoy: string; 
                 }}
               >
                 <m.div
-                  className="fixed inset-0 z-50 m-auto flex h-[min(800px,calc(100dvh-48px))] w-[min(1120px,calc(100vw-48px))] flex-col gap-4 rounded-(--radius-panel) bg-surface p-6 shadow-(--shadow-overlay) outline-none"
+                  // Casi todo el alto de la pantalla (12 px de borde): el mes entra entero sin deslizar.
+                  className="fixed inset-0 z-50 m-auto flex h-[min(880px,calc(100dvh-24px))] w-[min(1160px,calc(100vw-48px))] flex-col gap-3 rounded-(--radius-panel) bg-surface p-5 shadow-(--shadow-overlay) outline-none"
                   initial={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.16 } }}
                   transition={{ type: "spring", stiffness: 420, damping: 36, mass: 1 }}
                 >
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <Dialog.Title className="text-h2">{nombreMes(mes)}</Dialog.Title>
-                      {navegacion}
+                  {/* Una sola fila arriba: el mes, las flechas, los filtros y cerrar (si no entra, los filtros bajan). */}
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                    <Dialog.Title className="text-h3">{nombreMes(mes)}</Dialog.Title>
+                    {navegacion}
+                    <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Tipo de evento">
+                      {FILTROS.map((f) => (
+                        <button
+                          key={f.valor}
+                          type="button"
+                          onClick={() => setTipo(f.valor)}
+                          aria-pressed={tipo === f.valor}
+                          className={cn("flex h-9 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold whitespace-nowrap transition-colors", tipo === f.valor ? "bg-inverse text-on-inverse" : "bg-surface-2 text-text hover:bg-border")}
+                        >
+                          {f.tipo && <Punto tipo={f.tipo} />}
+                          {f.etiqueta}
+                        </button>
+                      ))}
                     </div>
-                    <Dialog.Close aria-label="Cerrar" className="flex size-10 items-center justify-center rounded-full bg-surface-2 text-text-2 hover:text-text">
+                    <SegmentedControl
+                      etiqueta="País"
+                      tamano="sm"
+                      valor={pais}
+                      onChange={setPais}
+                      opciones={[
+                        { valor: "todos", etiqueta: "Todos" },
+                        { valor: "AR", etiqueta: <Bandera pais="AR" decorativa />, ariaLabel: "Argentina" },
+                        { valor: "US", etiqueta: <Bandera pais="US" decorativa />, ariaLabel: "Estados Unidos" },
+                      ]}
+                    />
+                    <Dialog.Close aria-label="Cerrar" className="ml-auto flex size-10 items-center justify-center rounded-full bg-surface-2 text-text-2 hover:text-text">
                       <X className="size-[18px]" />
                     </Dialog.Close>
                   </div>
                   <Dialog.Description className="sr-only">Datos, tasas, resultados de empresas, pagos de bonos y vencimientos del mes. Horarios de Argentina.</Dialog.Description>
-                  {filtros}
-                  <div className="flex min-h-0 flex-1 gap-5">
+                  <div className="flex min-h-0 flex-1 gap-4">
                     <div className="flex min-w-0 flex-1 flex-col gap-2">
                       <div className="grid grid-cols-5 px-1 text-micro text-text-3">
                         {DIAS.map((d) => (
@@ -233,8 +274,8 @@ export function CalendarioMes({ hoy, inicial, cuantos, cuando }: { hoy: string; 
                         <Skeleton className="flex-1 rounded-[20px]" />
                       ) : (
                         error || (
-                          // Cada semana, al menos lo que ocupa un día con dos eventos y logos; si la pantalla es baja, la grilla se desliza en vez de cortar.
-                          <div className="grid min-h-0 flex-1 grid-cols-5 overflow-y-auto overscroll-contain rounded-[20px] border border-border" style={{ gridTemplateRows: `repeat(${semanas.length}, minmax(100px, 1fr))` }}>
+                          // Las semanas se reparten el alto (sin deslizar); cada día muestra lo que entra (ver `espacio`).
+                          <div ref={refGrilla} className="grid min-h-0 flex-1 grid-cols-5 overflow-hidden rounded-[20px] border border-border" style={{ gridTemplateRows: `repeat(${semanas.length}, minmax(0, 1fr))` }}>
                             {semanas.flatMap((s, fila) =>
                               s.map((d, k) => {
                                 const elegidoAca = d.fecha === dia?.fecha;
@@ -248,16 +289,21 @@ export function CalendarioMes({ hoy, inicial, cuantos, cuando }: { hoy: string; 
                                     aria-pressed={elegidoAca}
                                     aria-label={`${fechaLarga(d.fecha)}: ${n === 0 ? "nada importante" : n === 1 ? "1 evento" : `${n} eventos`}`}
                                     className={cn(
-                                      "flex min-h-0 min-w-0 flex-col items-stretch gap-1 overflow-hidden border-border p-2 text-left transition-colors",
+                                      "flex min-h-0 min-w-0 flex-col items-stretch gap-1 overflow-hidden border-border text-left transition-colors",
+                                      espacio === "minimo" ? "p-1.5" : "p-2",
                                       k > 0 && "border-l",
                                       fila > 0 && "border-t",
                                       d.enMes ? "hover:bg-surface-2" : "opacity-40",
                                       elegidoAca && "bg-surface-2 ring-2 ring-accent ring-inset",
                                     )}
                                   >
-                                    {/* Arriba, el número y los logos de las empresas en la misma fila; abajo, hasta dos eventos. */}
+                                    {/* Arriba, el número y los logos de las empresas en la misma fila; abajo, los eventos que entren. */}
                                     <span className="flex min-w-0 items-center justify-between gap-1">
-                                      <span className={cn("shrink-0 rounded-full px-1.5 text-[13px] leading-5 font-semibold tabular", d.fecha === hoy ? "bg-accent text-surface" : "text-text-2")}>{Number(d.fecha.slice(8, 10))}</span>
+                                      <span className="flex min-w-0 items-center gap-1">
+                                        <span className={cn("shrink-0 rounded-full px-1.5 text-[13px] leading-5 font-semibold tabular", d.fecha === hoy ? "bg-accent text-surface" : "text-text-2")}>{Number(d.fecha.slice(8, 10))}</span>
+                                        {/* Muy poco alto: los eventos, como puntos de colores al lado del número. */}
+                                        {espacio === "minimo" && d.eventos.map((e) => <Punto key={e.id} tipo={e.tipo} />)}
+                                      </span>
                                       {d.empresas.length > 0 && (
                                         <span className="flex min-w-0 items-center gap-1">
                                           {d.empresas.slice(0, LOGOS_POR_DIA).map((e) => (
@@ -267,13 +313,16 @@ export function CalendarioMes({ hoy, inicial, cuantos, cuando }: { hoy: string; 
                                         </span>
                                       )}
                                     </span>
-                                    {d.eventos.slice(0, EVENTOS_POR_DIA).map((e) => (
-                                      <span key={e.id} className="flex min-w-0 items-center gap-1.5 text-[13px] leading-4 font-semibold">
-                                        <Punto tipo={e.tipo} />
-                                        <span className="truncate">{e.etiqueta}</span>
-                                      </span>
-                                    ))}
-                                    {d.eventos.length > EVENTOS_POR_DIA && <span className="text-micro text-text-3">+{d.eventos.length - EVENTOS_POR_DIA} más</span>}
+                                    {espacio !== "minimo" &&
+                                      d.eventos.slice(0, espacio === "amplio" ? EVENTOS_POR_DIA : 1).map((e, i) => (
+                                        <span key={e.id} className="flex min-w-0 items-center gap-1.5 text-[13px] leading-4 font-semibold">
+                                          <Punto tipo={e.tipo} />
+                                          <span className="truncate">{e.etiqueta}</span>
+                                          {/* Más justo: el resto, en "+N" en la misma línea. */}
+                                          {espacio === "justo" && i === 0 && d.eventos.length > 1 && <span className="ml-auto shrink-0 text-micro font-normal text-text-3">+{d.eventos.length - 1}</span>}
+                                        </span>
+                                      ))}
+                                    {espacio === "amplio" && d.eventos.length > EVENTOS_POR_DIA && <span className="text-micro text-text-3">+{d.eventos.length - EVENTOS_POR_DIA} más</span>}
                                   </button>
                                 );
                               }),

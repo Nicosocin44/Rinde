@@ -141,10 +141,16 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 > Pedido: en vez de la semana arriba de Mercados, un botón chico "Calendario" que abra el mes entero en una ventana grande en el medio, con el mismo contenido. Benja eligió esta opción (la A) entre cuatro maquetas.
 
-- **El botón:** "Calendario · 6 esta semana", con lo que pasa en la semana (la que viene, si es fin de semana). Ocupa el lugar de la semana, que se sacó (`semana.tsx` y `semana-cliente.tsx`).
-- **En la compu:** una ventana de hasta 1120 × 800 px en el medio.
-  - La grilla del mes de lunes a viernes. En cada día, arriba el número con hasta 3 logos de las empresas que presentan resultados ("+N" si hay más), y abajo hasta 2 eventos con un punto de color ("+N más"). El resto se ve en el detalle. Hoy, resaltado.
-  - Cada semana ocupa al menos 100 px: entran las 5 semanas en una notebook de 1366 × 768. En pantallas más bajas, la grilla se desliza en vez de cortar los días.
+- **El botón:** "Calendario", con su ícono, sin números. Ocupa el lugar de la semana, que se sacó (`semana.tsx` y `semana-cliente.tsx`).
+- **En la compu:** una ventana en el medio que usa casi todo el alto de la pantalla (hasta 1160 × 880 px, con 12 px de borde). Arriba, una sola fila con el mes, las flechas, los filtros y cerrar.
+  - La grilla del mes de lunes a viernes. **Se ve siempre entera, sin deslizar:** las semanas se reparten el alto.
+  - En cada día, arriba el número con hasta 3 logos de las empresas que presentan resultados ("+N" si hay más). Hoy, resaltado.
+  - Debajo, lo que entra según el alto de cada semana:
+    - con lugar (102 px o más): dos eventos escritos con su punto de color, y "+N más";
+    - más justo: uno y "+N";
+    - muy justo (menos de 62 px): solo puntos de colores al lado del número.
+  - Todo lo demás se ve en el detalle del día.
+  - Medido día por día, sin nada cortado ni deslizable: 1440 × 900 (152 px por semana), 1366 × 768 (126), 1280 × 680 (108), 1100 × 560 (75, un evento) y 1024 × 460 (55, puntos).
   - Al costado, el detalle del día elegido en filas grandes: bandera, qué es, a qué hora y el link a su página.
   - Flechas para cambiar de mes y Esc para cerrar; al cerrar, el foco vuelve al botón.
 - **En el celular:** sube desde abajo (el mismo panel que las alertas y la cartera). El mes en números con puntos de colores, y abajo la lista del día. Los días son botones de 48 px, fáciles de tocar.
@@ -153,7 +159,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - **Datos:** los mismos de la semana (INDEC, Fed, Nasdaq, feriados, opciones de GGAL, pagos de bonos y LECAPs), semana por semana. Si una semana falla, el mes se muestra igual.
   - `/api/calendario?mes=AAAA-MM`: se puede ir un mes para atrás y dos para adelante.
   - El mes se pide recién al abrir (o al pasar el mouse por el botón), y después se trae el siguiente de fondo. La primera vez que se pide un mes tarda unos segundos; después queda en caché.
-- **Cálculo** (`src/lib/calendario/mes.ts`, 6 tests): las semanas que cubren cada mes, el mes que se muestra al abrir, los meses permitidos, los filtros y la cuenta del botón.
+- **Cálculo** (`src/lib/calendario/mes.ts`, 5 tests): las semanas que cubren cada mes, el mes que se muestra al abrir, los meses permitidos y los filtros.
 - Revisado en 1440, 1366 × 768 y 375 px, oscuro y claro.
 
 ### Para revisar

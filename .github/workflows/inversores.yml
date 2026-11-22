@@ -1,0 +1,42 @@
+# Carteras de grandes inversores (formularios 13F de la SEC) para /mercados/inversores.
+# Los informes llegan hasta 45 días después de cada trimestre (mediados de feb., may., ago. y nov.) y algunos fondos los
+# corrigen después: corre todos los lunes y solo sube algo si cambió. Se puede disparar a mano desde la pestaña Actions.
+name: Carteras de inversores
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: inversores
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar Pillow (logos)
+        run: pip install pillow
+      - name: Leer los informes 13F
+        run: python -u scripts/inversores.py
+      - name: Subir si cambió
+        run: |
+          if [ -z "$(git status --porcelain -- data/inversores public/logos/activos assets/logos-fuente/activos src/config/logos.ts)" ]; then
+            echo "Sin cambios"
+            exit 0
+          fi
+          git config user.name "rinde-datos"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/inversores public/logos/activos assets/logos-fuente/activos src/config/logos.ts
+          git commit -m "Carteras de inversores al $(TZ=America/Argentina/Buenos_Aires date +%d/%m/%Y) (automático)"
+          git pull --rebase --autostash
+          git push

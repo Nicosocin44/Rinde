@@ -34,9 +34,17 @@ describe("Yahoo: última rueda de un índice argentino", () => {
     expect(r?.hora).toBe(new Date(t(20, 11, 10) * 1000).toISOString());
   });
   it("antes de que abra el mercado, muestra la rueda anterior completa", () => {
-    const ts = [t(18, 16, 55), t(19, 11), t(19, 17), t(20, 9), t(20, 10)];
-    const r = ultimaRueda(ts, [90, 92, 95, 95, 95], rueda);
+    const ts = [t(18, 11), t(18, 16, 55), t(19, 11), t(19, 17), t(20, 9), t(20, 10)];
+    const r = ultimaRueda(ts, [89, 90, 92, 95, 95, 95], rueda);
     expect(r).toMatchObject({ previo: 90, puntos: [92, 95], ultimo: 95 });
+  });
+  it("un domingo ignora los puntos quietos que publica Yahoo y usa los cierres oficiales (después de la rueda)", () => {
+    // Jueves 19 y viernes 20 con rueda; el cierre oficial llega a las 19 h. Domingo 22: puntos quietos con el cierre del viernes.
+    const ts = [t(19, 11), t(19, 17), t(19, 19), t(20, 3), t(20, 11), t(20, 17), t(20, 19), t(22, 11, 5), t(22, 11, 20)];
+    const v = [100, 101, 100.5, 100.5, 99, 98, 98.5, 98.5, 98.5];
+    const r = ultimaRueda(ts, v, rueda);
+    expect(r).toMatchObject({ previo: 100.5, puntos: [99, 98, 98.5], ultimo: 98.5 });
+    expect(r?.variacion).toBeCloseTo(98.5 / 100.5 - 1, 10);
   });
   it("sin una rueda anterior para comparar, no hay dato", () => {
     expect(ultimaRueda([t(20, 11), t(20, 12)], [1, 2], rueda)).toBeNull();

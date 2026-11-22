@@ -12,7 +12,7 @@ const graficoSchema = z.object({
     result: z
       .array(
         z.object({
-          meta: z.object({ chartPreviousClose: z.number().optional(), previousClose: z.number().optional(), regularMarketPrice: z.number().optional() }),
+          meta: z.object({ chartPreviousClose: z.number().optional(), previousClose: z.number().optional(), regularMarketPrice: z.number().optional(), regularMarketTime: z.number().optional() }),
           timestamp: z.array(z.number()).optional(),
           indicators: z.object({ quote: z.array(z.object({ close: z.array(z.number().nullable()).optional() })) }),
         }),
@@ -56,28 +56,39 @@ export type RuedaDelDia = RecorridoDelDia & {
 };
 
 /**
- * Se queda con la última rueda (de `abre` a `cierra`, en la hora de `utcOffset`) que tenga al menos dos datos, y toma
- * como base el último dato de la rueda anterior. Hace falta para los índices de BYMA en Yahoo: la serie de 5 minutos
- * trae todo el día de Nueva York, con el valor quieto antes y después de la rueda. Puro (se testea aparte).
+ * La última rueda de un índice de BYMA en la serie de 5 minutos de Yahoo, que trae todo el día de Nueva York:
+ * - Cuenta como rueda un día hábil con al menos dos datos distintos entre `abre` y `cierra` (Yahoo también publica
+ *   puntos los fines de semana y feriados, todos con el último cierre: se descartan).
+ * - El cierre oficial de cada día se publica un rato después de la rueda (queda quieto hasta el día siguiente): es el
+ *   último dato del día, no el de las 17 h.
+ * - La base es el cierre oficial de la rueda anterior. Puro (se testea aparte).
  */
 export function ultimaRueda(timestamps: number[], cierres: (number | null)[], { abre, cierra, utcOffset }: { abre: number; cierra: number; utcOffset: number }): RuedaDelDia | null {
-  const porDia = new Map<string, { t: number; v: number }[]>();
+  type Punto = { t: number; v: number };
+  const porDia = new Map<string, { rueda: Punto[]; ultimo: Punto }>();
   timestamps.forEach((t, i) => {
     const v = cierres[i];
     if (typeof v !== "number" || !(v > 0)) return;
     const local = new Date((t + utcOffset * 3600) * 1000);
     const hora = local.getUTCHours() + local.getUTCMinutes() / 60;
-    if (hora < abre || hora > cierra) return;
     const dia = local.toISOString().slice(0, 10);
-    porDia.set(dia, [...(porDia.get(dia) ?? []), { t, v }]);
+    const d = porDia.get(dia) ?? { rueda: [], ultimo: { t, v } };
+    if (t >= d.ultimo.t) d.ultimo = { t, v };
+    if (hora >= abre && hora <= cierra) d.rueda.push({ t, v });
+    porDia.set(dia, d);
   });
-  const dias = [...porDia.keys()].sort();
-  const k = dias.findLastIndex((d) => porDia.get(d)!.length >= 2);
-  if (k < 1) return null;
-  const rueda = porDia.get(dias[k]!)!;
-  const previo = porDia.get(dias[k - 1]!)!.at(-1)!.v;
-  const ultimo = rueda.at(-1)!;
-  return { previo, puntos: rueda.map((p) => p.v), ultimo: ultimo.v, variacion: ultimo.v / previo - 1, hora: new Date(ultimo.t * 1000).toISOString() };
+  const habil = (dia: string) => ![0, 6].includes(new Date(`${dia}T12:00:00Z`).getUTCDay());
+  const dias = [...porDia.keys()].sort().filter((dia) => {
+    const r = porDia.get(dia)!.rueda;
+    return habil(dia) && r.length >= 2 && new Set(r.map((p) => p.v)).size >= 2;
+  });
+  if (dias.length < 2) return null;
+  const hoy = porDia.get(dias.at(-1)!)!;
+  const previo = porDia.get(dias.at(-2)!)!.ultimo.v;
+  const puntos = hoy.rueda.map((p) => p.v);
+  // Si el cierre oficial llegó después de la rueda, la línea termina en él.
+  if (hoy.ultimo.t > hoy.rueda.at(-1)!.t && hoy.ultimo.v !== puntos.at(-1)) puntos.push(hoy.ultimo.v);
+  return { previo, puntos, ultimo: hoy.ultimo.v, variacion: hoy.ultimo.v / previo - 1, hora: new Date(hoy.ultimo.t * 1000).toISOString() };
 }
 
 /**
@@ -94,10 +105,13 @@ export async function ruedaIndiceAr(simbolo: string, rueda: { abre: number; cier
   const res = r.chart.result?.[0];
   if (!res?.timestamp) return null;
   const salida = ultimaRueda(res.timestamp, res.indicators.quote[0]?.close ?? [], rueda);
-  // El último precio de la serie de 5 minutos puede tener hasta 5 minutos: el de `meta` es el del momento.
+  // Durante la rueda, el último punto de 5 minutos puede tener hasta 5 minutos: el precio de `meta` es el del momento.
+  // Solo si es del mismo día que la rueda (un domingo, `meta` trae el cierre del viernes con la hora del domingo).
   const ahora = res.meta.regularMarketPrice;
-  if (salida && ahora && ahora > 0 && Date.now() - new Date(salida.hora).getTime() < 6 * 3600_000) {
-    return { ...salida, ultimo: ahora, variacion: ahora / salida.previo - 1, puntos: [...salida.puntos.slice(0, -1), ahora] };
+  const horaAhora = res.meta.regularMarketTime;
+  const diaAr = (ms: number) => new Date(ms + rueda.utcOffset * 3600_000).toISOString().slice(0, 10);
+  if (salida && ahora && ahora > 0 && horaAhora && horaAhora * 1000 > new Date(salida.hora).getTime() && diaAr(horaAhora * 1000) === diaAr(new Date(salida.hora).getTime())) {
+    return { ...salida, ultimo: ahora, variacion: ahora / salida.previo - 1, puntos: [...salida.puntos.slice(0, -1), ahora], hora: new Date(horaAhora * 1000).toISOString() };
   }
   return salida;
 }

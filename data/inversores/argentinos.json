@@ -1,0 +1,24 @@
+{
+  "_nota": "Acciones y ETF argentinos que se informan en los 13F: CUSIP → ticker en EE.UU. y en BYMA. CUSIP sacados de los propios 13F (data set de la SEC, informes presentados de junio a agosto de 2026) y verificados con el nombre del emisor.",
+  "activos": {
+    "984245100": { "ticker": "YPF", "byma": "YPFD", "nombre": "YPF" },
+    "399909100": { "ticker": "GGAL", "byma": "GGAL", "nombre": "Grupo Financiero Galicia" },
+    "05961W105": { "ticker": "BMA", "byma": "BMA", "nombre": "Banco Macro" },
+    "058934100": { "ticker": "BBAR", "byma": "BBAR", "nombre": "BBVA Argentina" },
+    "40054A108": { "ticker": "SUPV", "byma": "SUPV", "nombre": "Grupo Supervielle" },
+    "697660207": { "ticker": "PAM", "byma": "PAMP", "nombre": "Pampa Energía" },
+    "92837L109": { "ticker": "VIST", "byma": "VIST", "nombre": "Vista Energy" },
+    "893870204": { "ticker": "TGS", "byma": "TGSU2", "nombre": "Transportadora de Gas del Sur" },
+    "155038201": { "ticker": "CEPU", "byma": "CEPU", "nombre": "Central Puerto" },
+    "29244A102": { "ticker": "EDN", "byma": "EDN", "nombre": "Edenor" },
+    "879273209": { "ticker": "TEO", "byma": "TECO2", "nombre": "Telecom Argentina" },
+    "54150E104": { "ticker": "LOMA", "byma": "LOMA", "nombre": "Loma Negra" },
+    "450047303": { "ticker": "IRS", "byma": "IRSA", "nombre": "IRSA" },
+    "226406106": { "ticker": "CRESY", "byma": "CRES", "nombre": "Cresud" },
+    "L1995B107": { "ticker": "CAAP", "byma": null, "nombre": "Corporación América Airports" },
+    "L00849106": { "ticker": "AGRO", "byma": "AGRO", "nombre": "Adecoagro" },
+    "H5012F103": { "ticker": "LAR", "byma": null, "nombre": "Lithium Argentina" },
+    "G1117K114": { "ticker": "BIOX", "byma": null, "nombre": "Bioceres Crop Solutions" },
+    "37950E259": { "ticker": "ARGT", "byma": null, "nombre": "Global X MSCI Argentina ETF" }
+  }
+}

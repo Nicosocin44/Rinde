@@ -4,5 +4,5 @@ export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
 export default function AppleIcon() {
-  return icono(180, 0.2);
+  return icono(180);
 }

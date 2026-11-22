@@ -11,15 +11,19 @@ import { useToast } from "@/components/ui/toast";
 import { guardarAlerta, listarAlertas } from "@/lib/alertas/almacen";
 import { describir, LIMITE_GRATIS, type Alerta } from "@/lib/alertas/evaluar";
 import { alCambiarFavoritos, dejarDeSeguir, listarFavoritos, seguir } from "@/lib/favoritos/almacen";
+import { useMonedaVista } from "@/lib/favoritos/moneda-vista";
 import { dolares, pesos } from "@/lib/format";
 
 /**
  * "★ Seguir" (punto 18): marca el activo para verlo en Mercados, en "★ Siguiendo". Se guarda en el navegador. Antes de
  * leer el navegador el botón queda deshabilitado, para no mostrar "Seguir" a alguien que ya lo sigue.
+ * Se sigue en la moneda que la persona está mirando en el gráfico ("En pesos" / "En dólares"); si la ficha no tiene
+ * selector, en `moneda` (la del activo).
  */
-export function SeguirActivo({ ticker, nombre }: { ticker: string; nombre: string }) {
+export function SeguirActivo({ ticker, nombre, moneda }: { ticker: string; nombre: string; moneda: "ARS" | "USD" }) {
   const toast = useToast();
   const router = useRouter();
+  const vista = useMonedaVista() ?? moneda;
   const [sigo, setSigo] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -38,8 +42,8 @@ export function SeguirActivo({ ticker, nombre }: { ticker: string; nombre: strin
       await dejarDeSeguir(ticker);
       toast(`Dejaste de seguir ${nombre}.`);
     } else {
-      await seguir({ ticker, nombre });
-      toast(`Seguís ${nombre}: lo ves en Mercados, en Siguiendo.`, { etiqueta: "Ver", onClick: () => router.push("/mercados") });
+      await seguir({ ticker, nombre, moneda: vista });
+      toast(`Seguís ${nombre} en ${vista === "USD" ? "dólares" : "pesos"}: lo ves en Mercados, en Siguiendo.`, { etiqueta: "Ver", onClick: () => router.push("/mercados") });
     }
   };
 

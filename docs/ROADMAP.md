@@ -58,6 +58,7 @@ En este orden de prioridad (si el tiempo no alcanza, lo de abajo queda para desp
 - **Resumen semanal con IA** (en el sitio y por newsletter), con las fuentes citadas.
 - Importación de cartera desde brokers con API (ej. IOL) y CSV de los brokers grandes.
 - Mercados globales con un proveedor con licencia.
+- **Carteras de grandes inversores** (`/mercados/inversores`, hecho el 22/11/2026 con los 13F de la SEC). Falta: carteras de los FCI argentinos (la CNV las recibe por semana pero no las publica en un formato abierto), bonos argentinos en fondos de EE.UU. (formulario N-PORT), operaciones de congresistas de EE.UU. (fuente con licencia) y aviso cuando un inversor compre o venda un activo argentino.
 
 ---
 

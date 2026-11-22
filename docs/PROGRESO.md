@@ -12,6 +12,36 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Carteras de grandes inversores (punto 28, rama `inversores`, 22/11/2026)
+
+> Pedido de Nico: las carteras de grandes inversores y fondos, sobre todo los que tienen activos argentinos. Para cada uno, una dona con los logos de sus posiciones (como las infografías de la cartera de Buffett) y sus últimos movimientos (como las apps que siguen carteras). Nada en las fichas de cada acción.
+
+- **Dónde:** Mercados → **Inversores** (`/mercados/inversores`), y una página por inversor (`/mercados/inversores/buffett`).
+- **Portada:** cuánto tienen en acciones argentinas los fondos con foco en Argentina (respuesta grande); los últimos movimientos llamativos de todos (posiciones nuevas o vendidas del todo que pesan 2 % o más, y cualquier movimiento en una acción argentina); el ranking "Con foco en Argentina" (cuánto, qué % de su cartera y en qué); y "Los grandes del mundo".
+- **Página de cada uno:** el total, cuánto tiene en Argentina, la fecha de la cartera y de la presentación, y el enlace al informe en la SEC; la dona con el logo de cada posición adentro y el % afuera (las 10 más grandes y el resto); la lista de posiciones (con "No cotiza en Argentina" si no hay CEDEAR); y los movimientos contra el informe anterior, agrupados (nuevas, vendió todo, aumentó, redujo), con el % antes → ahora y un selector para ver informes anteriores.
+- **Fuente:** formularios 13F de la SEC, leídos de EDGAR (últimos 5 informes de cada fondo, con las enmiendas aplicadas). Solo acciones y ETF comprados; sin opciones. El CUSIP de cada acción se pasa a ticker con OpenFIGI (gratis) y se guarda en `data/inversores/cusips.json`.
+- **Quiénes:**
+  - Con foco en Argentina (lista fija, `data/inversores/lista.json`): Aquamarine Financial, Helikon, Westwood Global, VR Advisory, Ping Capital, PointState (Zach Schreiber), North of South, Discovery (Rob Citrone), MAK Capital, Thiel Macro (Peter Thiel) y Fundamenta Capital (Montevideo).
+  - Se suman solos cada trimestre los fondos que más tienen en acciones argentinas (al menos US$ 10 M y el 3 % de su cartera), según el data set trimestral de 13F de la SEC: hoy Abu Dhabi Investment Council, RWC, Route One, SPX (Brasil), Cape Ann, Gemsstock, Sagil y Equinox.
+  - Los grandes del mundo: Berkshire (Warren Buffett), Pershing Square (Bill Ackman), Duquesne (Stanley Druckenmiller), Bridgewater (fundado por Ray Dalio), Oaktree (Howard Marks), ARK (Cathie Wood) y la Fundación Gates.
+- **Actualización:** `scripts/inversores.py` (Python), con un workflow que corre todos los lunes (`.github/workflows/inversores.yml`) y sube los cambios solo si los hay. Baja también el logo de las acciones nuevas que no tienen (Financial Modeling Prep, como los demás); si no hay, queda el monograma.
+- **Con datos reales (22/11/2026):** 26 inversores, casi todos con la cartera al 30/9/2026 (Pershing al 31/3 y Oaktree al 30/6: todavía no presentaron el último). Los 19 con foco en Argentina tienen **US$ 3.606 M** en acciones argentinas; el que más, Aquamarine (US$ 857 M, 44 % de su cartera: YPF, Galicia, Macro, BBVA). 831 de las 844 acciones que se muestran tienen ticker (los códigos que empiezan con letra se buscan como CINS); 566 logos nuevos (de 467 a 1.033). Se descartaron 3 logos de FMP que no servían (una foto, uno vacío). Capturas en `.shots/inversores/` (375 y 1440 px, claro y oscuro).
+- **Activos argentinos:** 19 CUSIP verificados en los propios 13F (`data/inversores/argentinos.json`): YPF, Galicia, Macro, BBVA, Supervielle, Pampa, Vista, TGS, Central Puerto, Edenor, Telecom, Loma Negra, IRSA, Cresud, Corporación América, Adecoagro, Lithium Argentina, Bioceres y el ETF ARGT.
+
+### Lo que no entra todavía
+- **FCI argentinos:** la CAFCI cerró su API ("Route not allowed") y la CNV recibe las carteras semanales de los fondos (RG 961/2023) pero no las publica en un formato abierto; cada administradora las sube en PDF a su sitio.
+- **Burry (Scion):** cerró el fondo; su último 13F es del 30/9/2025.
+- **Congresistas de EE.UU. (Pelosi):** son declaraciones en PDF ante el Congreso; los datos ordenados los venden terceros con licencia.
+
+### Decisiones para revisar
+1. **Nombres de los fondos, no de las personas,** salvo cuando quién está atrás es público y seguro (Buffett, Ackman, Druckenmiller, Marks, Wood, Gates, Citrone, Thiel, Schreiber; Bridgewater dice "Fundado por Ray Dalio"). De Aquamarine, Ping o Helikon la SEC no lo dice.
+2. **Sin fotos:** monogramas con las iniciales del fondo.
+3. **Los bancos enormes** (JPMorgan, Fidelity, Morgan Stanley) tienen mucho en Argentina en dólares, pero es menos del 1 % de lo que manejan: no entran (piso del 3 %).
+4. **El 13F llega hasta 45 días tarde** y no muestra bonos ni cortos: lo dice cada página, con las dos fechas (cartera y presentación).
+5. **Abu Dhabi Investment Council** es un fondo soberano: entra solo por tener el 26 % de su cartera de 13F en Vista.
+
+---
+
 ## Rediseño: la home como una historia (rama `rediseno`, sin subir todavía)
 
 > Pedido de los fundadores (17/11/2026): llevar el diseño al nivel de moahu.com.ar, Apple y Whoop. La parte de producto de la home se cuenta como una historia por secciones, con una idea por sección y componentes reales en modo demo.

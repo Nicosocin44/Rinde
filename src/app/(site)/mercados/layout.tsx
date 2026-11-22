@@ -9,7 +9,7 @@ export default function MercadosLayout({ children }: { children: React.ReactNode
     <>
       <PageHeader
         titulo="Mercados"
-        bajada="CEDEARs, acciones argentinas, bonos en dólares, cripto y opciones de GGAL."
+        bajada="CEDEARs, acciones argentinas, bonos en dólares, cripto, opciones de GGAL y las carteras de los grandes inversores."
         acciones={
           // En la compu, "Siguiendo" debajo de "Calendario"; en el celular, uno al lado del otro.
           <div className="flex flex-wrap gap-2 lg:flex-col lg:items-end">
@@ -27,6 +27,7 @@ export default function MercadosLayout({ children }: { children: React.ReactNode
           { href: "/mercados/cripto", label: "Cripto" },
           { href: "/mercados/opciones", label: "Opciones" },
           { href: "/mercados/comparar", label: "Comparar" },
+          { href: "/mercados/inversores", label: "Inversores" },
         ]}
       />
       <div className="pt-8 lg:pt-12">{children}</div>

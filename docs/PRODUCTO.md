@@ -65,6 +65,7 @@ El nicho es **el núcleo de valor**, no el techo. Nadie entra buscando "TEM de L
 /pesos                  Comparador · Plazo fijo · Billeteras y cuentas · FCI money market · Caución · LECAPs y BONCAPs · CER · Simulador
 /mercados/bonos         Soberanos USD · ONs · Calculadora de flujos
 /mercados               CEDEARs · Acciones · Cripto · Global
+/mercados/inversores    Carteras de grandes inversores (13F de la SEC): con foco en Argentina y los grandes del mundo; ficha de cada uno con su cartera y sus movimientos
 /calculadoras           Interés compuesto · Jubilación y metas · Plazo fijo · Conversor de tasas · Inflación · Sueldo en dólares
 /cartera                Resumen · Posiciones · Movimientos · Rendimiento · Ideas
 /alertas

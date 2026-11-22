@@ -213,6 +213,16 @@ async function nombresFaltantes(panel: Panel, conocidos: Record<string, unknown>
   }
 }
 
+/**
+ * Todos los CEDEARs que lista BYMA (data912), hayan operado hoy o no: para saber si una acción de EE.UU. se puede comprar
+ * acá (las carteras de /mercados/inversores). Sin las especies en dólares o cable.
+ */
+export async function cargarTickersCedear(): Promise<Set<string>> {
+  const panel = await d912.panel("arg_cedears").catch(() => [] as Panel);
+  const todos = new Set(panel.map((p) => p.symbol));
+  return new Set([...todos].filter((t) => !esEspecieDerivada(t, todos)));
+}
+
 export async function cargarMercados() {
   return conRespaldo<{ cedears: Cedear[]; acciones: Accion[]; mepPromedio: number | null; indices: IndiceEEUU[] }>("mercados", [FUENTES.data912], async () => {
     const [cedears, mep, ccl, acciones] = await Promise.all([

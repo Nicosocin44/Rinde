@@ -44,6 +44,7 @@ const RUTAS_POR_DEFECTO = [
   "/mercados/opciones/tasas",
   "/mercados/opciones/estrategias",
   "/mercados/comparar?t=MELI,GGAL,SPY,BTC",
+  "/mercados/brokers",
   "/alertas",
   "/metodologia",
   "/aprender",

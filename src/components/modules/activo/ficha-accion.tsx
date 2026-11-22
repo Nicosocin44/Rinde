@@ -17,6 +17,7 @@ import { BalancesEmpresa } from "./balances";
 import { AvisoActivo, SeguirActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
+import { RankingBrokers } from "@/components/modules/brokers/ranking-brokers";
 
 /** Ficha de un CEDEAR o una acción argentina. */
 export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHoy: number | null; asOf: string; estado: EstadoDato }) {
@@ -237,6 +238,8 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
           <BalancesEmpresa ticker={a.ticker} tipo={a.tipo} sector={a.sector} nombre={nombre} precioAccionUsd={a.tipo === "cedear" ? (a.subyacente?.precio ?? null) : null} precioAccionArs={a.tipo === "accion" ? a.precio : null} />
         </Suspense>
       )}
+
+      <RankingBrokers clase="acciones" titulo={`Dónde comprar ${a.ticker}`} />
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
         <NoticiasActivo titulo={`Noticias de ${nombre}`} noticias={a.noticias} vacio={`No encontramos noticias de ${nombre} ni de su mercado en los últimos días.`} />

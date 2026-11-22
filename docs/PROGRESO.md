@@ -137,6 +137,41 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Dónde comprar y las comisiones de los brokers (punto 28, rama `brokers-comisiones`, 22/11/2026)
+
+> Pedido de Benja: que, como en el dólar, en acciones, CEDEARs, bonos y opciones aparezcan los brokers para comprar, con sus comisiones. De cuatro ideas dibujadas eligió dos: "Dónde comprar" en cada ficha y una página con todas las comisiones.
+
+- **"Dónde comprar {ticker}" en cada ficha** de acción, CEDEAR, bono y letra, y "Dónde operar opciones" en Opciones. Los brokers van del más barato al más caro para el monto que pongas, con lo que te cobra cada uno, IVA incluido.
+- **Mercados → Brokers** (`/mercados/brokers`), solapa nueva. Muestra:
+  - las comisiones por tipo (acciones y CEDEARs, bonos, letras y opciones);
+  - el monto, y el plazo para las letras;
+  - el plan que se tomó de cada tarifario, la custodia, el link al tarifario y las notas (comisiones más bajas por volumen, planes pagos).
+- **Los datos** (`data/ar/comisiones-brokers.ts`): los tarifarios oficiales de cada broker, leídos el 22/11/2026, con su link. Es lo que paga una persona que opera online y recién abre la cuenta.
+
+  | Broker | Acciones y CEDEARs | Bonos | Letras | Opciones |
+  |---|---|---|---|---|
+  | Cocos | 0,45 % + IVA | 0,45 % | 1,5 % anual | 1 % + IVA |
+  | IOL | 0,5 % + IVA | 0,5 % | 0,20 % | 0,5 % + IVA |
+  | Balanz | hasta 0,5 % + IVA | hasta 0,5 % | hasta 0,10 % | hasta 0,5 % + IVA |
+  | Bull Market | 0,5 % + IVA | 0,5 % | 0,25 % | 0,5 % + IVA |
+  | PPI | 0,6 % + IVA | 0,6 % | 0,20 % | 1 % + IVA |
+
+  Allaria, Adcap y SBS no están: no encontramos su tarifario publicado (el PDF de Allaria ya no existe). Bull Market se sumó a los proveedores; todavía sin logo.
+- **Cálculo** (`src/lib/calculos/comisiones.ts`, 6 tests):
+  - lo que cobra cada broker es monto × comisión × (1 + IVA), con IVA solo en acciones, CEDEARs y opciones;
+  - las letras de Cocos se prorratean por los días que le quedan;
+  - los tests usan los tarifarios cargados, así que también avisan si un dato queda mal.
+- **Los derechos de mercado de BYMA no entran en el orden:** son iguales en todos los brokers. Van como nota, con los valores que publican los tarifarios. No coinciden del todo entre sí (IOL: 0,05 % + IVA en acciones; Bull Market: 0,070 %) y no pudimos confirmar el de BYMA.
+- Sección "Comisiones de los brokers" en Metodología. Revisado en 1366 px (oscuro) y 375 px (claro).
+- **De paso, Comparar deja de ser una solapa** (pedido de Benja): se llega desde el botón "Comparar" de la ficha de cada activo. La página sigue en `/mercados/comparar` y ahí ninguna solapa queda marcada (`sinSolapa` en `SectionTabs`). Las solapas de Mercados quedan: CEDEARs, Acciones, Bonos, Cripto, Opciones y Brokers.
+
+### Para revisar
+1. **Actualizar los tarifarios cada tanto:** los brokers los cambian. Cada uno tiene su fecha de lectura y su link.
+2. **"Hasta" de Balanz:** su tarifario publica máximos, y se toman esos.
+3. **Cocos y las letras:** cobra 1,5 % anual prorrateado. Para una letra corta es barato y para una larga es el más caro, por eso el orden cambia según el plazo.
+
+---
+
 ## Vuelve "Siguiendo", como un botón debajo del calendario (punto 18, rama `siguiendo`, 22/11/2026)
 
 > El 19/11 se sacó la lista de Siguiendo porque arriba bajaba la página y al costado tapaba. Benja propuso ponerla debajo del calendario; de las opciones dibujadas (fila con los seguidos, botón, franja, filtro en las tablas) eligió el botón.

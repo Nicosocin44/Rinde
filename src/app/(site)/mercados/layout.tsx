@@ -26,8 +26,10 @@ export default function MercadosLayout({ children }: { children: React.ReactNode
           { href: "/mercados/bonos", label: "Bonos" },
           { href: "/mercados/cripto", label: "Cripto" },
           { href: "/mercados/opciones", label: "Opciones" },
-          { href: "/mercados/comparar", label: "Comparar" },
+          { href: "/mercados/brokers", label: "Brokers" },
         ]}
+        // Comparar no tiene solapa: se llega desde el botón "Comparar" de la ficha de cada activo.
+        sinSolapa={["/mercados/comparar"]}
       />
       <div className="pt-8 lg:pt-12">{children}</div>
       <RefrescoEnVivo />

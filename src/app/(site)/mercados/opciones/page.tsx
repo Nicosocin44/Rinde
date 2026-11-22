@@ -1,5 +1,6 @@
 import { HISTORIAL_OPCIONES } from "@data/historico/opciones";
 import type { Metadata } from "next";
+import { RankingBrokers } from "@/components/modules/brokers/ranking-brokers";
 import { VistaCadena } from "@/components/modules/opciones/cadena";
 import { obtenerOpciones } from "@/lib/data";
 import { armarHistorial } from "@/lib/opciones/historial";
@@ -15,5 +16,11 @@ export default async function OpcionesCadena() {
   // El error se muestra en el layout.
   if (!r.ok) return null;
   const vigentes = new Set(r.data.vencimientos.flatMap((v) => v.filas.flatMap((f) => [f.call?.simbolo, f.put?.simbolo].filter((x): x is string => !!x))));
-  return <VistaCadena cadena={r.data} historial={armarHistorial(HISTORIAL_OPCIONES, r.data.subyacente.ticker, vigentes)} />;
+  return (
+    <>
+      <VistaCadena cadena={r.data} historial={armarHistorial(HISTORIAL_OPCIONES, r.data.subyacente.ticker, vigentes)} />
+      {/* Cuánto cobra cada broker por operar opciones (sobre la prima). */}
+      <RankingBrokers clase="opciones" titulo="Dónde operar opciones" />
+    </>
+  );
 }

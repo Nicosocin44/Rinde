@@ -81,12 +81,14 @@ export function SiguiendoMercados() {
 
   if (esDesktop) {
     return (
-      <Popover.Root open={abierto} onOpenChange={setAbierto}>
+      // modal: mientras la lista está abierta la página no se mueve (como el calendario); si no, el panel se iba con la
+      // página y la rueda, al llegar al final de la lista, seguía bajando la página de atrás.
+      <Popover.Root open={abierto} onOpenChange={setAbierto} modal>
         <Popover.Trigger asChild>{boton}</Popover.Trigger>
         <Popover.Portal>
           <Popover.Content align="end" sideOffset={8} collisionPadding={16} aria-label="Tus seguidos" className="z-50 flex max-h-[min(520px,var(--radix-popover-content-available-height))] w-[380px] flex-col rounded-(--radius-card) border border-border bg-surface p-3 shadow-(--shadow-overlay) outline-none">
             <p className="px-2 pt-1 pb-2 text-label">Tus seguidos · hoy</p>
-            <div className="min-h-0 overflow-y-auto">{lista}</div>
+            <div className="min-h-0 overflow-y-auto overscroll-contain">{lista}</div>
             <p className="px-2 pt-2 text-micro text-text-3">Sumá o sacá activos con «Seguir» en su ficha.</p>
           </Popover.Content>
         </Popover.Portal>

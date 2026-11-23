@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: lunes 23/11/2026, cuánto subió o bajó entre dos fechas en el gráfico (rama `grafico-tramo`).
+> Escrito para los fundadores. Última actualización: lunes 23/11/2026, cuánto subió o bajó entre dos fechas en el gráfico (rama `grafico-tramo`) y el interruptor de las alertas (rama `alertas-interruptor`).
 
 ## Cómo verlo
 
@@ -26,6 +26,16 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - **Ayuda:** una línea chica debajo del gráfico: "Arrastrá sobre el gráfico…" en la compu y "Tocá el gráfico con dos dedos…" en el celular.
 - **Cálculo:** `src/lib/calculos/tramo.ts` (puro, con decimal.js) y `tests/tramo.test.ts` (5 pruebas).
 - Probado con el mouse en la compu y con dos dedos simulados en 375 px: suba, baja, velas, brecha y dólar MEP. Las cuentas cierran ($ 26.880 − $ 6.690 = $ 20.190 → +33,14 %).
+
+---
+
+## El interruptor de las alertas, en su lugar (rama `alertas-interruptor`, 23/11/2026)
+
+> Benja: en Alertas, el círculo blanco del interruptor se salía del óvalo por la derecha.
+
+- **Por qué:** el círculo no decía desde dónde arrancaba (le faltaba `left-0`). Dentro de un `<button>` el contenido va centrado, así que arrancaba del medio del óvalo y, encendido, se salía 19 px.
+- **Arreglo:** `left-0` en el círculo (`src/components/modules/alertas/vista.tsx`). Ahora queda a 3 px de cada borde, encendido y apagado. También en el de "¿Dónde rinde más?" (`pesos/donde-rinde.tsx`): ahí andaba porque no es un botón, pero así no se rompe si algún día lo es.
+- Revisado con alertas de prueba (encendida y apagada) y tocando cada interruptor.
 
 ---
 

@@ -12,9 +12,11 @@ export type Solapa = { href: string; label: string };
  * Solapas de sección: control segmentado tipo Apple, pegajoso debajo de la nav, con indicador que se desliza.
  * Son rutas reales (/pesos/lecaps): se pueden compartir, indexar y volver atrás.
  */
-export function SectionTabs({ solapas, etiqueta }: { solapas: Solapa[]; etiqueta: string }) {
+export function SectionTabs({ solapas, etiqueta, sinSolapa = [] }: { solapas: Solapa[]; etiqueta: string; /** Páginas de la sección que no son de ninguna solapa: ahí no se marca ninguna. */ sinSolapa?: string[] }) {
   const pathname = usePathname();
-  const activa = [...solapas].sort((a, b) => b.href.length - a.href.length).find((s) => pathname === s.href || pathname.startsWith(`${s.href}/`))?.href ?? solapas[0]?.href;
+  const activa = sinSolapa.includes(pathname)
+    ? undefined
+    : ([...solapas].sort((a, b) => b.href.length - a.href.length).find((s) => pathname === s.href || pathname.startsWith(`${s.href}/`))?.href ?? solapas[0]?.href);
   const contenedor = useRef<HTMLDivElement>(null);
   const primera = useRef(true);
 

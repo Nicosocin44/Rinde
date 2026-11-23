@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 17/11/2026, rediseño de la home (rama `rediseno`).
+> Escrito para los fundadores. Última actualización: lunes 23/11/2026, el ícono viejo en la pestaña (rama `icono-cache`).
 
 ## Cómo verlo
 
@@ -9,6 +9,21 @@
 3. Abrir **http://localhost:3000**.
 
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
+
+---
+
+## El ícono viejo de las tres barras (rama `icono-cache`, 23/11/2026)
+
+> Benja seguía viendo las tres barras en la pestaña, aunque desde el 22/11 el ícono es la "r".
+
+- **La web publicada ya sirve la "r"** (pestaña, ícono del celular y los de la app instalable). Lo viejo quedaba guardado en el navegador.
+- **Un problema real del service worker** (`public/sw.js`): guardaba los íconos de la app (`/iconos/192`, `/iconos/512`, `/iconos/maskable`) para siempre. Esos nombres no cambian cuando cambia el dibujo, así que quien entró antes del 22/11 se quedaba con las barras.
+- **Arreglo:**
+  - los íconos ahora se piden primero a la red, y lo guardado se usa solo sin conexión;
+  - la versión del caché pasa a `rinde-v2`: al actualizarse, el service worker borra todo lo guardado con la anterior, incluidos los íconos viejos;
+  - de paso, una respuesta con error (404, 500) ya no reemplaza lo guardado.
+- **Pruebas:** `tests/sw.test.ts` (5) corre el service worker con un caché y una red de mentira. Con el service worker viejo fallan 3; con el nuevo pasan todas. El navegador integrado de Claude no permite registrar service workers, por eso la prueba es así y no en el navegador.
+- **La pestaña de Chrome** puede tardar en cambiar el ícono aunque la página esté al día (Chrome guarda los íconos aparte). Se arregla con Ctrl + F5 o cerrando y abriendo la pestaña.
 
 ---
 

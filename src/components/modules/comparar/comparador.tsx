@@ -13,6 +13,7 @@ import { DIAS_RANGO_COMPARAR, desdeCero, enMoneda, inicioComun, numerosDelPeriod
 import { cn } from "@/lib/cn";
 import type { Comparacion } from "@/lib/data/servicios/comparar";
 import { dolares, fechaCorta, pesos, porcentaje } from "@/lib/format";
+import { Etiqueta } from "@/components/ui/concepto";
 
 const MAXIMO = 5;
 const RANGOS: RangoComparar[] = ["1M", "3M", "6M", "1A", "3A", "5A"];
@@ -133,8 +134,12 @@ export function Comparador({ tickers, datos, hoy }: { tickers: string[]; datos: 
                   <tr className="text-left text-micro text-text-3">
                     <th className="sticky left-0 z-10 bg-bg pb-2 font-normal">Activo</th>
                     <th className="pb-2 text-right font-normal">Rendimiento</th>
-                    <th className="pb-2 text-right font-normal">Máxima caída</th>
-                    <th className="pb-2 text-right font-normal">Volatilidad (1 año)</th>
+                    <th className="pb-2 text-right font-normal">
+                      <Etiqueta texto="Máxima caída" />
+                    </th>
+                    <th className="pb-2 text-right font-normal">
+                      <Etiqueta texto="Volatilidad (1 año)" />
+                    </th>
                     <th className="pb-2 text-right font-normal">Precio hoy</th>
                   </tr>
                 </thead>

@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: lunes 23/11/2026, Allaria, SBS y Adcap en las comisiones (rama `brokers-faltantes`).
+> Escrito para los fundadores. Última actualización: lunes 23/11/2026, Allaria, SBS y Adcap en las comisiones (rama `brokers-faltantes`) y conceptos que se explican solos (rama `conceptos`).
 
 ## Cómo verlo
 
@@ -38,6 +38,20 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 ### Para revisar
 1. **Adcap con sus máximos:** queda último lejos (3 % en acciones). Es lo que publica; la nota aclara que puede cobrar bastante menos. Otra opción es sacarlo hasta que publique una tarifa para la app.
 2. **La bonificación de SBS** (mantenimiento de US$ 3,50) dice "hasta el 31/12/2025, pudiendo ser renovado automáticamente", en la tabla 2026. Se muestra como bonificado.
+
+## Conceptos que se explican solos (punto 24, rama `conceptos`, 23/11/2026)
+
+> Pedido: tocar (o pasar el mouse por) conceptos como el PER, el EBITDA o la TIR y que aparezca un cuadro chico que explique qué son, con la misma explicación en todo el sitio.
+
+- **Cómo se ve:** el concepto va subrayado con puntos. En la compu se abre al pasar el mouse (con un cuarto de segundo de espera, así no salta al pasar de largo) y se cierra al salir; un clic lo deja abierto hasta otro clic o hasta tocar afuera. En el celular se abre al tocarlo y se cierra tocando afuera. Muestra el término, la explicación en dos líneas y "Más en Aprender", que lleva a ese término en /aprender.
+- **Una sola fuente:** `src/lib/glosario.ts`. /aprender pasó de 25 a **60 términos** y el cuadro usa el mismo texto. Cada término guarda también cómo aparece escrito en pantalla ("Volatilidad anual", "PER (precio / ganancia)", "VI", "Capital que queda"), así que alcanza con envolver un texto en `<Etiqueta texto="…" />`: si es un concepto, se explica; si no, queda igual.
+- **Dónde aparece:**
+  - Fichas de CEDEARs y acciones: datos clave y balances (capitalización, valor de empresa, PER, EBITDA, márgenes, ROE, ROA, deuda, liquidez…).
+  - Fichas de bonos y letras: TIR, duration, paridad, cupón de hoy, rendimiento corriente, capital que queda, volatilidad, máxima caída.
+  - Comparar: máxima caída, volatilidad, PER, margen neto, ROE y dividendo.
+  - Opciones: VI, delta y base.
+- **Lo que no tiene:** los encabezados de la tabla de bonos, que ya se tocan para ordenar (sería un botón dentro de otro).
+- **Pruebas:** `tests/glosario.test.ts` (ids únicos, ninguna etiqueta repetida en dos términos, y que reconozca los textos tal como están en pantalla).
 
 ---
 

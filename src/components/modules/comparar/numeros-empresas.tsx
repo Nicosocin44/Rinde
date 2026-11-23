@@ -4,6 +4,7 @@ import { Delta } from "@/components/ui/delta";
 import type { ActivoComparable, NumerosEmpresa } from "@/lib/data/servicios/comparar";
 import { numerosDeEmpresas } from "@/lib/data/servicios/comparar";
 import { mesAnio, numero, porcentaje } from "@/lib/format";
+import { Etiqueta } from "@/components/ui/concepto";
 
 /**
  * Los números de la empresa de cada CEDEAR o acción, lado a lado: PER, margen, rentabilidad, crecimiento y dividendo.
@@ -49,7 +50,9 @@ export async function NumerosEmpresas({ activos, tickers }: { activos: ActivoCom
             {filas.map(([nombre, ayuda, f]) => (
               <tr key={nombre} className="border-t border-border">
                 <th scope="row" className="sticky left-0 z-10 max-w-[200px] min-w-[140px] bg-bg py-2.5 pr-3 text-left font-normal text-text-2">
-                  <span className="text-chico">{nombre}</span>
+                  <span className="text-chico">
+                    <Etiqueta texto={nombre} />
+                  </span>
                   {ayuda && <span className="block text-micro text-text-3">{ayuda}</span>}
                 </th>
                 {con.map(({ a, n }) => (

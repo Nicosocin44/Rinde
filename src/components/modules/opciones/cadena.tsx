@@ -8,6 +8,7 @@ import { fechaCorta, numero, pesos, porcentaje, SIN_DATO } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { EncabezadoVencimiento, useVencimiento } from "./comun";
 import { HistorialPrimas, type HistorialOpciones } from "./historial";
+import { Etiqueta } from "@/components/ui/concepto";
 
 const prima = (x: number | null | undefined) => (x === null || x === undefined ? SIN_DATO : numero(x, 2));
 
@@ -139,13 +140,15 @@ function Cadena({ v, precio, ticker }: { v: VencimientoOpciones; precio: number;
             <tr className="shadow-[inset_0_-1px_0_var(--c-border)]">
               {["Volumen", "Delta", "VI", "Último", "Compra", "Venta"].map((h, i) => (
                 <th key={`c${h}`} className={cn("h-9 px-2 text-right text-label font-medium", (i === 0 || i === 1 || i === 3) && "hidden lg:table-cell")}>
-                  {h}
+                  <Etiqueta texto={h} />
                 </th>
               ))}
-              <th className="h-9 px-3 text-center text-label font-medium">Base</th>
+              <th className="h-9 px-3 text-center text-label font-medium">
+                <Etiqueta texto="Base" />
+              </th>
               {["Compra", "Venta", "Último", "VI", "Delta", "Volumen"].map((h, i) => (
                 <th key={`p${h}`} className={cn("h-9 px-2 text-right text-label font-medium", (i === 2 || i === 4 || i === 5) && "hidden lg:table-cell")}>
-                  {h}
+                  <Etiqueta texto={h} />
                 </th>
               ))}
             </tr>
@@ -197,7 +200,7 @@ function Cadena({ v, precio, ticker }: { v: VencimientoOpciones; precio: number;
             <tr className="shadow-[inset_0_-1px_0_var(--c-border)]">
               {["Base", "Compra", "Venta", "VI", "Delta"].map((h, i) => (
                 <th key={h} className={cn("h-9 px-2 text-label font-medium", i === 0 ? "text-left" : "text-right")}>
-                  {h}
+                  <Etiqueta texto={h} />
                 </th>
               ))}
             </tr>

@@ -267,10 +267,15 @@ export function PriceChart({
   const mostrarDia = variacionDia !== undefined && variacionDia !== null && !esDia;
 
   return (
-    <div className={cn("flex flex-col gap-5", className)}>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div className={cn("@container flex flex-col gap-5", className)}>
+      {/*
+        Los botones (tipo y rango) van al lado del precio solo si el gráfico es ancho (46rem) y, si no, en su propia fila:
+        lo decide el ancho del gráfico, no el largo del texto, así no pasan de una a dos filas al tocar un rango (el texto
+        de la variación cambia). Siempre en una sola fila: en el celular, donde no entran, se desliza de costado.
+      */}
+      <div className="flex flex-col gap-4 @min-[46rem]:flex-row @min-[46rem]:items-end @min-[46rem]:justify-between">
         {compacto ? (
-          <div className="flex flex-col gap-1">
+          <div className="flex min-w-0 flex-col gap-1">
             <div className="text-label">{titulo}</div>
             <p className="tabular h-5 text-chico text-text-2">
               {scrub ? (
@@ -283,7 +288,7 @@ export function PriceChart({
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-1">
+          <div className="flex min-w-0 flex-col gap-1">
             <div className="text-label">{titulo}</div>
             {/* El destello sigue al último precio (el que se actualiza solo), no al que se ve al pasar el cursor. */}
             <Destello valor={actual?.[1] ?? null} className="self-start">
@@ -303,7 +308,7 @@ export function PriceChart({
             </p>
           </div>
         )}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="sin-scrollbar flex max-w-full items-center gap-2 overflow-x-auto *:shrink-0 @min-[46rem]:shrink-0 @min-[46rem]:overflow-visible">
           {acciones}
           {!compacto && <SegmentedControl etiqueta="Tipo de gráfico" tamano="sm" valor={tipo} onChange={elegirTipo} opciones={tipos} />}
           <SegmentedControl etiqueta="Rango" tamano="sm" valor={rango} onChange={setRango} opciones={rangos} />

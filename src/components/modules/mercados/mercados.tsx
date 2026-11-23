@@ -61,7 +61,7 @@ export function TablaCedears({ cedears }: { cedears: Cedear[] }) {
     { id: "var", encabezado: "Var.", alineacion: "derecha", valorOrden: (c) => c.variacion, celda: (c) => <Delta valor={c.variacion} en="tabla" className="text-chico" /> },
     { id: "mep", encabezado: "MEP implícito", alineacion: "derecha", solo: "pro", valorOrden: (c) => c.mepImplicito, celda: (c) => <span className="text-text-2">{c.mepImplicito ? pesos(c.mepImplicito, 2) : "—"}</span> },
     { id: "ccl", encabezado: "CCL implícito", alineacion: "derecha", solo: "pro-desktop", valorOrden: (c) => c.cclImplicito, celda: (c) => <span className="text-text-2">{c.cclImplicito ? pesos(c.cclImplicito, 2) : "—"}</span> },
-    { id: "vol", encabezado: "Volumen", alineacion: "derecha", solo: "desktop", valorOrden: (c) => c.volumenArs, celda: (c) => <span className="text-chico text-text-3">{pesosCompacto(c.volumenArs)}</span> },
+    { id: "vol", encabezado: "Volumen", alineacion: "derecha", solo: "desktop", valorOrden: (c) => c.volumenArs, celda: (c) => <span className="text-chico text-text-3">{c.volumenArs > 0 ? pesosCompacto(c.volumenArs) : "—"}</span> },
   ];
 
   return (
@@ -124,7 +124,7 @@ export function TablaAcciones({ acciones }: { acciones: Accion[] }) {
     },
     { id: "precio", encabezado: "Precio", alineacion: "derecha", valorOrden: (a) => a.precio, celda: (a) => <Destello valor={a.precio}>{pesos(a.precio, 2)}</Destello> },
     { id: "var", encabezado: "Var.", alineacion: "derecha", valorOrden: (a) => a.variacion, celda: (a) => <Delta valor={a.variacion} en="tabla" className="text-chico" /> },
-    { id: "vol", encabezado: "Volumen", alineacion: "derecha", solo: "desktop", valorOrden: (a) => a.volumen, celda: (a) => <span className="text-chico text-text-3">{pesosCompacto(a.volumen)}</span> },
+    { id: "vol", encabezado: "Volumen", alineacion: "derecha", solo: "desktop", valorOrden: (a) => a.volumen, celda: (a) => <span className="text-chico text-text-3">{a.volumen > 0 ? pesosCompacto(a.volumen) : "—"}</span> },
   ];
   return (
     <div className="flex flex-col gap-5">

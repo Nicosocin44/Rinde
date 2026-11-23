@@ -89,7 +89,7 @@ export function DondeRinde({ opciones, montoInicial = 1_000_000, compacto = fals
             }}
             className={cn("relative h-[26px] w-[44px] shrink-0 rounded-full transition-colors duration-(--duration-short)", soloLiquidez ? "bg-accent" : "bg-surface-2 ring-1 ring-border-strong ring-inset")}
           >
-            <span className={cn("absolute top-[3px] size-5 rounded-full bg-white shadow-(--shadow-thumb) transition-transform duration-(--duration-short) ease-(--ease-standard)", soloLiquidez ? "translate-x-[21px]" : "translate-x-[3px]")} />
+            <span className={cn("absolute top-[3px] left-0 size-5 rounded-full bg-white shadow-(--shadow-thumb) transition-transform duration-(--duration-short) ease-(--ease-standard)", soloLiquidez ? "translate-x-[21px]" : "translate-x-[3px]")} />
           </span>
           <span onClick={() => setSoloLiquidez((v) => !v)}>Necesito sacarla cuando quiera</span>
         </label>

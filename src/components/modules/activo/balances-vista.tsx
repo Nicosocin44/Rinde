@@ -6,6 +6,7 @@ import { SegmentedControl } from "@/components/ui/segmented";
 import type { Clave, DetalleFormulario, Estados, LineaFormulario } from "@/lib/calculos/balances";
 import { cn } from "@/lib/cn";
 import { mesAnio, numero, pesosCompacto, porcentaje } from "@/lib/format";
+import { Etiqueta } from "@/components/ui/concepto";
 
 /**
  * La parte interactiva de "Balances y resultados": trimestral o anual, el gráfico de ingresos y ganancia, y los tres
@@ -214,7 +215,7 @@ function Tabla({ e, anual, moneda, filas, comp }: { e: Estados; anual: boolean; 
             return (
               <tr key={f.clave} className="border-t border-border">
                 <th scope="row" className={cn("sticky left-0 z-10 max-w-[220px] min-w-[150px] bg-bg py-2.5 pr-3 text-left font-normal", f.destacada ? "font-semibold text-text" : "text-text-2")}>
-                  {f.etiqueta}
+                  <Etiqueta texto={f.etiqueta} />
                   {f.ayuda && <span className="block text-[11px] font-normal text-text-3">{f.ayuda}</span>}
                 </th>
                 {v.map((x, k) => (

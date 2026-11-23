@@ -5,6 +5,7 @@ import { valuar, type Valuacion } from "@/lib/calculos";
 import { obtenerBalances, obtenerCotizaciones } from "@/lib/data";
 import { dolares, fechaCorta, mesAnio, numero, pesosCompacto, porcentaje } from "@/lib/format";
 import { ResultadosEmpresa } from "./balances-vista";
+import { Etiqueta } from "@/components/ui/concepto";
 
 /**
  * Balances y resultados de la empresa, de lo que presenta ante la SEC (CEDEARs) o la CNV (acciones argentinas): las cifras principales, los resultados por
@@ -224,7 +225,7 @@ function Grupo({ id, titulo, items }: { id: string; titulo: string; items: Item[
         {items.map((d) => (
           <div key={d.etiqueta} className="flex items-baseline justify-between gap-4 border-b border-border py-2.5">
             <dt className="text-chico text-text-2">
-              {d.etiqueta}
+              <Etiqueta texto={d.etiqueta} />
               {d.ayuda && <span className="block text-micro text-text-3">{d.ayuda}</span>}
             </dt>
             <dd className="tabular shrink-0 text-right text-[15px] font-medium">{d.valor}</dd>

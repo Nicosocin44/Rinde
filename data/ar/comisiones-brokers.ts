@@ -1,12 +1,11 @@
 import type { TarifarioBroker } from "@/lib/calculos/comisiones";
 
 /**
- * Comisiones de los brokers, de sus tarifarios oficiales (leídos el 22/11/2026). Se toma la operación online de una
- * persona humana en el nivel de entrada: lo que paga alguien que recién abre la cuenta.
+ * Comisiones de los brokers, de sus tarifarios oficiales (la fecha en que se leyó cada uno va en `verificado`). Se toma
+ * la operación online de una persona humana en el nivel de entrada: lo que paga alguien que recién abre la cuenta.
+ * Adcap no publica una tarifa online aparte: de él va el máximo de su tabla general.
  *
  * Revisar cada tanto: los brokers cambian sus tarifarios (y lo informan en su sitio y en la CNV).
- *
- * Quedan afuera hasta tener su tarifario público: Allaria (el PDF que tenía publicado ya no existe), Adcap y SBS.
  *
  * Derechos de mercado (aparte, iguales en todos los brokers, los cobra BYMA). Según los tarifarios:
  * - acciones y CEDEARs: 0,05 % + IVA (IOL) o 0,070 % (Bull Market);
@@ -84,5 +83,49 @@ export const TARIFARIOS_BROKERS: TarifarioBroker[] = [
     custodia: "Apertura, administración y custodia sin cargo",
     fuente: { url: "https://portfoliopersonal.com/Contenido/comisiones", nombre: "Comisiones de PPI" },
     verificado: "2026-11-22",
+  },
+  {
+    proveedorId: "allaria",
+    plan: "Autogestión (web, sin asesor)",
+    comisiones: {
+      acciones: { tasa: 0.005, iva: true, hasta: true },
+      bonos: { tasa: 0.0025, iva: false, hasta: true },
+      // La tabla no separa las letras: son títulos públicos (Letras del Tesoro), con la misma comisión.
+      letras: { tasa: 0.0025, iva: false, hasta: true },
+      opciones: { tasa: 0.006, iva: true, hasta: true },
+    },
+    custodia: "$ 35 + IVA por mes",
+    nota: "El tarifario publica comisiones máximas (\"hasta\") y no separa las letras: van como títulos públicos.",
+    fuente: { url: "https://allariainversiones.com.ar/doc/ArancelesComisiones.pdf", nombre: "Tabla de aranceles y comisiones de Allaria" },
+    verificado: "2026-11-23",
+  },
+  {
+    proveedorId: "sbs",
+    plan: "Quicktrade (cuenta abierta en la web o la app)",
+    comisiones: {
+      acciones: { tasa: 0.007, iva: true },
+      bonos: { tasa: 0.005, iva: false },
+      // Las letras en pesos: 2 % anual, prorrateado por los días que le quedan.
+      letras: { tasa: 0.02, iva: false, anual: true },
+      opciones: { tasa: 0.007, iva: true },
+    },
+    custodia: "Apertura sin cargo; mantenimiento de US$ 3,50 por mes, bonificado",
+    nota: "Es la tarifa de quien abre la cuenta solo, en Quicktrade (la plataforma online de SBS); con atención personalizada, hasta 1 %.",
+    fuente: { url: "https://www.gruposbs.com/documentos/arancaeles-trading-2026.pdf", nombre: "Tabla de aranceles de SBS Trading 2026" },
+    verificado: "2026-11-23",
+  },
+  {
+    proveedorId: "adcap",
+    plan: "Tabla general (solo comisiones máximas)",
+    comisiones: {
+      acciones: { tasa: 0.03, iva: true, hasta: true },
+      bonos: { tasa: 0.02, iva: false, hasta: true },
+      letras: { tasa: 0.015, iva: false, hasta: true },
+      opciones: { tasa: 0.01, iva: true, hasta: true },
+    },
+    custodia: "Mantenimiento sin arancel en la tabla",
+    nota: "Su tabla publica solo comisiones máximas, sin una tarifa aparte para la app: lo que cobra de verdad puede ser bastante menos.",
+    fuente: { url: "https://cdn.ad-cap.com.ar/adcap-web/pdf/aranceles-y-comisiones.pdf", nombre: "Aranceles y comisiones de Adcap" },
+    verificado: "2026-11-23",
   },
 ];

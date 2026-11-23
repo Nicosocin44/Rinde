@@ -12,6 +12,7 @@ import { BotonComparar } from "./comparar-boton";
 import { AvisoActivo, SeguirActivo } from "./seguir";
 import { GraficoActivo } from "./grafico";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, TablaRendimiento, type Dato } from "./partes";
+import { RankingBrokers } from "@/components/modules/brokers/ranking-brokers";
 
 const PAGOS: Record<number, string> = { 1: "una vez por año", 2: "cada seis meses", 4: "cada tres meses" };
 
@@ -107,6 +108,8 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
         ]}
         nota="Variación del precio, sin contar los cupones y el capital que el bono fue pagando: el rendimiento total es mayor. El precio en dólares es el de la especie D."
       />
+
+      <RankingBrokers clase="bonos" titulo={`Dónde comprar ${b.ticker}`} />
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
         <NoticiasActivo titulo={`Noticias de ${b.ticker} y la deuda`} noticias={f.noticias} vacio="No encontramos noticias de bonos ni de deuda en los últimos días." />

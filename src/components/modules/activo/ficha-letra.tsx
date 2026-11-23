@@ -9,6 +9,7 @@ import { fechaCorta, mesAnio, numero, porcentaje } from "@/lib/format";
 import { CurvaConLetra } from "./grafico";
 import { AvisoActivo, SeguirActivo } from "./seguir";
 import { AcercaDe, Aviso, DatosClave, NoticiasActivo, Parecidos, Ruta, type Dato } from "./partes";
+import { RankingBrokers } from "@/components/modules/brokers/ranking-brokers";
 
 /** Ficha de una LECAP o BONCAP: cuánto cobrás, cómo está en la curva, si le gana a la inflación y al plazo fijo. */
 export function FichaLetraVista({ f, asOf, estado }: { f: FichaLetra; asOf: string; estado: EstadoDato }) {
@@ -92,6 +93,8 @@ export function FichaLetraVista({ f, asOf, estado }: { f: FichaLetra; asOf: stri
           )}
         </div>
       </section>
+
+      <RankingBrokers clase="letras" dias={l.dias} titulo={`Dónde comprar ${l.ticker}`} />
 
       <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-14">
         <NoticiasActivo titulo="Noticias de LECAPs y tasas" noticias={f.noticias} vacio="No encontramos noticias de tasas en los últimos días." />

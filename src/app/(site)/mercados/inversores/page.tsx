@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AvisoInversores, CifraMonto, etiquetaTrimestre, fechasInforme, LogosPosiciones, MarcaInversor, montoUsd } from "@/components/modules/inversores/comun";
-import { inversores, totalArgentina, ultimo } from "@/lib/inversores/datos";
-import { fechaCorta, porcentaje } from "@/lib/format";
+import { AvisoInversores, etiquetaTrimestre, fechasInforme, LogosPosiciones, MarcaInversor, montoUsd } from "@/components/modules/inversores/comun";
+import { inversores, ultimo } from "@/lib/inversores/datos";
+import { porcentaje } from "@/lib/format";
 
 export const revalidate = 3600;
 export const metadata: Metadata = {
@@ -14,23 +14,15 @@ export default function Inversores() {
   const lista = inversores();
   const foco = lista.filter((i) => i.grupo === "argentina").sort((a, b) => ultimo(b).argentina - ultimo(a).argentina);
   const mundo = lista.filter((i) => i.grupo === "mundo").sort((a, b) => ultimo(b).total - ultimo(a).total);
-  const { total, inversores: cuantos, hasta } = totalArgentina();
 
   return (
     <div className="flex flex-col gap-14 lg:gap-20">
-      <section className="flex flex-col gap-3">
-        <p className="text-label">Fondos con foco en Argentina</p>
-        <CifraMonto valor={total} />
-        <p className="text-[17px] font-medium">Es lo que tienen en acciones argentinas los {cuantos} fondos con más peso en Argentina.</p>
-        <p className="max-w-xl text-text-2">Según el último informe de cada uno a la SEC, con la cartera hasta el {fechaCorta(hasta, true)}. Tocá cada uno para ver su cartera completa y qué compró y vendió.</p>
-      </section>
-
       <section aria-labelledby="foco" className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <h2 id="foco" className="text-h3">
             Con foco en Argentina
           </h2>
-          <p className="text-chico text-text-2">Ordenados por cuánto tienen en acciones argentinas. Los nuevos se suman solos cada trimestre.</p>
+          <p className="text-chico text-text-2">Ordenados por cuánto tienen en acciones argentinas.</p>
         </div>
         <ol className="flex flex-col border-t border-border">
           {foco.map((i, k) => {

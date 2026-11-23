@@ -28,6 +28,7 @@ export default function MercadosLayout({ children }: { children: React.ReactNode
           { href: "/mercados/opciones", label: "Opciones" },
           { href: "/mercados/comparar", label: "Comparar" },
           { href: "/mercados/inversores", label: "Inversores" },
+          { href: "/mercados/brokers", label: "Brokers" },
         ]}
       />
       <div className="pt-8 lg:pt-12">{children}</div>

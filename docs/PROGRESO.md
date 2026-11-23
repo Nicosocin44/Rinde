@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: lunes 23/11/2026, el interruptor de las alertas (rama `alertas-interruptor`).
+> Escrito para los fundadores. Última actualización: lunes 23/11/2026, cuánto subió o bajó entre dos fechas en el gráfico (rama `grafico-tramo`) y el interruptor de las alertas (rama `alertas-interruptor`).
 
 ## Cómo verlo
 
@@ -9,6 +9,23 @@
 3. Abrir **http://localhost:3000**.
 
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
+
+---
+
+## Cuánto subió o bajó entre dos fechas, en el gráfico (rama `grafico-tramo`, 23/11/2026)
+
+> Benja: como en Google Finance, unir dos puntos del gráfico y ver cuánto subió o bajó.
+
+- **En la compu:** apretás sobre el gráfico y arrastrás. Al soltar, el tramo queda a la vista hasta otro clic o hasta sacar el mouse del gráfico.
+- **En el celular:** tocás el gráfico con dos dedos (con uno solo se sigue viendo el valor de cada fecha). Al levantar un dedo, se va.
+- **Qué muestra:**
+  - el tramo sombreado, con una línea punteada en cada fecha y un punto sobre la línea, verde si subió y rojo si bajó;
+  - el encabezado cambia a "▲ +33,14 % (+$ 6.690,00) del 9 feb al 17 sep", y la cifra grande, al valor de la segunda fecha;
+  - en la brecha, que ya es un porcentaje, la diferencia va en puntos ("+0,5 pp") y sin monto.
+- **Dónde:** en todos los gráficos de precio: fichas (área, línea o velas; con velas se toma el cierre), Cartera e histórico del dólar.
+- **Ayuda:** una línea chica debajo del gráfico: "Arrastrá sobre el gráfico…" en la compu y "Tocá el gráfico con dos dedos…" en el celular.
+- **Cálculo:** `src/lib/calculos/tramo.ts` (puro, con decimal.js) y `tests/tramo.test.ts` (5 pruebas).
+- Probado con el mouse en la compu y con dos dedos simulados en 375 px: suba, baja, velas, brecha y dólar MEP. Las cuentas cierran ($ 26.880 − $ 6.690 = $ 20.190 → +33,14 %).
 
 ---
 

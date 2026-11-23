@@ -6,6 +6,7 @@ import type { Rendimientos } from "@/lib/calculos";
 import { MEDIOS } from "@/lib/data/adapters/medios";
 import { fechaCorta, hora } from "@/lib/format";
 import type { Noticia } from "@/lib/noticias";
+import { Etiqueta } from "@/components/ui/concepto";
 
 /**
  * Piezas compartidas por todas las fichas (CEDEAR, acción, bono, letra, cripto): datos clave, tabla de rendimiento,
@@ -25,7 +26,7 @@ export function DatosClave({ datos, titulo = "Datos clave" }: { datos: Dato[]; t
         {datos.map((d) => (
           <div key={d.etiqueta} className="flex items-baseline justify-between gap-4 border-b border-border py-3">
             <dt className="text-chico text-text-2">
-              {d.etiqueta}
+              <Etiqueta texto={d.etiqueta} />
               {d.ayuda && <span className="block text-micro text-text-3">{d.ayuda}</span>}
             </dt>
             <dd className="tabular shrink-0 text-right text-[15px] font-medium">{d.valor}</dd>

@@ -2,7 +2,7 @@ import { pais } from "@/config/countries/ar";
 import { bonoPorTicker, BONOS_USD } from "@data/ar/bonos-usd";
 import { ACCIONES_GENERAL, CEDEARS, PANEL_LIDER } from "@data/ar/mercados";
 import { resolverProveedor } from "@data/ar/proveedores";
-import { cronograma, d, fechaLiquidacion, hoyAR, metricasBono, spread } from "@/lib/calculos";
+import { cronograma, d, esHabil, fechaLiquidacion, hoyAR, metricasBono, spread, sumarDias } from "@/lib/calculos";
 import * as binance from "../adapters/binance";
 import * as criptoya from "../adapters/criptoya";
 import * as d912 from "../adapters/data912";
@@ -19,6 +19,21 @@ import type { d912MepSchema, d912PanelSchema } from "../schemas";
 type Panel = z.infer<typeof d912PanelSchema>;
 
 const estadoData912 = (): "delayed" | "close" => (mercadoAbierto() ? "delayed" : "close");
+
+/** ¿Hubo rueda hoy? Un feriado, un fin de semana o antes de que abra, data912 trae todo con volumen 0. */
+const huboRueda = (panel: Panel) => panel.some((p) => (p.v ?? 0) > 0);
+
+/**
+ * Hora y estado de los precios de data912. Si hoy no hubo rueda, lo que muestra es el cierre del último día hábil
+ * (no el de hoy): un feriado decía "Cierre del 23 nov" con los precios del viernes 20.
+ */
+async function momentoData912(rueda: boolean): Promise<{ asOf: string; status: "delayed" | "close" }> {
+  if (rueda) return { asOf: new Date().toISOString(), status: estadoData912() };
+  const feriados = await cargarFeriados().catch(() => new Set<string>(pais.feriadosRespaldo));
+  let dia = sumarDias(hoyAR(), -1);
+  while (!esHabil(dia, feriados)) dia = sumarDias(dia, -1);
+  return { asOf: new Date(`${dia}T17:00:00-03:00`).toISOString(), status: "close" };
+}
 const precio = (p: Panel[number] | undefined) => (p && p.c && p.c > 0 ? p.c : null);
 
 // ───────────────────────── Bonos soberanos ─────────────────────────
@@ -96,7 +111,7 @@ export async function cargarBonos() {
     const [bonos, corp] = await Promise.all([d912.panel("arg_bonds"), d912.panel("arg_corp").catch(() => [] as Panel)]);
     const { bonos: lista, excluidos } = normalizarBonos(bonos, liquidacion);
     if (lista.length === 0) throw new Error("Sin bonos válidos");
-    return { data: { bonos: lista, ons: normalizarOns(corp).slice(0, 60), liquidacion }, asOf: new Date().toISOString(), status: estadoData912(), excluded: excluidos };
+    return { data: { bonos: lista, ons: normalizarOns(corp).slice(0, 60), liquidacion }, ...(await momentoData912(huboRueda(bonos))), excluded: excluidos };
   });
 }
 
@@ -115,8 +130,11 @@ function esEspecieDerivada(simbolo: string, todos: ReadonlySet<string>): boolean
 export function normalizarCedears(panel: Panel, mep: Mep, ccl: Map<string, number>): Cedear[] {
   const mepPorTicker = new Map(mep.filter((m) => m.panel === "cedear").map((m) => [m.ticker, m]));
   const todos = new Set(panel.map((p) => p.symbol));
+  const rueda = huboRueda(panel);
   return panel
-    .filter((p) => precio(p) && (p.v ?? 0) > 0 && !esEspecieDerivada(p.symbol, todos))
+    // Con rueda, los que operaron hoy. Sin rueda (feriado, fin de semana), el último cierre de los conocidos y de los que
+    // tienen especie en dólares: si no, la tabla quedaba vacía (y sin filtro entran cientos que nunca operan).
+    .filter((p) => precio(p) && (rueda ? (p.v ?? 0) > 0 : p.symbol in CEDEARS || mepPorTicker.has(p.symbol)) && !esEspecieDerivada(p.symbol, todos))
     .map((p) => {
       const m = mepPorTicker.get(p.symbol);
       const meta = CEDEARS[p.symbol];
@@ -241,8 +259,7 @@ export async function cargarMercados() {
     const meps = lista.slice(0, 30).map((c) => c.mepImplicito).filter((x): x is number => x !== null && x > 0);
     return {
       data: { cedears: lista, acciones: normalizarAcciones(acciones).map((a) => ({ ...a, nombre: a.nombre ?? nombresAcciones[a.ticker] ?? null })), mepPromedio: meps.length ? mediana(meps) : null, indices: indicesEEUU(cedears) },
-      asOf: new Date().toISOString(),
-      status: estadoData912(),
+      ...(await momentoData912(huboRueda(cedears) || huboRueda(acciones))),
     };
   });
 }

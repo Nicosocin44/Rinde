@@ -473,14 +473,14 @@ Bonos, rendimiento total: el día de corte (hábil anterior al pago), cantidad �
     contenido: (
       <>
         <p>
-          De los tarifarios oficiales que publica cada broker (Cocos, IOL, Balanz, Bull Market y PPI), con la fecha en que los leímos. Se toma lo que paga una persona que opera
-          online y recién abre la cuenta: con más volumen, algunos cobran menos. Si el tarifario dice &quot;hasta&quot;, se usa ese máximo. Allaria, Adcap y SBS no están porque
-          no encontramos su tarifario publicado.
+          De los tarifarios oficiales que publica cada broker (Cocos, IOL, Balanz, Bull Market, PPI, Allaria, SBS y Adcap), con la fecha en que los leímos. Se toma lo que
+          paga una persona que opera online y recién abre la cuenta: con más volumen, algunos cobran menos. Si el tarifario dice &quot;hasta&quot;, se usa ese máximo. Adcap
+          publica solo comisiones máximas, sin una tarifa aparte para la app: se muestran esas, aclarado.
         </p>
-        <Formula>{`Lo que te cobra = monto × comisión × (1 + IVA si corresponde)
+        <Formula>{`Comisión con IVA = comisión × (1 + IVA si corresponde)
 IVA = 21 % sobre la comisión, en acciones, CEDEARs y opciones (los títulos públicos y las letras están exentos)
-Letras con comisión anual (Cocos): comisión × días que le quedan / 365
-Orden: del que menos cobra al que más; a igual costo, por nombre`}</Formula>
+Letras con comisión anual (Cocos y SBS): comisión × días que le quedan / 365
+Orden: de la comisión con IVA más baja a la más alta; si son iguales, por nombre (no depende del monto)`}</Formula>
         <p className="mt-3">
           Los derechos de mercado de BYMA se suman aparte y son iguales en todos los brokers, así que no cambian el orden: alrededor de 0,05 % a 0,07 % en acciones y CEDEARs, 0,01 % en
           bonos, 0,001 % en letras y 0,2 % en opciones. Nadie paga por estar arriba.

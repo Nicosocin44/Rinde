@@ -18,23 +18,32 @@ describe("comisiones de brokers", () => {
 
   it("acciones y CEDEARs por $ 1.000.000: del más barato al más caro, y a igual costo por nombre", () => {
     const filas = rankingBrokers(TARIFARIOS_BROKERS, "acciones", 1_000_000);
-    expect(orden(filas)).toEqual(["cocos", "balanz", "bullmarket", "iol", "ppi"]);
-    expect(filas.map((f) => Math.round(f.costo))).toEqual([5445, 6050, 6050, 6050, 7260]);
+    expect(orden(filas)).toEqual(["cocos", "allaria", "balanz", "bullmarket", "iol", "ppi", "sbs", "adcap"]);
+    expect(filas.map((f) => Math.round(f.costo))).toEqual([5445, 6050, 6050, 6050, 6050, 7260, 8470, 36300]);
     expect(filas[0]!.efectiva).toBeCloseTo(0.005445, 9);
   });
 
-  it("letras: la de tasa anual depende del plazo, y sin plazo queda afuera", () => {
-    expect(orden(rankingBrokers(TARIFARIOS_BROKERS, "letras", 1_000_000, 30))).toEqual(["balanz", "cocos", "iol", "ppi", "bullmarket"]);
-    expect(orden(rankingBrokers(TARIFARIOS_BROKERS, "letras", 1_000_000, 200)).at(-1)).toBe("cocos");
-    expect(orden(rankingBrokers(TARIFARIOS_BROKERS, "letras", 1_000_000))).not.toContain("cocos");
+  it("letras: las de tasa anual (Cocos, SBS) dependen del plazo, y sin plazo quedan afuera", () => {
+    expect(orden(rankingBrokers(TARIFARIOS_BROKERS, "letras", 1_000_000, 30))).toEqual(["balanz", "cocos", "sbs", "iol", "ppi", "allaria", "bullmarket", "adcap"]);
+    expect(orden(rankingBrokers(TARIFARIOS_BROKERS, "letras", 1_000_000, 200)).slice(-3)).toEqual(["cocos", "sbs", "adcap"]);
+    const sinPlazo = orden(rankingBrokers(TARIFARIOS_BROKERS, "letras", 1_000_000));
+    expect(sinPlazo).not.toContain("cocos");
+    expect(sinPlazo).not.toContain("sbs");
   });
 
   it("opciones y bonos con los tarifarios cargados", () => {
-    expect(rankingBrokers(TARIFARIOS_BROKERS, "opciones", 100_000).map((f) => Math.round(f.costo))).toEqual([605, 605, 605, 1210, 1210]);
-    expect(rankingBrokers(TARIFARIOS_BROKERS, "bonos", 1_000_000)[0]).toMatchObject({ tarifario: { proveedorId: "cocos" }, costo: 4500 });
+    expect(rankingBrokers(TARIFARIOS_BROKERS, "opciones", 100_000).map((f) => Math.round(f.costo))).toEqual([605, 605, 605, 726, 847, 1210, 1210, 1210]);
+    expect(rankingBrokers(TARIFARIOS_BROKERS, "bonos", 1_000_000)[0]).toMatchObject({ tarifario: { proveedorId: "allaria" }, costo: 2500 });
   });
 
-  it("los tarifarios están completos: proveedor conocido, fuente, fecha y tasas razonables", () => {
+  it("los que publican solo el máximo van marcados con \"hasta\" (Adcap, Allaria, Balanz)", () => {
+    for (const id of ["adcap", "allaria", "balanz"]) {
+      const t = TARIFARIOS_BROKERS.find((x) => x.proveedorId === id)!;
+      for (const c of Object.values(t.comisiones)) expect(c.hasta, id).toBe(true);
+    }
+  });
+
+  it("los tarifarios están completos: proveedor conocido, fuente, fecha y tasas razonables (hasta el 3 % de Adcap)", () => {
     const ids = new Set(PROVEEDORES.map((p) => p.id));
     for (const t of TARIFARIOS_BROKERS) {
       expect(ids.has(t.proveedorId), t.proveedorId).toBe(true);
@@ -42,7 +51,7 @@ describe("comisiones de brokers", () => {
       expect(t.verificado).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       for (const c of Object.values(t.comisiones)) {
         expect(c.tasa).toBeGreaterThan(0);
-        expect(c.tasa).toBeLessThan(0.02);
+        expect(c.tasa).toBeLessThanOrEqual(0.03);
       }
     }
   });

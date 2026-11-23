@@ -27,6 +27,49 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Allaria, SBS y Adcap en las comisiones, y logos de Bull Market y Adcap (punto 29, rama `brokers-faltantes`, 23/11/2026)
+
+> Lo que faltaba del punto 29: sumar Allaria, Adcap y SBS cuando publicaran su tarifario, y el logo de Bull Market.
+
+- **Los tres tienen tarifario oficial** (leídos el 23/11/2026, con su link en Mercados → Brokers):
+  - **Allaria:** la tabla se mudó a `allariainversiones.com.ar` (por eso el link viejo daba error). Se toma la "operatoria con autogestión" (web, sin asesor).
+  - **SBS:** la tabla 2026 de SBS Trading. Se toma la tarifa "Cliente directo Quicktrade": quien abre la cuenta solo, en la web o la app de Quicktrade.
+  - **Adcap:** su tabla (en `ad-cap.com.ar`, con guion) publica solo comisiones máximas y no tiene tarifa aparte para la app. Se muestran esas, con "hasta" y una nota que lo aclara.
+
+  | Broker | Acciones y CEDEARs | Bonos | Letras | Opciones | Custodia |
+  |---|---|---|---|---|---|
+  | Allaria | hasta 0,50 % + IVA | hasta 0,25 % | hasta 0,25 % (*) | hasta 0,60 % + IVA | $ 35 + IVA por mes |
+  | SBS (Quicktrade) | 0,70 % + IVA | 0,50 % | 2 % anual | 0,70 % + IVA | US$ 3,50 por mes, bonificado |
+  | Adcap (máximos) | hasta 3 % + IVA | hasta 2 % | hasta 1,5 % | hasta 1 % + IVA | sin arancel en la tabla |
+
+  (*) La tabla de Allaria no separa las letras: son títulos públicos, con la misma comisión.
+- **Cómo quedan en acciones y CEDEARs:** Cocos (0,45 % + IVA); Allaria, Balanz, Bull Market e IOL (0,50 % + IVA); PPI (0,60 %), SBS (0,70 %) y Adcap (hasta 3 %, su máximo). En bonos, Allaria pasa a ser el más barato (hasta 0,25 %).
+- **Sin monto ni "Te cobra"** (pedido de Benja, 23/11/2026): la tabla muestra solo la comisión de cada broker, de la más barata a la más cara (con el IVA en la cuenta; el orden no depende del monto). Así en la ficha y en Mercados → Brokers. Las letras de Mercados → Brokers conservan el plazo (30, 90 o 180 días), porque Cocos y SBS cobran tasa anual y el orden cambia según cuánto le queda a la letra.
+- **Letras de tasa anual:** ahora son dos (Cocos y SBS). La nota de la tabla los nombra solos según cuáles aparecen.
+- **Logos de Bull Market (el toro) y de Adcap:** el ícono de cada sitio, con el mismo tratamiento que los demás logos manuales (original en `assets/logos-fuente/proveedores/`, 96 px en `public/logos/proveedores/`). Revisados a ojo.
+- **Sitios actualizados:** Bull Market ahora es `bullmarket.com.ar`; se sumaron los de Allaria, Adcap y SBS.
+- Tests: `tests/comisiones.test.ts` (7), con el nuevo orden y que los que publican máximos van con "hasta".
+
+### Para revisar
+1. **Adcap con sus máximos:** queda último lejos (3 % en acciones). Es lo que publica; la nota aclara que puede cobrar bastante menos. Otra opción es sacarlo hasta que publique una tarifa para la app.
+2. **La bonificación de SBS** (mantenimiento de US$ 3,50) dice "hasta el 31/12/2025, pudiendo ser renovado automáticamente", en la tabla 2026. Se muestra como bonificado.
+
+## Conceptos que se explican solos (punto 24, rama `conceptos`, 23/11/2026)
+
+> Pedido: tocar (o pasar el mouse por) conceptos como el PER, el EBITDA o la TIR y que aparezca un cuadro chico que explique qué son, con la misma explicación en todo el sitio.
+
+- **Cómo se ve:** el concepto va subrayado con puntos. En la compu se abre al pasar el mouse (con un cuarto de segundo de espera, así no salta al pasar de largo) y se cierra al salir; un clic lo deja abierto hasta otro clic o hasta tocar afuera. En el celular se abre al tocarlo y se cierra tocando afuera. Muestra el término, la explicación en dos líneas y "Más en Aprender", que lleva a ese término en /aprender.
+- **Una sola fuente:** `src/lib/glosario.ts`. /aprender pasó de 25 a **60 términos** y el cuadro usa el mismo texto. Cada término guarda también cómo aparece escrito en pantalla ("Volatilidad anual", "PER (precio / ganancia)", "VI", "Capital que queda"), así que alcanza con envolver un texto en `<Etiqueta texto="…" />`: si es un concepto, se explica; si no, queda igual.
+- **Dónde aparece:**
+  - Fichas de CEDEARs y acciones: datos clave y balances (capitalización, valor de empresa, PER, EBITDA, márgenes, ROE, ROA, deuda, liquidez…).
+  - Fichas de bonos y letras: TIR, duration, paridad, cupón de hoy, rendimiento corriente, capital que queda, volatilidad, máxima caída.
+  - Comparar: máxima caída, volatilidad, PER, margen neto, ROE y dividendo.
+  - Opciones: VI, delta y base.
+- **Lo que no tiene:** los encabezados de la tabla de bonos, que ya se tocan para ordenar (sería un botón dentro de otro).
+- **Pruebas:** `tests/glosario.test.ts` (ids únicos, ninguna etiqueta repetida en dos términos, y que reconozca los textos tal como están en pantalla).
+
+---
+
 ## CEDEARs en los feriados (rama `feriado-cedears`, 23/11/2026)
 
 - **El feriado del 23/11 la tabla de CEDEARs quedó vacía:** sin rueda, data912 trae todo con volumen 0, y la tabla dejaba afuera los que no operaron. Ahora, si hoy no hubo rueda (feriado, fin de semana o antes de que abra), muestra el último cierre de los CEDEARs conocidos (`data/ar/mercados.ts`) y de los que tienen especie en dólares; con rueda, como antes, los que operaron. Con un test.
@@ -46,7 +89,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 > Pedido de Nico: las carteras de grandes inversores y fondos, sobre todo los que tienen activos argentinos. Para cada uno, una dona con los logos de sus posiciones (como las infografías de la cartera de Buffett) y sus últimos movimientos (como las apps que siguen carteras). Nada en las fichas de cada acción.
 
 - **Dónde:** Mercados → **Inversores** (`/mercados/inversores`), y una página por inversor (`/mercados/inversores/buffett`).
-- **Portada:** cuánto tienen en acciones argentinas los fondos con foco en Argentina (respuesta grande); el ranking "Con foco en Argentina" (cuánto, qué % de su cartera y en qué); y "Los grandes del mundo".
+- **Portada:** arranca directo con el ranking (sin la cifra grande de arriba ni la frase "los nuevos se suman solos", pedido de Nico, 23/11/2026): "Con foco en Argentina" (cuánto, qué % de su cartera y en qué); y "Los grandes del mundo".
 - **Página de cada uno:** el total, cuánto tiene en Argentina, la fecha de la cartera y de la presentación, y el enlace al informe en la SEC; la dona con el logo de cada posición adentro y el % afuera (las 10 más grandes y el resto); la lista de posiciones (con "No cotiza en Argentina" si no hay CEDEAR); y los movimientos contra el informe anterior, en tres grupos, uno al lado del otro (posiciones nuevas, aumentó y redujo; lo que vendió del todo va en "redujo", hasta 0 %; pedido de Nico), con el % antes → ahora, cuántas acciones sumó o vendió y un selector para ver informes anteriores.
 - **Fuente:** formularios 13F de la SEC, leídos de EDGAR (últimos 5 informes de cada fondo, con las enmiendas aplicadas). Solo acciones y ETF comprados; sin opciones. El CUSIP de cada acción se pasa a ticker con OpenFIGI (gratis) y se guarda en `data/inversores/cusips.json`.
 - **Quiénes:**
@@ -238,7 +281,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
   | Bull Market | 0,5 % + IVA | 0,5 % | 0,25 % | 0,5 % + IVA |
   | PPI | 0,6 % + IVA | 0,6 % | 0,20 % | 1 % + IVA |
 
-  Allaria, Adcap y SBS no están: no encontramos su tarifario publicado (el PDF de Allaria ya no existe). Bull Market se sumó a los proveedores; todavía sin logo.
+  Allaria, SBS y Adcap se sumaron el 23/11/2026, con los logos de Bull Market y Adcap (ver la sección de arriba).
 - **Cálculo** (`src/lib/calculos/comisiones.ts`, 6 tests):
   - lo que cobra cada broker es monto × comisión × (1 + IVA), con IVA solo en acciones, CEDEARs y opciones;
   - las letras de Cocos se prorratean por los días que le quedan;

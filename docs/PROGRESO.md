@@ -28,6 +28,14 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## CEDEARs en los feriados (rama `feriado-cedears`, 23/11/2026)
+
+- **El feriado del 23/11 la tabla de CEDEARs quedó vacía:** sin rueda, data912 trae todo con volumen 0, y la tabla dejaba afuera los que no operaron. Ahora, si hoy no hubo rueda (feriado, fin de semana o antes de que abra), muestra el último cierre de los CEDEARs conocidos (`data/ar/mercados.ts`) y de los que tienen especie en dólares; con rueda, como antes, los que operaron. Con un test.
+- **La fecha:** decía "Cierre del 23 nov" con los precios del viernes 20. Ahora, sin rueda, CEDEARs, acciones y bonos dicen el cierre del último día hábil (`momentoData912`, con los feriados).
+- El volumen en 0 se muestra "—" en vez de "$ 0".
+
+---
+
 ## Ícono nuevo en la pestaña (22/11/2026)
 
 - La "r" del logotipo, blanca, con el punto de sol amarillo, sobre un cuadrado casi negro (la imagen que mandó Nico), en vez de las tres barras. Lo arma `src/lib/icono.tsx` con la misma tipografía del logo (Bricolage extra negrita): la pestaña (64 px, puntas redondeadas), el ícono de iPhone (180 px) y los del manifest para instalar la app (192, 512 y maskable).

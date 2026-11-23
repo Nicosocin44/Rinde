@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/config/site";
+import { inversores } from "@/lib/inversores/datos";
 
 const RUTAS = [
   "/",
@@ -23,6 +24,7 @@ const RUTAS = [
   "/mercados/opciones/estrategias",
   "/mercados/comparar",
   "/mercados/brokers",
+  "/mercados/inversores",
   "/calculadoras",
   "/calculadoras/interes-compuesto",
   "/calculadoras/que-hubiera-pasado",
@@ -40,5 +42,5 @@ const RUTAS = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return RUTAS.map((r) => ({ url: `${site.url}${r}`, changeFrequency: r.startsWith("/dolar") || r === "/" ? "hourly" : "daily", priority: r === "/" ? 1 : 0.7 }));
+  return [...RUTAS, ...inversores().map((i) => `/mercados/inversores/${i.slug}`)].map((r) => ({ url: `${site.url}${r}`, changeFrequency: r.startsWith("/dolar") || r === "/" ? "hourly" : "daily", priority: r === "/" ? 1 : 0.7 }));
 }

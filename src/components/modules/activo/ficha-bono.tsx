@@ -51,7 +51,7 @@ export function FichaBonoVista({ f, asOf, estado }: { f: FichaBono; asOf: string
         titulo={b.nombre}
         acciones={
           <div className="flex flex-wrap gap-2">
-            <SeguirActivo ticker={b.ticker} nombre={b.nombre} />
+            <SeguirActivo ticker={b.ticker} nombre={b.nombre} moneda="USD" />
             <AvisoActivo ticker={b.ticker} nombre={b.nombre} precio={b.precioUsd} moneda="USD" />
             <BotonComparar ticker={b.ticker} />
           </div>

@@ -107,7 +107,7 @@ export function FichaCriptoVista({ f, asOf, estado }: { f: FichaCripto; asOf: st
         titulo={c.nombre}
         acciones={
           <div className="flex flex-wrap gap-2">
-            <SeguirActivo ticker={c.simbolo} nombre={c.nombre} />
+            <SeguirActivo ticker={c.simbolo} nombre={c.nombre} moneda="ARS" />
             <AvisoActivo ticker={c.simbolo} nombre={c.nombre} precio={c.precioArs} moneda="ARS" />
             {(c.simbolo === "BTC" || c.simbolo === "ETH") && <BotonComparar ticker={c.simbolo} />}
           </div>

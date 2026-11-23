@@ -272,6 +272,27 @@ Paridad = P / valor técnico`}</Formula>
 CCL implícito = precio en pesos / precio de la especie C`}</Formula>,
   },
   {
+    id: "inversores",
+    titulo: "Carteras de grandes inversores",
+    contenido: (
+      <>
+        <p>
+          Salen del formulario 13F que los administradores de fondos de EE.UU. con más de US$ 100 millones presentan a la SEC cada trimestre, hasta 45 días después del cierre.
+          Leemos los últimos cinco informes de cada fondo en EDGAR y, si hay una enmienda, usamos la versión que la reemplaza (o le sumamos las posiciones que agrega). Contamos solo
+          acciones y ETF comprados: el 13F no incluye bonos, acciones que cotizan solo en BYMA, ventas en corto ni opciones (las opciones que informan, las dejamos afuera).
+        </p>
+        <p>
+          El peso de cada posición es su valor sobre el total informado. Un movimiento compara la cantidad de acciones contra el informe anterior: nueva, aumentó o redujo (si
+          cambió 2 % o más) o vendió todo. El código de cada acción (CUSIP) se pasa a ticker con OpenFIGI.
+        </p>
+        <p>
+          Además de la lista que elegimos, cada trimestre se suman solos los fondos que más tienen en acciones argentinas (al menos US$ 10 millones y el 3 % de su cartera), según el
+          conjunto de datos de 13F que publica la SEC. Información pública: no es una recomendación de inversión.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "merval",
     titulo: "Merval y actualización de los precios",
     contenido: (

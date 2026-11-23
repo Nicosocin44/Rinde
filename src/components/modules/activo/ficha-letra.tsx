@@ -38,7 +38,7 @@ export function FichaLetraVista({ f, asOf, estado }: { f: FichaLetra; asOf: stri
         titulo={nombre}
         acciones={
           <div className="flex flex-wrap gap-2">
-            <SeguirActivo ticker={l.ticker} nombre={nombre} />
+            <SeguirActivo ticker={l.ticker} nombre={nombre} moneda="ARS" />
             <AvisoActivo ticker={l.ticker} nombre={nombre} precio={l.precio} moneda="ARS" />
           </div>
         }

@@ -1,0 +1,3488 @@
+{
+ "000000000": {
+  "ticker": null,
+  "nombre": null
+ },
+ "000899104": {
+  "ticker": "ADMA",
+  "nombre": "ADMA BIOLOGICS INC"
+ },
+ "00091E109": {
+  "ticker": "ABSI",
+  "nombre": "ABSCI CORP"
+ },
+ "00108J109": {
+  "ticker": "ACMR",
+  "nombre": "ACM RESEARCH INC-CLASS A"
+ },
+ "00130H105": {
+  "ticker": "AES",
+  "nombre": "AES CORP"
+ },
+ "00165C302": {
+  "ticker": "AMC",
+  "nombre": "AMC ENTERTAINMENT HLDS-CL A"
+ },
+ "00214Q302": {
+  "ticker": "ARKG",
+  "nombre": "ARK GENOMIC REVOLUTION ETF"
+ },
+ "00214Q724": {
+  "ticker": "ARKY",
+  "nombre": "ARK ACTIVE AUTOCALL INC ETF"
+ },
+ "00215W100": {
+  "ticker": "ASX",
+  "nombre": "ASE TECHNOLOGY HOLDING -ADR"
+ },
+ "002824100": {
+  "ticker": "ABT",
+  "nombre": "ABBOTT LABORATORIES"
+ },
+ "00287Y109": {
+  "ticker": "ABBV",
+  "nombre": "ABBVIE INC"
+ },
+ "00370M103": {
+  "ticker": "ABVX",
+  "nombre": "ABIVAX SA-ADR"
+ },
+ "00404A109": {
+  "ticker": "ACHC",
+  "nombre": "ACADIA HEALTHCARE CO INC"
+ },
+ "00489Q102": {
+  "ticker": "ACR",
+  "nombre": "ACRES COMMERCIAL REALTY CORP"
+ },
+ "00724F101": {
+  "ticker": "ADBE",
+  "nombre": "ADOBE INC"
+ },
+ "00773J202": {
+  "ticker": "SYRE",
+  "nombre": "SPYRE THERAPEUTICS INC"
+ },
+ "007903107": {
+  "ticker": "AMD",
+  "nombre": "ADVANCED MICRO DEVICES"
+ },
+ "00835Q202": {
+  "ticker": "AEVA",
+  "nombre": "AEVA TECHNOLOGIES INC"
+ },
+ "00846U101": {
+  "ticker": "A",
+  "nombre": "AGILENT TECHNOLOGIES INC"
+ },
+ "008474108": {
+  "ticker": "AEM",
+  "nombre": "AGNICO EAGLE MINES LTD"
+ },
+ "00847J105": {
+  "ticker": "AGYS",
+  "nombre": "AGILYSYS INC"
+ },
+ "009066101": {
+  "ticker": "ABNB",
+  "nombre": "AIRBNB INC-CLASS A"
+ },
+ "00912X302": {
+  "ticker": "ALGBP",
+  "nombre": "SUMISHO AIR LEASE CORP"
+ },
+ "010911105": {
+  "ticker": "ALMR",
+  "nombre": "ALAMAR BIOSCIENCES INC"
+ },
+ "011659109": {
+  "ticker": "ALK",
+  "nombre": "ALASKA AIR GROUP INC"
+ },
+ "012653101": {
+  "ticker": "ALB",
+  "nombre": "ALBEMARLE CORP"
+ },
+ "013872106": {
+  "ticker": "AA",
+  "nombre": "ALCOA CORP"
+ },
+ "015857105": {
+  "ticker": "AQN",
+  "nombre": "ALGONQUIN POWER & UTILITIES"
+ },
+ "01609W102": {
+  "ticker": "BABA",
+  "nombre": "ALIBABA GROUP HOLDING-SP ADR"
+ },
+ "016255101": {
+  "ticker": "ALGN",
+  "nombre": "ALIGN TECHNOLOGY INC"
+ },
+ "01741R102": {
+  "ticker": "ATI",
+  "nombre": "ATI INC"
+ },
+ "01921D204": {
+  "ticker": "AAUC",
+  "nombre": "ALLIED GOLD CORP"
+ },
+ "02005N100": {
+  "ticker": "ALLY",
+  "nombre": "ALLY FINANCIAL INC"
+ },
+ "02079K107": {
+  "ticker": "GOOG",
+  "nombre": "ALPHABET INC-CL C"
+ },
+ "02079K305": {
+  "ticker": "GOOGL",
+  "nombre": "ALPHABET INC-CL A"
+ },
+ "02079K404": {
+  "ticker": "GOOGL 6.25 05/15/29 A",
+  "nombre": "ALPHABET INC"
+ },
+ "021513106": {
+  "ticker": "ALTO",
+  "nombre": "ALTO INGREDIENTS INC"
+ },
+ "02156K103": {
+  "ticker": "OPTU",
+  "nombre": "OPTIMUM COMMUNICATIONS INC-A"
+ },
+ "02209S103": {
+  "ticker": "MO",
+  "nombre": "ALTRIA GROUP INC"
+ },
+ "023135106": {
+  "ticker": "AMZN",
+  "nombre": "AMAZON.COM INC"
+ },
+ "02319V103": {
+  "ticker": "ABEV",
+  "nombre": "AMBEV SA-ADR"
+ },
+ "02376R102": {
+  "ticker": "AAL",
+  "nombre": "AMERICAN AIRLINES GROUP INC"
+ },
+ "02390A101": {
+  "ticker": "AMX",
+  "nombre": "AMERICA MOVIL SAB DE CV"
+ },
+ "023939101": {
+  "ticker": "AMTM",
+  "nombre": "AMENTUM HOLDINGS INC"
+ },
+ "024061103": {
+  "ticker": "DCH",
+  "nombre": "DAUCH CORPORATION"
+ },
+ "025537101": {
+  "ticker": "AEP",
+  "nombre": "AMERICAN ELECTRIC POWER"
+ },
+ "025816109": {
+  "ticker": "AXP",
+  "nombre": "AMERICAN EXPRESS CO"
+ },
+ "030111207": {
+  "ticker": "AMSC",
+  "nombre": "AMERICAN SUPERCONDUCTOR CORP"
+ },
+ "03027X100": {
+  "ticker": "AMT",
+  "nombre": "AMERICAN TOWER CORP"
+ },
+ "030420103": {
+  "ticker": "AWK",
+  "nombre": "AMERICAN WATER WORKS CO INC"
+ },
+ "03062D803": {
+  "ticker": "USAS",
+  "nombre": "AMERICAS GOLD AND SILVER COR"
+ },
+ "031100100": {
+  "ticker": "AME",
+  "nombre": "AMETEK INC"
+ },
+ "031162100": {
+  "ticker": "AMGN",
+  "nombre": "AMGEN INC"
+ },
+ "031652100": {
+  "ticker": "AMKR",
+  "nombre": "AMKOR TECHNOLOGY INC"
+ },
+ "032095101": {
+  "ticker": "APH",
+  "nombre": "AMPHENOL CORP-CL A"
+ },
+ "03214Q108": {
+  "ticker": "AMPX",
+  "nombre": "AMPRIUS TECHNOLOGIES INC"
+ },
+ "032654105": {
+  "ticker": "ADI",
+  "nombre": "ANALOG DEVICES INC"
+ },
+ "03524A108": {
+  "ticker": "BUD",
+  "nombre": "ANHEUSER-BUSCH INBEV-SPN ADR"
+ },
+ "03589W102": {
+  "ticker": "ANNX",
+  "nombre": "ANNEXON INC"
+ },
+ "03674X106": {
+  "ticker": "AR",
+  "nombre": "ANTERO RESOURCES CORP"
+ },
+ "036752103": {
+  "ticker": "ELV",
+  "nombre": "ELEVANCE HEALTH INC"
+ },
+ "03743Q108": {
+  "ticker": "APA",
+  "nombre": "APA CORP"
+ },
+ "037833100": {
+  "ticker": "AAPL",
+  "nombre": "APPLE INC"
+ },
+ "038222105": {
+  "ticker": "AMAT",
+  "nombre": "APPLIED MATERIALS INC"
+ },
+ "03823U102": {
+  "ticker": "AAOI",
+  "nombre": "APPLIED OPTOELECTRONICS INC"
+ },
+ "03831W108": {
+  "ticker": "APP",
+  "nombre": "APPLOVIN CORP-CLASS A"
+ },
+ "03852U106": {
+  "ticker": "ARMK",
+  "nombre": "ARAMARK"
+ },
+ "03938L203": {
+  "ticker": "MT",
+  "nombre": "ARCELORMITTAL-NY REGISTERED"
+ },
+ "03940C100": {
+  "ticker": "ACLXGBX",
+  "nombre": "ARCELLX INC"
+ },
+ "03945R102": {
+  "ticker": "ACHR",
+  "nombre": "ARCHER AVIATION INC-A"
+ },
+ "04040Y109": {
+  "ticker": "ARIS",
+  "nombre": "ARIS MINING CORP"
+ },
+ "040413205": {
+  "ticker": "ANET",
+  "nombre": "ARISTA NETWORKS INC"
+ },
+ "040919102": {
+  "ticker": "ARKB",
+  "nombre": "ARK 21SHARES BITCOIN ETF"
+ },
+ "042068205": {
+  "ticker": "ARM",
+  "nombre": "ARM HOLDINGS PLC-ADR"
+ },
+ "04247X102": {
+  "ticker": "AWI",
+  "nombre": "ARMSTRONG WORLD INDUSTRIES"
+ },
+ "046353108": {
+  "ticker": "AZNN",
+  "nombre": "ASTRAZENECA PLC-SPONS ADR"
+ },
+ "04650F101": {
+  "ticker": "ATAI*",
+  "nombre": "ATAIBECKLEY INC"
+ },
+ "047726302": {
+  "ticker": "BATRK",
+  "nombre": "ATLANTA BRAVES HOLDINGS IN-C"
+ },
+ "052769106": {
+  "ticker": "ADSK",
+  "nombre": "AUTODESK INC"
+ },
+ "05278C107": {
+  "ticker": "ATHM",
+  "nombre": "AUTOHOME INC-ADR"
+ },
+ "05280R100": {
+  "ticker": "AUTL",
+  "nombre": "AUTOLUS THERAPEUTICS PLC"
+ },
+ "053774105": {
+  "ticker": "CAR",
+  "nombre": "AVIS BUDGET GROUP INC"
+ },
+ "05379B107": {
+  "ticker": "AVA",
+  "nombre": "AVISTA CORP"
+ },
+ "05501U601": {
+  "ticker": "AZUL",
+  "nombre": "AZUL SA-SPON ADR"
+ },
+ "055622104": {
+  "ticker": "BP",
+  "nombre": "BP PLC-SPONS ADR"
+ },
+ "05580M108": {
+  "ticker": "RILY",
+  "nombre": "BRC GROUP HOLDINGS INC"
+ },
+ "056525108": {
+  "ticker": "BMI",
+  "nombre": "BADGER METER INC"
+ },
+ "056752108": {
+  "ticker": "BIDU",
+  "nombre": "BAIDU INC - SPON ADR"
+ },
+ "05722G100": {
+  "ticker": "BKR",
+  "nombre": "BAKER HUGHES CO"
+ },
+ "059460303": {
+  "ticker": "BBD",
+  "nombre": "BANCO BRADESCO-ADR"
+ },
+ "059520106": {
+  "ticker": "BCH",
+  "nombre": "BANCO DE CHILE-ADR"
+ },
+ "05965X109": {
+  "ticker": "BSAC",
+  "nombre": "BANCO SANTANDER-CHILE-ADR"
+ },
+ "05967A107": {
+  "ticker": "BSBR",
+  "nombre": "BANCO SANTANDER BRASIL-ADS"
+ },
+ "060505104": {
+  "ticker": "BAC",
+  "nombre": "BANK OF AMERICA CORP"
+ },
+ "06849F108": {
+  "ticker": "B",
+  "nombre": "BARRICK MINING CORP"
+ },
+ "071705107": {
+  "ticker": "BLCO",
+  "nombre": "BAUSCH + LOMB CORP"
+ },
+ "071813109": {
+  "ticker": "BAX",
+  "nombre": "BAXTER INTERNATIONAL INC"
+ },
+ "07373V105": {
+  "ticker": "BEAM",
+  "nombre": "BEAM THERAPEUTICS INC"
+ },
+ "07725L102": {
+  "ticker": "ONC",
+  "nombre": "BEONE MEDICINES LTD-ADR"
+ },
+ "07831C103": {
+  "ticker": "BRBR",
+  "nombre": "BELLRING BRANDS INC"
+ },
+ "084670702": {
+  "ticker": "BRK/B",
+  "nombre": "BERKSHIRE HATHAWAY INC-CL B"
+ },
+ "08579X101": {
+  "ticker": "BRY2",
+  "nombre": "BERRY CORP"
+ },
+ "090040106": {
+  "ticker": "BILI",
+  "nombre": "BILIBILI INC-SPONSORED ADR"
+ },
+ "090043100": {
+  "ticker": "BILL",
+  "nombre": "BILL HOLDINGS INC"
+ },
+ "09075P204": {
+  "ticker": "BTAIQ",
+  "nombre": "BIOXCEL THERAPEUTICS INC"
+ },
+ "09075V102": {
+  "ticker": "BNTX",
+  "nombre": "BIONTECH SE-ADR"
+ },
+ "09175A206": {
+  "ticker": "BMNR",
+  "nombre": "BITMINE IMMERSION TECHNOLOGI"
+ },
+ "09263B116": {
+  "ticker": null,
+  "nombre": null
+ },
+ "092667104": {
+  "ticker": "SRTA",
+  "nombre": "STRATA CRITICAL MEDICAL INC"
+ },
+ "093712107": {
+  "ticker": "BE",
+  "nombre": "BLOOM ENERGY CORP- A"
+ },
+ "09570Q509": {
+  "ticker": "BMM",
+  "nombre": "BLUE MOON METALS INC"
+ },
+ "09581B103": {
+  "ticker": "OWL",
+  "nombre": "BLUE OWL CAPITAL INC"
+ },
+ "097023105": {
+  "ticker": "BA",
+  "nombre": "BOEING CO/THE"
+ },
+ "09857L108": {
+  "ticker": "BKNG",
+  "nombre": "BOOKING HOLDINGS INC"
+ },
+ "10501L106": {
+  "ticker": "BWAY",
+  "nombre": "BRAINSWAY LTD-ADR"
+ },
+ "105532105": {
+  "ticker": "BAK",
+  "nombre": "BRASKEM SA-CLASS A- ADR"
+ },
+ "10586A108": {
+  "ticker": "GRO",
+  "nombre": "BRAZIL POTASH CORP"
+ },
+ "109641100": {
+  "ticker": "EAT",
+  "nombre": "BRINKER INTERNATIONAL INC"
+ },
+ "110122108": {
+  "ticker": "BMY",
+  "nombre": "BRISTOL-MYERS SQUIBB CO"
+ },
+ "110448107": {
+  "ticker": "BTI",
+  "nombre": "BRITISH AMERICAN TOB-SP ADR"
+ },
+ "11135F101": {
+  "ticker": "AVGO",
+  "nombre": "BROADCOM INC"
+ },
+ "11271J107": {
+  "ticker": "BN",
+  "nombre": "BROOKFIELD CORP"
+ },
+ "11777Q209": {
+  "ticker": "BTG",
+  "nombre": "B2GOLD CORP"
+ },
+ "124830878": {
+  "ticker": "CBL",
+  "nombre": "CBL & ASSOCIATES PROPERTIES"
+ },
+ "12510Q100": {
+  "ticker": "CCC",
+  "nombre": "CCC INTELLIGENT SOLUTIONS HO"
+ },
+ "12514G108": {
+  "ticker": "CDW",
+  "nombre": "CDW CORP/DE"
+ },
+ "125269100": {
+  "ticker": "CF",
+  "nombre": "CF INDUSTRIES HOLDINGS INC"
+ },
+ "125523100": {
+  "ticker": "CI",
+  "nombre": "THE CIGNA GROUP"
+ },
+ "125896100": {
+  "ticker": "CMS",
+  "nombre": "CMS ENERGY CORP"
+ },
+ "126408103": {
+  "ticker": "CSX",
+  "nombre": "CSX CORP"
+ },
+ "127097103": {
+  "ticker": "CTRA",
+  "nombre": "COTERRA ENERGY INC"
+ },
+ "127387108": {
+  "ticker": "CDNS",
+  "nombre": "CADENCE DESIGN SYS INC"
+ },
+ "13057Q305": {
+  "ticker": "CRC",
+  "nombre": "CALIFORNIA RESOURCES CORP"
+ },
+ "13321L108": {
+  "ticker": "CCJ",
+  "nombre": "CAMECO CORP"
+ },
+ "136375102": {
+  "ticker": "CNI",
+  "nombre": "CANADIAN NATL RAILWAY CO"
+ },
+ "136385101": {
+  "ticker": "CNQ",
+  "nombre": "CANADIAN NATURAL RESOURCES"
+ },
+ "13646K108": {
+  "ticker": "CP",
+  "nombre": "CANADIAN PACIFIC KANSAS CITY"
+ },
+ "14040H105": {
+  "ticker": "COF",
+  "nombre": "CAPITAL ONE FINANCIAL CORP"
+ },
+ "142152107": {
+  "ticker": "CAI",
+  "nombre": "CARIS LIFE SCIENCES INC"
+ },
+ "143658300": {
+  "ticker": null,
+  "nombre": null
+ },
+ "144285103": {
+  "ticker": "CRS",
+  "nombre": "CARPENTER TECHNOLOGY"
+ },
+ "149123101": {
+  "ticker": "CAT",
+  "nombre": "CATERPILLAR INC"
+ },
+ "149568107": {
+  "ticker": "CVCO",
+  "nombre": "CAVCO INDUSTRIES INC"
+ },
+ "15101Q207": {
+  "ticker": "CLS",
+  "nombre": "CELESTICA INC"
+ },
+ "15126Q208": {
+  "ticker": "CPAC",
+  "nombre": "CEMENTOS PACASMAYO SAA - ADR"
+ },
+ "151290889": {
+  "ticker": "CX",
+  "nombre": "CEMEX SAB-SPONS ADR PART CER"
+ },
+ "15135U109": {
+  "ticker": "CVE",
+  "nombre": "CENOVUS ENERGY INC"
+ },
+ "15234Q207": {
+  "ticker": "AXIAY",
+  "nombre": "AXIA ENERGIA-ADR"
+ },
+ "15235A102": {
+  "ticker": null,
+  "nombre": null
+ },
+ "15236F100": {
+  "ticker": "AXICY",
+  "nombre": "AXIA ENERGIA-ADR PREF C"
+ },
+ "15675D103": {
+  "ticker": "CBRS",
+  "nombre": "CEREBRAS SYSTEMS INC - A"
+ },
+ "16119P108": {
+  "ticker": "CHTR",
+  "nombre": "CHARTER COMMUNICATIONS INC-A"
+ },
+ "16411R208": {
+  "ticker": "LNG",
+  "nombre": "CHENIERE ENERGY INC"
+ },
+ "165167180": {
+  "ticker": "EXEEL",
+  "nombre": "CHESAPEAKE ENERGY CORP -CW26"
+ },
+ "165167735": {
+  "ticker": "EXE",
+  "nombre": "EXPAND ENERGY CORP"
+ },
+ "166764100": {
+  "ticker": "CVX",
+  "nombre": "CHEVRON CORP"
+ },
+ "169656105": {
+  "ticker": "CMG",
+  "nombre": "CHIPOTLE MEXICAN GRILL INC"
+ },
+ "171484108": {
+  "ticker": "CHDN",
+  "nombre": "CHURCHILL DOWNS INC"
+ },
+ "172573107": {
+  "ticker": "CRCL",
+  "nombre": "CIRCLE INTERNET GROUP INC"
+ },
+ "17275R102": {
+  "ticker": "CSCO",
+  "nombre": "CISCO SYSTEMS INC"
+ },
+ "172908105": {
+  "ticker": "CTAS",
+  "nombre": "CINTAS CORP"
+ },
+ "172967424": {
+  "ticker": "C",
+  "nombre": "CITIGROUP INC"
+ },
+ "18467V109": {
+  "ticker": "YOU",
+  "nombre": "CLEAR SECURE INC -CLASS A"
+ },
+ "18507C103": {
+  "ticker": "CLPT",
+  "nombre": "CLEARPOINT NEURO INC"
+ },
+ "18539C204": {
+  "ticker": "CWEN",
+  "nombre": "CLEARWAY ENERGY INC-C"
+ },
+ "185899101": {
+  "ticker": "CLF",
+  "nombre": "CLEVELAND-CLIFFS INC"
+ },
+ "18915M107": {
+  "ticker": "NET",
+  "nombre": "CLOUDFLARE INC - CLASS A"
+ },
+ "191216100": {
+  "ticker": "KO",
+  "nombre": "COCA-COLA CO/THE"
+ },
+ "191241108": {
+  "ticker": "KOF",
+  "nombre": "COCA-COLA FEMSA SAB-SP ADR"
+ },
+ "19240Q201": {
+  "ticker": "COGT",
+  "nombre": "COGENT BIOSCIENCES INC"
+ },
+ "19247G107": {
+  "ticker": "COHR",
+  "nombre": "COHERENT CORP"
+ },
+ "19260Q107": {
+  "ticker": "COIN",
+  "nombre": "COINBASE GLOBAL INC -CLASS A"
+ },
+ "19425C100": {
+  "ticker": "CNL",
+  "nombre": "COLLECTIVE MINING LTD"
+ },
+ "20030N101": {
+  "ticker": "CMCSA",
+  "nombre": "COMCAST CORP-CLASS A"
+ },
+ "20337X109": {
+  "ticker": "VISN",
+  "nombre": "VISTANCE NETWORKS INC"
+ },
+ "204409882": {
+  "ticker": "CIG/C",
+  "nombre": "CIA ENERGETICA DE-SPON ADR"
+ },
+ "20440W105": {
+  "ticker": "SID",
+  "nombre": "CIA SIDERURGICA NACL-SP ADR"
+ },
+ "20441A102": {
+  "ticker": "SBS",
+  "nombre": "CIA SANEAMENTO BASICO DE-ADR"
+ },
+ "20441B605": {
+  "ticker": "ELP1",
+  "nombre": "COMPANHIA PARANAENSE DE ENER"
+ },
+ "20441B704": {
+  "ticker": "ELPC",
+  "nombre": "CIA PARANAENSE DE ENER-ADR"
+ },
+ "204429104": {
+  "ticker": "CCU",
+  "nombre": "CIA CERVECERIAS UNI-SPON ADR"
+ },
+ "204448104": {
+  "ticker": "BVN",
+  "nombre": "CIA DE MINAS BUENAVENTUR-ADR"
+ },
+ "20460L112": {
+  "ticker": "SPWRW",
+  "nombre": "SUNPOWER INC-CW27"
+ },
+ "20464U100": {
+  "ticker": "COMP",
+  "nombre": "COMPASS INC - CLASS A"
+ },
+ "205750409": {
+  "ticker": "LODE",
+  "nombre": "COMSTOCK INC"
+ },
+ "205768302": {
+  "ticker": "CRK",
+  "nombre": "COMSTOCK RESOURCES INC"
+ },
+ "209115104": {
+  "ticker": "ED",
+  "nombre": "CONSOLIDATED EDISON INC"
+ },
+ "21036P108": {
+  "ticker": "STZ",
+  "nombre": "CONSTELLATION BRANDS INC-A"
+ },
+ "21037T109": {
+  "ticker": "CEG",
+  "nombre": "CONSTELLATION ENERGY"
+ },
+ "21240E105": {
+  "ticker": "VLRS",
+  "nombre": "CONTROLADORA VUELA CIA-ADR"
+ },
+ "21873S108": {
+  "ticker": "CRWV",
+  "nombre": "COREWEAVE INC-CL A"
+ },
+ "21874A106": {
+  "ticker": "CORZ",
+  "nombre": "CORE SCIENTIFIC INC"
+ },
+ "218937100": {
+  "ticker": "CNR",
+  "nombre": "CORE NATURAL RESOURCES INC"
+ },
+ "219350105": {
+  "ticker": "GLW",
+  "nombre": "CORNING INC"
+ },
+ "219948106": {
+  "ticker": "CPAY",
+  "nombre": "CORPAY INC"
+ },
+ "22052L104": {
+  "ticker": "CTVA",
+  "nombre": "CORTEVA INC"
+ },
+ "22113B103": {
+  "ticker": "CSANY",
+  "nombre": "COSAN SA -ADR"
+ },
+ "22266M104": {
+  "ticker": "COUR",
+  "nombre": "COURSERA INC"
+ },
+ "22266T109": {
+  "ticker": "CPNG",
+  "nombre": "COUPANG INC"
+ },
+ "22788C105": {
+  "ticker": "CRWD",
+  "nombre": "CROWDSTRIKE HOLDINGS INC - A"
+ },
+ "22890A302": {
+  "ticker": "ORBS",
+  "nombre": "EIGHTCO HOLDINGS INC"
+ },
+ "229050307": {
+  "ticker": "CYRX",
+  "nombre": "CRYOPORT INC"
+ },
+ "229899109": {
+  "ticker": "CFR",
+  "nombre": "CULLEN/FROST BANKERS INC"
+ },
+ "23292B104": {
+  "ticker": "HEPS",
+  "nombre": "D-MARKET ELECTRONIC SERV-ADR"
+ },
+ "233051879": {
+  "ticker": "ASHR",
+  "nombre": "XTRACKERS HARVEST CSI 300 CH"
+ },
+ "23306J309": {
+  "ticker": "DBVT",
+  "nombre": "DBV TECHNOLOGIES SA-SPON ADR"
+ },
+ "23331A109": {
+  "ticker": "DHI",
+  "nombre": "DR HORTON INC"
+ },
+ "233331107": {
+  "ticker": "DTE",
+  "nombre": "DTE ENERGY COMPANY"
+ },
+ "234264109": {
+  "ticker": "DAKT",
+  "nombre": "DAKTRONICS INC"
+ },
+ "235851102": {
+  "ticker": "DHR",
+  "nombre": "DANAHER CORP"
+ },
+ "23804L103": {
+  "ticker": "DDOG",
+  "nombre": "DATADOG INC - CLASS A"
+ },
+ "23918K108": {
+  "ticker": "DVA",
+  "nombre": "DAVITA INC"
+ },
+ "23954D109": {
+  "ticker": "DAWNGBX",
+  "nombre": "DAY ONE BIOPHARMACEUTICALS I"
+ },
+ "244199105": {
+  "ticker": "DE",
+  "nombre": "DEERE & CO"
+ },
+ "24703L202": {
+  "ticker": "DELL",
+  "nombre": "DELL TECHNOLOGIES -C"
+ },
+ "247361702": {
+  "ticker": "DAL",
+  "nombre": "DELTA AIR LINES INC"
+ },
+ "25179M103": {
+  "ticker": "DVN",
+  "nombre": "DEVON ENERGY CORP"
+ },
+ "25243Q205": {
+  "ticker": "DEO",
+  "nombre": "DIAGEO PLC-SPONSORED ADR"
+ },
+ "25278X109": {
+  "ticker": "FANG",
+  "nombre": "DIAMONDBACK ENERGY INC"
+ },
+ "252828108": {
+  "ticker": "DNTH",
+  "nombre": "DIANTHUS THERAPEUTICS INC"
+ },
+ "25460G138": {
+  "ticker": "TMF",
+  "nombre": "DIR DLY 20+YR TR BL3X ETF-UI"
+ },
+ "25460G195": {
+  "ticker": "YINN",
+  "nombre": "DIREXION DLY FTSE CH BL3X-UI"
+ },
+ "254687106": {
+  "ticker": "DIS",
+  "nombre": "WALT DISNEY CO/THE"
+ },
+ "25490K869": {
+  "ticker": "CHAU",
+  "nombre": "DD CSI 300 CH A SB 2X ETF-US"
+ },
+ "256163106": {
+  "ticker": "DOCU",
+  "nombre": "DOCUSIGN INC"
+ },
+ "256746108": {
+  "ticker": "DLTR",
+  "nombre": "DOLLAR TREE INC"
+ },
+ "25746U109": {
+  "ticker": "D",
+  "nombre": "DOMINION ENERGY INC"
+ },
+ "25754A201": {
+  "ticker": "DPZ",
+  "nombre": "DOMINO'S PIZZA INC"
+ },
+ "25809K105": {
+  "ticker": "DASH",
+  "nombre": "DOORDASH INC - A"
+ },
+ "260557103": {
+  "ticker": "DOW",
+  "nombre": "DOW INC"
+ },
+ "26142V105": {
+  "ticker": "DKNG",
+  "nombre": "DRAFTKINGS INC-CL A"
+ },
+ "26441C204": {
+  "ticker": "DUK",
+  "nombre": "DUKE ENERGY CORP"
+ },
+ "26875P101": {
+  "ticker": "EOG",
+  "nombre": "EOG RESOURCES INC"
+ },
+ "26884L109": {
+  "ticker": "EQT",
+  "nombre": "EQT CORP"
+ },
+ "26922A842": {
+  "ticker": "JETS",
+  "nombre": "US GLOBAL JETS ETF"
+ },
+ "278642103": {
+  "ticker": "EBAY",
+  "nombre": "EBAY INC"
+ },
+ "278768106": {
+  "ticker": "ECHO",
+  "nombre": "ECHOSTAR CORP-A"
+ },
+ "278865100": {
+  "ticker": "ECL",
+  "nombre": "ECOLAB INC"
+ },
+ "279158109": {
+  "ticker": "EC",
+  "nombre": "ECOPETROL SA-SPONSORED ADR"
+ },
+ "27923Q109": {
+  "ticker": "ECVT",
+  "nombre": "ECOVYST INC"
+ },
+ "281020107": {
+  "ticker": "EIX",
+  "nombre": "EDISON INTERNATIONAL"
+ },
+ "284902509": {
+  "ticker": "EGO",
+  "nombre": "ELDORADO GOLD CORP"
+ },
+ "29081P303": {
+  "ticker": "AKO/B",
+  "nombre": "EMBOTELLADORA ANDINA-ADR B"
+ },
+ "29082A107": {
+  "ticker": "EMBJ",
+  "nombre": "EMBRAER SA-SPON ADR"
+ },
+ "29258Y103": {
+  "ticker": "EXK",
+  "nombre": "ENDEAVOUR SILVER CORP"
+ },
+ "29260V105": {
+  "ticker": "DAVA",
+  "nombre": "ENDAVA PLC- SPON ADR"
+ },
+ "29278D105": {
+  "ticker": "ENIC",
+  "nombre": "ENEL CHILE SA-ADR"
+ },
+ "29362U104": {
+  "ticker": "ENTG",
+  "nombre": "ENTEGRIS INC"
+ },
+ "29364G103": {
+  "ticker": "ETR",
+  "nombre": "ENTERGY CORP"
+ },
+ "29414B104": {
+  "ticker": "EPAM",
+  "nombre": "EPAM SYSTEMS INC"
+ },
+ "29446M102": {
+  "ticker": "EQNR",
+  "nombre": "EQUINOR ASA-SPON ADR"
+ },
+ "29446Y502": {
+  "ticker": "EQX",
+  "nombre": "EQUINOX GOLD CORP"
+ },
+ "296006109": {
+  "ticker": "ERO",
+  "nombre": "ERO COPPER CORP"
+ },
+ "29670G102": {
+  "ticker": "WTRG",
+  "nombre": "ESSENTIAL UTILITIES INC"
+ },
+ "297178105": {
+  "ticker": "ESS",
+  "nombre": "ESSEX PROPERTY TRUST INC"
+ },
+ "29970N104": {
+  "ticker": "EVEX",
+  "nombre": "EVE HOLDING INC"
+ },
+ "30040W108": {
+  "ticker": "ES",
+  "nombre": "EVERSOURCE ENERGY"
+ },
+ "30063P105": {
+  "ticker": "EXK",
+  "nombre": "EXACT SCIENCES CORP"
+ },
+ "30161N101": {
+  "ticker": "EXC",
+  "nombre": "EXELON CORP"
+ },
+ "30212P303": {
+  "ticker": "EXPE",
+  "nombre": "EXPEDIA GROUP INC"
+ },
+ "30231G102": {
+  "ticker": "EXMOC",
+  "nombre": "EXXON MOBIL CORP"
+ },
+ "30233G209": {
+  "ticker": "EYPT",
+  "nombre": "EYEPOINT INC"
+ },
+ "30303M102": {
+  "ticker": "META",
+  "nombre": "META PLATFORMS INC-CLASS A"
+ },
+ "31428X106": {
+  "ticker": "FDX",
+  "nombre": "FEDEX CORP"
+ },
+ "314352105": {
+  "ticker": "FDXF",
+  "nombre": "FEDEX FREIGHT HOLDING CO"
+ },
+ "31556C106": {
+  "ticker": "FRVO",
+  "nombre": "FERVO ENERGY CO-A"
+ },
+ "316841105": {
+  "ticker": "FIG",
+  "nombre": "FIGMA INC-CL A"
+ },
+ "320517105": {
+  "ticker": "FHN",
+  "nombre": "FIRST HORIZON CORP"
+ },
+ "336433107": {
+  "ticker": "FSLR",
+  "nombre": "FIRST SOLAR INC"
+ },
+ "337738108": {
+  "ticker": "FISV",
+  "nombre": "FISERV INC"
+ },
+ "337932107": {
+  "ticker": "FE",
+  "nombre": "FIRSTENERGY CORP"
+ },
+ "33829M101": {
+  "ticker": "FIVE",
+  "nombre": "FIVE BELOW"
+ },
+ "343412102": {
+  "ticker": "FLR",
+  "nombre": "FLUOR CORP"
+ },
+ "34354P105": {
+  "ticker": "FLS",
+  "nombre": "FLOWSERVE CORP"
+ },
+ "34385P108": {
+  "ticker": "LAB",
+  "nombre": "STANDARD BIOTOOLS INC"
+ },
+ "345370860": {
+  "ticker": "F",
+  "nombre": "FORD MOTOR CO"
+ },
+ "34631F102": {
+  "ticker": "FPS",
+  "nombre": "FORGENT POWER SOLUTIONS-CL A"
+ },
+ "349381103": {
+  "ticker": "FIGR",
+  "nombre": "FIGURE TECHNOLOGY SOLUT-CL A"
+ },
+ "34959E109": {
+  "ticker": "FTNT",
+  "nombre": "FORTINET INC"
+ },
+ "35137L105": {
+  "ticker": "FOXA",
+  "nombre": "FOX CORP - CLASS A"
+ },
+ "35137L204": {
+  "ticker": "FOX",
+  "nombre": "FOX CORP - CLASS B"
+ },
+ "35661P100": {
+  "ticker": "FRNM",
+  "nombre": "FREENOME INC"
+ },
+ "35671D857": {
+  "ticker": "FCX",
+  "nombre": "FREEPORT-MCMORAN INC"
+ },
+ "358029106": {
+  "ticker": "FMS",
+  "nombre": "FRESENIUS MEDICAL CARE-ADR"
+ },
+ "35834F104": {
+  "ticker": "TE",
+  "nombre": "T1 ENERGY INC"
+ },
+ "35969L108": {
+  "ticker": "YMM",
+  "nombre": "FULL TRUCK ALLIANCE -SPN ADR"
+ },
+ "36118L106": {
+  "ticker": "FUTU",
+  "nombre": "FUTU HOLDINGS LTD-ADR"
+ },
+ "36162J106": {
+  "ticker": "GEO",
+  "nombre": "GEO GROUP INC/THE"
+ },
+ "36165L108": {
+  "ticker": "GDS",
+  "nombre": "GDS HOLDINGS LTD - ADR"
+ },
+ "36266G107": {
+  "ticker": "GEHC",
+  "nombre": "GE HEALTHCARE TECHNOLOGY"
+ },
+ "36352H100": {
+  "ticker": "GAU",
+  "nombre": "GALIANO GOLD INC"
+ },
+ "363576109": {
+  "ticker": "AJG",
+  "nombre": "ARTHUR J GALLAGHER & CO"
+ },
+ "36472T109": {
+  "ticker": "TDAY",
+  "nombre": "USA TODAY CO INC"
+ },
+ "366505105": {
+  "ticker": "GTX",
+  "nombre": "GARRETT MOTION INC"
+ },
+ "36828A101": {
+  "ticker": "GEV",
+  "nombre": "GE VERNOVA INC"
+ },
+ "37045V100": {
+  "ticker": "GM",
+  "nombre": "GENERAL MOTORS CO"
+ },
+ "370920100": {
+  "ticker": "GENB",
+  "nombre": "GENERATE BIOMEDICINES INC"
+ },
+ "373737105": {
+  "ticker": "GGB",
+  "nombre": "GERDAU SA -SPON ADR"
+ },
+ "37637K108": {
+  "ticker": "GTLB",
+  "nombre": "GITLAB INC-CL A"
+ },
+ "377322102": {
+  "ticker": "GKOS",
+  "nombre": "GLAUKOS CORP"
+ },
+ "37940X102": {
+  "ticker": "GPN",
+  "nombre": "GLOBAL PAYMENTS INC"
+ },
+ "37954Y830": {
+  "ticker": "COPX",
+  "nombre": "GLOBAL X COPPER MINERS ETF"
+ },
+ "380237107": {
+  "ticker": "GDDY",
+  "nombre": "GODADDY INC - CLASS A"
+ },
+ "38059T106": {
+  "ticker": "GFI",
+  "nombre": "GOLD FIELDS LTD-SPONS ADR"
+ },
+ "38141G104": {
+  "ticker": "GS",
+  "nombre": "GOLDMAN SACHS GROUP INC"
+ },
+ "38500T200": {
+  "ticker": "GTE",
+  "nombre": "GRAN TIERRA ENERGY INC"
+ },
+ "38964R203": {
+  "ticker": "ETH",
+  "nombre": "GRAYSCALE ETHEREUM STAKING M"
+ },
+ "39579V100": {
+  "ticker": "GHG",
+  "nombre": "GREENTREE HOSPITALITY GR-ADR"
+ },
+ "39854F101": {
+  "ticker": "GRND",
+  "nombre": "GRINDR INC"
+ },
+ "40049J206": {
+  "ticker": "TV",
+  "nombre": "GRUPO TELEVISA SA-SPON ADR"
+ },
+ "40054J109": {
+  "ticker": "AERO",
+  "nombre": "GRUPO AEROMEXICO SAB DE CV"
+ },
+ "40090E106": {
+  "ticker": "CIB",
+  "nombre": "GRUPO CIBEST SA-ADR"
+ },
+ "40131M109": {
+  "ticker": "GH",
+  "nombre": "GUARDANT HEALTH INC"
+ },
+ "40171V100": {
+  "ticker": "GWRE",
+  "nombre": "GUIDEWIRE SOFTWARE INC"
+ },
+ "402635502": {
+  "ticker": "GPOR",
+  "nombre": "GULFPORT ENERGY CORP"
+ },
+ "403949100": {
+  "ticker": "DINO",
+  "nombre": "HF SINCLAIR CORP"
+ },
+ "40415F101": {
+  "ticker": "HDB",
+  "nombre": "HDFC BANK LTD-ADR"
+ },
+ "40434L105": {
+  "ticker": "HPQ",
+  "nombre": "HP INC"
+ },
+ "406216101": {
+  "ticker": "HAL",
+  "nombre": "HALLIBURTON CO"
+ },
+ "412822108": {
+  "ticker": "HOG",
+  "nombre": "HARLEY-DAVIDSON INC"
+ },
+ "413216300": {
+  "ticker": "HMY",
+  "nombre": "HARMONY GOLD MNG-SPON ADR"
+ },
+ "422806208": {
+  "ticker": "HEI/A",
+  "nombre": "HEICO CORP-CLASS A"
+ },
+ "422819102": {
+  "ticker": "HSI",
+  "nombre": "HEIDRICK & STRUGGLES INTL"
+ },
+ "42328V876": {
+  "ticker": "HSDT",
+  "nombre": "SOLANA CO"
+ },
+ "42806J700": {
+  "ticker": "HTZ",
+  "nombre": "HERTZ GLOBAL HLDGS INC"
+ },
+ "43087N204": {
+  "ticker": "HSLV",
+  "nombre": "HIGHLANDER SILVER CORP"
+ },
+ "432705309": {
+  "ticker": "CNTN",
+  "nombre": "CANTON STRATEGIC HOLDINGS IN"
+ },
+ "43300A203": {
+  "ticker": "HLT",
+  "nombre": "HILTON WORLDWIDE HOLDINGS IN"
+ },
+ "436440101": {
+  "ticker": "HO1",
+  "nombre": "HOLOGIC INC"
+ },
+ "437076102": {
+  "ticker": "HD",
+  "nombre": "HOME DEPOT INC"
+ },
+ "438333106": {
+  "ticker": "HNST",
+  "nombre": "HONEST CO INC/THE"
+ },
+ "43849R105": {
+  "ticker": "HONA",
+  "nombre": "HONEYWELL AEROSPACE INC"
+ },
+ "438516106": {
+  "ticker": null,
+  "nombre": null
+ },
+ "438516205": {
+  "ticker": "HON",
+  "nombre": "HONEYWELL INTERNATIONAL INC"
+ },
+ "440452100": {
+  "ticker": "HRL",
+  "nombre": "HORMEL FOODS CORP"
+ },
+ "44267T102": {
+  "ticker": "HHH",
+  "nombre": "HOWARD HUGHES HOLDINGS INC"
+ },
+ "443320106": {
+  "ticker": "HUBG",
+  "nombre": "HUB GROUP INC-CL A"
+ },
+ "444144109": {
+  "ticker": "HDSN",
+  "nombre": "HUDSON TECHNOLOGIES INC"
+ },
+ "444859102": {
+  "ticker": "HUM",
+  "nombre": "HUMANA INC"
+ },
+ "44812J104": {
+  "ticker": "HUT",
+  "nombre": "HUT 8 CORP"
+ },
+ "44891N208": {
+  "ticker": "PPLI",
+  "nombre": "PEOPLE INC"
+ },
+ "44916Y106": {
+  "ticker": "PURR",
+  "nombre": "HYPERLIQUID STRATEGIES"
+ },
+ "44955L155": {
+  "ticker": "IAUX/WS",
+  "nombre": "I-80 GOLD CORP -26"
+ },
+ "450056106": {
+  "ticker": "IRTC",
+  "nombre": "IRHYTHM HOLDINGS INC"
+ },
+ "45104G104": {
+  "ticker": "IBN",
+  "nombre": "ICICI BANK LTD-SPON ADR"
+ },
+ "451051106": {
+  "ticker": "IBTA",
+  "nombre": "IBOTTA INC-CL A"
+ },
+ "452327109": {
+  "ticker": "ILMN",
+  "nombre": "ILLUMINA INC"
+ },
+ "45337C102": {
+  "ticker": "INCY",
+  "nombre": "INCYTE CORP"
+ },
+ "45579U109": {
+  "ticker": "SUPN",
+  "nombre": "SUPERNUS INC"
+ },
+ "456788108": {
+  "ticker": "INFY",
+  "nombre": "INFOSYS LTD-SP ADR"
+ },
+ "45687V106": {
+  "ticker": "IR",
+  "nombre": "INGERSOLL-RAND INC"
+ },
+ "45765U103": {
+  "ticker": "NSIT",
+  "nombre": "INSIGHT ENTERPRISES INC"
+ },
+ "457669307": {
+  "ticker": "INSM",
+  "nombre": "INSMED INC"
+ },
+ "458140100": {
+  "ticker": "INTC",
+  "nombre": "INTEL CORP"
+ },
+ "45826J105": {
+  "ticker": "NTLA",
+  "nombre": "INTELLIA THERAPEUTICS INC"
+ },
+ "45826T509": {
+  "ticker": "ITRG",
+  "nombre": "INTEGRA RESOURCES CORP"
+ },
+ "45866F104": {
+  "ticker": "ICE",
+  "nombre": "INTERCONTINENTAL EXCHANGE IN"
+ },
+ "460690100": {
+  "ticker": "IPG",
+  "nombre": "INTERPUBLIC GROUP OF COS INC"
+ },
+ "46090E103": {
+  "ticker": "QQQ",
+  "nombre": "INVESCO QQQ TRUST SERIES 1"
+ },
+ "46137V357": {
+  "ticker": "RSP",
+  "nombre": "INVESCO S&P 500 EQUAL WEIGHT"
+ },
+ "46138G508": {
+  "ticker": "BKLN",
+  "nombre": "INVESCO SENIOR LOAN ETF"
+ },
+ "46138K103": {
+  "ticker": "FXE",
+  "nombre": "INVESCO CURRENCYSHARES EURO"
+ },
+ "46269C102": {
+  "ticker": "IRDM",
+  "nombre": "IRIDIUM COMMUNICATIONS INC"
+ },
+ "464285204": {
+  "ticker": "IAU",
+  "nombre": "ISHARES GOLD TRUST"
+ },
+ "464286400": {
+  "ticker": "EWZ",
+  "nombre": "ISHARES MSCI BRAZIL ETF"
+ },
+ "464286640": {
+  "ticker": "ECH",
+  "nombre": "ISHARES MSCI CHILE ETF"
+ },
+ "464286715": {
+  "ticker": "TUR",
+  "nombre": "ISHARES MSCI TURKEY ETF"
+ },
+ "464286772": {
+  "ticker": "EWY",
+  "nombre": "ISHARES MSCI SOUTH KOREA ETF"
+ },
+ "464286822": {
+  "ticker": "EWW",
+  "nombre": "ISHARES MSCI MEXICO ETF"
+ },
+ "464287184": {
+  "ticker": "FXI",
+  "nombre": "ISHARES CHINA LARGE-CAP ETF"
+ },
+ "464287200": {
+  "ticker": "IVV",
+  "nombre": "ISHARES CORE S&P 500 ETF"
+ },
+ "464287234": {
+  "ticker": "EEM",
+  "nombre": "ISHARES MSCI EMERGING MARKET"
+ },
+ "464287242": {
+  "ticker": "LQD",
+  "nombre": "ISHR IBX USD INVGD CB ETF-UI"
+ },
+ "464287515": {
+  "ticker": "IGV",
+  "nombre": "ISHARES EXPANDED TECH-SOFTWA"
+ },
+ "464287523": {
+  "ticker": "SOXX",
+  "nombre": "ISHARES SEMICONDUCTOR ETF"
+ },
+ "464287556": {
+  "ticker": "IBB",
+  "nombre": "ISHARES BIOTECHNOLOGY ETF"
+ },
+ "464287622": {
+  "ticker": "IWB",
+  "nombre": "ISHARES RUSSELL 1000 ETF"
+ },
+ "464287655": {
+  "ticker": "IWM",
+  "nombre": "ISHARES RUSSELL 2000 ETF"
+ },
+ "464288588": {
+  "ticker": "MBB",
+  "nombre": "ISHARES MBS ETF"
+ },
+ "46428Q109": {
+  "ticker": "SLV",
+  "nombre": "ISHARES SILVER TRUST"
+ },
+ "46428R107": {
+  "ticker": "GSG",
+  "nombre": "ISHARES S&P GSCI COMMODITY I"
+ },
+ "46429B598": {
+  "ticker": "INDA",
+  "nombre": "ISHARES MSCI INDIA ETF"
+ },
+ "46429B671": {
+  "ticker": "MCHI",
+  "nombre": "ISHARES MSCI CHINA ETF"
+ },
+ "46434G103": {
+  "ticker": "IEMG",
+  "nombre": "ISHARES CORE MSCI EMERGING"
+ },
+ "46434G764": {
+  "ticker": "EMXC",
+  "nombre": "ISHARES MSCI EMR MRK EX CHNA"
+ },
+ "46438F101": {
+  "ticker": "IBIT",
+  "nombre": "ISHARES BITCOIN TRUST ETF"
+ },
+ "465562106": {
+  "ticker": "ITUB",
+  "nombre": "ITAU UNIBANCO H-SPON PRF ADR"
+ },
+ "46591M109": {
+  "ticker": "JOYY",
+  "nombre": "JOYY INC-ADR"
+ },
+ "46625H100": {
+  "ticker": "JPM",
+  "nombre": "JPMORGAN CHASE & CO"
+ },
+ "466313103": {
+  "ticker": "JBL",
+  "nombre": "JABIL INC"
+ },
+ "46654Q203": {
+  "ticker": "JEPQ",
+  "nombre": "JPM NASDAQ EQUITY PREMIUM"
+ },
+ "46817M107": {
+  "ticker": "JXN",
+  "nombre": "JACKSON FINANCIAL INC-A"
+ },
+ "47215P106": {
+  "ticker": "JD",
+  "nombre": "JD.COM INC-ADR"
+ },
+ "47233W109": {
+  "ticker": "JEF",
+  "nombre": "JEFFERIES FINANCIAL GROUP IN"
+ },
+ "478160104": {
+  "ticker": "JNJ",
+  "nombre": "JOHNSON & JOHNSON"
+ },
+ "48138M105": {
+  "ticker": "JMIA",
+  "nombre": "JUMIA TECHNOLOGIES AG-ADR"
+ },
+ "482480100": {
+  "ticker": "KLAC",
+  "nombre": "KLA CORP"
+ },
+ "482497104": {
+  "ticker": "BEKE",
+  "nombre": "KE HOLDINGS INC-ADR"
+ },
+ "48268K101": {
+  "ticker": "KT",
+  "nombre": "KT CORP-SP ADR"
+ },
+ "48553T106": {
+  "ticker": "BZ",
+  "nombre": "KANZHUN LTD - ADR"
+ },
+ "48581R205": {
+  "ticker": "KSPI",
+  "nombre": "JSC KASPI.KZ ADR"
+ },
+ "49177J102": {
+  "ticker": "J4D",
+  "nombre": "KENVUE INC"
+ },
+ "49271V100": {
+  "ticker": "KDP",
+  "nombre": "KEURIG DR PEPPER INC"
+ },
+ "49427F108": {
+  "ticker": "KRC",
+  "nombre": "KILROY REALTY CORP"
+ },
+ "496902404": {
+  "ticker": "KGC",
+  "nombre": "KINROSS GOLD CORP"
+ },
+ "49845K101": {
+  "ticker": "KVYO",
+  "nombre": "KLAVIYO INC-A"
+ },
+ "499049104": {
+  "ticker": "KNX",
+  "nombre": "KNIGHT-SWIFT TRANSPORTATION"
+ },
+ "500472303": {
+  "ticker": "PHG",
+  "nombre": "KONINKLIJKE PHILIPS NVR- NY"
+ },
+ "500688106": {
+  "ticker": "KOS",
+  "nombre": "KOSMOS ENERGY LTD"
+ },
+ "500754106": {
+  "ticker": "KHC",
+  "nombre": "KRAFT HEINZ CO/THE"
+ },
+ "500767306": {
+  "ticker": "KWEB",
+  "nombre": "KRANESH CSI CHINA INTERNET"
+ },
+ "50077B207": {
+  "ticker": "KTOS",
+  "nombre": "KRATOS DEFENSE & SECURITY"
+ },
+ "501044101": {
+  "ticker": "KR",
+  "nombre": "KROGER CO"
+ },
+ "50202M102": {
+  "ticker": "LI",
+  "nombre": "LI AUTO INC - ADR"
+ },
+ "50212V100": {
+  "ticker": "LPLA",
+  "nombre": "LPL FINANCIAL HOLDINGS INC"
+ },
+ "502431109": {
+  "ticker": "LHX",
+  "nombre": "L3HARRIS TECHNOLOGIES INC"
+ },
+ "512807306": {
+  "ticker": "LRCX",
+  "nombre": "LAM RESEARCH CORP"
+ },
+ "512816109": {
+  "ticker": "LAMR",
+  "nombre": "LAMAR ADVERTISING CO-A"
+ },
+ "51817R205": {
+  "ticker": "LTM",
+  "nombre": "LATAM AIRLINES GROUP SA-ADR"
+ },
+ "518415104": {
+  "ticker": "LSCC",
+  "nombre": "LATTICE SEMICONDUCTOR CORP"
+ },
+ "518613203": {
+  "ticker": "LAUR",
+  "nombre": "LAUREATE EDUCATION INC"
+ },
+ "521865204": {
+  "ticker": "LEA",
+  "nombre": "LEAR CORP"
+ },
+ "52476L109": {
+  "ticker": "LGN",
+  "nombre": "LEGENCE CORP-CL A"
+ },
+ "526057104": {
+  "ticker": "LEN",
+  "nombre": "LENNAR CORP-A"
+ },
+ "526057302": {
+  "ticker": "LEN/B",
+  "nombre": "LENNAR CORP - B SHS"
+ },
+ "530909100": {
+  "ticker": "LLYVA",
+  "nombre": "LIBERTY LIVE HOLDINGS-A"
+ },
+ "530909308": {
+  "ticker": "LLYVK",
+  "nombre": "LIBERTY LIVE HOLDINGS-C"
+ },
+ "53115L104": {
+  "ticker": "LBRT",
+  "nombre": "LIBERTY ENERGY INC"
+ },
+ "531229722": {
+  "ticker": "LLYVK*",
+  "nombre": "LIBERTY MEDIA CORP-LIBERTY-C"
+ },
+ "531229748": {
+  "ticker": "LLYVA*",
+  "nombre": "LIBERTY MEDIA CORP-LIBERTY-A"
+ },
+ "531229755": {
+  "ticker": "FWONK",
+  "nombre": "LIBERTY MEDIA CORP-C"
+ },
+ "531229854": {
+  "ticker": "FWONKUSD",
+  "nombre": "LIBERTY MEDIA CORP-LIBERTY-C"
+ },
+ "53190C102": {
+  "ticker": "LTH",
+  "nombre": "LIFE TIME GROUP HOLDINGS INC"
+ },
+ "532457108": {
+  "ticker": "LLY",
+  "nombre": "ELI LILLY & CO"
+ },
+ "53680QAA6": {
+  "ticker": "LARCN 1.75 01/15/27",
+  "nombre": "LITHIUM ARGENTINA AG"
+ },
+ "546347105": {
+  "ticker": "LPX",
+  "nombre": "LOUISIANA-PACIFIC CORP"
+ },
+ "550021109": {
+  "ticker": "LULU",
+  "nombre": "LULULEMON ATHLETICA INC"
+ },
+ "55024U109": {
+  "ticker": "LITE",
+  "nombre": "LUMENTUM HOLDINGS INC"
+ },
+ "552953101": {
+  "ticker": "MGM",
+  "nombre": "MGM RESORTS INTERNATIONAL"
+ },
+ "55616P104": {
+  "ticker": "M",
+  "nombre": "MACY'S INC"
+ },
+ "55825T103": {
+  "ticker": "MSGK",
+  "nombre": "MSG KNICKERBOCKERS CORP"
+ },
+ "55933J203": {
+  "ticker": "MX",
+  "nombre": "MAGNACHIP SEMICONDUCTOR CORP"
+ },
+ "56418H100": {
+  "ticker": "MAN",
+  "nombre": "MANPOWERGROUP INC"
+ },
+ "565394103": {
+  "ticker": "CART",
+  "nombre": "MAPLEBEAR INC"
+ },
+ "56585A102": {
+  "ticker": "MPC",
+  "nombre": "MARATHON PETROLEUM CORP"
+ },
+ "573874104": {
+  "ticker": "MRVL",
+  "nombre": "MARVELL TECHNOLOGY INC"
+ },
+ "576323109": {
+  "ticker": "MTZ",
+  "nombre": "MASTEC INC"
+ },
+ "57636Q104": {
+  "ticker": "MA",
+  "nombre": "MASTERCARD INC - A"
+ },
+ "57667L107": {
+  "ticker": "MTCH",
+  "nombre": "MATCH GROUP INC"
+ },
+ "577128101": {
+  "ticker": "MATW",
+  "nombre": "MATTHEWS INTL CORP-CLASS A"
+ },
+ "57808L305": {
+  "ticker": "MINE",
+  "nombre": "MAYFAIR GOLD CORP"
+ },
+ "580135101": {
+  "ticker": "MCD",
+  "nombre": "MCDONALD'S CORP"
+ },
+ "58039P305": {
+  "ticker": "MUX",
+  "nombre": "MCEWEN INC"
+ },
+ "58507V107": {
+  "ticker": "MDLN",
+  "nombre": "MEDLINE INC-CL A"
+ },
+ "58733R102": {
+  "ticker": "MELI",
+  "nombre": "MERCADOLIBRE INC"
+ },
+ "58933Y105": {
+  "ticker": "MRK",
+  "nombre": "MERCK & CO. INC."
+ },
+ "594918104": {
+  "ticker": "MSFT",
+  "nombre": "MICROSOFT CORP"
+ },
+ "595112103": {
+  "ticker": "MU",
+  "nombre": "MICRON TECHNOLOGY INC"
+ },
+ "606710200": {
+  "ticker": "MITK",
+  "nombre": "MITEK SYSTEMS INC"
+ },
+ "60855R100": {
+  "ticker": "MOH",
+  "nombre": "MOLINA HEALTHCARE INC"
+ },
+ "60871R209": {
+  "ticker": "TAP",
+  "nombre": "MOLSON COORS BEVERAGE CO - B"
+ },
+ "615369105": {
+  "ticker": "MCO",
+  "nombre": "MOODY'S CORP"
+ },
+ "61945C103": {
+  "ticker": "MOS",
+  "nombre": "MOSAIC CO/THE"
+ },
+ "62914V106": {
+  "ticker": "NIO",
+  "nombre": "NIO INC - ADR"
+ },
+ "629337106": {
+  "ticker": "NNBR",
+  "nombre": "NN INC"
+ },
+ "629377508": {
+  "ticker": "NRG",
+  "nombre": "NRG ENERGY INC"
+ },
+ "632307104": {
+  "ticker": "NTRA",
+  "nombre": "NATERA INC"
+ },
+ "64110L106": {
+  "ticker": "NFLX",
+  "nombre": "NETFLIX INC"
+ },
+ "64361Q101": {
+  "ticker": "VNOM",
+  "nombre": "VIPER ENERGY INC-CL A"
+ },
+ "64782A107": {
+  "ticker": "NEWP",
+  "nombre": "NEW PACIFIC METALS CORP"
+ },
+ "650111107": {
+  "ticker": "NYT",
+  "nombre": "NEW YORK TIMES CO-A"
+ },
+ "651639106": {
+  "ticker": "NEM",
+  "nombre": "NEWMONT CORP"
+ },
+ "65290E101": {
+  "ticker": "NXT",
+  "nombre": "NEXTPOWER INC"
+ },
+ "65339F101": {
+  "ticker": "NEE",
+  "nombre": "NEXTERA ENERGY INC"
+ },
+ "65345M108": {
+  "ticker": "NXDR",
+  "nombre": "NEXTDOOR HOLDINGS INC"
+ },
+ "65345N106": {
+  "ticker": "NN",
+  "nombre": "NEXTNAV INC"
+ },
+ "65473P105": {
+  "ticker": "NI",
+  "nombre": "NISOURCE INC"
+ },
+ "654902204": {
+  "ticker": "NOK",
+  "nombre": "NOKIA CORP-SPON ADR"
+ },
+ "670100205": {
+  "ticker": "NVO",
+  "nombre": "NOVO-NORDISK A/S-SPONS ADR"
+ },
+ "670346105": {
+  "ticker": "NUE",
+  "nombre": "NUCOR CORP"
+ },
+ "67059N108": {
+  "ticker": "NTNX",
+  "nombre": "NUTANIX INC - A"
+ },
+ "67066G104": {
+  "ticker": "NVDA",
+  "nombre": "NVIDIA CORP"
+ },
+ "67077M108": {
+  "ticker": "NTR",
+  "nombre": "NUTRIEN LTD"
+ },
+ "67080M103": {
+  "ticker": "NRIX",
+  "nombre": "NURIX THERAPEUTICS INC"
+ },
+ "67080N101": {
+  "ticker": "NUVB",
+  "nombre": "NUVATION BIO INC"
+ },
+ "67401P405": {
+  "ticker": "OCSL",
+  "nombre": "OAKTREE SPECIALTY LENDING CO"
+ },
+ "674215207": {
+  "ticker": "CHRD",
+  "nombre": "CHORD ENERGY CORP"
+ },
+ "674599105": {
+  "ticker": "OXY",
+  "nombre": "OCCIDENTAL PETROLEUM CORP"
+ },
+ "675746606": {
+  "ticker": "ONIT",
+  "nombre": "ONITY GROUP INC"
+ },
+ "67576A100": {
+  "ticker": "OCUL",
+  "nombre": "OCULAR THERAPEUTIX INC"
+ },
+ "67623C307": {
+  "ticker": "OPI",
+  "nombre": "OFFICE PROPERTIES INCOME TRU"
+ },
+ "679295105": {
+  "ticker": "OKTA",
+  "nombre": "OKTA INC"
+ },
+ "68170A108": {
+  "ticker": "OMDA",
+  "nombre": "OMADA HEALTH INC"
+ },
+ "681919106": {
+  "ticker": "OMC",
+  "nombre": "OMNICOM GROUP"
+ },
+ "682189105": {
+  "ticker": "ON",
+  "nombre": "ON SEMICONDUCTOR"
+ },
+ "68236H204": {
+  "ticker": "ONDS",
+  "nombre": "ONDAS INC"
+ },
+ "68389X105": {
+  "ticker": "ORCL",
+  "nombre": "ORACLE CORP"
+ },
+ "68403P203": {
+  "ticker": "ORMP",
+  "nombre": "ORAMED PHARMACEUTICALS INC"
+ },
+ "68404L201": {
+  "ticker": "OPCH",
+  "nombre": "OPTION CARE HEALTH INC"
+ },
+ "68622P109": {
+  "ticker": "ORIC",
+  "nombre": "ORIC PHARMACEUTICALS INC"
+ },
+ "68828E809": {
+  "ticker": null,
+  "nombre": null
+ },
+ "690742101": {
+  "ticker": "OC",
+  "nombre": "OWENS CORNING"
+ },
+ "69318G106": {
+  "ticker": "PBF",
+  "nombre": "PBF ENERGY INC-CLASS A"
+ },
+ "69331C108": {
+  "ticker": "PCG",
+  "nombre": "P G & E CORP"
+ },
+ "693718108": {
+  "ticker": "PCAR",
+  "nombre": "PACCAR INC"
+ },
+ "69553P100": {
+  "ticker": "PD",
+  "nombre": "PAGERDUTY INC"
+ },
+ "69608A108": {
+  "ticker": "PLTR",
+  "nombre": "PALANTIR TECHNOLOGIES INC-A"
+ },
+ "697435105": {
+  "ticker": "PANW",
+  "nombre": "PALO ALTO NETWORKS INC"
+ },
+ "697900108": {
+  "ticker": "PAAS",
+  "nombre": "PAN AMERICAN SILVER CORP"
+ },
+ "69888T207": {
+  "ticker": "PARR",
+  "nombre": "PAR PACIFIC HOLDINGS INC"
+ },
+ "70202L102": {
+  "ticker": "PSN",
+  "nombre": "PARSONS CORP"
+ },
+ "704326107": {
+  "ticker": "PAYX",
+  "nombre": "PAYCHEX INC"
+ },
+ "70450C101": {
+  "ticker": "PAYP",
+  "nombre": "PAYPAY CORP"
+ },
+ "70450Y103": {
+  "ticker": "PYPL",
+  "nombre": "PAYPAL HOLDINGS INC"
+ },
+ "713448108": {
+  "ticker": "PEP",
+  "nombre": "PEPSICO INC"
+ },
+ "714157203": {
+  "ticker": "PESI",
+  "nombre": "PERMA-FIX ENVIRONMENTAL SVCS"
+ },
+ "714266103": {
+  "ticker": "PPTA",
+  "nombre": "PERPETUA RESOURCES CORP"
+ },
+ "71535D106": {
+  "ticker": "PSNL",
+  "nombre": "PERSONALIS INC"
+ },
+ "715684106": {
+  "ticker": "TLK",
+  "nombre": "TELKOM INDONESIA PERSERO-ADR"
+ },
+ "71654V101": {
+  "ticker": "PBR/A",
+  "nombre": "PETROLEO BRASIL-SP PREF  ADR"
+ },
+ "71654V408": {
+  "ticker": "PBR",
+  "nombre": "PETROLEO BRASILEIRO-SPON ADR"
+ },
+ "717081103": {
+  "ticker": "PFE",
+  "nombre": "PFIZER INC"
+ },
+ "718172109": {
+  "ticker": "PM",
+  "nombre": "PHILIP MORRIS INTERNATIONAL"
+ },
+ "718546104": {
+  "ticker": "PSX",
+  "nombre": "PHILLIPS 66"
+ },
+ "722304102": {
+  "ticker": "PDD",
+  "nombre": "PDD HOLDINGS INC"
+ },
+ "72352L106": {
+  "ticker": "PINS",
+  "nombre": "PINTEREST INC- CLASS A"
+ },
+ "73278L105": {
+  "ticker": "POOL",
+  "nombre": "POOL CORP"
+ },
+ "732908108": {
+  "ticker": "PONY",
+  "nombre": "PONY AI INC"
+ },
+ "737446104": {
+  "ticker": "POST",
+  "nombre": "POST HOLDINGS INC"
+ },
+ "738920107": {
+  "ticker": null,
+  "nombre": null
+ },
+ "738920115": {
+  "ticker": "ASBPW",
+  "nombre": "ASPIRE BIOPHARMA HOLDIN-CW27"
+ },
+ "74022D407": {
+  "ticker": "PDS",
+  "nombre": "PRECISION DRILLING CORP"
+ },
+ "741623102": {
+  "ticker": "PRMB",
+  "nombre": "PRIMO BRANDS CORP"
+ },
+ "74164F103": {
+  "ticker": "PRIM",
+  "nombre": "PRIMORIS SERVICES CORP"
+ },
+ "74275K108": {
+  "ticker": "PCOR",
+  "nombre": "PROCORE TECHNOLOGIES INC"
+ },
+ "743315103": {
+  "ticker": "PGR",
+  "nombre": "PROGRESSIVE CORP"
+ },
+ "74340E103": {
+  "ticker": "PGNY",
+  "nombre": "PROGYNY INC"
+ },
+ "74346Y103": {
+  "ticker": "PRO",
+  "nombre": "PROS HOLDINGS INC"
+ },
+ "74347M108": {
+  "ticker": "PUMP",
+  "nombre": "PROPETRO HOLDING CORP"
+ },
+ "74347Y797": {
+  "ticker": "SCOUSD",
+  "nombre": "PROSHARES ULTRASHORT BLOOMBE"
+ },
+ "74365A309": {
+  "ticker": "PLX",
+  "nombre": "PROTALIX BIOTHERAPEUTICS INC"
+ },
+ "74366E102": {
+  "ticker": "PTGX",
+  "nombre": "PROTAGONIST THERAPEUTICS INC"
+ },
+ "744573106": {
+  "ticker": "PEG",
+  "nombre": "PUBLIC SERVICE ENTERPRISE GP"
+ },
+ "745867101": {
+  "ticker": "PHM",
+  "nombre": "PULTEGROUP INC"
+ },
+ "74623V103": {
+  "ticker": "PCT",
+  "nombre": "PURECYCLE TECHNOLOGIES INC"
+ },
+ "74736K101": {
+  "ticker": "QRVO*",
+  "nombre": "QORVO INC"
+ },
+ "74743L100": {
+  "ticker": "Q",
+  "nombre": "QNITY ELECTRONICS INC"
+ },
+ "747525103": {
+  "ticker": "QCOM",
+  "nombre": "QUALCOMM INC"
+ },
+ "747906600": {
+  "ticker": "QMCO",
+  "nombre": "QUANTUM CORP"
+ },
+ "750917106": {
+  "ticker": "RMBS",
+  "nombre": "RAMBUS INC"
+ },
+ "75134P600": {
+  "ticker": "METC",
+  "nombre": "RAMACO RESOURCES INC-A"
+ },
+ "75134PAB1": {
+  "ticker": "METC 0 11/01/31",
+  "nombre": "RAMACO RESOURCES INC"
+ },
+ "75513E101": {
+  "ticker": "RTX",
+  "nombre": "RTX CORP"
+ },
+ "75734B100": {
+  "ticker": "RDDT",
+  "nombre": "REDDIT INC-CL A"
+ },
+ "75943R102": {
+  "ticker": "RLAY",
+  "nombre": "RELAY THERAPEUTICS INC"
+ },
+ "759916109": {
+  "ticker": "RGEN",
+  "nombre": "REPLIGEN CORP"
+ },
+ "760759100": {
+  "ticker": "RSG",
+  "nombre": "REPUBLIC SERVICES INC"
+ },
+ "76131D103": {
+  "ticker": "QSR",
+  "nombre": "RESTAURANT BRANDS INTERN"
+ },
+ "76155X100": {
+  "ticker": "RVMD",
+  "nombre": "REVOLUTION MEDICINES INC"
+ },
+ "767204100": {
+  "ticker": "RIO",
+  "nombre": "RIO TINTO PLC-SPON ADR"
+ },
+ "770323103": {
+  "ticker": "RHI",
+  "nombre": "ROBERT HALF INC"
+ },
+ "770700102": {
+  "ticker": "HOOD",
+  "nombre": "ROBINHOOD MARKETS INC - A"
+ },
+ "771049103": {
+  "ticker": "RBLX",
+  "nombre": "ROBLOX CORP -CLASS A"
+ },
+ "77311W101": {
+  "ticker": "RKT",
+  "nombre": "ROCKET COS INC-CLASS A"
+ },
+ "773121108": {
+  "ticker": "RKLB",
+  "nombre": "ROCKET LAB CORP"
+ },
+ "77543R102": {
+  "ticker": "ROKU*",
+  "nombre": "ROKU INC"
+ },
+ "778296103": {
+  "ticker": "ROST",
+  "nombre": "ROSS STORES INC"
+ },
+ "778920306": {
+  "ticker": "SHAZ",
+  "nombre": "SHARONAI HOLDINGS INC"
+ },
+ "77926X320": {
+  "ticker": "DRAM",
+  "nombre": "ROUNDHILL MEMORY ETF"
+ },
+ "780259305": {
+  "ticker": "SHEL",
+  "nombre": "SHELL PLC-ADR"
+ },
+ "781154109": {
+  "ticker": "RBRK",
+  "nombre": "RUBRIK INC-A"
+ },
+ "78163D100": {
+  "ticker": "RWAY",
+  "nombre": "RUNWAY GROWTH FINANCE CORP"
+ },
+ "78392B206": {
+  "ticker": "SKHY",
+  "nombre": "SK HYNIX INC-ADR"
+ },
+ "78409V104": {
+  "ticker": "SPGI",
+  "nombre": "S&P GLOBAL INC"
+ },
+ "78440P306": {
+  "ticker": "SKM",
+  "nombre": "SK TELECOM CO LTD-SPON ADR"
+ },
+ "78462F103": {
+  "ticker": "SPY",
+  "nombre": "SS SPDR S&P 500 ETF TRUST-US"
+ },
+ "78464A771": {
+  "ticker": "KCE",
+  "nombre": "SS SPDR S&P CAP MKTS ETF"
+ },
+ "78464A870": {
+  "ticker": "XBI",
+  "nombre": "SS SPDR S&P BIOTECH ETF"
+ },
+ "78467X109": {
+  "ticker": "DIA",
+  "nombre": "SS SPDR DOW JONES INDUS AVG"
+ },
+ "78468R556": {
+  "ticker": "XOP",
+  "nombre": "SS SPDR S&P OG EXP & PROD"
+ },
+ "78475V103": {
+  "ticker": "MWH",
+  "nombre": "SOLV ENERGY INC-CL A"
+ },
+ "79466L302": {
+  "ticker": "CRM",
+  "nombre": "SALESFORCE INC"
+ },
+ "79589L106": {
+  "ticker": "IOT",
+  "nombre": "SAMSARA INC-CL A"
+ },
+ "80004C200": {
+  "ticker": "SNDK",
+  "nombre": "SANDISK CORP"
+ },
+ "800677106": {
+  "ticker": "SGMOQ",
+  "nombre": "SANGAMO THERAPEUTICS INC"
+ },
+ "80105N105": {
+  "ticker": "SNY",
+  "nombre": "SANOFI-ADR"
+ },
+ "803054204": {
+  "ticker": "SAP",
+  "nombre": "SAP SE-SPONSORED ADR"
+ },
+ "80706P103": {
+  "ticker": "SRRK",
+  "nombre": "SCHOLAR ROCK HOLDING CORP"
+ },
+ "80810D103": {
+  "ticker": "SDGR",
+  "nombre": "SCHRODINGER INC"
+ },
+ "808513105": {
+  "ticker": "SCHW",
+  "nombre": "SCHWAB (CHARLES) CORP"
+ },
+ "811033109": {
+  "ticker": "SCTX",
+  "nombre": "SCRIBE THERAPEUTICS INC"
+ },
+ "81141R100": {
+  "ticker": "SE",
+  "nombre": "SEA LTD-ADR"
+ },
+ "812215200": {
+  "ticker": "SEG",
+  "nombre": "SEAPORT ENTERTAINMENT GROUP"
+ },
+ "81369Y209": {
+  "ticker": "XLV",
+  "nombre": "SS HEALTH CARE SELECT SECTOR"
+ },
+ "81369Y308": {
+  "ticker": "XLP",
+  "nombre": "SS CONSUMER STAPLES SEL SECT"
+ },
+ "81369Y506": {
+  "ticker": "XLE",
+  "nombre": "SS ENERGY SELECT SECTOR"
+ },
+ "81369Y605": {
+  "ticker": "XLF",
+  "nombre": "SS FINANCIAL SELECT SECTOR"
+ },
+ "81517B101": {
+  "ticker": "SECZ",
+  "nombre": "SECURITIZE CORP"
+ },
+ "816851109": {
+  "ticker": "SRE",
+  "nombre": "SEMPRA"
+ },
+ "81761L102": {
+  "ticker": null,
+  "nombre": null
+ },
+ "81761L201": {
+  "ticker": "SVC",
+  "nombre": "SERVICE PROPERTIES TRUST"
+ },
+ "81762P102": {
+  "ticker": "NOW",
+  "nombre": "SERVICENOW INC"
+ },
+ "82509L107": {
+  "ticker": "SHOP",
+  "nombre": "SHOPIFY INC - CLASS A"
+ },
+ "828359109": {
+  "ticker": "SAMG",
+  "nombre": "SILVERCREST ASSET MANAGEME-A"
+ },
+ "82835P103": {
+  "ticker": "SVM",
+  "nombre": "SILVERCORP METALS INC"
+ },
+ "82846H405": {
+  "ticker": "QXO",
+  "nombre": "QXO INC"
+ },
+ "82900L102": {
+  "ticker": "SMPL",
+  "nombre": "SIMPLY GOOD FOODS CO/THE"
+ },
+ "82983N108": {
+  "ticker": "SB9",
+  "nombre": "SITIO ROYALTIES CORP-A"
+ },
+ "829933100": {
+  "ticker": "SIRI",
+  "nombre": "SIRIUS XM HOLDINGS INC"
+ },
+ "83056P715": {
+  "ticker": "SKE",
+  "nombre": "SKEENA RESOURCES LTD"
+ },
+ "830830105": {
+  "ticker": "SKY",
+  "nombre": "CHAMPION HOMES INC"
+ },
+ "83193G107": {
+  "ticker": "SMRT",
+  "nombre": "SMARTRENT INC"
+ },
+ "832696405": {
+  "ticker": "SJM",
+  "nombre": "JM SMUCKER CO/THE"
+ },
+ "833445109": {
+  "ticker": "SNOW",
+  "nombre": "SNOWFLAKE INC"
+ },
+ "833635105": {
+  "ticker": "SQM",
+  "nombre": "QUIMICA Y MINERA CHIL-SP ADR"
+ },
+ "83418M103": {
+  "ticker": "SEI",
+  "nombre": "SOLARIS ENERGY INFRASTRUCTUR"
+ },
+ "83419D201": {
+  "ticker": "SLSR",
+  "nombre": "SOLARIS RESOURCES INC"
+ },
+ "834203309": {
+  "ticker": "SLNOEUR",
+  "nombre": "SOLENO THERAPEUTICS INC"
+ },
+ "83443Q103": {
+  "ticker": "SOLS",
+  "nombre": "SOLSTICE ADV MATERIALS INC"
+ },
+ "835699307": {
+  "ticker": "SONY",
+  "nombre": "SONY GROUP CORP - SP ADR"
+ },
+ "836100115": {
+  "ticker": "SOUNW",
+  "nombre": "SOUNDHOUND AI INC"
+ },
+ "84265V105": {
+  "ticker": "SCCO",
+  "nombre": "SOUTHERN COPPER CORP"
+ },
+ "84615Q103": {
+  "ticker": "SPCX",
+  "nombre": "SPACE EXPLORATION TECHN-CL A"
+ },
+ "85207K107": {
+  "ticker": "PSLV",
+  "nombre": "SPROTT PHYSICAL SILVER TRUST"
+ },
+ "852234103": {
+  "ticker": "XYZ",
+  "nombre": "BLOCK INC"
+ },
+ "85238K118": {
+  "ticker": "USDEW",
+  "nombre": "STABLECOINX INC"
+ },
+ "858119100": {
+  "ticker": "STLD",
+  "nombre": "STEEL DYNAMICS INC"
+ },
+ "861012102": {
+  "ticker": "STM",
+  "nombre": "STMICROELECTRONICS NV-NY SHS"
+ },
+ "86384P109": {
+  "ticker": "STUB",
+  "nombre": "STUBHUB HOLDINGS INC-CLASS A"
+ },
+ "866796105": {
+  "ticker": "SLF",
+  "nombre": "SUN LIFE FINANCIAL INC"
+ },
+ "8676EP108": {
+  "ticker": "STKL",
+  "nombre": "SUNOPTA INC"
+ },
+ "86771W105": {
+  "ticker": "RUN",
+  "nombre": "SUNRUN INC"
+ },
+ "86881A100": {
+  "ticker": "SGRY",
+  "nombre": "SURGERY PARTNERS INC"
+ },
+ "87157D109": {
+  "ticker": "SYNA",
+  "nombre": "SYNAPTICS INC"
+ },
+ "871607107": {
+  "ticker": "SNPS",
+  "nombre": "SYNOPSYS INC"
+ },
+ "87162W100": {
+  "ticker": "SNX",
+  "nombre": "TD SYNNEX CORP"
+ },
+ "87165B103": {
+  "ticker": "SYF",
+  "nombre": "SYNCHRONY FINANCIAL"
+ },
+ "871829107": {
+  "ticker": "SYY",
+  "nombre": "SYSCO CORP"
+ },
+ "87266J104": {
+  "ticker": "TPICQEUR",
+  "nombre": "TPI COMPOSITES INC"
+ },
+ "87305R109": {
+  "ticker": "TTMI",
+  "nombre": "TTM TECHNOLOGIES"
+ },
+ "874039100": {
+  "ticker": "TSM",
+  "nombre": "TAIWAN SEMICONDUCTOR-SP ADR"
+ },
+ "874054109": {
+  "ticker": "TTWO",
+  "nombre": "TAKE-TWO INTERACTIVE SOFTWRE"
+ },
+ "87422Q109": {
+  "ticker": "TLN",
+  "nombre": "TALEN ENERGY CORP"
+ },
+ "87427V103": {
+  "ticker": "TALK1",
+  "nombre": "TALKSPACE INC"
+ },
+ "878742204": {
+  "ticker": "TECK",
+  "nombre": "TECK RESOURCES LTD-CLS B"
+ },
+ "879433829": {
+  "ticker": "TDS",
+  "nombre": "TELEPHONE AND DATA SYSTEMS"
+ },
+ "88023B103": {
+  "ticker": "TEM",
+  "nombre": "TEMPUS AI INC-CL A"
+ },
+ "88023U101": {
+  "ticker": "SGI",
+  "nombre": "SOMNIGROUP INTERNATIONAL INC"
+ },
+ "88025U109": {
+  "ticker": "TXG",
+  "nombre": "10X GENOMICS INC-CLASS A"
+ },
+ "88031M109": {
+  "ticker": "TS",
+  "nombre": "TENARIS SA-ADR"
+ },
+ "88034P109": {
+  "ticker": "TME",
+  "nombre": "TENCENT MUSIC ENTERTAINM-ADR"
+ },
+ "880770102": {
+  "ticker": "TER",
+  "nombre": "TERADYNE INC"
+ },
+ "88080T104": {
+  "ticker": "WULF",
+  "nombre": "TERAWULF INC"
+ },
+ "880890108": {
+  "ticker": "TX",
+  "nombre": "TERNIUM SA-SPONSORED ADR"
+ },
+ "88160R101": {
+  "ticker": "TSLA",
+  "nombre": "TESLA INC"
+ },
+ "881624209": {
+  "ticker": "TEVAN",
+  "nombre": "TEVA PHARMACEUTICAL-SP ADR"
+ },
+ "882508104": {
+  "ticker": "TXN",
+  "nombre": "TEXAS INSTRUMENTS INC"
+ },
+ "88339J105": {
+  "ticker": "TTD",
+  "nombre": "TRADE DESK INC/THE -CLASS A"
+ },
+ "883556102": {
+  "ticker": "TMO",
+  "nombre": "THERMO FISHER SCIENTIFIC INC"
+ },
+ "88428H101": {
+  "ticker": "ETHQ",
+  "nombre": "3IQ ETHER STAKING ETF"
+ },
+ "88428J107": {
+  "ticker": "SOLQ",
+  "nombre": "3IQ SOLANA STAKING ETF"
+ },
+ "884903808": {
+  "ticker": null,
+  "nombre": null
+ },
+ "88557W101": {
+  "ticker": "QFIN",
+  "nombre": "QFIN HOLDINGS INC-ADR"
+ },
+ "88642R109": {
+  "ticker": "TDW",
+  "nombre": "TIDEWATER INC"
+ },
+ "88706T108": {
+  "ticker": "TIMB",
+  "nombre": "TIM SA-ADR"
+ },
+ "892331307": {
+  "ticker": "TM",
+  "nombre": "TOYOTA MOTOR CORP -SPON ADR"
+ },
+ "89346D107": {
+  "ticker": "TAC",
+  "nombre": "TRANSALTA CORP"
+ },
+ "89677Q107": {
+  "ticker": "TCOM",
+  "nombre": "TRIP.COM GROUP LTD-ADR"
+ },
+ "90138A103": {
+  "ticker": "VNET",
+  "nombre": "VNET GROUP INC-ADR"
+ },
+ "90138F102": {
+  "ticker": "TWLO",
+  "nombre": "TWILIO INC - A"
+ },
+ "90184D100": {
+  "ticker": "TWST",
+  "nombre": "TWIST BIOSCIENCE CORP"
+ },
+ "902494103": {
+  "ticker": "TSN",
+  "nombre": "TYSON FOODS INC-CL A"
+ },
+ "902685106": {
+  "ticker": "UDMY",
+  "nombre": "UDEMY INC"
+ },
+ "90353T100": {
+  "ticker": "UBER",
+  "nombre": "UBER TECHNOLOGIES INC"
+ },
+ "90384S303": {
+  "ticker": "ULTA",
+  "nombre": "ULTA BEAUTY INC"
+ },
+ "907818108": {
+  "ticker": "UNP",
+  "nombre": "UNION PACIFIC CORP"
+ },
+ "910047109": {
+  "ticker": "UAL",
+  "nombre": "UNITED AIRLINES HOLDINGS INC"
+ },
+ "910873405": {
+  "ticker": "UMC",
+  "nombre": "UNITED MICROELECTRON-SP ADR"
+ },
+ "911684108": {
+  "ticker": "AD",
+  "nombre": "ARRAY DIGITAL INFRASTRUCTURE"
+ },
+ "91324P102": {
+  "ticker": "UNH",
+  "nombre": "UNITEDHEALTH GROUP INC"
+ },
+ "91325V108": {
+  "ticker": null,
+  "nombre": null
+ },
+ "91332U101": {
+  "ticker": "U",
+  "nombre": "UNITY SOFTWARE INC"
+ },
+ "913903100": {
+  "ticker": "UHS",
+  "nombre": "UNIVERSAL HEALTH SERVICES-B"
+ },
+ "91822M502": {
+  "ticker": "VEON",
+  "nombre": "VEON LTD"
+ },
+ "91823B109": {
+  "ticker": "UWMC",
+  "nombre": "UWM HOLDINGS CORP"
+ },
+ "91912E105": {
+  "ticker": "VALE",
+  "nombre": "VALE SA-SP ADR"
+ },
+ "91913Y100": {
+  "ticker": "VLO",
+  "nombre": "VALERO ENERGY CORP"
+ },
+ "92189F106": {
+  "ticker": "GDX",
+  "nombre": "VANECK GOLD MINERS ETF"
+ },
+ "92189F676": {
+  "ticker": "SMH",
+  "nombre": "VANECK SEMICONDUCTOR ETF"
+ },
+ "92189F791": {
+  "ticker": "GDXJ",
+  "nombre": "VANECK JUNIOR GOLD MINERS"
+ },
+ "92189H607": {
+  "ticker": "OIH",
+  "nombre": "VANECK OIL SERVICES ETF"
+ },
+ "922042858": {
+  "ticker": "VWO",
+  "nombre": "VANGUARD FTSE EMERGING MARKE"
+ },
+ "922475108": {
+  "ticker": "VEEV",
+  "nombre": "VEEVA SYSTEMS INC-CLASS A"
+ },
+ "92259N302": {
+  "ticker": "VELO",
+  "nombre": "VELO3D INC"
+ },
+ "922908363": {
+  "ticker": "VOO",
+  "nombre": "VANGUARD S&P 500 ETF"
+ },
+ "922908736": {
+  "ticker": "VUG",
+  "nombre": "VANGUARD MRNGSTAR GR ETF-SUI"
+ },
+ "92333F101": {
+  "ticker": "VG",
+  "nombre": "VENTURE GLOBAL INC-CL A"
+ },
+ "92337F107": {
+  "ticker": "VCYT",
+  "nombre": "VERACYTE INC"
+ },
+ "92338C103": {
+  "ticker": "VLTO",
+  "nombre": "VERALTO CORP"
+ },
+ "92343E102": {
+  "ticker": "VRSN",
+  "nombre": "VERISIGN INC"
+ },
+ "925050106": {
+  "ticker": "VRNA",
+  "nombre": "VERONA PHARMA PLC - ADR"
+ },
+ "925283103": {
+  "ticker": "VSNT",
+  "nombre": "VERSANT MEDIA GROUP INC"
+ },
+ "92532F100": {
+  "ticker": "VRTX",
+  "nombre": "VERTEX PHARMACEUTICALS INC"
+ },
+ "92552V100": {
+  "ticker": "VSAT",
+  "nombre": "VIASAT INC"
+ },
+ "92763W103": {
+  "ticker": "VIPS",
+  "nombre": "VIPSHOP HOLDINGS LTD - ADR"
+ },
+ "927926303": {
+  "ticker": "VGZ",
+  "nombre": "VISTA GOLD CORP"
+ },
+ "92826C839": {
+  "ticker": "V",
+  "nombre": "VISA INC-CLASS A SHARES"
+ },
+ "92835K103": {
+  "ticker": "VPG",
+  "nombre": "VISHAY PRECISION GROUP"
+ },
+ "92840M102": {
+  "ticker": "VST",
+  "nombre": "VISTRA CORP"
+ },
+ "92859G608": {
+  "ticker": "VZLA",
+  "nombre": "VIZSLA SILVER CORP"
+ },
+ "92864M822": {
+  "ticker": "SOLZ",
+  "nombre": "SOLANA ETF"
+ },
+ "929160109": {
+  "ticker": "VMC",
+  "nombre": "VULCAN MATERIALS CO"
+ },
+ "929740108": {
+  "ticker": "WAB",
+  "nombre": "WABTEC CORP"
+ },
+ "931142103": {
+  "ticker": "WMT",
+  "nombre": "WALMART INC"
+ },
+ "93403J106": {
+  "ticker": "WRBY",
+  "nombre": "WARBY PARKER INC-CLASS A"
+ },
+ "934423104": {
+  "ticker": "WBD*",
+  "nombre": "WARNER BROS DISCOVERY INC"
+ },
+ "94106B101": {
+  "ticker": "WCN",
+  "nombre": "WASTE CONNECTIONS INC"
+ },
+ "94106L109": {
+  "ticker": "WM",
+  "nombre": "WASTE MANAGEMENT INC"
+ },
+ "946784105": {
+  "ticker": "WAY",
+  "nombre": "WAYSTAR HOLDING CORP"
+ },
+ "947890109": {
+  "ticker": "WED",
+  "nombre": "WEBSTER FINANCIAL CORP"
+ },
+ "949746101": {
+  "ticker": "WFC",
+  "nombre": "WELLS FARGO & CO"
+ },
+ "95082P105": {
+  "ticker": "WCC",
+  "nombre": "WESCO INTERNATIONAL INC"
+ },
+ "950915108": {
+  "ticker": "WRD",
+  "nombre": "WERIDE INC-ADR"
+ },
+ "955306105": {
+  "ticker": "WST",
+  "nombre": "WEST PHARMACEUTICAL SERVICES"
+ },
+ "958102105": {
+  "ticker": "WDC",
+  "nombre": "WESTERN DIGITAL CORP"
+ },
+ "969457100": {
+  "ticker": "WMB",
+  "nombre": "WILLIAMS COS INC"
+ },
+ "97785W106": {
+  "ticker": "WOLF",
+  "nombre": "WOLFSPEED INC"
+ },
+ "980745103": {
+  "ticker": "WWD",
+  "nombre": "WOODWARD INC"
+ },
+ "98138H101": {
+  "ticker": "WDAY",
+  "nombre": "WORKDAY INC-CLASS A"
+ },
+ "98386P102": {
+  "ticker": "XE",
+  "nombre": "X-ENERGY INC"
+ },
+ "98389B100": {
+  "ticker": "XEL",
+  "nombre": "XCEL ENERGY INC"
+ },
+ "98422D105": {
+  "ticker": "XPEV",
+  "nombre": "XPENG INC - ADR"
+ },
+ "98850P109": {
+  "ticker": "YUMC",
+  "nombre": "YUM CHINA HOLDINGS INC"
+ },
+ "98980L101": {
+  "ticker": "ZM",
+  "nombre": "ZOOM COMMUNICATIONS INC"
+ },
+ "B38564108": {
+  "ticker": "CMBT",
+  "nombre": "CMB TECH NV",
+  "cins": true
+ },
+ "D18190898": {
+  "ticker": "DB",
+  "nombre": "DEUTSCHE BANK AG-REGISTERED",
+  "cins": true
+ },
+ "F92124100": {
+  "ticker": "TTE",
+  "nombre": "TOTALENERGIES SE",
+  "cins": true
+ },
+ "G01125106": {
+  "ticker": "AFYA",
+  "nombre": "AFYA LTD-CLASS A",
+  "cins": true
+ },
+ "G0176J109": {
+  "ticker": "ALLE",
+  "nombre": "ALLEGION PLC",
+  "cins": true
+ },
+ "G0378L100": {
+  "ticker": "AU",
+  "nombre": "ANGLOGOLD ASHANTI PLC",
+  "cins": true
+ },
+ "G0403H108": {
+  "ticker": "AON",
+  "nombre": "AON PLC-CLASS A",
+  "cins": true
+ },
+ "G0457F107": {
+  "ticker": "ARCO",
+  "nombre": "ARCOS DORADOS HOLDINGS INC-A",
+  "cins": true
+ },
+ "G0593M107": {
+  "ticker": "AZN",
+  "nombre": "ASTRAZENECA PLC",
+  "cins": true
+ },
+ "G06973112": {
+  "ticker": "AUGO",
+  "nombre": "AURA MINERALS INC",
+  "cins": true
+ },
+ "G0896C103": {
+  "ticker": "TBBB",
+  "nombre": "BBB FOODS INC-CLASS A",
+  "cins": true
+ },
+ "G11448100": {
+  "ticker": "BTDR",
+  "nombre": "BITDEER TECHNOLOGIES GROUP-A",
+  "cins": true
+ },
+ "G13311116": {
+  "ticker": "SLMT",
+  "nombre": "SOLMATE INFRASTRUCTURE PLC",
+  "cins": true
+ },
+ "G16910120": {
+  "ticker": "BLSH",
+  "nombre": "BULLISH",
+  "cins": true
+ },
+ "G1827P106": {
+  "ticker": null,
+  "nombre": null,
+  "cins": true
+ },
+ "G2004J103": {
+  "ticker": "CCL",
+  "nombre": "CARNIVAL CORP LTD",
+  "cins": true
+ },
+ "G22845104": {
+  "ticker": "OCTV",
+  "nombre": "OCTAVE INTELLIGENCE-CL B",
+  "cins": true
+ },
+ "G2519Y108": {
+  "ticker": "BAP",
+  "nombre": "CREDICORP LTD",
+  "cins": true
+ },
+ "G25457105": {
+  "ticker": "CRDO",
+  "nombre": "CREDO TECHNOLOGY GROUP HOLDI",
+  "cins": true
+ },
+ "G25508105": {
+  "ticker": "CRH",
+  "nombre": "CRH PLC",
+  "cins": true
+ },
+ "G29018101": {
+  "ticker": "DLO",
+  "nombre": "DLOCAL LTD",
+  "cins": true
+ },
+ "G2R11M108": {
+  "ticker": "DPC",
+  "nombre": "DPC HOLDINGS PLC",
+  "cins": true
+ },
+ "G3643J108": {
+  "ticker": "FLUT",
+  "nombre": "FLUTTER ENTERTAINMENT PLC-DI",
+  "cins": true
+ },
+ "G3730V105": {
+  "ticker": "FTAI",
+  "nombre": "FTAI AVIATION LTD",
+  "cins": true
+ },
+ "G38327105": {
+  "ticker": "GPRK",
+  "nombre": "GEOPARK LTD",
+  "cins": true
+ },
+ "G3934V109": {
+  "ticker": "GENI",
+  "nombre": "GENIUS SPORTS LTD",
+  "cins": true
+ },
+ "G40705108": {
+  "ticker": "GDLC",
+  "nombre": "GRAYSCALE COINDESK 5 ETF",
+  "cins": true
+ },
+ "G4124C109": {
+  "ticker": "GRAB",
+  "nombre": "GRAB HOLDINGS LTD - CL A",
+  "cins": true
+ },
+ "G4412G101": {
+  "ticker": "HLF",
+  "nombre": "HERBALIFE LTD",
+  "cins": true
+ },
+ "G4701H109": {
+  "ticker": "IHS",
+  "nombre": "IHS HOLDING LTD",
+  "cins": true
+ },
+ "G470AU126": {
+  "ticker": "ILLUU",
+  "nombre": "ILLUMINATION ACQUISITION COR",
+  "cins": true
+ },
+ "G4766E116": {
+  "ticker": "INDV",
+  "nombre": "INDIVIOR PLC",
+  "cins": true
+ },
+ "G4R20B107": {
+  "ticker": "INTR",
+  "nombre": "INTER & CO INC - CL A",
+  "cins": true
+ },
+ "G50871105": {
+  "ticker": "JAZZ",
+  "nombre": "JAZZ PHARMACEUTICALS PLC",
+  "cins": true
+ },
+ "G5331N101": {
+  "ticker": "KYIV",
+  "nombre": "KYIVSTAR GROUP LTD",
+  "cins": true
+ },
+ "G54950103": {
+  "ticker": "LIN",
+  "nombre": "LINDE PLC",
+  "cins": true
+ },
+ "G61188101": {
+  "ticker": "LBTYA",
+  "nombre": "LIBERTY GLOBAL LTD-A",
+  "cins": true
+ },
+ "G6359F137": {
+  "ticker": "NBR",
+  "nombre": "NABORS INDUSTRIES LTD",
+  "cins": true
+ },
+ "G6683N103": {
+  "ticker": "NU",
+  "nombre": "NU HOLDINGS LTD/CAYMAN ISL-A",
+  "cins": true
+ },
+ "G6700G107": {
+  "ticker": "NVT",
+  "nombre": "NVENT ELECTRIC PLC",
+  "cins": true
+ },
+ "G670AQ104": {
+  "ticker": "CSHR",
+  "nombre": "COINSHARES PLC",
+  "cins": true
+ },
+ "G6964L115": {
+  "ticker": null,
+  "nombre": null,
+  "cins": true
+ },
+ "G7553X106": {
+  "ticker": "KRSP",
+  "nombre": "RICE ACQUISITION CORP 3-A",
+  "cins": true
+ },
+ "G7553X114": {
+  "ticker": "KRSP/WS",
+  "nombre": "RICE ACQUISITION CORP 3",
+  "cins": true
+ },
+ "G76279101": {
+  "ticker": "ROIV",
+  "nombre": "ROIVANT SCIENCES LTD",
+  "cins": true
+ },
+ "G7997R103": {
+  "ticker": "STX",
+  "nombre": "SEAGATE TECHNOLOGY HOLDINGS",
+  "cins": true
+ },
+ "G7T16G103": {
+  "ticker": "S3P",
+  "nombre": "SAPIENS INTERNATIONAL CORP",
+  "cins": true
+ },
+ "G8068L108": {
+  "ticker": "SN",
+  "nombre": "SHARKNINJA INC",
+  "cins": true
+ },
+ "G8267P108": {
+  "ticker": "SW",
+  "nombre": "SMURFIT WESTROCK PLC",
+  "cins": true
+ },
+ "G85158106": {
+  "ticker": "STNE",
+  "nombre": "STONECO LTD-A",
+  "cins": true
+ },
+ "G8588X103": {
+  "ticker": "SGHC",
+  "nombre": "SUPER GROUP SGHC LTD",
+  "cins": true
+ },
+ "G87052109": {
+  "ticker": "TEL",
+  "nombre": "TE CONNECTIVITY PLC",
+  "cins": true
+ },
+ "G8726X106": {
+  "ticker": "TNK",
+  "nombre": "TEEKAY TANKERS LTD-CLASS A",
+  "cins": true
+ },
+ "G89479102": {
+  "ticker": "TRMD",
+  "nombre": "TORM PLC-A",
+  "cins": true
+ },
+ "G9001E102": {
+  "ticker": "LILA",
+  "nombre": "LIBERTY LATIN AMERIC-CL A",
+  "cins": true
+ },
+ "G9001E128": {
+  "ticker": "LILAK",
+  "nombre": "LIBERTY LATIN AMERIC-CL C",
+  "cins": true
+ },
+ "G9108L173": {
+  "ticker": "TEN",
+  "nombre": "TSAKOS ENERGY NAVIGATION LTD",
+  "cins": true
+ },
+ "G9451V109": {
+  "ticker": "VINP",
+  "nombre": "VINCI COMPASS INVESTMENTS LT",
+  "cins": true
+ },
+ "G9456A100": {
+  "ticker": "GLNG",
+  "nombre": "GOLAR LNG LTD",
+  "cins": true
+ },
+ "G9723Y105": {
+  "ticker": "WSE",
+  "nombre": "WISE GROUP PLC-CL A",
+  "cins": true
+ },
+ "G98239109": {
+  "ticker": "XP",
+  "nombre": "XP INC - CLASS A",
+  "cins": true
+ },
+ "G98338109": {
+  "ticker": "YTRA",
+  "nombre": "YATRA ONLINE INC",
+  "cins": true
+ },
+ "H1467J104": {
+  "ticker": "CB",
+  "nombre": "CHUBB LTD",
+  "cins": true
+ },
+ "H17182108": {
+  "ticker": "CRSP",
+  "nombre": "CRISPR THERAPEUTICS AG",
+  "cins": true
+ },
+ "H42097107": {
+  "ticker": "UBS",
+  "nombre": "UBS GROUP AG-REG",
+  "cins": true
+ },
+ "H5919C104": {
+  "ticker": "ONON",
+  "nombre": "ON HOLDING AG-CLASS A",
+  "cins": true
+ },
+ "L01800108": {
+  "ticker": "ALVO",
+  "nombre": "ALVOTECH SA",
+  "cins": true
+ },
+ "L0415A103": {
+  "ticker": "AUNA",
+  "nombre": "AUNA SA-CLASS A",
+  "cins": true
+ },
+ "L44385109": {
+  "ticker": "GLOB",
+  "nombre": "GLOBANT SA",
+  "cins": true
+ },
+ "L6388F110": {
+  "ticker": "TIGO",
+  "nombre": "MILLICOM INTL CELLULAR S.A.",
+  "cins": true
+ },
+ "L67359106": {
+  "ticker": "NEXA",
+  "nombre": "NEXA RESOURCES SA",
+  "cins": true
+ },
+ "L8681T102": {
+  "ticker": "SPOT",
+  "nombre": "SPOTIFY TECHNOLOGY SA",
+  "cins": true
+ },
+ "M0740A108": {
+  "ticker": "DRTS",
+  "nombre": "ALPHA TAU MEDICAL LTD",
+  "cins": true
+ },
+ "M25722105": {
+  "ticker": "CGEN",
+  "nombre": "COMPUGEN LTD",
+  "cins": true
+ },
+ "M4130Y106": {
+  "ticker": "ENLV",
+  "nombre": "ENLIVEX LTD",
+  "cins": true
+ },
+ "M4R82T106": {
+  "ticker": "FVRR",
+  "nombre": "FIVERR INTERNATIONAL LTD",
+  "cins": true
+ },
+ "M5216V106": {
+  "ticker": "GLBE",
+  "nombre": "GLOBAL-E ONLINE LTD",
+  "cins": true
+ },
+ "M5R635108": {
+  "ticker": "INVZ",
+  "nombre": "INNOVIZ TECHNOLOGIES LTD",
+  "cins": true
+ },
+ "M6240T109": {
+  "ticker": "KMDA",
+  "nombre": "KAMADA LTD",
+  "cins": true
+ },
+ "M70700105": {
+  "ticker": "NNOX",
+  "nombre": "NANO-X IMAGING LTD",
+  "cins": true
+ },
+ "M7S64L123": {
+  "ticker": "PGY",
+  "nombre": "PAGAYA TECHNOLOGIES LTD -A",
+  "cins": true
+ },
+ "M84116108": {
+  "ticker": "SILC",
+  "nombre": "SILICOM LTD",
+  "cins": true
+ },
+ "M8694L137": {
+  "ticker": "SLGL",
+  "nombre": "SOL-GEL TECHNOLOGIES LTD",
+  "cins": true
+ },
+ "M8769Q102": {
+  "ticker": "TEVA",
+  "nombre": "TEVA PHARMACEUTICAL IND LTD",
+  "cins": true
+ },
+ "M87915274": {
+  "ticker": "TSEM",
+  "nombre": "TOWER SEMICONDUCTOR LTD",
+  "cins": true
+ },
+ "M8S7C5117": {
+  "ticker": "PLSM",
+  "nombre": "PULSENMORE LTD",
+  "cins": true
+ },
+ "M8T80P204": {
+  "ticker": "NEXN",
+  "nombre": "NEXXEN INTERNATIONAL LTD",
+  "cins": true
+ },
+ "M9607U107": {
+  "ticker": null,
+  "nombre": null,
+  "cins": true
+ },
+ "M9T951109": {
+  "ticker": "ZIM",
+  "nombre": "ZIM INTEGRATED SHIPPING SERV",
+  "cins": true
+ },
+ "N00985106": {
+  "ticker": "AER",
+  "nombre": "AERCAP HOLDINGS NV",
+  "cins": true
+ },
+ "N07059210": {
+  "ticker": "ASML",
+  "nombre": "ASML HOLDING NV-NY REG SHS",
+  "cins": true
+ },
+ "N0731H103": {
+  "ticker": "ATAI*",
+  "nombre": "ATAIBECKLEY INC",
+  "cins": true
+ },
+ "N20944109": {
+  "ticker": "CNH",
+  "nombre": "CNH INDUSTRIAL NV",
+  "cins": true
+ },
+ "N3167Y103": {
+  "ticker": "RACE",
+  "nombre": "FERRARI NV",
+  "cins": true
+ },
+ "N4732M103": {
+  "ticker": "JBS",
+  "nombre": "JBS NV-A",
+  "cins": true
+ },
+ "N53745100": {
+  "ticker": "LYB",
+  "nombre": "LYONDELLBASELL INDU-CL A",
+  "cins": true
+ },
+ "N62509109": {
+  "ticker": "NAMS",
+  "nombre": "NEWAMSTERDAM PHARMA CO NV",
+  "cins": true
+ },
+ "N69958101": {
+  "ticker": "PICS",
+  "nombre": "PICS NV",
+  "cins": true
+ },
+ "N72482156": {
+  "ticker": "QGEN",
+  "nombre": "QIAGEN N.V.",
+  "cins": true
+ },
+ "N90064101": {
+  "ticker": "QURE",
+  "nombre": "UNIQURE NV",
+  "cins": true
+ },
+ "N97284108": {
+  "ticker": "NBIS",
+  "nombre": "NEBIUS GROUP NV",
+  "cins": true
+ },
+ "P31076105": {
+  "ticker": "CPA",
+  "nombre": "COPA HOLDINGS SA-CLASS A",
+  "cins": true
+ },
+ "P5626F128": {
+  "ticker": "IFS",
+  "nombre": "INTERCORP FINANCIAL SERVICES",
+  "cins": true
+ },
+ "Q4982L109": {
+  "ticker": "IREN",
+  "nombre": "IREN LTD",
+  "cins": true
+ },
+ "T19377109": {
+  "ticker": "BSP",
+  "nombre": "BENDING SPOONS SPA",
+  "cins": true
+ },
+ "V5633W109": {
+  "ticker": "MMYT",
+  "nombre": "MAKEMYTRIP LTD",
+  "cins": true
+ },
+ "Y2065G121": {
+  "ticker": "DHT",
+  "nombre": "DHT HOLDINGS INC",
+  "cins": true
+ },
+ "Y2990R101": {
+  "ticker": "HAFN",
+  "nombre": "HAFNIA LTD",
+  "cins": true
+ },
+ "Y64177101": {
+  "ticker": "ECO",
+  "nombre": "OKEANIS ECO TANKERS CORP",
+  "cins": true
+ },
+ "Y8162K204": {
+  "ticker": "SBLK",
+  "nombre": "STAR BULK CARRIERS CORP",
+  "cins": true
+ }
+}

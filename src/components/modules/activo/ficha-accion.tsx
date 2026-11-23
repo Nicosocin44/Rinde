@@ -121,7 +121,7 @@ export function FichaAccion({ a, mepHoy, asOf, estado }: { a: FichaActivo; mepHo
         titulo={nombre}
         acciones={
           <div className="flex flex-wrap gap-2">
-            <SeguirActivo ticker={a.ticker} nombre={nombre} />
+            <SeguirActivo ticker={a.ticker} nombre={nombre} moneda="ARS" />
             {a.precio ? <AvisoActivo ticker={a.ticker} nombre={nombre} precio={a.precio} moneda="ARS" /> : null}
             <BotonComparar ticker={a.ticker} />
           </div>

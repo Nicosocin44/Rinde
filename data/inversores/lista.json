@@ -1,0 +1,23 @@
+{
+  "_nota": "Inversores que seguimos (punto 28). CIK verificado en EDGAR el 22/11/2026. 'persona' solo cuando es pública y está confirmada. 'grupo': argentina (fondos con mucho peso en acciones argentinas, según sus 13F) o mundo (los más conocidos). A estos se suman solos los que más tienen en Argentina en cada trimestre (ver scripts/inversores.py).",
+  "excluidos": [{ "cik": 1536411, "nombre": "Duquesne Family Office (Stanley Druckenmiller)", "motivo": "Lo sacamos el 22/11/2026, pedido de Nico" }],
+  "inversores": [
+    { "slug": "aquamarine", "nombre": "Aquamarine Financial", "cik": 2104187, "grupo": "argentina", "ciudad": "Islas Caimán" },
+    { "slug": "helikon", "nombre": "Helikon Investments", "cik": 1839497, "grupo": "argentina", "ciudad": "Londres" },
+    { "slug": "westwood-global", "nombre": "Westwood Global Investments", "cik": 1356513, "grupo": "argentina", "ciudad": "Boston" },
+    { "slug": "vr-advisory", "nombre": "VR Advisory Services", "cik": 1348145, "grupo": "argentina", "ciudad": "Islas Caimán" },
+    { "slug": "ping-capital", "nombre": "Ping Capital Management", "cik": 1804352, "grupo": "argentina", "ciudad": "Nueva York" },
+    { "slug": "pointstate", "nombre": "PointState Capital", "persona": "Zach Schreiber", "cik": 1509842, "grupo": "argentina", "ciudad": "Nueva York" },
+    { "slug": "north-of-south", "nombre": "North of South Capital", "cik": 2033334, "grupo": "argentina", "ciudad": "Londres" },
+    { "slug": "discovery", "nombre": "Discovery Capital Management", "persona": "Rob Citrone", "cik": 1389507, "grupo": "argentina", "ciudad": "Connecticut" },
+    { "slug": "mak-capital", "nombre": "MAK Capital One", "cik": 1385702, "grupo": "argentina", "ciudad": "Nueva York" },
+    { "slug": "thiel-macro", "nombre": "Thiel Macro", "persona": "Peter Thiel", "cik": 1562087, "grupo": "argentina", "ciudad": "Miami" },
+    { "slug": "fundamenta", "nombre": "Fundamenta Capital", "cik": 2088289, "grupo": "argentina", "ciudad": "Montevideo" },
+    { "slug": "buffett", "nombre": "Berkshire Hathaway", "persona": "Warren Buffett", "cik": 1067983, "grupo": "mundo", "ciudad": "Omaha" },
+    { "slug": "ackman", "nombre": "Pershing Square", "persona": "Bill Ackman", "cik": 1336528, "grupo": "mundo", "ciudad": "Nueva York" },
+    { "slug": "dalio", "nombre": "Bridgewater Associates", "persona": "Fundado por Ray Dalio", "cik": 1350694, "grupo": "mundo", "ciudad": "Connecticut" },
+    { "slug": "marks", "nombre": "Oaktree Capital", "persona": "Howard Marks", "cik": 949509, "grupo": "mundo", "ciudad": "Los Ángeles" },
+    { "slug": "cathie-wood", "nombre": "ARK Invest", "persona": "Cathie Wood", "cik": 1697748, "grupo": "mundo", "ciudad": "Florida" },
+    { "slug": "gates", "nombre": "Fundación Gates", "persona": "Bill Gates", "cik": 1166559, "grupo": "mundo", "ciudad": "Kirkland" }
+  ]
+}

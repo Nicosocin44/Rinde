@@ -102,7 +102,12 @@ export function RankingBrokers({ clase: claseFija, dias: diasFijos, titulo, comp
 
       <div className="flex flex-wrap items-end gap-4">
         <MoneyInput etiqueta="Monto" valor={monto} onChange={setMonto} className="w-full sm:w-56" />
-        {!claseFija && <SegmentedControl etiqueta="Qué operás" tamano="sm" valor={claseElegida} onChange={setClase} opciones={CLASES} />}
+        {!claseFija && (
+          // En 375 px las cuatro opciones no entran: la franja se desliza de costado (como las solapas).
+          <div className="sin-scrollbar -mx-4 max-w-[calc(100%+2rem)] overflow-x-auto px-4 sm:mx-0 sm:max-w-none sm:overflow-visible sm:px-0">
+            <SegmentedControl etiqueta="Qué operás" tamano="sm" valor={claseElegida} onChange={setClase} opciones={CLASES} />
+          </div>
+        )}
         {clase === "letras" && diasFijos === undefined && (
           <SegmentedControl etiqueta="Plazo de la letra" tamano="sm" valor={plazo} onChange={setPlazo} opciones={PLAZOS.map((p) => ({ valor: p, etiqueta: `${p} días` }))} />
         )}

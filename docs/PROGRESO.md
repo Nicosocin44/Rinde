@@ -12,6 +12,65 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Ícono nuevo en la pestaña (22/11/2026)
+
+- La "r" del logotipo, blanca, con el punto de sol amarillo, sobre un cuadrado casi negro (la imagen que mandó Nico), en vez de las tres barras. Lo arma `src/lib/icono.tsx` con la misma tipografía del logo (Bricolage extra negrita): la pestaña (64 px, puntas redondeadas), el ícono de iPhone (180 px) y los del manifest para instalar la app (192, 512 y maskable).
+
+---
+
+## Carteras de grandes inversores (punto 28, rama `inversores`, 22/11/2026)
+
+> Pedido de Nico: las carteras de grandes inversores y fondos, sobre todo los que tienen activos argentinos. Para cada uno, una dona con los logos de sus posiciones (como las infografías de la cartera de Buffett) y sus últimos movimientos (como las apps que siguen carteras). Nada en las fichas de cada acción.
+
+- **Dónde:** Mercados → **Inversores** (`/mercados/inversores`), y una página por inversor (`/mercados/inversores/buffett`).
+- **Portada:** cuánto tienen en acciones argentinas los fondos con foco en Argentina (respuesta grande); el ranking "Con foco en Argentina" (cuánto, qué % de su cartera y en qué); y "Los grandes del mundo".
+- **Página de cada uno:** el total, cuánto tiene en Argentina, la fecha de la cartera y de la presentación, y el enlace al informe en la SEC; la dona con el logo de cada posición adentro y el % afuera (las 10 más grandes y el resto); la lista de posiciones (con "No cotiza en Argentina" si no hay CEDEAR); y los movimientos contra el informe anterior, en tres grupos, uno al lado del otro (posiciones nuevas, aumentó y redujo; lo que vendió del todo va en "redujo", hasta 0 %; pedido de Nico), con el % antes → ahora, cuántas acciones sumó o vendió y un selector para ver informes anteriores.
+- **Fuente:** formularios 13F de la SEC, leídos de EDGAR (últimos 5 informes de cada fondo, con las enmiendas aplicadas). Solo acciones y ETF comprados; sin opciones. El CUSIP de cada acción se pasa a ticker con OpenFIGI (gratis) y se guarda en `data/inversores/cusips.json`.
+- **Quiénes:**
+  - Con foco en Argentina (lista fija, `data/inversores/lista.json`): Aquamarine Financial, Helikon, Westwood Global, VR Advisory, Ping Capital, PointState (Zach Schreiber), North of South, Discovery (Rob Citrone), MAK Capital, Thiel Macro (Peter Thiel) y Fundamenta Capital (Montevideo).
+  - Se suman solos cada trimestre los fondos que más tienen en acciones argentinas (al menos US$ 10 M y el 3 % de su cartera), según el data set trimestral de 13F de la SEC: hoy Abu Dhabi Investment Council, RWC, Route One, Cape Ann, Gemsstock, Sagil y Equinox.
+  - Los grandes del mundo: Berkshire (Warren Buffett), Pershing Square (Bill Ackman), Bridgewater (fundado por Ray Dalio), Oaktree (Howard Marks), ARK (Cathie Wood) y la Fundación Gates.
+  - **Excluidos** (`excluidos` en `lista.json`, no entran ni solos): Duquesne (Stanley Druckenmiller), a pedido de Nico.
+  - Sin "Últimos movimientos" en la portada (pedido de Nico): los movimientos se ven en la página de cada uno.
+- **Actualización:** `scripts/inversores.py` (Python), con un workflow que corre todos los lunes (`.github/workflows/inversores.yml`) y sube los cambios solo si los hay. Baja también el logo de las acciones nuevas que no tienen (Financial Modeling Prep, como los demás); si no hay, queda el monograma.
+- **Con datos reales (22/11/2026):** 24 inversores, casi todos con la cartera al 30/9/2026 (Pershing al 31/3 y Oaktree al 30/6: todavía no presentaron el último). Los 18 con foco en Argentina tienen **US$ 3.463 M** en acciones argentinas; el que más, Aquamarine (US$ 857 M, 44 % de su cartera: YPF, Galicia, Macro, BBVA).
+- **Fondos que informan en miles:** desde 2023 el 13F va en dólares, pero algunos siguen informando en miles (Duquesne daba US$ 4,1 M en vez de US$ 4.149 M). `corregir_miles()` lo detecta por el precio por acción que resulta (mediana de menos de US$ 2) y multiplica por 1.000, también al buscar los fondos con foco en Argentina. 831 de las 844 acciones que se muestran tienen ticker (los códigos que empiezan con letra se buscan como CINS); 566 logos nuevos (de 467 a 1.033). Se descartaron 3 logos de FMP que no servían (una foto, uno vacío). Capturas en `.shots/inversores/` (375 y 1440 px, claro y oscuro).
+- **Activos argentinos:** 19 CUSIP verificados en los propios 13F (`data/inversores/argentinos.json`): YPF, Galicia, Macro, BBVA, Supervielle, Pampa, Vista, TGS, Central Puerto, Edenor, Telecom, Loma Negra, IRSA, Cresud, Corporación América, Adecoagro, Lithium Argentina, Bioceres y el ETF ARGT.
+
+### Lo que no entra todavía
+- **FCI argentinos:** la CAFCI cerró su API ("Route not allowed") y la CNV recibe las carteras semanales de los fondos (RG 961/2023) pero no las publica en un formato abierto; cada administradora las sube en PDF a su sitio.
+- **Burry (Scion):** cerró el fondo; su último 13F es del 30/9/2025.
+- **Congresistas de EE.UU. (Pelosi):** son declaraciones en PDF ante el Congreso; los datos ordenados los venden terceros con licencia.
+
+### Decisiones para revisar
+1. **Nombres de los fondos, no de las personas,** salvo cuando quién está atrás es público y seguro (Buffett, Ackman, Druckenmiller, Marks, Wood, Gates, Citrone, Thiel, Schreiber; Bridgewater dice "Fundado por Ray Dalio"). De Aquamarine, Ping o Helikon la SEC no lo dice.
+2. **Sin fotos:** monogramas con las iniciales del fondo.
+3. **Los bancos enormes** (JPMorgan, Fidelity, Morgan Stanley) tienen mucho en Argentina en dólares, pero es menos del 1 % de lo que manejan: no entran (piso del 3 %).
+4. **El 13F llega hasta 45 días tarde** y no muestra bonos ni cortos: lo dice cada página, con las dos fechas (cartera y presentación).
+5. **Abu Dhabi Investment Council** es un fondo soberano: entra solo por tener el 26 % de su cartera de 13F en Vista.
+
+---
+
+## Siguiendo: sin la cantidad y en la moneda que elegís (rama `siguiendo-moneda`, 22/11/2026)
+
+> Correcciones de Nico: el botón sin el número de seguidos, y que cada activo se sume en la moneda que se estaba mirando (siguió BTC y se agregó en pesos).
+
+- **El botón dice solo "★ Siguiendo"**, sin "· N".
+- **El botón está siempre** (22/11/2026, pedido de Nico): si no seguís nada, la lista lo dice y explica cómo sumar un activo (antes el botón no aparecía, y en Vercel parecía que faltaba: lo seguido se guarda en cada navegador y en cada dirección por separado).
+- **Cada activo se sigue en la moneda que estás mirando** en el gráfico de la ficha ("En pesos" / "En dólares"): el gráfico la anota (`fijarMonedaVista`) y "★ Seguir" la guarda con el activo. El aviso lo dice ("Seguís Bitcoin en dólares"). Si la ficha no tiene selector, va en la moneda del activo (bonos en dólares; el resto en pesos).
+- **La lista muestra cada uno en su moneda.** El servicio de precios ahora trae también la otra moneda: CEDEARs con su especie en dólares, bonos con su especie en pesos, cripto con su precio en dólares; acciones y LECAPs pasadas al dólar MEP. La variación en la otra moneda compone la del activo con la del MEP del día. Los que se siguieron antes de este cambio quedan en la moneda del activo.
+- Probado: BTC (en dólares, como abre la ficha) → US$ 63.936; ETH en pesos → $ 3.039.900; GGAL en dólares → US$ 2,61; AL30 → US$ 47,50.
+- **Cripto con variación en la lista:** BTC, ETH, USDT y USDC no mostraban variación. Ahora llevan la de las últimas 24 h de Binance, como su ficha: BTC y ETH en dólares, de su par contra USDT; en pesos, esa compuesta con la del dólar cripto (USDT/ARS); USDT y USDC, la de su par en pesos (`binance.ticker24h`).
+- **Scroll con la lista abierta (compu):** el panel quedaba abierto pero se iba con la página, y la rueda, al llegar al final de la lista, seguía bajando la página de atrás. Ahora, mientras la lista está abierta, la página queda quieta (como con el calendario) y la rueda mueve solo la lista; se cierra con un clic afuera o Esc. En el celular ya andaba bien (sube desde abajo y bloquea la página).
+- **Gráfico del Merval los fines de semana:** salía una línea plana y una variación que no era la real (−0,26 % en vez de −0,24 %). Yahoo publica puntos los sábados y domingos, todos con el último cierre, y el código los tomaba como una rueda. Además, el cierre oficial de BYMA llega un rato después de las 17 h y se usaba el último dato de la rueda. Ahora solo cuentan los días hábiles con movimiento, la línea termina en el cierre oficial y la base es el cierre oficial de la rueda anterior (`ultimaRueda`, con un test nuevo).
+- **De paso, cripto en Mercados:** las tarjetas de BTC y ETH mostraban en dólares la mediana de los exchanges argentinos, que cotizan con sobreprecio (BTC US$ 63.976 contra US$ 60.906 en Binance). Ahora usan el precio de Binance, como la ficha y como dice Metodología (`binance.precioActual`, caché de 15 s). Los exchanges en dólares quedan de respaldo si Binance no responde. El precio en pesos no cambia (mediana de los exchanges, que ya coincidía).
+
+### Decisiones para revisar
+1. **Acciones y LECAPs en dólares, al MEP:** no tienen especie en dólares con precio propio, así que se dividen por el MEP del momento.
+2. **Mismo activo en las dos monedas:** se sigue una sola vez. Para cambiarle la moneda, dejás de seguirlo y lo volvés a seguir mirando la otra.
+
+---
+
 ## Rediseño: la home como una historia (rama `rediseno`, sin subir todavía)
 
 > Pedido de los fundadores (17/11/2026): llevar el diseño al nivel de moahu.com.ar, Apple y Whoop. La parte de producto de la home se cuenta como una historia por secciones, con una idea por sección y componentes reales en modo demo.
@@ -137,7 +196,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
-## Dónde comprar y las comisiones de los brokers (punto 28, rama `brokers-comisiones`, 22/11/2026)
+## Dónde comprar y las comisiones de los brokers (punto 29, rama `brokers-comisiones`, 22/11/2026)
 
 > Pedido de Benja: que, como en el dólar, en acciones, CEDEARs, bonos y opciones aparezcan los brokers para comprar, con sus comisiones. De cuatro ideas dibujadas eligió dos: "Dónde comprar" en cada ficha y una página con todas las comisiones.
 
@@ -163,7 +222,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
   - los tests usan los tarifarios cargados, así que también avisan si un dato queda mal.
 - **Los derechos de mercado de BYMA no entran en el orden:** son iguales en todos los brokers. Van como nota, con los valores que publican los tarifarios. No coinciden del todo entre sí (IOL: 0,05 % + IVA en acciones; Bull Market: 0,070 %) y no pudimos confirmar el de BYMA.
 - Sección "Comisiones de los brokers" en Metodología. Revisado en 1366 px (oscuro) y 375 px (claro).
-- **De paso, Comparar deja de ser una solapa** (pedido de Benja): se llega desde el botón "Comparar" de la ficha de cada activo. La página sigue en `/mercados/comparar` y ahí ninguna solapa queda marcada (`sinSolapa` en `SectionTabs`). Las solapas de Mercados quedan: CEDEARs, Acciones, Bonos, Cripto, Opciones y Brokers.
+- **Comparar sigue siendo una solapa** (Benja la había sacado; Nico pidió dejar todas, 23/11/2026). Las solapas de Mercados quedan: CEDEARs, Acciones, Bonos, Cripto, Opciones, Comparar, Inversores y Brokers. `SectionTabs` conserva la opción `sinSolapa` por si una página de la sección no tiene solapa.
 
 ### Para revisar
 1. **Actualizar los tarifarios cada tanto:** los brokers los cambian. Cada uno tiene su fecha de lectura y su link.

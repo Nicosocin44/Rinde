@@ -32,3 +32,22 @@ export async function velasDelDia(par: ParIntradia) {
   });
   return k.map((r) => ({ fecha: new Date(r[0]).toISOString(), apertura: Number(r[1]), maximo: Number(r[2]), minimo: Number(r[3]), cierre: Number(r[4]), volumen: Number(r[5]) }));
 }
+
+const tickerSchema = z.object({ lastPrice: z.string(), priceChangePercent: z.string() });
+
+/**
+ * Precio de este momento en dólares (contra USDT) y variación de las últimas 24 h. Es el precio de BTC y ETH en dólares
+ * de todo el sitio (el de los exchanges locales trae sobreprecio). Verificado el 22/11/2026. Caché de 15 segundos.
+ */
+export async function precioActual(simbolo: "BTC" | "ETH"): Promise<{ precio: number; variacion24h: number }> {
+  return ticker24h(`${simbolo}USDT`);
+}
+
+/** Precio y variación de 24 h de un par (BTCUSDT, USDTARS, USDCARS…). Verificado el 22/11/2026. Caché de 15 segundos. */
+export async function ticker24h(par: "BTCUSDT" | "ETHUSDT" | "USDTARS" | "USDCARS"): Promise<{ precio: number; variacion24h: number }> {
+  const t = await traerJson(`https://api.binance.com/api/v3/ticker/24hr?symbol=${par}`, tickerSchema, { fuente: "binance", revalidate: 15, timeoutMs: 6000 });
+  const precio = Number(t.lastPrice);
+  const variacion24h = Number(t.priceChangePercent) / 100;
+  if (!(precio > 0) || !Number.isFinite(variacion24h)) throw new Error(`Binance: dato inválido de ${par}`);
+  return { precio, variacion24h };
+}

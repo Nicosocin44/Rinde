@@ -48,7 +48,8 @@ export function FilaAlerta({ alerta, foto, onBorrar, onToggle }: { alerta: Alert
           onClick={onToggle}
           className={cn("relative h-[26px] w-[44px] shrink-0 rounded-full transition-colors", alerta.activa ? "bg-accent" : "bg-surface-2 ring-1 ring-border-strong ring-inset")}
         >
-          <span className={cn("absolute top-[3px] size-5 rounded-full bg-white shadow-(--shadow-thumb) transition-transform duration-(--duration-short)", alerta.activa ? "translate-x-[21px]" : "translate-x-[3px]")} />
+          {/* `left-0`: dentro de un <button> el contenido va centrado, y sin él el círculo arrancaba del medio y se salía. */}
+          <span className={cn("absolute top-[3px] left-0 size-5 rounded-full bg-white shadow-(--shadow-thumb) transition-transform duration-(--duration-short) ease-(--ease-standard)", alerta.activa ? "translate-x-[21px]" : "translate-x-[3px]")} />
         </button>
       )}
       {onBorrar && (

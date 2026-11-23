@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: lunes 23/11/2026, los botones del gráfico en una fila (rama `grafico-botones`) y el ícono viejo en la pestaña (rama `icono-cache`).
+> Escrito para los fundadores. Última actualización: lunes 23/11/2026, el interruptor de las alertas (rama `alertas-interruptor`).
 
 ## Cómo verlo
 
@@ -9,6 +9,16 @@
 3. Abrir **http://localhost:3000**.
 
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
+
+---
+
+## El interruptor de las alertas, en su lugar (rama `alertas-interruptor`, 23/11/2026)
+
+> Benja: en Alertas, el círculo blanco del interruptor se salía del óvalo por la derecha.
+
+- **Por qué:** el círculo no decía desde dónde arrancaba (le faltaba `left-0`). Dentro de un `<button>` el contenido va centrado, así que arrancaba del medio del óvalo y, encendido, se salía 19 px.
+- **Arreglo:** `left-0` en el círculo (`src/components/modules/alertas/vista.tsx`). Ahora queda a 3 px de cada borde, encendido y apagado. También en el de "¿Dónde rinde más?" (`pesos/donde-rinde.tsx`): ahí andaba porque no es un botón, pero así no se rompe si algún día lo es.
+- Revisado con alertas de prueba (encendida y apagada) y tocando cada interruptor.
 
 ---
 

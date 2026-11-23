@@ -10,6 +10,7 @@ import {
   LineStyle,
   type IChartApi,
   type ISeriesApi,
+  type Logical,
   type MouseEventParams,
   type SeriesType,
   type Time,
@@ -22,6 +23,7 @@ import { Destello } from "@/components/ui/destello";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { fechaCorta, hora, numero } from "@/lib/format";
 import type { VelaCompacta } from "@/lib/calculos";
+import { indiceCercano, tramoEntre, type Tramo } from "@/lib/calculos/tramo";
 import { usePreferencias } from "@/lib/preferencias";
 import { cn } from "@/lib/cn";
 
@@ -43,6 +45,9 @@ export type { VelaCompacta };
 
 export type TipoGrafico = "area" | "linea" | "velas";
 const CLAVE_TIPO = "rinde.tipo-grafico";
+
+/** Un tramo elegido en el gráfico, con dónde se dibujan sus dos puntas (en píxeles, dentro del gráfico). */
+type TramoVisible = Tramo & { a: { x: number; y: number }; b: { x: number; y: number }; alto: number };
 
 function leerColor(nombre: string) {
   return getComputedStyle(document.documentElement).getPropertyValue(nombre).trim();
@@ -71,6 +76,8 @@ function porSemana(velas: VelaCompacta[]): VelaCompacta[] {
  * - Área, línea o velas (si hay apertura, máximo y mínimo); la elección se recuerda en el navegador.
  * - Rango "1D" con el recorrido del día, cuando la fuente lo tiene.
  * - Con `variacionDia`, la variación de hoy queda siempre visible al lado de la del período.
+ * - Tramo (como Google Finance): arrastrando el mouse, o tocando con dos dedos, se marcan dos fechas y el encabezado
+ *   dice cuánto subió o bajó entre ellas.
  */
 export function PriceChart({
   serie,
@@ -131,6 +138,11 @@ export function PriceChart({
     }
   }, []);
   const [scrub, setScrub] = useState<{ valor: number; fecha: string } | null>(null);
+  // El tramo: lo que está dibujado ([fecha, valor], el cierre en las velas), dónde se apretó el mouse y dónde están los dedos.
+  const [tramo, setTramo] = useState<TramoVisible | null>(null);
+  const dibujados = useRef<[string, number][]>([]);
+  const arrastre = useRef<number | null>(null);
+  const dedos = useRef(new Map<number, number>());
   const { tema, coloresAlt } = usePreferencias();
   const formatoRef = useRef(formato);
   useEffect(() => {
@@ -249,13 +261,81 @@ export function PriceChart({
     if (tipo === "velas") {
       const lista = !esDia && (rango === "5A" || rango === "Max") ? porSemana(velasVisibles) : velasVisibles;
       s.setData(lista.map((v) => ({ time: aTiempo(v[0], esDia), open: v[1], high: v[2], low: v[3], close: v[4] })));
+      dibujados.current = lista.map((v): [string, number] => [v[0], v[4]]);
     } else {
       s.setData(puntos.map(([f, v]) => ({ time: aTiempo(f, esDia), value: v })));
+      dibujados.current = puntos;
     }
     grafico.current?.timeScale().fitContent();
   }, [puntos, velasVisibles, tipo, esDia, rango]);
 
-  const mostrado = scrub?.valor ?? actual?.[1] ?? null;
+  // ── Tramo: dos puntos del gráfico y cuánto cambió entre ellos ──
+  /** El dato dibujado más cercano a una posición horizontal (en píxeles, dentro del gráfico). */
+  const indiceEn = (x: number) => {
+    const l = grafico.current?.timeScale().coordinateToLogical(x);
+    return l === null || l === undefined ? null : indiceCercano(l, dibujados.current.length);
+  };
+  const marcar = (i: number | null, j: number | null) => {
+    const chart = grafico.current;
+    const s = serieApi.current;
+    const t = i === null || j === null ? null : tramoEntre(dibujados.current, i, j, variacionEn);
+    if (!chart || !s || !t || i === null || j === null) return setTramo(null);
+    const [ia, ib] = i < j ? [i, j] : [j, i];
+    const xa = chart.timeScale().logicalToCoordinate(ia as Logical);
+    const xb = chart.timeScale().logicalToCoordinate(ib as Logical);
+    const ya = s.priceToCoordinate(t.desde[1]);
+    const yb = s.priceToCoordinate(t.hasta[1]);
+    if (xa === null || xb === null || ya === null || yb === null) return setTramo(null);
+    setTramo({ ...t, a: { x: xa, y: ya }, b: { x: xb, y: yb }, alto: alto - chart.timeScale().height() });
+  };
+  const xEn = (e: React.PointerEvent<HTMLElement>) => e.clientX - e.currentTarget.getBoundingClientRect().left;
+  /** Compu: apretar y arrastrar. Celular: dos dedos (con uno solo se sigue viendo cada fecha). */
+  const alApretar = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse") {
+      if (e.button !== 0) return;
+      arrastre.current = indiceEn(xEn(e));
+      setTramo(null);
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } else if (e.pointerType === "touch") {
+      dedos.current.set(e.pointerId, xEn(e));
+      if (dedos.current.size === 2) {
+        const [x1, x2] = [...dedos.current.values()];
+        marcar(indiceEn(x1!), indiceEn(x2!));
+      }
+    }
+  };
+  const alMoverPuntero = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse" && arrastre.current !== null) marcar(arrastre.current, indiceEn(xEn(e)));
+    else if (e.pointerType === "touch" && dedos.current.has(e.pointerId)) {
+      dedos.current.set(e.pointerId, xEn(e));
+      if (dedos.current.size === 2) {
+        const [x1, x2] = [...dedos.current.values()];
+        marcar(indiceEn(x1!), indiceEn(x2!));
+      }
+    }
+  };
+  /** Al soltar el mouse el tramo queda a la vista (hasta otro clic o hasta salir del gráfico); al levantar un dedo, se va. */
+  const alSoltar = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse") arrastre.current = null;
+    else if (e.pointerType === "touch") {
+      dedos.current.delete(e.pointerId);
+      setTramo(null);
+    }
+  };
+  const alSalir = () => {
+    setScrub(null);
+    if (arrastre.current === null) setTramo(null);
+  };
+  const elegirRango = (r: Rango) => {
+    setRango(r);
+    setTramo(null);
+  };
+  const fechaTramo = (iso: string) => (esDia ? hora(iso) : fechaCorta(iso.slice(0, 10)));
+  /** "+$ 20,20" o "−US$ 1.234": la diferencia del tramo, en la unidad de la serie. */
+  const diferenciaTexto = (v: number) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${formato ? formato(Math.abs(v)) : `${moneda ? `${moneda} ` : ""}${numero(Math.abs(v), decimales)}`}`;
+  const colorTramo = !tramo || tono === "neutro" ? "accent" : tramo.diferencia >= 0 ? "gain" : "loss";
+
+  const mostrado = tramo?.hasta[1] ?? scrub?.valor ?? actual?.[1] ?? null;
   const variacionMostrada = scrub && inicial ? cambio(scrub.valor, inicial[1]) : variacion;
   const rangos = hayIntradia ? RANGOS : RANGOS.filter((r) => r.valor !== "1D");
   const tipos: { valor: TipoGrafico; etiqueta: string }[] = [
@@ -278,7 +358,11 @@ export function PriceChart({
           <div className="flex min-w-0 flex-col gap-1">
             <div className="text-label">{titulo}</div>
             <p className="tabular h-5 text-chico text-text-2">
-              {scrub ? (
+              {tramo ? (
+                <span className="inline-flex items-center gap-1.5">
+                  {fechaTramo(tramo.desde[0])} → {fechaTramo(tramo.hasta[0])}: <Delta valor={tramo.variacion} tipo={variacionEn === "puntos" ? "puntos" : "porcentaje"} className="font-medium" />
+                </span>
+              ) : scrub ? (
                 <>
                   {esDia ? hora(scrub.fecha) : fechaCorta(scrub.fecha.slice(0, 10), true)}: <span className="font-medium text-text">{formato ? formato(scrub.valor) : `${moneda ?? ""} ${numero(scrub.valor, decimales)}`}</span>
                 </>
@@ -295,6 +379,16 @@ export function PriceChart({
               {formato ? <span className="tabular text-cifra">{mostrado !== null ? formato(mostrado) : "—"}</span> : <Cifra valor={mostrado} moneda={moneda} decimales={decimales} className="text-cifra" />}
             </Destello>
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-chico text-text-2">
+              {tramo ? (
+                <span className="inline-flex flex-wrap items-center gap-x-1.5">
+                  <Delta valor={tramo.variacion} tipo={variacionEn === "puntos" ? "puntos" : "porcentaje"} className={cn("font-semibold", tono === "neutro" && "!text-text-2")} />
+                  {variacionEn !== "puntos" && <span className={cn("tabular", tono === "neutro" ? "text-text-2" : tramo.diferencia >= 0 ? "text-gain" : "text-loss")}>({diferenciaTexto(tramo.diferencia)})</span>}
+                  <span>
+                    del {fechaTramo(tramo.desde[0])} al {fechaTramo(tramo.hasta[0])}
+                  </span>
+                </span>
+              ) : (
+                <>
               {mostrarDia && !scrub && (
                 <span className="inline-flex items-center gap-1.5">
                   <Delta valor={variacionDia} tipo={variacionEn === "puntos" ? "puntos" : "porcentaje"} className={cn("font-semibold", tono === "neutro" && "!text-text-2")} />
@@ -305,16 +399,52 @@ export function PriceChart({
                 <Delta valor={variacionMostrada} tipo={variacionEn === "puntos" ? "puntos" : "porcentaje"} className={tono === "neutro" ? "!text-text-2" : undefined} />
                 <span>{scrub ? fechaScrub(scrub.fecha) : esDia ? etiquetaDia : `en ${nombreRango(rango)}`}</span>
               </span>
+                </>
+              )}
             </p>
           </div>
         )}
         <div className="sin-scrollbar flex max-w-full items-center gap-2 overflow-x-auto *:shrink-0 @min-[46rem]:shrink-0 @min-[46rem]:overflow-visible">
           {acciones}
           {!compacto && <SegmentedControl etiqueta="Tipo de gráfico" tamano="sm" valor={tipo} onChange={elegirTipo} opciones={tipos} />}
-          <SegmentedControl etiqueta="Rango" tamano="sm" valor={rango} onChange={setRango} opciones={rangos} />
+          <SegmentedControl etiqueta="Rango" tamano="sm" valor={rango} onChange={elegirRango} opciones={rangos} />
         </div>
       </div>
-      <div ref={contenedor} style={{ height: alto }} className="w-full touch-pan-y" onPointerLeave={() => setScrub(null)} />
+      <div className="flex flex-col gap-2">
+        <div
+          style={{ height: alto }}
+          className="relative w-full touch-pan-y select-none"
+          onPointerDown={alApretar}
+          onPointerMove={alMoverPuntero}
+          onPointerUp={alSoltar}
+          onPointerCancel={alSoltar}
+          onPointerLeave={alSalir}
+        >
+          <div ref={contenedor} className="absolute inset-0" />
+          {tramo && (
+            // Las dos fechas (líneas punteadas), el tramo sombreado y sus dos puntas sobre la línea.
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0" style={{ height: tramo.alto }}>
+              <div
+                className={cn("absolute inset-y-0", colorTramo === "gain" ? "bg-gain/10" : colorTramo === "loss" ? "bg-loss/10" : "bg-accent/10")}
+                style={{ left: tramo.a.x, width: Math.max(0, tramo.b.x - tramo.a.x) }}
+              />
+              {[tramo.a, tramo.b].map((p, i) => (
+                <div key={i}>
+                  <div className="absolute inset-y-0 border-l border-dashed border-text-3" style={{ left: p.x }} />
+                  <div
+                    className={cn("absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-surface", colorTramo === "gain" ? "bg-gain" : colorTramo === "loss" ? "bg-loss" : "bg-accent")}
+                    style={{ left: p.x, top: p.y }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <p className="text-micro text-text-3">
+          <span className="[@media(pointer:coarse)]:hidden">Arrastrá sobre el gráfico para ver cuánto subió o bajó entre dos fechas.</span>
+          <span className="hidden [@media(pointer:coarse)]:inline">Tocá el gráfico con dos dedos para ver cuánto subió o bajó entre dos fechas.</span>
+        </p>
+      </div>
     </div>
   );
 }

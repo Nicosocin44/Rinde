@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: lunes 23/11/2026, Allaria, SBS y Adcap en las comisiones (rama `brokers-faltantes`) y conceptos que se explican solos (rama `conceptos`).
+> Escrito para los fundadores. Última actualización: lunes 23/11/2026, los botones del gráfico en una fila (rama `grafico-botones`).
 
 ## Cómo verlo
 
@@ -9,6 +9,19 @@
 3. Abrir **http://localhost:3000**.
 
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
+
+---
+
+## Los botones del gráfico, siempre en una fila (rama `grafico-botones`, 23/11/2026)
+
+> Benja: los botones del gráfico (Área, Línea, Velas y 1S… Máx) a veces estaban en una fila y, al tocar uno, pasaban a dos.
+
+- **Por qué pasaba:** iban al lado del precio en una fila que podía partirse. Al tocar un rango cambia el texto de la variación ("en 3 meses", "en 1 año"…), el precio ocupa más y los botones bajaban. A 1024 px ya estaban partidos desde el principio.
+- **Ahora** (`src/components/charts/price-chart.tsx`): lo decide el ancho del gráfico, no el texto.
+  - Si el gráfico mide 46rem (736 px) o más, los botones van al lado del precio, en una fila.
+  - Si no, van debajo del precio, también en una fila.
+  - En el celular, donde los dos grupos no entran, la fila se desliza de costado (como las solapas) en vez de partirse.
+- Revisado tocando cada rango a 1366 px (al lado del precio), 1024 px (debajo) y 375 px (se desliza), y en el histórico del dólar. Vale para todos los gráficos de precio: fichas, Cartera e histórico del dólar.
 
 ---
 

@@ -5,11 +5,26 @@ import { useToast } from "@/components/ui/toast";
 import { diasEntre, hoyAR } from "@/lib/calculos/fechas";
 import { evaluar, type FotoMercado } from "@/lib/alertas/evaluar";
 
-/** Vencimientos de la cartera local, para las alertas de vencimiento. Carga Dexie bajo demanda. */
+/** La cartera del usuario: la de su cuenta si inició sesión; si no, la del navegador. Carga Dexie y Supabase bajo demanda. */
+async function cargarCartera() {
+  const { haySesionGuardada } = await import("@/lib/cuenta/config");
+  if (haySesionGuardada()) {
+    const { supabase } = await import("@/lib/cuenta/cliente");
+    const sb = supabase();
+    const usuario = sb ? (await sb.auth.getSession()).data.session?.user : undefined;
+    if (sb && usuario) {
+      const { repositorioNube } = await import("@/lib/cartera/repositorio-nube");
+      return repositorioNube(sb, usuario.id).cargar();
+    }
+  }
+  const { repositorioLocal } = await import("@/lib/cartera/repositorio");
+  return repositorioLocal.cargar();
+}
+
+/** Vencimientos de la cartera, para las alertas de vencimiento. */
 export async function vencimientosLocales(): Promise<FotoMercado["vencimientos"]> {
   try {
-    const { repositorioLocal } = await import("@/lib/cartera/repositorio");
-    const { activos, movimientos } = await repositorioLocal.cargar();
+    const { activos, movimientos } = await cargarCartera();
     const conMovs = new Set(movimientos.map((m) => m.activoId));
     const hoy = hoyAR();
     return activos.filter((a) => a.vencimiento && conMovs.has(a.id) && a.vencimiento >= hoy).map((a) => ({ nombre: a.nombre, fecha: a.vencimiento!, dias: diasEntre(hoy, a.vencimiento!) }));

@@ -3,18 +3,70 @@ import { ProviderMark } from "@/components/ui/provider-mark";
 import { iniciales, tickerLogo, type Inversor, type Posicion } from "@/lib/inversores/datos";
 export { etiquetaTrimestre } from "@/lib/inversores/datos";
 import { fechaCorta, pesosCompacto } from "@/lib/format";
+import { FOTOS_INVERSORES, LOGOS_INVERSORES } from "@/config/fotos-inversores";
 import { cn } from "@/lib/cn";
 
-/** Monograma del inversor (sin fotos, como las marcas del resto del sitio). */
+/**
+ * La foto del inversor si es una persona con foto libre; si no, el logo del fondo (los dos en config/fotos-inversores.ts);
+ * si tampoco hay, un monograma: las iniciales de la persona ("RC" de Rob Citrone) o, si es solo un fondo, las de la
+ * firma. Decorativo: el nombre va siempre al lado.
+ */
 export function MarcaInversor({ inversor, tamano = 40, className }: { inversor: Inversor; tamano?: number; className?: string }) {
+  const imagen = FOTOS_INVERSORES[inversor.slug] ?? LOGOS_INVERSORES[inversor.slug];
+  if (imagen) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- imágenes de 192 px ya optimizadas (webp, 1 a 8 KB)
+      <img
+        src={imagen.src}
+        alt=""
+        aria-hidden
+        width={tamano}
+        height={tamano}
+        loading="lazy"
+        decoding="async"
+        className={cn("shrink-0 rounded-full border border-border bg-white object-cover", className)}
+        style={{ width: tamano, height: tamano }}
+      />
+    );
+  }
+  const persona = inversor.persona && !/^fundad/i.test(inversor.persona) ? inversor.persona : null;
   return (
     <span
       aria-hidden
       className={cn("inline-flex shrink-0 items-center justify-center rounded-full font-semibold tracking-[-0.01em]", inversor.grupo === "argentina" ? "bg-accent/12 text-accent" : "bg-surface-2 text-text", className)}
       style={{ width: tamano, height: tamano, fontSize: tamano >= 56 ? 20 : tamano >= 40 ? 14 : 12 }}
     >
-      {iniciales(inversor)}
+      {iniciales({ nombre: persona ?? inversor.nombre })}
     </span>
+  );
+}
+
+/** Créditos de las fotos que se ven en la página (las licencias piden nombrar al autor). */
+export function CreditosFotos({ inversores, className }: { inversores: Pick<Inversor, "slug">[]; className?: string }) {
+  const fotos = inversores.map((i) => FOTOS_INVERSORES[i.slug]).filter((f) => f !== undefined);
+  if (!fotos.length) return null;
+  return (
+    <p className={cn("max-w-3xl text-micro text-text-3", className)}>
+      {fotos.length === 1 ? "Foto de Wikimedia Commons, recortada:" : "Fotos de Wikimedia Commons, recortadas:"}{" "}
+      {fotos.map((f, k) => (
+        <span key={f.src}>
+          {k > 0 && " · "}
+          <a href={f.fuente} target="_blank" rel="noopener noreferrer" className="underline decoration-dotted underline-offset-2 hover:text-text-2">
+            {f.persona}
+          </a>{" "}
+          ({f.autor},{" "}
+          {f.licenciaUrl ? (
+            <a href={f.licenciaUrl} target="_blank" rel="noopener noreferrer" className="underline decoration-dotted underline-offset-2 hover:text-text-2">
+              {f.licencia}
+            </a>
+          ) : (
+            f.licencia
+          )}
+          )
+        </span>
+      ))}
+      .
+    </p>
   );
 }
 

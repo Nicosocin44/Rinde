@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { normalizarCuentas, normalizarFondos, normalizarLecaps } from "@/lib/data/servicios/pesos";
-import { normalizarRanking } from "@/lib/data/servicios/dolar";
+import { combinarCotizaciones, normalizarRanking, oficialDeComparaDolar } from "@/lib/data/servicios/dolar";
 import { ajusteNelsonSiegel } from "@/lib/data/validacion";
 
 /** 11. Validación: una LECAP vencida y un FCI duplicado quedan excluidos con su motivo. */
@@ -121,5 +121,55 @@ describe("11. validación de sanidad", () => {
     expect(excluidos.map((e) => e.reason).join(" ")).toMatch(/desactualizada/);
     expect(excluidos.map((e) => e.reason).join(" ")).toMatch(/atípico/);
     expect(excluidos.map((e) => e.reason).join(" ")).toMatch(/No publica/);
+  });
+
+  it("dólar: Bytelime no entra al ranking (no tiene web ni app donde comprar) y queda en los excluidos", () => {
+    const ahora = new Date("2026-11-24T15:00:00Z");
+    const t = ahora.getTime() / 1000;
+    const { ranking, excluidos } = normalizarRanking(
+      "USD",
+      {
+        bna: { ask: 1615, totalAsk: 1615, bid: 1565, totalBid: 1565, time: t - 60 },
+        bytelime: { ask: 1630, totalAsk: 1630, bid: 1590, totalBid: 1590, time: t - 60 },
+        supervielle: { ask: 1575, totalAsk: 1575, bid: 1525, totalBid: 1525, time: t - 60 },
+      },
+      ahora,
+    );
+    expect(ranking.proveedores.map((p) => p.id).sort()).toEqual(["bna", "supervielle"]);
+    expect(excluidos).toContainEqual({ id: "Bytelime", reason: "No tiene web ni app propia donde comprar" });
+  });
+
+  it("dólar oficial: ComparaDolar suma entidades y reemplaza las viejas de CriptoYa, sin pisar las que están al día", () => {
+    const ahora = new Date("2026-11-24T17:00:00Z");
+    const t = ahora.getTime() / 1000;
+    const visto = "2026-11-24T16:59:00.000Z";
+    const fila = (slug: string, ask: number | null, bid: number | null, extra: Record<string, unknown> = {}) => ({ slug, ask, bid, usdType: "Oficial", conditions: null, lastSeenAt: visto, stale: false, ...extra });
+    const { cotizaciones, condiciones } = oficialDeComparaDolar([
+      fila("uala", 1632, 1592),
+      fila("banco-nacion", 1620, 1570),
+      fila("banco-ciudad", 1615, 1555),
+      fila("brubank-ultra", 1630, 1590, { conditions: "Solo para clientes Ultra" }),
+      fila("banco-supervielle", 1575, 1520, { stale: true }), // ComparaDolar la marca vieja: no entra
+      fila("astropay", 1813, 1759, { usdType: "CCL" }), // no es oficial
+      fila("desconocida", 1600, 1550), // no la reconocemos
+      fila("reba", 1610, null), // sin precio de venta
+    ]);
+    expect(Object.keys(cotizaciones).sort()).toEqual(["bna", "brubank", "ciudad", "uala"]);
+    expect(condiciones).toEqual({ brubank: "Solo para clientes Ultra" });
+
+    const criptoya = {
+      bna: { ask: 1615, totalAsk: 1615, bid: 1565, totalBid: 1565, time: t - 60 }, // al día: queda la de CriptoYa
+      ciudad: { ask: 1470, totalAsk: 1470, bid: 1410, totalBid: 1410, time: t - 7000 * 3600 }, // vieja: la reemplaza ComparaDolar
+      supervielle: { ask: 1575.5, totalAsk: 1575.5, bid: 1520.5, totalBid: 1520.5, time: t - 60 },
+    };
+    const juntas = combinarCotizaciones(criptoya, cotizaciones, ahora, 30 * 3600);
+    expect(juntas.bna!.totalAsk).toBe(1615);
+    expect(juntas.ciudad!.totalAsk).toBe(1615);
+    expect(juntas.uala!.totalAsk).toBe(1632);
+
+    const { ranking } = normalizarRanking("USD", juntas, ahora, [], condiciones);
+    expect(ranking.proveedores.map((p) => p.id).sort()).toEqual(["bna", "ciudad", "supervielle", "uala"]);
+    expect(ranking.especiales).toHaveLength(1);
+    expect(ranking.especiales[0]).toMatchObject({ id: "brubank", condicion: "Solo para clientes Ultra" });
   });
 });

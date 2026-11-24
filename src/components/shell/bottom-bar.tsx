@@ -118,9 +118,10 @@ function MenuMas({ onElegir }: { onElegir: () => void }) {
             role="switch"
             aria-checked={coloresAlt}
             onClick={() => cambiarColoresAlt(!coloresAlt)}
-            className={cn("relative h-[31px] w-[51px] rounded-full transition-colors", coloresAlt ? "bg-accent" : "bg-surface-2 ring-1 ring-border-strong")}
+            className={cn("relative h-[31px] w-[51px] shrink-0 rounded-full transition-colors", coloresAlt ? "bg-accent" : "bg-surface-2 ring-1 ring-border-strong")}
           >
-            <span className={cn("absolute top-[2px] size-[27px] rounded-full bg-white shadow-(--shadow-thumb) transition-transform duration-(--duration-short)", coloresAlt ? "translate-x-[22px]" : "translate-x-[2px]")} />
+            {/* left-0: los botones centran su contenido, y sin un punto de partida el círculo arrancaba desde el medio. */}
+            <span className={cn("absolute top-[2px] left-0 size-[27px] rounded-full bg-white shadow-(--shadow-thumb) transition-transform duration-(--duration-short)", coloresAlt ? "translate-x-[22px]" : "translate-x-[2px]")} />
             <span className="sr-only">Colores alternativos</span>
           </button>
         </Fila>

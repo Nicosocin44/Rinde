@@ -19,7 +19,7 @@ export function EscenaMacizo({ monto, tea, nombre, inflacion, informeRem, meses 
     <Escena
       etiqueta="Macizo o hueco"
       alto={260}
-      altoMobile={230}
+      fluidoMobile
       className="inversa a-lo-ancho lamina-cerrada mt-16 bg-bg text-text lg:mt-24"
       director={<Director coreografia="macizo" comienzo="top 40%" datos={{ monto, tope, meses }} />}
       claseInterior="flex flex-col"

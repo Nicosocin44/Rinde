@@ -28,7 +28,7 @@ export function EscenaDolar({ proveedores, asOf, estado }: { proveedores: Provee
     <Escena
       etiqueta="El dólar"
       alto={220}
-      altoMobile={200}
+      fluidoMobile
       director={<Director coreografia="dolar" comienzo="top 65%" />}
       claseInterior="flex flex-col"
     >

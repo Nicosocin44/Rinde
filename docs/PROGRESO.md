@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 24/11/2026, cuentas de usuario para la cartera (rama `cuenta-cartera`).
+> Escrito para los fundadores. Última actualización: martes 24/11/2026, la portada en el celular ya no se traba (rama `celular-portada-fluida`).
 
 ## Cómo verlo
 
@@ -11,6 +11,18 @@
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
 
 ---
+
+## La portada en el celular ya no se traba (rama `celular-portada-fluida`, 24/11/2026)
+
+> Punto 3 de la Lista ("el scroll se traba, hay que darle muchas veces para que baje") y captura de Benja desde el celular.
+
+- **Qué pasaba:** en el celular, las 6 escenas de la historia quedaban fijas mientras corría su animación: en total, **6 pantallas de scroll en las que la página no bajaba**. Medido en la web en vivo a 375 px: 14.190 px de alto.
+- **Ahora, en el celular, las escenas fluyen con el dedo** y la animación se reparte mientras bajan (el modo `fluidoMobile`, que existía pero ninguna escena usaba). Cada una ocupa su alto natural: la portada pasa a 9.143 px y no queda ninguna pantalla fija. **En la compu no cambia nada.**
+- **El modo `fluidoMobile` tenía un error** que nadie había visto: las clases de Tailwind que soltaban el interior perdían contra la regla `.escena-interior` de `globals.css` (las utilidades van en una capa y pierden contra las reglas sin capa). Se pasó todo a `globals.css`. De costado se sigue recortando: las tarjetas de "El problema" se salen a propósito y, sin el recorte, la página se ensanchaba a 545 px.
+- **Sin saltos al llegar a cada escena:** en el celular se dibujan siempre (sin `content-visibility: auto`, que reservaba una pantalla de alto).
+- **`SiNoEntra` ya no reacciona a la barra del navegador:** en pantallas táctiles, que la barra se esconda o aparezca al scrollear cambiaba el alto de la ventana, y eso podía recalcular todos los recorridos en pleno scroll. Ahora cuenta solo si cambia el ancho (girar el teléfono).
+- **El interruptor de "Colores alternativos"** (menú "Más") tenía el círculo afuera del óvalo: el mismo error que el de Alertas (le faltaba `left-0`).
+- Probado a 375 × 812 (las 6 escenas, de a una, mientras se scrollea; el interruptor prendido y apagado) y a 1024 × 768 (las escenas siguen como antes).
 
 ## Cuentas de usuario: la cartera en cualquier dispositivo (rama `cuenta-cartera`, 24/11/2026)
 

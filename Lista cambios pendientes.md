@@ -1,6 +1,6 @@
 1. ~~Franja amarilla con contizaciones de dólares, que no se mueva cuando se scrollea para abajo en la app, sino que este en contante giro, como si fuese una rueda, que vayan pasando. Como la franja de color rojo en rulo.com.ar.~~ ✅ <span style="color:red">HECHO</span>
 2. Mas colores rojos y verdes, mas identificada a una web de finanzas.
-3. en la home page, el scroleo hacia abajo se traba en algunas partes, hay que dalre muchas veces para que baje.
+3. ~~en la home page, el scroleo hacia abajo se traba en algunas partes, hay que dalre muchas veces para que baje.~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama celular-portada-fluida: en el celular las escenas ya no quedan fijas)</span>
 4. ~~Agregar logos de las apps y bancos~~ ✅ <span style="color:red">HECHO</span>
 5. ~~Agregar logos de los activos~~ ✅ <span style="color:red">HECHO</span>
 6. Los textos en letra color girs son muy fácil de percibir que son hechos con ia, textos con otro color y tipografia, acorde al resto de la web

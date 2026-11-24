@@ -21,7 +21,7 @@ export function EscenaRespuesta({ opciones, asOf, estado }: { opciones: OpcionTa
     <Escena
       etiqueta="La respuesta"
       alto={230}
-      altoMobile={210}
+      fluidoMobile
       className="sobre-color a-lo-ancho lamina-cerrada mt-16 bg-celeste lg:mt-24"
       director={<Director coreografia="respuesta" comienzo="top 60%" />}
       claseInterior="flex flex-col"

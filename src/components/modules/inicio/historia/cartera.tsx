@@ -35,7 +35,7 @@ export function EscenaCartera({ serie, inicio, vsInflacion, vsDolar }: { serie: 
     <Escena
       etiqueta="Tu cartera"
       alto={220}
-      altoMobile={200}
+      fluidoMobile
       className="sobre-color a-lo-ancho lamina-cerrada mt-16 bg-lila lg:mt-24"
       director={<Director coreografia="cartera" comienzo="top 60%" />}
       claseInterior="flex flex-col"

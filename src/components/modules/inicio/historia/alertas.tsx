@@ -13,7 +13,7 @@ export function EscenaAlertas({ alertas }: { alertas: AlertaDemo[] }) {
     <Escena
       etiqueta="Alertas"
       alto={200}
-      altoMobile={190}
+      fluidoMobile
       director={<Director coreografia="alertas" comienzo="top 55%" />}
       claseInterior="flex flex-col"
     >

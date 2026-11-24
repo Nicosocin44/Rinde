@@ -24,7 +24,10 @@ export function SiNoEntra() {
     const contenido = el?.querySelector<HTMLElement>(".escena-interior")?.firstElementChild;
     if (!el || !(contenido instanceof HTMLElement)) return;
 
+    // En el celular, una escena con fluidoMobile ya fluye siempre: no hay nada que medir.
+    const fluidaEnCelular = () => el.dataset.fluido === "true" && window.matchMedia("(max-width: 767px)").matches;
     const medir = () => {
+      if (fluidaEnCelular()) return;
       // Por un instante (sin pintar), el interior suelta su alto de pantalla para medir lo que ocupa de verdad.
       el.dataset.midiendo = "true";
       const alto = contenido.getBoundingClientRect().height;
@@ -37,7 +40,14 @@ export function SiNoEntra() {
 
     medir();
     let espera: number | undefined;
+    // En pantallas táctiles, la barra del navegador se esconde y aparece al scrollear y cambia el alto de la ventana:
+    // eso no cuenta (volver a medir en pleno scroll recalculaba todos los recorridos y la página se trababa). Sí cuenta
+    // girar el teléfono o cambiar el ancho.
+    const tactil = window.matchMedia("(pointer: coarse)").matches;
+    let ancho = window.innerWidth;
     const alCambiar = () => {
+      if (tactil && window.innerWidth === ancho) return;
+      ancho = window.innerWidth;
       window.clearTimeout(espera);
       espera = window.setTimeout(medir, 150);
     };

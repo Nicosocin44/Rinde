@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 24/11/2026, la portada en el celular ya no se traba (rama `celular-portada-fluida`).
+> Escrito para los fundadores. Última actualización: martes 24/11/2026, importar la cartera desde una planilla CSV o Excel (rama `importar-planilla`).
 
 ## Cómo verlo
 
@@ -24,6 +24,31 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - **El interruptor de "Colores alternativos"** (menú "Más") tenía el círculo afuera del óvalo: el mismo error que el de Alertas (le faltaba `left-0`).
 - Probado a 375 × 812 (las 6 escenas, de a una, mientras se scrollea; el interruptor prendido y apagado) y a 1024 × 768 (las escenas siguen como antes). Benja lo probó en su iPhone con la vista previa: anda bien.
 - **Inicio marcado al entrar** (pedido de Benja): al entrar directo a la portada, ni la barra de arriba ni la de abajo marcaban Inicio (la de abajo marcaba "Más"). Cuando Vercel regenera la portada (cada 60 s), la versión nueva trae la ruta `/index` y `usePathname()` la devuelve así: se ve en el HTML (`"c":["","index"]`), en la web oficial y en las vistas previas. Con `next start` en la compu no pasa. Ahora `rutaActiva()` (pasó a `src/lib/rutas.ts`) cuenta `/index` como Inicio. Test: `tests/rutas.test.ts`.
+
+## Importar la cartera desde una planilla CSV o Excel (punto 31, partes 1 y 2, rama `importar-planilla`, 24/11/2026)
+
+> Pedido de Nico: que el usuario pueda cargar su cartera con más formatos que el JSON. Primero CSV y Excel con vista previa; después, fotos de las operaciones.
+
+- **Cómo se usa:** Mi cartera → "Importar" abre un panel con dos pasos: "Bajar planilla modelo" (se abre con Excel o Google Sheets) y "Elegir archivo" (.csv o .xlsx). Abajo, una ayuda corta de cada columna.
+- **Vista previa antes de guardar:** "En mi-cartera.csv hay 8 filas: 4 listas, 2 para revisar, 2 con errores." Cada fila muestra lo que se entendió (operación, activo, cantidad y precio o monto, fecha), con una casilla para sumarla o no.
+  - **Para revisar** (tildadas): ticker que no está en nuestras listas, billetera sin TNA, plazo fijo sin vencimiento.
+  - **Ya estaban** (destildadas): mismo activo, fecha, tipo e importe que un movimiento de la cartera. Así subir dos veces el mismo archivo no duplica nada.
+  - **Con error** (no se pueden sumar), con el motivo: fecha que no existe o futura, tipo desconocido, falta el precio, un CEDEAR cargado en dólares, etc.
+  - **De ejemplo:** las filas de la planilla modelo no se suman aunque el usuario no las borre.
+- **Qué entiende:** columnas con otros nombres (Operación, Símbolo, Tipo, Monto…), con o sin tildes; fechas 10/03/2026, 1/3/26 o 2026-03-10; números 18.500, 6.500,50, 0,005 o 62.5; separador ";" o ","; Excel con fechas y números de verdad.
+- **Los activos quedan igual que los cargados a mano** (misma regla de id, nombre y moneda, ahora en `src/lib/cartera/activos.ts`, compartida con el formulario): lo importado se junta con lo que ya había.
+- **Exportar CSV** ahora sale en formato de Excel en castellano (";" y coma decimal, se ven las tildes) y suma TNA y vencimiento: se puede volver a importar tal cual.
+- **El JSON sigue funcionando** desde el mismo panel (reemplaza toda la cartera, como antes).
+- **Privacidad:** la planilla se lee en el navegador; no se manda a ningún servidor (con cuenta, se guardan los movimientos como siempre).
+- **Dependencia nueva:** `read-excel-file` (MIT), que se carga solo cuando alguien sube un Excel.
+- Probado en el navegador (1440 px oscuro y 375 px claro) con un CSV hecho a mano con errores y un Excel. Tests: `tests/importar-planilla.test.ts` (27, incluida la ida y vuelta exportar → importar).
+
+### Para revisar
+1. **"18.500" sin coma se lee como 18500** (punto de miles, como se escribe acá). Un "1.234" con punto decimal (planillas en inglés) se leería como 1234: la vista previa lo muestra antes de guardar.
+2. **Las filas con error no se editan en la vista previa:** se corrigen en el archivo y se vuelve a subir. Si hace falta, se puede sumar edición fila por fila.
+3. **Excel viejo (.xls) no se lee:** se pide guardarlo como .xlsx o .csv.
+
+---
 
 ## Cuentas de usuario: la cartera en cualquier dispositivo (rama `cuenta-cartera`, 24/11/2026)
 

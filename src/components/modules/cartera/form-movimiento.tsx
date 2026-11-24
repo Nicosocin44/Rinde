@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { MoneyInput, NumberField } from "@/components/ui/money-input";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { hoyAR, sumarDias } from "@/lib/calculos/fechas";
+import { esCuenta, idActivo, monedaDe } from "@/lib/cartera/activos";
 import { precioCuenta, type Activo, type Movimiento, type TipoActivo, type TipoMovimiento } from "@/lib/calculos/cartera";
 import type { PreciosCartera } from "@/lib/data/servicios/cartera";
 import { dinero, numero } from "@/lib/format";
@@ -38,8 +39,7 @@ const SUGERENCIAS: Partial<Record<TipoActivo, { valor: string; nombre: string }[
   ],
 };
 
-const esCuentaForm = (t: TipoActivo) => t === "billetera" || t === "plazo_fijo" || t === "efectivo_usd";
-const monedaDe = (t: TipoActivo) => (t === "bono" || t === "cripto" || t === "efectivo_usd" || t === "on" ? "USD" : "ARS");
+const esCuentaForm = esCuenta;
 
 /**
  * Carga manual de un movimiento. Las posiciones se derivan de los movimientos (no hay "editar posición").
@@ -64,7 +64,7 @@ export function FormMovimiento({ precios, onGuardar, activosExistentes, conCuent
   const cuenta = esCuentaForm(tipo);
   const moneda = monedaDe(tipo);
   const tickerNorm = ticker.trim().toUpperCase();
-  const activoId = cuenta ? `${tipo}:${(nombre || "cuenta").toLowerCase().replace(/[^a-z0-9]+/g, "-")}${tipo === "plazo_fijo" ? `-${fecha}` : ""}` : `${tipo}:${tickerNorm}`;
+  const activoId = idActivo(tipo, cuenta ? nombre : tickerNorm, fecha);
   const precioHoy = precios?.actuales[activoId]?.precio ?? null;
   const precioUsado = precio ?? (fecha === hoyAR() ? precioHoy : null);
   const porCien = tipo === "bono" || tipo === "lecap";

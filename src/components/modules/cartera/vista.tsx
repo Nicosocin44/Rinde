@@ -2,7 +2,7 @@
 
 import { Download, Plus, Upload } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { pais } from "@/config/countries/ar";
 import { PriceChart } from "@/components/charts/price-chart";
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,12 @@ import { EstadoDiscreto } from "@/components/ui/estado-dato";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { movimientosACsv, validarImportacion } from "@/lib/cartera/repositorio";
+import { movimientosACsv } from "@/lib/cartera/repositorio";
 import type { PosicionValuada } from "@/lib/calculos";
 import { generarIdeas } from "@/lib/insights/reglas";
 import { dinero, fechaCorta, numero } from "@/lib/format";
 import { CuentaCartera } from "./cuenta";
+import { ImportarCartera } from "./importar";
 import { Comparacion, Distribucion, HeroCartera, Ideas, Posiciones, type Unidad } from "./partes";
 import { FormMovimiento } from "./form-movimiento";
 import { useCartera } from "./use-cartera";
@@ -29,7 +30,7 @@ export function CarteraVista() {
   const [unidad, setUnidad] = useState<Unidad>("ARS");
   const [cargar, setCargar] = useState(params.get("cargar") === "1");
   const [detalle, setDetalle] = useState<PosicionValuada | null>(null);
-  const archivo = useRef<HTMLInputElement>(null);
+  const [importando, setImportando] = useState(false);
   const toast = useToast();
   const conCuenta = sesion.estado === "con";
 
@@ -67,18 +68,6 @@ export function CarteraVista() {
     URL.revokeObjectURL(a.href);
   };
 
-  const importar = async (f: File) => {
-    try {
-      const r = validarImportacion(JSON.parse(await f.text()));
-      if (!r.ok) return toast(r.error);
-      await repo.reemplazar(r.datos);
-      await recargar();
-      toast(`Importamos ${r.datos.movimientos.length} movimientos`);
-    } catch {
-      toast("El archivo no es un JSON válido.");
-    }
-  };
-
   const borrar = async (id: string) => {
     await repo.borrarMovimiento(id);
     await recargar();
@@ -109,15 +98,26 @@ export function CarteraVista() {
           </Button>
         </>
       )}
-      <Button variante="fantasma" onClick={() => archivo.current?.click()}>
+      <Button variante="fantasma" onClick={() => setImportando(true)} data-testid="abrir-importar">
         <Upload />
         Importar
       </Button>
-      <input ref={archivo} type="file" accept="application/json,.json" className="hidden" onChange={(e) => e.target.files?.[0] && importar(e.target.files[0])} />
     </div>
   );
 
   const formulario = (
+    <>
+    <ImportarCartera
+      abierto={importando}
+      onCambio={setImportando}
+      datos={datos}
+      estado={estado}
+      repo={repo}
+      alTerminar={async (mensaje) => {
+        await recargar();
+        toast(mensaje);
+      }}
+    />
     <Sheet abierto={cargar} onCambio={setCargar} titulo="Cargar movimiento" descripcion={estado === "demo" ? "Al guardar, empieza tu cartera y se oculta la de ejemplo." : undefined}>
       <FormMovimiento
         precios={precios}
@@ -130,6 +130,7 @@ export function CarteraVista() {
         }}
       />
     </Sheet>
+    </>
   );
 
   if (estado === "cargando" || forzado === "carga") return <EsqueletoCartera />;

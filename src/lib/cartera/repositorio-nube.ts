@@ -26,7 +26,7 @@ async function todas<T>(sb: SupabaseClient, tabla: string): Promise<T[]> {
   }
 }
 
-export function repositorioNube(sb: SupabaseClient, usuario: string): PortfolioRepository & { sumar(activos: Activo[], movimientos: Movimiento[]): Promise<void> } {
+export function repositorioNube(sb: SupabaseClient, usuario: string): PortfolioRepository {
   const ahora = () => new Date().toISOString();
   const filaActivo = (a: Activo) => ({ user_id: usuario, id: a.id, datos: a, actualizado: ahora() });
   const filaMovimiento = (m: Movimiento) => ({ user_id: usuario, id: m.id, activo_id: m.activoId, datos: m, actualizado: ahora() });
@@ -71,7 +71,6 @@ export function repositorioNube(sb: SupabaseClient, usuario: string): PortfolioR
       revisar((await sb.from("cartera_movimientos").delete().eq("user_id", usuario)).error);
       revisar((await sb.from("cartera_activos").delete().eq("user_id", usuario)).error);
     },
-    /** Suma activos y movimientos de una vez (lo que había en el navegador al iniciar sesión). */
     async sumar(activos, movimientos) {
       for (let i = 0; i < activos.length; i += LOTE) revisar((await sb.from("cartera_activos").upsert(activos.slice(i, i + LOTE).map(filaActivo))).error);
       for (let i = 0; i < movimientos.length; i += LOTE) revisar((await sb.from("cartera_movimientos").upsert(movimientos.slice(i, i + LOTE).map(filaMovimiento))).error);

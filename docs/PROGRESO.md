@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 24/11/2026, importar la cartera desde una planilla CSV o Excel (rama `importar-planilla`).
+> Escrito para los fundadores. Última actualización: martes 24/11/2026, los ETFs con el logo de su gestora (rama `etfs-gestoras`).
 
 ## Cómo verlo
 
@@ -11,6 +11,30 @@
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
 
 ---
+
+## Los ETFs con el logo de su gestora (rama `etfs-gestoras`, 24/11/2026)
+
+> Pedido de Benja: que los ETFs muestren la gestora (iShares, Vanguard…). El de IBIT era una "i" negra que no se entendía.
+
+- **77 ETFs con el logo de su gestora, siempre el mismo.** Antes iShares aparecía de tres formas distintas (la "i" negra, el cuadrado celeste y uno verde), Vanguard de dos e Invesco de dos.
+- **Las gestoras:**
+  - iShares (35 ETFs, entre ellos IBIT, EWZ e IVV);
+  - SPDR (17: SPY, DIA y los XL*);
+  - Vanguard (5);
+  - Invesco (9: QQQ, RSP…);
+  - J.P. Morgan (4);
+  - VanEck (5);
+  - Direxion (4);
+  - ProShares (3);
+  - ARK (3);
+  - Global X (2).
+  
+  Se usa el logo de un ETF de referencia de cada una: IWB, SPY, VOO, QQQ, JEPQ, GDXJ, CHAU, TQQQ, ARKK y COPX.
+- **Estaban mal:** XLE, XLF y XBI mostraban "S&P Global" (son de SPDR); RSP, "Guggenheim" (hoy es de Invesco); varios de Invesco y J.P. Morgan tenían logos viejos o de otra marca.
+- **VXX** mostraba "iShares UK", pero es de iPath, la marca de ETNs de Barclays: ahora lleva el logo de Barclays (el mismo de su acción, BCS).
+- Se copió también en `assets/logos-fuente/activos/`, que tiene prioridad: si se vuelve a correr `scripts/logos.py`, no se pisa.
+- Los que ya tenían el logo de su gestora o uno propio quedaron igual: GLD, KWEB, ASHR, CIBR, JETS, PSLV, USO, los de Teucrium (CORN, SOYB, WEAT) y GDLC.
+- **Queda para después, si se quiere:** a los temáticos (países, cripto, materias primas, sectores) ponerles un ícono de lo que son, como la bandera de Brasil en EWZ o el logo de Bitcoin en IBIT.
 
 ## La portada en el celular ya no se traba (rama `celular-portada-fluida`, 24/11/2026)
 

@@ -101,7 +101,16 @@ type Exchanges = z.infer<typeof criptoyaExchangesSchema>;
 const TIPOS_BANCARIOS = new Set(["banco", "casa_de_cambio", "billetera"]);
 
 /**
+ * Proveedores que CriptoYa publica pero donde la gente no puede ir a comprar: no tienen web ni app propia.
+ * Bytelime S.A.S. es una casa de cambio registrada en el BCRA, pero bytelime.com es un dominio a la venta y no tiene app
+ * con su nombre (operaba las compras de dólares de otras apps, como Manteca). En un ranking para decidir dónde comprar,
+ * una opción a la que no se puede ir confunde. (24/11/2026)
+ */
+const SIN_DONDE_COMPRAR = new Set(["bytelime"]);
+
+/**
  * Normaliza las cotizaciones de CriptoYa en un ranking comparable:
+ *  - excluye los que no tienen dónde comprar (SIN_DONDE_COMPRAR);
  *  - excluye cotizaciones viejas, puntas en cero, puntas cruzadas y precios atípicos (> 25 % de la mediana);
  *  - separa los P2P (precio de un aviso, depende de la contraparte) como "condiciones especiales".
  */
@@ -112,6 +121,10 @@ export function normalizarRanking(activo: ActivoDolar, cotizaciones: Exchanges, 
   const candidatos: ProveedorDolar[] = [];
   for (const [id, c] of Object.entries(cotizaciones)) {
     const proveedor = resolverProveedor(id, activo === "USD" ? "banco" : "exchange");
+    if (SIN_DONDE_COMPRAR.has(proveedor.id)) {
+      excluidos.push({ id: proveedor.nombre, reason: "No tiene web ni app propia donde comprar" });
+      continue;
+    }
     if (!(c.totalAsk > 0) || !(c.totalBid > 0)) {
       excluidos.push({ id: proveedor.nombre, reason: "No publica precio de compra o de venta" });
       continue;

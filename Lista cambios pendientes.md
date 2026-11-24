@@ -1,6 +1,6 @@
 1. ~~Franja amarilla con contizaciones de dólares, que no se mueva cuando se scrollea para abajo en la app, sino que este en contante giro, como si fuese una rueda, que vayan pasando. Como la franja de color rojo en rulo.com.ar.~~ ✅ <span style="color:red">HECHO</span>
 2. Mas colores rojos y verdes, mas identificada a una web de finanzas.
-3. en la home page, el scroleo hacia abajo se traba en algunas partes, hay que dalre muchas veces para que baje.
+3. ~~en la home page, el scroleo hacia abajo se traba en algunas partes, hay que dalre muchas veces para que baje.~~ ✅ <span style="color:red">HECHO (en el Pull Request de la rama celular-portada-fluida: en el celular las escenas ya no quedan fijas)</span>
 4. ~~Agregar logos de las apps y bancos~~ ✅ <span style="color:red">HECHO</span>
 5. ~~Agregar logos de los activos~~ ✅ <span style="color:red">HECHO</span>
 6. Los textos en letra color girs son muy fácil de percibir que son hechos con ia, textos con otro color y tipografia, acorde al resto de la web
@@ -33,7 +33,7 @@
 29. ~~Que en acciones, CEDEARs, bonos y opciones aparezcan los brokers para comprar, como en el dólar, con sus comisiones.~~ ✅ <span style="color:red">HECHO (en la rama brokers-comisiones): "Dónde comprar" en cada ficha y en Opciones, y Mercados → Brokers con todas las comisiones. Después se sumaron Allaria, SBS y Adcap (rama brokers-faltantes), con los logos de Bull Market y Adcap.</span>
 30. Meter Metas dentro de Calculadoras y ordenar las calculadoras. Hoy Metas es un apartado propio en el menú (/metas) y además aparece en la lista de Calculadoras: que quede solo dentro de Calculadoras, y ordenar esa lista (hoy son 9, una debajo de la otra, sin agrupar).
 31. Más formas de cargar la cartera, además del JSON (hoy "Importar" solo acepta el archivo que exporta la web). En este orden:
-    1. **CSV y Excel** con nuestras columnas (fecha, tipo de movimiento, activo, ticker, moneda, cantidad, precio, comisión), con un botón "Bajar planilla modelo". El CSV que ya exporta la web también se tiene que poder volver a importar.
-    2. **Vista previa antes de guardar:** "Encontramos 34 movimientos…", con cada fila editable y las que no se entendieron marcadas. Nada se guarda sin que el usuario lo confirme.
+    1. ~~**CSV y Excel** con nuestras columnas (fecha, tipo de movimiento, activo, ticker, moneda, cantidad, precio, comisión), con un botón "Bajar planilla modelo". El CSV que ya exporta la web también se tiene que poder volver a importar.~~ ✅ <span style="color:red">HECHO (en la rama importar-planilla)</span>
+    2. ~~**Vista previa antes de guardar:** "Encontramos 34 movimientos…", con cada fila editable y las que no se entendieron marcadas. Nada se guarda sin que el usuario lo confirme.~~ ✅ <span style="color:red">HECHO (en la rama importar-planilla): cada fila se puede tildar o destildar; las que tienen error se corrigen en el archivo y se vuelve a subir.</span>
     3. **Fotos de las operaciones:** capturas de la pantalla de operaciones del broker, banco o billetera, leídas con IA y mostradas en la misma vista previa. Solo para usuarios con cuenta y con un límite por día (cada foto cuesta unos centavos de IA). La foto viaja al servidor y al proveedor de IA: avisarlo antes de subir, no guardar las imágenes, usar un proveedor que no retenga los datos y sumarlo a la política de privacidad.
     4. **Resúmenes de movimientos de los brokers** (IOL, Balanz, Cocos, PPI, Bull Market), si con las fotos no alcanza. Necesitamos archivos reales de ejemplo de cada uno (pueden tener los montos cambiados).

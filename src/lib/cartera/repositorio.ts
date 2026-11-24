@@ -19,6 +19,8 @@ export interface PortfolioRepository {
   guardarAjustes(a: AjustesCartera): Promise<void>;
   reemplazar(datos: DatosCartera): Promise<void>;
   vaciar(): Promise<void>;
+  /** Suma activos y movimientos de una vez (importar una planilla, o lo del navegador al iniciar sesión). */
+  sumar(activos: Activo[], movimientos: Movimiento[]): Promise<void>;
 }
 
 class BaseCartera extends Dexie {
@@ -66,6 +68,12 @@ export const repositorioLocal: PortfolioRepository = {
   async vaciar() {
     await Promise.all([db().activos.clear(), db().movimientos.clear()]);
   },
+  async sumar(activos, movimientos) {
+    await db().transaction("rw", db().activos, db().movimientos, async () => {
+      await db().activos.bulkPut(activos);
+      await db().movimientos.bulkPut(movimientos);
+    });
+  },
 };
 
 /** Valida un archivo importado. Devuelve un mensaje para humanos si algo no cierra. */
@@ -81,13 +89,18 @@ export function validarImportacion(json: unknown): { ok: true; datos: DatosCarte
   return { ok: true, datos: { version: 1, activos: d.activos as Activo[], movimientos: d.movimientos as Movimiento[], ajustes: d.ajustes } };
 }
 
-/** CSV de movimientos (para planillas). */
+/**
+ * CSV de movimientos (para planillas), con las mismas columnas que la planilla modelo: se puede volver a importar.
+ * Formato de Excel en castellano: separador ";", coma decimal y marca UTF-8 (para que se vean las tildes).
+ */
 export function movimientosACsv(datos: DatosCartera): string {
   const activos = new Map(datos.activos.map((a) => [a.id, a]));
-  const filas = [["fecha", "tipo_movimiento", "activo", "ticker", "tipo_activo", "moneda", "cantidad", "precio", "comision", "nota"]];
+  const num = (x: string | number | undefined) => (x === undefined || x === "" ? "" : String(x).replace(".", ","));
+  const filas = [["fecha", "tipo_movimiento", "activo", "ticker", "tipo_activo", "moneda", "cantidad", "precio", "comision", "nota", "tna", "vencimiento"]];
   for (const m of [...datos.movimientos].sort((a, b) => a.fecha.localeCompare(b.fecha))) {
     const a = activos.get(m.activoId);
-    filas.push([m.fecha, m.tipo, a?.nombre ?? "", a?.ticker ?? "", a?.tipo ?? "", a?.moneda ?? "", m.cantidad, m.precio, m.comision ?? "", m.nota ?? ""]);
+    const tna = a?.tna !== undefined ? num(Math.round(a.tna * 1e6) / 1e4) : "";
+    filas.push([m.fecha, m.tipo, a?.nombre ?? "", a?.ticker ?? "", a?.tipo ?? "", a?.moneda ?? "", num(m.cantidad), num(m.precio), num(m.comision), m.nota ?? "", tna, a?.vencimiento ?? ""]);
   }
-  return filas.map((f) => f.map((c) => (/[",;\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c)).join(",")).join("\n");
+  return "\uFEFF" + filas.map((f) => f.map((c) => (/[";\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c)).join(";")).join("\r\n") + "\r\n";
 }

@@ -34,7 +34,7 @@ export function EscenaProblema({ piezas }: { piezas: Pieza[] }) {
     <Escena
       etiqueta="El problema"
       alto={190}
-      altoMobile={170}
+      fluidoMobile
       director={<Director coreografia="problema" comienzo="top 85%" />}
       claseInterior="flex flex-col"
     >

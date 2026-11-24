@@ -39,10 +39,11 @@ export function Escena({
       aria-label={etiqueta}
       data-escena
       data-fluido={fluidoMobile ? "true" : undefined}
-      className={cn("escena h-(--alto-m) md:h-(--alto)", fluidoMobile && "max-md:h-auto", className)}
+      className={cn("escena h-(--alto-m) md:h-(--alto)", className)}
       style={{ "--alto": `${alto}svh`, "--alto-m": `${altoMobile ?? alto}svh` } as React.CSSProperties}
     >
-      <div className={cn("escena-interior", fluidoMobile && "max-md:static max-md:h-auto max-md:overflow-visible", claseInterior)}>{children}</div>
+      {/* Con fluidoMobile, lo que cambia en el celular está en globals.css (.escena[data-fluido]). */}
+      <div className={cn("escena-interior", claseInterior)}>{children}</div>
       <SiNoEntra />
       {director}
     </section>

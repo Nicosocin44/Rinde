@@ -611,6 +611,23 @@
   /* Con alto natural, el "no dibujar fuera de pantalla" reservaría una pantalla de alto y la página saltaría al llegar. */
   content-visibility: visible;
 }
+/* En el celular, las escenas de la historia fluyen con el dedo (fluidoMobile): ninguna queda fija mientras se scrollea
+   y cada una ocupa su alto natural. Va acá y no con clases de Tailwind: las utilidades viven en una capa (@layer) y
+   pierden contra estas reglas sin capa. Por lo mismo que arriba, se dibujan siempre: si no, al llegar a cada una la
+   página saltaría. */
+@media (width < 48rem) {
+  .escena[data-fluido="true"] {
+    height: auto;
+    content-visibility: visible;
+  }
+  .escena[data-fluido="true"] .escena-interior {
+    position: static;
+    height: auto;
+    /* De costado se sigue recortando (las tarjetas de "El problema" se salen a propósito): si no, la página se
+       ensancha y el celular la achica entera. */
+    overflow: clip visible;
+  }
+}
 .escena[data-bajo="true"] .escena-interior,
 .escena[data-midiendo] .escena-interior {
   position: static;

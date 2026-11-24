@@ -23,6 +23,44 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - De paso: la descripción de la página (la que ve Google) todavía nombraba a Druckenmiller, que se sacó; ahora dice Buffett, Dalio, Cathie Wood.
 - Test: `tests/fotos-inversores.test.ts` (que cada foto sea de un inversor de la lista, tenga su archivo y su licencia).
 
+## La portada en el celular ya no se traba (rama `celular-portada-fluida`, 24/11/2026)
+
+> Punto 3 de la Lista ("el scroll se traba, hay que darle muchas veces para que baje") y captura de Benja desde el celular.
+
+- **Qué pasaba:** en el celular, las 6 escenas de la historia quedaban fijas mientras corría su animación: en total, **6 pantallas de scroll en las que la página no bajaba**. Medido en la web en vivo a 375 px: 14.190 px de alto.
+- **Ahora, en el celular, las escenas fluyen con el dedo** y la animación se reparte mientras bajan (el modo `fluidoMobile`, que existía pero ninguna escena usaba). Cada una ocupa su alto natural: la portada pasa a 9.143 px y no queda ninguna pantalla fija. **En la compu no cambia nada.**
+- **El modo `fluidoMobile` tenía un error** que nadie había visto: las clases de Tailwind que soltaban el interior perdían contra la regla `.escena-interior` de `globals.css` (las utilidades van en una capa y pierden contra las reglas sin capa). Se pasó todo a `globals.css`. De costado se sigue recortando: las tarjetas de "El problema" se salen a propósito y, sin el recorte, la página se ensanchaba a 545 px.
+- **Sin saltos al llegar a cada escena:** en el celular se dibujan siempre (sin `content-visibility: auto`, que reservaba una pantalla de alto).
+- **`SiNoEntra` ya no reacciona a la barra del navegador:** en pantallas táctiles, que la barra se esconda o aparezca al scrollear cambiaba el alto de la ventana, y eso podía recalcular todos los recorridos en pleno scroll. Ahora cuenta solo si cambia el ancho (girar el teléfono).
+- **El interruptor de "Colores alternativos"** (menú "Más") tenía el círculo afuera del óvalo: el mismo error que el de Alertas (le faltaba `left-0`).
+- Probado a 375 × 812 (las 6 escenas, de a una, mientras se scrollea; el interruptor prendido y apagado) y a 1024 × 768 (las escenas siguen como antes). Benja lo probó en su iPhone con la vista previa: anda bien.
+- **Inicio marcado al entrar** (pedido de Benja): al entrar directo a la portada, ni la barra de arriba ni la de abajo marcaban Inicio (la de abajo marcaba "Más"). Cuando Vercel regenera la portada (cada 60 s), la versión nueva trae la ruta `/index` y `usePathname()` la devuelve así: se ve en el HTML (`"c":["","index"]`), en la web oficial y en las vistas previas. Con `next start` en la compu no pasa. Ahora `rutaActiva()` (pasó a `src/lib/rutas.ts`) cuenta `/index` como Inicio. Test: `tests/rutas.test.ts`.
+
+## Importar la cartera desde una planilla CSV o Excel (punto 31, partes 1 y 2, rama `importar-planilla`, 24/11/2026)
+
+> Pedido de Nico: que el usuario pueda cargar su cartera con más formatos que el JSON. Primero CSV y Excel con vista previa; después, fotos de las operaciones.
+
+- **Cómo se usa:** Mi cartera → "Importar" abre un panel con dos pasos: "Bajar planilla modelo" (se abre con Excel o Google Sheets) y "Elegir archivo" (.csv o .xlsx). Abajo, una ayuda corta de cada columna.
+- **Vista previa antes de guardar:** "En mi-cartera.csv hay 8 filas: 4 listas, 2 para revisar, 2 con errores." Cada fila muestra lo que se entendió (operación, activo, cantidad y precio o monto, fecha), con una casilla para sumarla o no.
+  - **Para revisar** (tildadas): ticker que no está en nuestras listas, billetera sin TNA, plazo fijo sin vencimiento.
+  - **Ya estaban** (destildadas): mismo activo, fecha, tipo e importe que un movimiento de la cartera. Así subir dos veces el mismo archivo no duplica nada.
+  - **Con error** (no se pueden sumar), con el motivo: fecha que no existe o futura, tipo desconocido, falta el precio, un CEDEAR cargado en dólares, etc.
+  - **De ejemplo:** las filas de la planilla modelo no se suman aunque el usuario no las borre.
+- **Qué entiende:** columnas con otros nombres (Operación, Símbolo, Tipo, Monto…), con o sin tildes; fechas 10/03/2026, 1/3/26 o 2026-03-10; números 18.500, 6.500,50, 0,005 o 62.5; separador ";" o ","; Excel con fechas y números de verdad.
+- **Los activos quedan igual que los cargados a mano** (misma regla de id, nombre y moneda, ahora en `src/lib/cartera/activos.ts`, compartida con el formulario): lo importado se junta con lo que ya había.
+- **Exportar CSV** ahora sale en formato de Excel en castellano (";" y coma decimal, se ven las tildes) y suma TNA y vencimiento: se puede volver a importar tal cual.
+- **El JSON sigue funcionando** desde el mismo panel (reemplaza toda la cartera, como antes).
+- **Privacidad:** la planilla se lee en el navegador; no se manda a ningún servidor (con cuenta, se guardan los movimientos como siempre).
+- **Dependencia nueva:** `read-excel-file` (MIT), que se carga solo cuando alguien sube un Excel.
+- Probado en el navegador (1440 px oscuro y 375 px claro) con un CSV hecho a mano con errores y un Excel. Tests: `tests/importar-planilla.test.ts` (27, incluida la ida y vuelta exportar → importar).
+
+### Para revisar
+1. **"18.500" sin coma se lee como 18500** (punto de miles, como se escribe acá). Un "1.234" con punto decimal (planillas en inglés) se leería como 1234: la vista previa lo muestra antes de guardar.
+2. **Las filas con error no se editan en la vista previa:** se corrigen en el archivo y se vuelve a subir. Si hace falta, se puede sumar edición fila por fila.
+3. **Excel viejo (.xls) no se lee:** se pide guardarlo como .xlsx o .csv.
+
+---
+
 ## Cuentas de usuario: la cartera en cualquier dispositivo (rama `cuenta-cartera`, 24/11/2026)
 
 > Pedido de Nico: que el usuario pueda iniciar sesión con su mail para ver su cartera desde cualquier lado, y que se inicie sesión dentro de Mi cartera.

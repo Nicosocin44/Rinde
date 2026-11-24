@@ -29,11 +29,11 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - **Solo la cartera, por ahora.** Metas, alertas y seguidos siguen en el navegador.
 - Tests: `tests/cartera-fusion.test.ts` (qué se sube al entrar) y `tests/cuenta-errores.test.ts` (mensajes de error).
 
+- **Mails (hecho el 24/11/2026):** salen de `no-reply@donderinde.com.ar` con Resend (Marketplace de Vercel, plan gratis), conectado a Supabase por SMTP. Dominio verificado en Resend (DKIM, SPF y MX cargados en el DNS de Vercel). Plantillas "Magic link or OTP" y "Confirm sign up" en castellano y con el código: `supabase/plantillas/codigo.html`. Probado: llegó el mail y se pudo entrar.
+
 ### Para hacer antes de abrirlo al público
-1. **Plantillas de mail en Supabase** (para que llegue el código, en castellano): `supabase/plantillas/codigo.html`, con el paso a paso adentro.
-2. **Un servicio de mails propio (SMTP).** El de Supabase es para probar: manda muy pocos mails por hora y Supabase avisa que no es para producción. Hace falta uno propio (por ejemplo, Resend) con el dominio.
-3. **Un mail de contacto real.** `site.contacto` todavía es `hola@rinde.example`; la política de privacidad dice que pueden pedirnos ver o borrar sus datos.
-4. **Ley 25.326:** con cuentas guardamos datos personales. Conviene que un abogado revise la política y la inscripción de la base ante la AAIP.
+1. **Un mail de contacto real.** `site.contacto` todavía es `hola@rinde.example`; la política de privacidad dice que pueden pedirnos ver o borrar sus datos.
+2. **Ley 25.326:** con cuentas guardamos datos personales. Conviene que un abogado revise la política y la inscripción de la base ante la AAIP.
 
 ### Para revisar
 1. **El código tiene 8 números** (lo que trae Supabase hoy). Se puede bajar a 6 en Supabase → Authentication → Sign In / Providers → Email → "Email OTP Length".

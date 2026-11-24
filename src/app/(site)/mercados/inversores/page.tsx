@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AvisoInversores, etiquetaTrimestre, fechasInforme, LogosPosiciones, MarcaInversor, montoUsd } from "@/components/modules/inversores/comun";
+import { AvisoInversores, CreditosFotos, etiquetaTrimestre, fechasInforme, LogosPosiciones, MarcaInversor, montoUsd } from "@/components/modules/inversores/comun";
 import { inversores, ultimo } from "@/lib/inversores/datos";
 import { porcentaje } from "@/lib/format";
 
 export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Grandes inversores: qué tienen y qué compraron",
-  description: "Las carteras de los fondos con más acciones argentinas y de los inversores más conocidos (Buffett, Druckenmiller, Dalio…), con sus últimas compras y ventas, según sus informes a la SEC.",
+  description: "Las carteras de los fondos con más acciones argentinas y de los inversores más conocidos (Buffett, Dalio, Cathie Wood…), con sus últimas compras y ventas, según sus informes a la SEC.",
 };
 
 export default function Inversores() {
@@ -79,7 +79,10 @@ export default function Inversores() {
         </ul>
       </section>
 
-      <AvisoInversores />
+      <div className="flex flex-col gap-3">
+        <AvisoInversores />
+        <CreditosFotos inversores={[...foco, ...mundo]} />
+      </div>
     </div>
   );
 }

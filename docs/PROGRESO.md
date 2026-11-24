@@ -22,7 +22,8 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - **Sin saltos al llegar a cada escena:** en el celular se dibujan siempre (sin `content-visibility: auto`, que reservaba una pantalla de alto).
 - **`SiNoEntra` ya no reacciona a la barra del navegador:** en pantallas táctiles, que la barra se esconda o aparezca al scrollear cambiaba el alto de la ventana, y eso podía recalcular todos los recorridos en pleno scroll. Ahora cuenta solo si cambia el ancho (girar el teléfono).
 - **El interruptor de "Colores alternativos"** (menú "Más") tenía el círculo afuera del óvalo: el mismo error que el de Alertas (le faltaba `left-0`).
-- Probado a 375 × 812 (las 6 escenas, de a una, mientras se scrollea; el interruptor prendido y apagado) y a 1024 × 768 (las escenas siguen como antes).
+- Probado a 375 × 812 (las 6 escenas, de a una, mientras se scrollea; el interruptor prendido y apagado) y a 1024 × 768 (las escenas siguen como antes). Benja lo probó en su iPhone con la vista previa: anda bien.
+- **Inicio marcado al entrar** (pedido de Benja): al entrar directo a la portada, ni la barra de arriba ni la de abajo marcaban Inicio (la de abajo marcaba "Más"). Cuando Vercel regenera la portada (cada 60 s), la versión nueva trae la ruta `/index` y `usePathname()` la devuelve así: se ve en el HTML (`"c":["","index"]`), en la web oficial y en las vistas previas. Con `next start` en la compu no pasa. Ahora `rutaActiva()` (pasó a `src/lib/rutas.ts`) cuenta `/index` como Inicio. Test: `tests/rutas.test.ts`.
 
 ## Cuentas de usuario: la cartera en cualquier dispositivo (rama `cuenta-cartera`, 24/11/2026)
 

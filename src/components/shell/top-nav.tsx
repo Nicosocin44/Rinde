@@ -8,15 +8,11 @@ import { useEffect, useState } from "react";
 import { navPrincipal } from "@/config/site";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { rutaActiva } from "@/lib/rutas";
 import { useEsDesktop } from "@/lib/use-media";
 import { ToggleModo, ToggleTema } from "./preferencias-controles";
 import { useShell } from "./shell-context";
 import { Wordmark } from "./wordmark";
-
-export function rutaActiva(pathname: string, href: string): boolean {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
 
 /**
  * Barra superior: una cápsula flotante y translúcida, separada de los bordes. La sección activa tiene una

@@ -12,7 +12,7 @@ const Sheet = dynamic(() => import("@/components/ui/sheet").then((m) => m.Sheet)
 import { cn } from "@/lib/cn";
 import { ToggleModo } from "./preferencias-controles";
 import { useShell } from "./shell-context";
-import { rutaActiva } from "./top-nav";
+import { rutaActiva } from "@/lib/rutas";
 import { cambiarColoresAlt, cambiarTema, usePreferencias } from "@/lib/preferencias";
 
 const ITEMS = [

@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 24/11/2026, fotos de los inversores (rama `inversores-fotos`).
+> Escrito para los fundadores. Última actualización: martes 24/11/2026, Bytelime fuera del ranking del dólar (rama `sin-bytelime`) y fotos de los inversores (rama `inversores-fotos`).
 
 ## Cómo verlo
 
@@ -11,6 +11,15 @@
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
 
 ---
+
+## Bytelime fuera del ranking del dólar (rama `sin-bytelime`, 24/11/2026)
+
+> Benja vio que Bytelime era el único sin logo ("BY") y pidió sacarlo.
+
+- **Por qué:** no tiene web ni app propia donde comprar. `bytelime.com` es un dominio a la venta. Bytelime S.A.S. es una casa de cambio registrada en el BCRA (operador N° 20.194) que operaba las compras de dólares de otras apps, como Manteca, según unos términos de Manteca que ya no están online. Su precio llega por CriptoYa, que tampoco tiene link ni logo. En un ranking para decidir dónde comprar, una opción a la que no se puede ir confunde.
+- **Cómo:** `SIN_DONDE_COMPRAR` en `src/lib/data/servicios/dolar.ts`. Sale del ranking (Dónde comprar, la portada, las alertas de "dónde comprar") y queda en la lista de excluidos con el motivo "No tiene web ni app propia donde comprar".
+- **Para Nico:** si sabés qué app está detrás de Bytelime, se puede volver a sumar con ese nombre, logo y link.
+- Test en `tests/validacion.test.ts`.
 
 ## Fotos de los inversores (rama `inversores-fotos`, 24/11/2026)
 

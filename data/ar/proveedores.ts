@@ -67,6 +67,7 @@ export const PROVEEDORES: Proveedor[] = [
   P({ id: "pluscambio", nombre: "Plus Cambio", sigla: "PC", tipo: "casa_de_cambio", regulador: "BCRA" }),
   P({ id: "plazacambio", nombre: "Plaza Cambio", sigla: "PZ", tipo: "casa_de_cambio", regulador: "BCRA" }),
   P({ id: "triacambio", nombre: "Tría Cambio", sigla: "TR", tipo: "casa_de_cambio", regulador: "BCRA" }),
+  // Fuera del ranking del dólar: no tiene web ni app donde comprar (SIN_DONDE_COMPRAR en lib/data/servicios/dolar.ts).
   P({ id: "bytelime", nombre: "Bytelime", sigla: "BY", tipo: "casa_de_cambio", regulador: "BCRA" }),
 
   // ───── Billeteras y fintech ─────

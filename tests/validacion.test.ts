@@ -122,4 +122,20 @@ describe("11. validación de sanidad", () => {
     expect(excluidos.map((e) => e.reason).join(" ")).toMatch(/atípico/);
     expect(excluidos.map((e) => e.reason).join(" ")).toMatch(/No publica/);
   });
+
+  it("dólar: Bytelime no entra al ranking (no tiene web ni app donde comprar) y queda en los excluidos", () => {
+    const ahora = new Date("2026-11-24T15:00:00Z");
+    const t = ahora.getTime() / 1000;
+    const { ranking, excluidos } = normalizarRanking(
+      "USD",
+      {
+        bna: { ask: 1615, totalAsk: 1615, bid: 1565, totalBid: 1565, time: t - 60 },
+        bytelime: { ask: 1630, totalAsk: 1630, bid: 1590, totalBid: 1590, time: t - 60 },
+        supervielle: { ask: 1575, totalAsk: 1575, bid: 1525, totalBid: 1525, time: t - 60 },
+      },
+      ahora,
+    );
+    expect(ranking.proveedores.map((p) => p.id).sort()).toEqual(["bna", "supervielle"]);
+    expect(excluidos).toContainEqual({ id: "Bytelime", reason: "No tiene web ni app propia donde comprar" });
+  });
 });

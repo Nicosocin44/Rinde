@@ -59,6 +59,7 @@ export const PROVEEDORES: Proveedor[] = [
   P({ id: "brubank", nombre: "Brubank", sigla: "BR", tipo: "banco", regulador: "BCRA", garantiaDepositos: true, opera247: true, sitio: "https://www.brubank.com" }),
   P({ id: "supervielle", nombre: "Supervielle", sigla: "SU", tipo: "banco", regulador: "BCRA", garantiaDepositos: true, alias: ["supervielle hit iol"] }),
   P({ id: "columbia", nombre: "Banco Columbia", sigla: "CL", tipo: "banco", regulador: "BCRA", garantiaDepositos: true }),
+  P({ id: "santacruz", nombre: "Banco Santa Cruz", sigla: "SC", tipo: "banco", regulador: "BCRA", garantiaDepositos: true, sitio: "https://www.bancosantacruz.com", alias: ["banco de santa cruz s.a."] }),
   P({ id: "carrefour", nombre: "Carrefour Banco", sigla: "CB", tipo: "banco", regulador: "BCRA", garantiaDepositos: true, alias: ["carrefour banco"] }),
   // No es un banco: el "andina" de CriptoYa es Andina Cambio, casa de cambio de Bariloche y Villa La Angostura (verificado el 19/11/2026).
   P({ id: "andina", nombre: "Andina Cambio", sigla: "AC", tipo: "casa_de_cambio", regulador: "BCRA", sitio: "https://www.andinacambio.com.ar" }),
@@ -67,6 +68,8 @@ export const PROVEEDORES: Proveedor[] = [
   P({ id: "pluscambio", nombre: "Plus Cambio", sigla: "PC", tipo: "casa_de_cambio", regulador: "BCRA" }),
   P({ id: "plazacambio", nombre: "Plaza Cambio", sigla: "PZ", tipo: "casa_de_cambio", regulador: "BCRA" }),
   P({ id: "triacambio", nombre: "Tría Cambio", sigla: "TR", tipo: "casa_de_cambio", regulador: "BCRA" }),
+  // Casa de cambio online (verificado el 24/11/2026: su precio llega por ComparaDolar).
+  P({ id: "tiendadolar", nombre: "Tienda Dólar", sigla: "TD", tipo: "casa_de_cambio", sitio: "https://tiendadolar.com.ar" }),
   // Fuera del ranking del dólar: no tiene web ni app donde comprar (SIN_DONDE_COMPRAR en lib/data/servicios/dolar.ts).
   P({ id: "bytelime", nombre: "Bytelime", sigla: "BY", tipo: "casa_de_cambio", regulador: "BCRA" }),
 

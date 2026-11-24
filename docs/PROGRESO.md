@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 24/11/2026, Bytelime fuera del ranking del dólar (rama `sin-bytelime`) y fotos de los inversores (rama `inversores-fotos`).
+> Escrito para los fundadores. Última actualización: martes 24/11/2026, logos de los fondos y más entidades en el dólar oficial (rama `inversores-logos-mas-dolar`).
 
 ## Cómo verlo
 
@@ -11,6 +11,33 @@
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
 
 ---
+
+## Logos de los fondos y más entidades en el dólar oficial (rama `inversores-logos-mas-dolar`, 24/11/2026)
+
+> Pedido de Nico: en Inversores, logos para los fondos y fotos para las personas; en Dónde comprar, más apps y bancos en el dólar oficial (había 11) y más en cripto si aparecen.
+
+**Inversores**
+- **10 logos nuevos** de fondos con foco en Argentina, sacados de la web de cada uno: North of South, Fundamenta, Helikon, Westwood, Abu Dhabi Investment Council, RWC (hoy Redwheel), Gemsstock, Cape Ann, Sagil y Equinox. Recortados en un cuadrado de 192 px (webp, 0,5 a 5 KB) en `public/inversores/`, con margen para que entren en el círculo. Datos en `LOGOS_INVERSORES` (`src/config/fotos-inversores.ts`). De los 18 fondos con foco en Argentina, 11 tienen imagen (antes 1).
+- **Siguen con iniciales:** Aquamarine, VR Advisory, Ping Capital, MAK Capital, Route One (no tienen web propia o el dominio está estacionado), PointState (Zach Schreiber) y Discovery (Rob Citrone): ninguno de los dos tiene una foto con licencia libre, y usar una de un diario sería infringir derechos de autor.
+- Equinox publica solo un ícono de 32 px: se ve un poco blando a 56 px en su ficha.
+- Test: `tests/fotos-inversores.test.ts` (cada logo es de un fondo que se muestra, tiene su archivo y no pisa una foto).
+
+**Dólar oficial: de 11 a 21 entidades**
+- **Fuente nueva: ComparaDolar** (`api.comparadolar.ar/usd`, verificada el 24/11/2026: respondió con 32 entidades, 17 del oficial). Adapter `src/lib/data/adapters/comparadolar.ts`, schema `comparaDolarSchema`.
+- **Por qué faltaban:** CriptoYa publica 22 entidades del oficial, pero 10 no se actualizan hace meses (BBVA, Galicia, Santander, Brubank, Macro, Ciudad, Provincia, Patagonia, Piano e ICBC) y la validación las saca por viejas.
+- **Cómo se juntan** (`combinarCotizaciones` y `oficialDeComparaDolar` en `src/lib/data/servicios/dolar.ts`): por cada entidad queda CriptoYa si está al día; si no la tiene o está vieja, la de ComparaDolar. De ComparaDolar solo entra el oficial (no el MEP ni el CCL), solo entidades que reconocemos y no las que ellos marcan como desactualizadas. Después pasa por la misma validación de siempre (mediana, puntas, spread). Si una de las dos fuentes falla, el ranking sale con la otra.
+- **Entran:** Ualá, Banco Ciudad, Banco Provincia, Bancor, Banco Bica, Banco Santa Cruz, Cocos, Balanz, Reba y Tienda Dólar. Brubank va a "condiciones especiales": ComparaDolar dice que ese precio es "Solo para clientes Ultra".
+- **Nuevos en el registro de proveedores:** Banco Santa Cruz y Tienda Dólar, con logo (Tienda Dólar como logo manual en `assets/logos-fuente/`).
+- ComparaDolar va en el pie, en /metodologia (tabla de fuentes y criterio del dólar) y en "¿De dónde sale este número?" del ranking.
+- Test en `tests/validacion.test.ts`.
+
+**Lo que no se pudo**
+- **Galicia, Santander, BBVA, Macro y Mercado Pago** muestran su precio solo dentro de la app (Mercado Pago vende dólar oficial desde julio de 2025). Ninguna fuente pública los tiene al día: CriptoYa los tiene congelados hace meses y sus webs no lo publican. No los sumamos con un precio viejo.
+- **Cripto:** CriptoYa ya trae los 34 exchanges que cotizan USDT en pesos (23 en el ranking y 11 P2P aparte). Probé ComparaDolar y su "cripto" da unos $ 100 menos que el USDT, porque es otro producto: no es comparable.
+
+**Para revisar**
+- ComparaDolar no publica términos de uso para su API; la usamos con caché de 15 a 60 s (un pedido por minuto como mucho). Si un día piden que no, se saca y el ranking vuelve a 11.
+- "Cocos Bank" de ComparaDolar (es el ex Banco Voii) lo mostramos como **Cocos**, que es la app donde se compra.
 
 ## Bytelime fuera del ranking del dólar (rama `sin-bytelime`, 24/11/2026)
 

@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AvisoInversores, CifraMonto, etiquetaTrimestre, fechasInforme, MarcaInversor, montoUsd } from "@/components/modules/inversores/comun";
+import { AvisoInversores, CifraMonto, CreditosFotos, etiquetaTrimestre, fechasInforme, MarcaInversor, montoUsd } from "@/components/modules/inversores/comun";
 import { DonaConLogos, type Porcion } from "@/components/modules/inversores/dona-logos";
 import { MovimientosInversor, type TrimestreMovimientos } from "@/components/modules/inversores/movimientos";
 import { ProviderMark } from "@/components/ui/provider-mark";
@@ -130,7 +130,10 @@ export default async function FichaInversor({ params }: Props) {
         </section>
       )}
 
-      <AvisoInversores />
+      <div className="flex flex-col gap-3">
+        <AvisoInversores />
+        <CreditosFotos inversores={[i]} />
+      </div>
     </div>
   );
 }

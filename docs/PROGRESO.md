@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 24/11/2026, cuentas de usuario para la cartera (rama `cuenta-cartera`).
+> Escrito para los fundadores. Última actualización: martes 24/11/2026, fotos de los inversores (rama `inversores-fotos`).
 
 ## Cómo verlo
 
@@ -11,6 +11,17 @@
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
 
 ---
+
+## Fotos de los inversores (rama `inversores-fotos`, 24/11/2026)
+
+> Pedido de Benja: en Inversores, poner la foto de las personas en vez de las iniciales (el círculo mostraba las de la firma: "BH" para Buffett, "PS" para Ackman).
+
+- **7 fotos** (Buffett, Gates, Dalio, Cathie Wood, Ackman, Howard Marks, Peter Thiel), todas de **Wikimedia Commons con licencia libre**: dominio público, CC BY o CC BY-SA. Se bajaron en chico, se recortaron en un cuadrado centrado en la cara (192 × 192, webp, ~7 KB) y viven en `public/inversores/`. No dependemos de Wikimedia para mostrarlas.
+- **Datos y créditos:** `src/config/fotos-inversores.ts` (autor, licencia y página de cada foto). Las licencias piden nombrar al autor: al pie de la lista y de cada ficha sale "Fotos de Wikimedia Commons, recortadas: …" con links.
+- **Sin foto libre:** Rob Citrone y Zach Schreiber. Siguen con monograma, pero ahora con las iniciales de la persona ("RC", "ZS"), no las de la firma. Los fondos sin persona siguen con las de la firma.
+- **Antes era una decisión de diseño** ("sin fotos, como las marcas del resto del sitio"); la cambió Benja. El aviso de la página ya dice que Rinde no está relacionado con estos inversores: las fotos acompañan datos públicos de la SEC, no sugieren un respaldo.
+- De paso: la descripción de la página (la que ve Google) todavía nombraba a Druckenmiller, que se sacó; ahora dice Buffett, Dalio, Cathie Wood.
+- Test: `tests/fotos-inversores.test.ts` (que cada foto sea de un inversor de la lista, tenga su archivo y su licencia).
 
 ## Cuentas de usuario: la cartera en cualquier dispositivo (rama `cuenta-cartera`, 24/11/2026)
 

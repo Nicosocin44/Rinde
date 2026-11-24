@@ -1,6 +1,6 @@
 {
  "_nota": "Generado por scripts/inversores.py: no editar a mano.",
- "actualizado": "2026-11-23T23:45:55+00:00",
+ "actualizado": "2026-11-24T12:47:06+00:00",
  "inversores": [
   {
    "slug": "aquamarine",
@@ -10086,676 +10086,7 @@
       "valor": 13166455,
       "cantidad": 29
      },
-     "movimientos": {
-      "nueva": [
-       {
-        "cusip": "233051879",
-        "ticker": "ASHR",
-        "byma": null,
-        "nombre": "Xtrackers Harvest Csi 300 Ch",
-        "valor": 2890800,
-        "peso": 0.011515168573694844,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.011515168573694844,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "91324P102",
-        "ticker": "UNH",
-        "byma": null,
-        "nombre": "Unitedhealth Group Inc",
-        "valor": 1584528,
-        "peso": 0.006311784637380498,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.006311784637380498,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "47215P106",
-        "ticker": "JD",
-        "byma": null,
-        "nombre": "Jd.Com Inc-Adr",
-        "valor": 1205400,
-        "peso": 0.004801571951962005,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.004801571951962005,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "78462F103",
-        "ticker": "SPY",
-        "byma": null,
-        "nombre": "Ss Spdr S&P 500 Etf Trust-Us",
-        "valor": 886496,
-        "peso": 0.0035312546284440934,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0035312546284440934,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "50202M102",
-        "ticker": "LI",
-        "byma": null,
-        "nombre": "Li Auto Inc - Adr",
-        "valor": 761850,
-        "peso": 0.0030347416555518945,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0030347416555518945,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "N20944109",
-        "ticker": "CNH",
-        "byma": null,
-        "nombre": "Cnh Industrial Nv",
-        "valor": 276600,
-        "peso": 0.0011018042159554428,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0011018042159554428,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "358029106",
-        "ticker": "FMS",
-        "byma": null,
-        "nombre": "Fresenius Medical Care-Adr",
-        "valor": 238200,
-        "peso": 0.0009488422423737761,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0009488422423737761,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "G6683N103",
-        "ticker": "NU",
-        "byma": null,
-        "nombre": "Nu Holdings Ltd/Cayman Isl-A",
-        "valor": 227664,
-        "peso": 0.0009068733008723063,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0009068733008723063,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "05278C107",
-        "ticker": "ATHM",
-        "byma": null,
-        "nombre": "Autohome Inc-Adr",
-        "valor": 222600,
-        "peso": 0.000886701440606224,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.000886701440606224,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "67066G104",
-        "ticker": "NVDA",
-        "byma": null,
-        "nombre": "Nvidia Corp",
-        "valor": 205150,
-        "peso": 0.0008171913770905968,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0008171913770905968,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "58733R102",
-        "ticker": "MELI",
-        "byma": null,
-        "nombre": "Mercadolibre Inc",
-        "valor": 201426,
-        "peso": 0.0008023572523609582,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0008023572523609582,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "011659109",
-        "ticker": "ALK",
-        "byma": null,
-        "nombre": "Alaska Air Group Inc",
-        "valor": 201200,
-        "peso": 0.0008014570074122743,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0008014570074122743,
-        "cambioAcciones": null
-       }
-      ],
-      "aumento": [
-       {
-        "cusip": "399909100",
-        "ticker": "GGAL",
-        "byma": "GGAL",
-        "nombre": "Grupo Financiero Galicia",
-        "valor": 24316152,
-        "peso": 0.09686058853728623,
-        "argentino": true,
-        "pesoAntes": 0.06768235136797986,
-        "pesoAhora": 0.09686058853728623,
-        "cambioAcciones": 0.1049019607843138
-       },
-       {
-        "cusip": "500767306",
-        "ticker": "KWEB",
-        "byma": null,
-        "nombre": "Kranesh Csi China Internet",
-        "valor": 16854750,
-        "peso": 0.0671389537558749,
-        "argentino": false,
-        "pesoAntes": 0.056894627916807855,
-        "pesoAhora": 0.0671389537558749,
-        "cambioAcciones": 1.2000000000000002
-       },
-       {
-        "cusip": "464287184",
-        "ticker": "FXI",
-        "byma": null,
-        "nombre": "Ishares China Large-Cap Etf",
-        "valor": 14358750,
-        "peso": 0.057196425473066574,
-        "argentino": false,
-        "pesoAntes": 0.017333983916509112,
-        "pesoAhora": 0.057196425473066574,
-        "cambioAcciones": 4.357142857142857
-       },
-       {
-        "cusip": "92837L109",
-        "ticker": "VIST",
-        "byma": "VIST",
-        "nombre": "Vista Energy",
-        "valor": 10943634,
-        "peso": 0.043592704551964304,
-        "argentino": true,
-        "pesoAntes": 0.025654633269528607,
-        "pesoAhora": 0.043592704551964304,
-        "cambioAcciones": 0.8151735270379339
-       },
-       {
-        "cusip": "46090E103",
-        "ticker": "QQQ",
-        "byma": null,
-        "nombre": "Invesco Qqq Trust Series 1",
-        "valor": 8907495,
-        "peso": 0.03548197955387573,
-        "argentino": false,
-        "pesoAntes": 0.040835087277132684,
-        "pesoAhora": 0.03548197955387573,
-        "cambioAcciones": 0.2831858407079646
-       },
-       {
-        "cusip": "78468R556",
-        "ticker": "XOP",
-        "byma": null,
-        "nombre": "Ss Spdr S&P Og Exp & Prod",
-        "valor": 5050400,
-        "peso": 0.02011768623377212,
-        "argentino": false,
-        "pesoAntes": 0.02625919794227469,
-        "pesoAhora": 0.02011768623377212,
-        "cambioAcciones": 0.21212121212121215
-       },
-       {
-        "cusip": "037833100",
-        "ticker": "AAPL",
-        "byma": null,
-        "nombre": "Apple Inc",
-        "valor": 4458504,
-        "peso": 0.017759936746399873,
-        "argentino": false,
-        "pesoAntes": 0.020537634957446208,
-        "pesoAhora": 0.017759936746399873,
-        "cambioAcciones": 0.22388059701492535
-       },
-       {
-        "cusip": "40054A108",
-        "ticker": "SUPV",
-        "byma": "SUPV",
-        "nombre": "Grupo Supervielle",
-        "valor": 5129880,
-        "peso": 0.02043428565200834,
-        "argentino": true,
-        "pesoAntes": 0.010264327183563121,
-        "pesoAhora": 0.02043428565200834,
-        "cambioAcciones": 0.25979680696661833
-       },
-       {
-        "cusip": "71654V408",
-        "ticker": "PBR",
-        "byma": null,
-        "nombre": "Petroleo Brasileiro-Spon Adr",
-        "valor": 4646385,
-        "peso": 0.018508339052610737,
-        "argentino": false,
-        "pesoAntes": 0.020422295767291283,
-        "pesoAhora": 0.018508339052610737,
-        "cambioAcciones": 0.4630597014925373
-       },
-       {
-        "cusip": "81369Y506",
-        "ticker": "XLE",
-        "byma": null,
-        "nombre": "Ss Energy Select Sector",
-        "valor": 1341300,
-        "peso": 0.005342913936590873,
-        "argentino": false,
-        "pesoAntes": 0.008066279549452693,
-        "pesoAhora": 0.005342913936590873,
-        "cambioAcciones": 1.0
-       },
-       {
-        "cusip": "226406106",
-        "ticker": "CRESY",
-        "byma": "CRES",
-        "nombre": "Cresud",
-        "valor": 1702789,
-        "peso": 0.006782863698780016,
-        "argentino": true,
-        "pesoAntes": 0.006689456339138679,
-        "pesoAhora": 0.006782863698780016,
-        "cambioAcciones": 0.11606788079470198
-       },
-       {
-        "cusip": "450047303",
-        "ticker": "IRS",
-        "byma": "IRSA",
-        "nombre": "IRSA",
-        "valor": 1598558,
-        "peso": 0.006367671525124008,
-        "argentino": true,
-        "pesoAntes": 0.006642073492624768,
-        "pesoAhora": 0.006367671525124008,
-        "cambioAcciones": 0.03699570815450648
-       },
-       {
-        "cusip": "29244A102",
-        "ticker": "EDN",
-        "byma": "EDN",
-        "nombre": "Edenor",
-        "valor": 1569904,
-        "peso": 0.006253531619108146,
-        "argentino": true,
-        "pesoAntes": 0.004720371624050435,
-        "pesoAhora": 0.006253531619108146,
-        "cambioAcciones": 0.039682539682539764
-       },
-       {
-        "cusip": "254687106",
-        "ticker": "DIS",
-        "byma": null,
-        "nombre": "Walt Disney Co/The",
-        "valor": 1023930,
-        "peso": 0.0040787071252467695,
-        "argentino": false,
-        "pesoAntes": 0.005168955722030071,
-        "pesoAhora": 0.0040787071252467695,
-        "cambioAcciones": 0.19999999999999996
-       },
-       {
-        "cusip": "L1995B107",
-        "ticker": "CAAP",
-        "byma": null,
-        "nombre": "Corporación América Airports",
-        "valor": 1209000,
-        "peso": 0.004815912136985286,
-        "argentino": true,
-        "pesoAntes": 0.004308155305369204,
-        "pesoAhora": 0.004815912136985286,
-        "cambioAcciones": 0.17721518987341778
-       },
-       {
-        "cusip": "L00849106",
-        "ticker": "AGRO",
-        "byma": "AGRO",
-        "nombre": "Adecoagro",
-        "valor": 952393,
-        "peso": 0.003793747731910528,
-        "argentino": true,
-        "pesoAntes": 0.004719023331669958,
-        "pesoAhora": 0.003793747731910528,
-        "cambioAcciones": 0.20100000000000007
-       },
-       {
-        "cusip": "279158109",
-        "ticker": "EC",
-        "byma": null,
-        "nombre": "Ecopetrol Sa-Sponsored Adr",
-        "valor": 410820,
-        "peso": 0.001636454114240112,
-        "argentino": false,
-        "pesoAntes": 0.0021620229470695564,
-        "pesoAhora": 0.001636454114240112,
-        "cambioAcciones": 0.05128205128205132
-       },
-       {
-        "cusip": "594918104",
-        "ticker": "MSFT",
-        "byma": null,
-        "nombre": "Microsoft Corp",
-        "valor": 386896,
-        "peso": 0.0015411556179909507,
-        "argentino": false,
-        "pesoAntes": 0.0018705751030396337,
-        "pesoAhora": 0.0015411556179909507,
-        "cambioAcciones": 0.33333333333333326
-       },
-       {
-        "cusip": "023135106",
-        "ticker": "AMZN",
-        "byma": null,
-        "nombre": "Amazon.Com Inc",
-        "valor": 461640,
-        "peso": 0.001838889726152099,
-        "argentino": false,
-        "pesoAntes": 0.0015859529891858765,
-        "pesoAhora": 0.001838889726152099,
-        "cambioAcciones": 0.6666666666666667
-       },
-       {
-        "cusip": "580135101",
-        "ticker": "MCD",
-        "byma": null,
-        "nombre": "Mcdonald'S Corp",
-        "valor": 366756,
-        "peso": 0.0014609302495551496,
-        "argentino": false,
-        "pesoAntes": 0.0018291632656392647,
-        "pesoAhora": 0.0014609302495551496,
-        "cambioAcciones": 0.19999999999999996
-       }
-      ],
-      "reduccion": [
-       {
-        "cusip": "984245100",
-        "ticker": "YPF",
-        "byma": "YPFD",
-        "nombre": "YPF",
-        "valor": 70464992,
-        "peso": 0.2806891730400092,
-        "argentino": true,
-        "pesoAntes": 0.29489640275111356,
-        "pesoAhora": 0.2806891730400092,
-        "cambioAcciones": -0.03386217154189386
-       },
-       {
-        "cusip": "697660207",
-        "ticker": "PAM",
-        "byma": "PAMP",
-        "nombre": "Pampa Energía",
-        "valor": 18861481,
-        "peso": 0.07513253537586219,
-        "argentino": true,
-        "pesoAntes": 0.08748563647273423,
-        "pesoAhora": 0.07513253537586219,
-        "cambioAcciones": -0.11942148760330573
-       },
-       {
-        "cusip": "058934100",
-        "ticker": "BBAR",
-        "byma": "BBAR",
-        "nombre": "BBVA Argentina",
-        "valor": 14110863,
-        "peso": 0.05620899618282598,
-        "argentino": true,
-        "pesoAntes": 0.05260844255424554,
-        "pesoAhora": 0.05620899618282598,
-        "cambioAcciones": -0.2566396953831509
-       },
-       {
-        "cusip": "464286400",
-        "ticker": "EWZ",
-        "byma": null,
-        "nombre": "Ishares Msci Brazil Etf",
-        "valor": 7300746,
-        "peso": 0.029081680124439027,
-        "argentino": false,
-        "pesoAntes": 0.04567821971859308,
-        "pesoAhora": 0.029081680124439027,
-        "cambioAcciones": -0.06127450980392157
-       },
-       {
-        "cusip": "05961W105",
-        "ticker": "BMA",
-        "byma": "BMA",
-        "nombre": "Banco Macro",
-        "valor": 10783497,
-        "peso": 0.042954817271666196,
-        "argentino": true,
-        "pesoAntes": 0.03133616882431168,
-        "pesoAhora": 0.042954817271666196,
-        "cambioAcciones": -0.028431245126072313
-       },
-       {
-        "cusip": "46654Q203",
-        "ticker": "JEPQ",
-        "byma": null,
-        "nombre": "Jpm Nasdaq Equity Premium",
-        "valor": 331284,
-        "peso": 0.0013196316264590848,
-        "argentino": false,
-        "pesoAntes": 0.011771555547551407,
-        "pesoAhora": 0.0013196316264590848,
-        "cambioAcciones": -0.8323529411764706
-       },
-       {
-        "cusip": "155038201",
-        "ticker": "CEPU",
-        "byma": "CEPU",
-        "nombre": "Central Puerto",
-        "valor": 2222500,
-        "peso": 0.008853072559511828,
-        "argentino": true,
-        "pesoAntes": 0.007473091093666883,
-        "pesoAhora": 0.008853072559511828,
-        "cambioAcciones": -0.1806451612903226
-       },
-       {
-        "cusip": "91912E105",
-        "ticker": "VALE",
-        "byma": null,
-        "nombre": "Vale Sa-Sp Adr",
-        "valor": 457353,
-        "peso": 0.0018218129558202083,
-        "argentino": false,
-        "pesoAntes": 0.008680884185103401,
-        "pesoAhora": 0.0018218129558202083,
-        "cambioAcciones": -0.7356927710843373
-       },
-       {
-        "cusip": "012653101",
-        "ticker": "ALB",
-        "byma": null,
-        "nombre": "Albemarle Corp",
-        "valor": 1838720,
-        "peso": 0.007324329168335472,
-        "argentino": false,
-        "pesoAntes": 0.007857342383778039,
-        "pesoAhora": 0.007324329168335472,
-        "cambioAcciones": -0.1925465838509317
-       },
-       {
-        "cusip": "464287556",
-        "ticker": "IBB",
-        "byma": null,
-        "nombre": "Ishares Biotechnology Etf",
-        "valor": 337540,
-        "peso": 0.0013445516813217649,
-        "argentino": false,
-        "pesoAntes": 0.006951891820338692,
-        "pesoAhora": 0.0013445516813217649,
-        "cambioAcciones": -0.75
-       },
-       {
-        "cusip": "54150E104",
-        "ticker": "LOMA",
-        "byma": "LOMA",
-        "nombre": "Loma Negra",
-        "valor": 1182335,
-        "peso": 0.004709695183194788,
-        "argentino": true,
-        "pesoAntes": 0.006698545274382074,
-        "pesoAhora": 0.004709695183194788,
-        "cambioAcciones": -0.395364238410596
-       },
-       {
-        "cusip": "78464A870",
-        "ticker": "XBI",
-        "byma": null,
-        "nombre": "Ss Spdr S&P Biotech Etf",
-        "valor": 243860,
-        "peso": 0.0009713881999381572,
-        "argentino": false,
-        "pesoAntes": 0.001809360221301007,
-        "pesoAhora": 0.0009713881999381572,
-        "cambioAcciones": -0.33333333333333337
-       },
-       {
-        "cusip": "879273209",
-        "ticker": "TEO",
-        "byma": "TECO2",
-        "nombre": "Telecom Argentina",
-        "valor": 240327,
-        "peso": 0.0009573149016916981,
-        "argentino": true,
-        "pesoAntes": 0.0016759816013947892,
-        "pesoAhora": 0.0009573149016916981,
-        "cambioAcciones": -0.45953002610966054
-       },
-       {
-        "cusip": "G1117K114",
-        "ticker": "BIOX",
-        "byma": null,
-        "nombre": "Bioceres Crop Solutions",
-        "valor": 72050,
-        "peso": 0.00028700286970205946,
-        "argentino": true,
-        "pesoAntes": 0.0004837600831202991,
-        "pesoAhora": 0.00028700286970205946,
-        "cambioAcciones": -0.03508771929824561
-       }
-      ],
-      "salida": [
-       {
-        "cusip": "25490K869",
-        "ticker": "CHAU",
-        "byma": null,
-        "nombre": "Dd Csi 300 Ch A Sb 2X Etf-Us",
-        "valor": 3579370,
-        "peso": 0.014258007796328392,
-        "argentino": false,
-        "pesoAntes": 0.021544809365662623,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "25460G195",
-        "ticker": "YINN",
-        "byma": null,
-        "nombre": "Direxion Dly Ftse Ch Bl3X-Ui",
-        "valor": 3148820,
-        "peso": 0.012542961501391241,
-        "argentino": false,
-        "pesoAntes": 0.018953258988812494,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "464287655",
-        "ticker": "IWM",
-        "byma": null,
-        "nombre": "Ishares Russell 2000 Etf",
-        "valor": 1088820,
-        "peso": 0.004337188960291415,
-        "argentino": false,
-        "pesoAntes": 0.006553784418353168,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "464286822",
-        "ticker": "EWW",
-        "byma": null,
-        "nombre": "Ishares Msci Mexico Etf",
-        "valor": 695742,
-        "peso": 0.002771408057907707,
-        "argentino": false,
-        "pesoAntes": 0.0041877840954371425,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "81369Y209",
-        "ticker": "XLV",
-        "byma": null,
-        "nombre": "Ss Health Care Select Sector",
-        "valor": 556680,
-        "peso": 0.002217470610766724,
-        "argentino": false,
-        "pesoAntes": 0.0033507473319821838,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "00214Q302",
-        "ticker": "ARKG",
-        "byma": null,
-        "nombre": "Ark Genomic Revolution Etf",
-        "valor": 416550,
-        "peso": 0.0016592789087355013,
-        "argentino": false,
-        "pesoAntes": 0.0025072821030703075,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "007903107",
-        "ticker": "AMD",
-        "byma": null,
-        "nombre": "Advanced Micro Devices",
-        "valor": 323580,
-        "peso": 0.0012889436305092631,
-        "argentino": false,
-        "pesoAntes": 0.0019476805735481697,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "247361702",
-        "ticker": "DAL",
-        "byma": null,
-        "nombre": "Delta Air Lines Inc",
-        "valor": 283750,
-        "peso": 0.0011302854167655708,
-        "argentino": false,
-        "pesoAntes": 0.0017079373346445797,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "02376R102",
-        "ticker": "AAL",
-        "byma": null,
-        "nombre": "American Airlines Group Inc",
-        "valor": 224800,
-        "peso": 0.0008954648870093403,
-        "argentino": false,
-        "pesoAntes": 0.0013531077104074064,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       }
-      ]
-     }
+     "movimientos": null
     }
    ]
   },
@@ -40719,604 +40050,7 @@
       "valor": 487384791,
       "cantidad": 84
      },
-     "movimientos": {
-      "nueva": [
-       {
-        "cusip": "29414B104",
-        "ticker": "EPAM",
-        "byma": null,
-        "nombre": "Epam Systems Inc",
-        "valor": 15884142,
-        "peso": 0.008889085785639296,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.008889085785639296,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "69331C108",
-        "ticker": "PCG",
-        "byma": null,
-        "nombre": "P G & E Corp",
-        "valor": 14409471,
-        "peso": 0.008063830192696695,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.008063830192696695,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "25179M103",
-        "ticker": "DVN",
-        "byma": null,
-        "nombre": "Devon Energy Corp",
-        "valor": 7268930,
-        "peso": 0.00406783963148951,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.00406783963148951,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "40054J109",
-        "ticker": "AERO",
-        "byma": null,
-        "nombre": "Grupo Aeromexico Sab De Cv",
-        "valor": 2730726,
-        "peso": 0.0015281692691412388,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0015281692691412388,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "450047303",
-        "ticker": "IRS",
-        "byma": "IRSA",
-        "nombre": "IRSA",
-        "valor": 2577180,
-        "peso": 0.0014422418349718785,
-        "argentino": true,
-        "pesoAntes": 0,
-        "pesoAhora": 0.0014422418349718785,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "056525108",
-        "ticker": "BMI",
-        "byma": null,
-        "nombre": "Badger Meter Inc",
-        "valor": 307310,
-        "peso": 0.00017197686552945777,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.00017197686552945777,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "80706P103",
-        "ticker": "SRRK",
-        "byma": null,
-        "nombre": "Scholar Rock Holding Corp",
-        "valor": 295928,
-        "peso": 0.00016560726908464214,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.00016560726908464214,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "377322102",
-        "ticker": "GKOS",
-        "byma": null,
-        "nombre": "Glaukos Corp",
-        "valor": 202109,
-        "peso": 0.00011310426707654544,
-        "argentino": false,
-        "pesoAntes": 0,
-        "pesoAhora": 0.00011310426707654544,
-        "cambioAcciones": null
-       }
-      ],
-      "aumento": [
-       {
-        "cusip": "40434L105",
-        "ticker": "HPQ",
-        "byma": null,
-        "nombre": "Hp Inc",
-        "valor": 133903959,
-        "peso": 0.07493535241549258,
-        "argentino": false,
-        "pesoAntes": 0.09006355954872952,
-        "pesoAhora": 0.07493535241549258,
-        "cambioAcciones": 0.02352799725063348
-       },
-       {
-        "cusip": "521865204",
-        "ticker": "LEA",
-        "byma": null,
-        "nombre": "Lear Corp",
-        "valor": 67585694,
-        "peso": 0.03782231560558746,
-        "argentino": false,
-        "pesoAntes": 0.032305430672830364,
-        "pesoAhora": 0.03782231560558746,
-        "cambioAcciones": 0.034567264511058626
-       },
-       {
-        "cusip": "38059T106",
-        "ticker": "GFI",
-        "byma": null,
-        "nombre": "Gold Fields Ltd-Spons Adr",
-        "valor": 58329454,
-        "peso": 0.03264233727169533,
-        "argentino": false,
-        "pesoAntes": 0.027231762904857886,
-        "pesoAhora": 0.03264233727169533,
-        "cambioAcciones": 0.15954301961859851
-       },
-       {
-        "cusip": "60871R209",
-        "ticker": "TAP",
-        "byma": null,
-        "nombre": "Molson Coors Beverage Co - B",
-        "valor": 51564222,
-        "peso": 0.028856377185985188,
-        "argentino": false,
-        "pesoAntes": 0.027417883548720674,
-        "pesoAhora": 0.028856377185985188,
-        "cambioAcciones": 0.026893110830777722
-       },
-       {
-        "cusip": "681919106",
-        "ticker": "OMC",
-        "byma": null,
-        "nombre": "Omnicom Group",
-        "valor": 45010131,
-        "peso": 0.025188575856465063,
-        "argentino": false,
-        "pesoAntes": 0.017295327748402707,
-        "pesoAhora": 0.025188575856465063,
-        "cambioAcciones": 0.48006011571744556
-       },
-       {
-        "cusip": "704326107",
-        "ticker": "PAYX",
-        "byma": null,
-        "nombre": "Paychex Inc",
-        "valor": 37575701,
-        "peso": 0.021028119091640728,
-        "argentino": false,
-        "pesoAntes": 0.012842424690056326,
-        "pesoAhora": 0.021028119091640728,
-        "cambioAcciones": 0.8623007511272469
-       },
-       {
-        "cusip": "92837L109",
-        "ticker": "VIST",
-        "byma": "VIST",
-        "nombre": "Vista Energy",
-        "valor": 36306783,
-        "peso": 0.020318007021568458,
-        "argentino": true,
-        "pesoAntes": 0.007729568529488812,
-        "pesoAhora": 0.020318007021568458,
-        "cambioAcciones": 0.8704316021949867
-       },
-       {
-        "cusip": "91912E105",
-        "ticker": "VALE",
-        "byma": null,
-        "nombre": "Vale Sa-Sp Adr",
-        "valor": 32584212,
-        "peso": 0.018234781313681118,
-        "argentino": false,
-        "pesoAntes": 0.011937015215863954,
-        "pesoAhora": 0.018234781313681118,
-        "cambioAcciones": 0.28150364997168675
-       },
-       {
-        "cusip": "718172109",
-        "ticker": "PM",
-        "byma": null,
-        "nombre": "Philip Morris International",
-        "valor": 28978024,
-        "peso": 0.016216685876663302,
-        "argentino": false,
-        "pesoAntes": 0.010660959094597938,
-        "pesoAhora": 0.016216685876663302,
-        "cambioAcciones": 0.5482530187595875
-       },
-       {
-        "cusip": "54150E104",
-        "ticker": "LOMA",
-        "byma": "LOMA",
-        "nombre": "Loma Negra",
-        "valor": 25454675,
-        "peso": 0.014244948812505452,
-        "argentino": true,
-        "pesoAntes": 0.0059632592630805385,
-        "pesoAhora": 0.014244948812505452,
-        "cambioAcciones": 0.36837320104506976
-       },
-       {
-        "cusip": "29082A107",
-        "ticker": "EMBJ",
-        "byma": null,
-        "nombre": "Embraer Sa-Spon Adr",
-        "valor": 21073515,
-        "peso": 0.011793163435579745,
-        "argentino": false,
-        "pesoAntes": 0.007096463520532926,
-        "pesoAhora": 0.011793163435579745,
-        "cambioAcciones": 0.5708356524576319
-       },
-       {
-        "cusip": "40054A108",
-        "ticker": "SUPV",
-        "byma": "SUPV",
-        "nombre": "Grupo Supervielle",
-        "valor": 13934527,
-        "peso": 0.007798041964451526,
-        "argentino": true,
-        "pesoAntes": 0.002076139326922763,
-        "pesoAhora": 0.007798041964451526,
-        "cambioAcciones": 0.5832389885161204
-       },
-       {
-        "cusip": "879273209",
-        "ticker": "TEO",
-        "byma": "TECO2",
-        "nombre": "Telecom Argentina",
-        "valor": 11717323,
-        "peso": 0.006557249949354797,
-        "argentino": true,
-        "pesoAntes": 0.002742967803145148,
-        "pesoAhora": 0.006557249949354797,
-        "cambioAcciones": 0.5067211284090842
-       },
-       {
-        "cusip": "247361702",
-        "ticker": "DAL",
-        "byma": null,
-        "nombre": "Delta Air Lines Inc",
-        "valor": 9859450,
-        "peso": 0.005517546799142275,
-        "argentino": false,
-        "pesoAntes": 0.0040336347982615995,
-        "pesoAhora": 0.005517546799142275,
-        "cambioAcciones": 0.12586282046202002
-       },
-       {
-        "cusip": "87165B103",
-        "ticker": "SYF",
-        "byma": null,
-        "nombre": "Synchrony Financial",
-        "valor": 9504679,
-        "peso": 0.005319009802101009,
-        "argentino": false,
-        "pesoAntes": 0.003990165491164721,
-        "pesoAhora": 0.005319009802101009,
-        "cambioAcciones": 0.1426450823453893
-       },
-       {
-        "cusip": "030420103",
-        "ticker": "AWK",
-        "byma": null,
-        "nombre": "American Water Works Co Inc",
-        "valor": 5245709,
-        "peso": 0.002935604410203594,
-        "argentino": false,
-        "pesoAntes": 0.001863083281670018,
-        "pesoAhora": 0.002935604410203594,
-        "cambioAcciones": 0.6915793460421664
-       }
-      ],
-      "reduccion": [
-       {
-        "cusip": "30161N101",
-        "ticker": "EXC",
-        "byma": null,
-        "nombre": "Exelon Corp",
-        "valor": 78625898,
-        "peso": 0.04400063612469123,
-        "argentino": false,
-        "pesoAntes": 0.04985241141694573,
-        "pesoAhora": 0.04400063612469123,
-        "cambioAcciones": -0.08267219984539642
-       },
-       {
-        "cusip": "833635105",
-        "ticker": "SQM",
-        "byma": null,
-        "nombre": "Quimica Y Minera Chil-Sp Adr",
-        "valor": 58246768,
-        "peso": 0.03259606452071694,
-        "argentino": false,
-        "pesoAntes": 0.02696493125084507,
-        "pesoAhora": 0.03259606452071694,
-        "cambioAcciones": -0.23989524217391345
-       },
-       {
-        "cusip": "871829107",
-        "ticker": "SYY",
-        "byma": null,
-        "nombre": "Sysco Corp",
-        "valor": 38944723,
-        "peso": 0.02179425137630725,
-        "argentino": false,
-        "pesoAntes": 0.025286601536788373,
-        "pesoAhora": 0.02179425137630725,
-        "cambioAcciones": -0.030643744233778025
-       },
-       {
-        "cusip": "21037T109",
-        "ticker": "CEG",
-        "byma": null,
-        "nombre": "Constellation Energy",
-        "valor": 31964223,
-        "peso": 0.017887822982085196,
-        "argentino": false,
-        "pesoAntes": 0.023603112757478728,
-        "pesoAhora": 0.017887822982085196,
-        "cambioAcciones": -0.2894422717492029
-       },
-       {
-        "cusip": "65339F101",
-        "ticker": "NEE",
-        "byma": null,
-        "nombre": "Nextera Energy Inc",
-        "valor": 29882223,
-        "peso": 0.01672269384853168,
-        "argentino": false,
-        "pesoAntes": 0.02048695341624424,
-        "pesoAhora": 0.01672269384853168,
-        "cambioAcciones": -0.2274251864889435
-       },
-       {
-        "cusip": "25746U109",
-        "ticker": "D",
-        "byma": null,
-        "nombre": "Dominion Energy Inc",
-        "valor": 25565278,
-        "peso": 0.014306844478960024,
-        "argentino": false,
-        "pesoAntes": 0.019414390565823364,
-        "pesoAhora": 0.014306844478960024,
-        "cambioAcciones": -0.22560115287891402
-       },
-       {
-        "cusip": "01609W102",
-        "ticker": "BABA",
-        "byma": null,
-        "nombre": "Alibaba Group Holding-Sp Adr",
-        "valor": 20636412,
-        "peso": 0.011548551793090002,
-        "argentino": false,
-        "pesoAntes": 0.015060534913650496,
-        "pesoAhora": 0.011548551793090002,
-        "cambioAcciones": -0.05889194898259309
-       },
-       {
-        "cusip": "92840M102",
-        "ticker": "VST",
-        "byma": null,
-        "nombre": "Vistra Corp",
-        "valor": 9303094,
-        "peso": 0.005206198775978345,
-        "argentino": false,
-        "pesoAntes": 0.010852884320558294,
-        "pesoAhora": 0.005206198775978345,
-        "cambioAcciones": -0.41363391395422144
-       },
-       {
-        "cusip": "48553T106",
-        "ticker": "BZ",
-        "byma": null,
-        "nombre": "Kanzhun Ltd - Adr",
-        "valor": 9293545,
-        "peso": 0.005200854963251975,
-        "argentino": false,
-        "pesoAntes": 0.00934629419402931,
-        "pesoAhora": 0.005200854963251975,
-        "cambioAcciones": -0.3580021483789313
-       },
-       {
-        "cusip": "05379B107",
-        "ticker": "AVA",
-        "byma": null,
-        "nombre": "Avista Corp",
-        "valor": 9619892,
-        "peso": 0.005383485317405573,
-        "argentino": false,
-        "pesoAntes": 0.00906734642541983,
-        "pesoAhora": 0.005383485317405573,
-        "cambioAcciones": -0.4137161594002058
-       },
-       {
-        "cusip": "98389B100",
-        "ticker": "XEL",
-        "byma": null,
-        "nombre": "Xcel Energy Inc",
-        "valor": 10007291,
-        "peso": 0.005600281600407253,
-        "argentino": false,
-        "pesoAntes": 0.008959613832311591,
-        "pesoAhora": 0.005600281600407253,
-        "cambioAcciones": -0.3130181265052605
-       },
-       {
-        "cusip": "71654V408",
-        "ticker": "PBR",
-        "byma": null,
-        "nombre": "Petroleo Brasileiro-Spon Adr",
-        "valor": 5862254,
-        "peso": 0.003280635410033926,
-        "argentino": false,
-        "pesoAntes": 0.00659147051082695,
-        "pesoAhora": 0.003280635410033926,
-        "cambioAcciones": -0.46479438553672026
-       },
-       {
-        "cusip": "984245100",
-        "ticker": "YPF",
-        "byma": "YPFD",
-        "nombre": "YPF",
-        "valor": 2179074,
-        "peso": 0.0012194536991205548,
-        "argentino": true,
-        "pesoAntes": 0.001601823575848289,
-        "pesoAhora": 0.0012194536991205548,
-        "cambioAcciones": -0.48527012598761476
-       }
-      ],
-      "salida": [
-       {
-        "cusip": "17275R102",
-        "ticker": "CSCO",
-        "byma": null,
-        "nombre": "Cisco Systems Inc",
-        "valor": 52144593,
-        "peso": 0.029181164486835134,
-        "argentino": false,
-        "pesoAntes": 0.029371913732425915,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "62914V106",
-        "ticker": "NIO",
-        "byma": null,
-        "nombre": "Nio Inc - Adr",
-        "valor": 20829659,
-        "peso": 0.011656696706477041,
-        "argentino": false,
-        "pesoAntes": 0.01173289332652091,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "518613203",
-        "ticker": "LAUR",
-        "byma": null,
-        "nombre": "Laureate Education Inc",
-        "valor": 10819166,
-        "peso": 0.00605462320237832,
-        "argentino": false,
-        "pesoAntes": 0.006094200608849235,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "50202M102",
-        "ticker": "LI",
-        "byma": null,
-        "nombre": "Li Auto Inc - Adr",
-        "valor": 9100202,
-        "peso": 0.0050926563263314,
-        "argentino": false,
-        "pesoAntes": 0.005125945619935125,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "80004C200",
-        "ticker": "SNDK",
-        "byma": null,
-        "nombre": "Sandisk Corp",
-        "valor": 6891997,
-        "peso": 0.0038569003328834933,
-        "argentino": false,
-        "pesoAntes": 0.0038821118294688427,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "22266T109",
-        "ticker": "CPNG",
-        "byma": null,
-        "nombre": "Coupang Inc",
-        "valor": 5345200,
-        "peso": 0.002991281577651419,
-        "argentino": false,
-        "pesoAntes": 0.003010834762533538,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "460690100",
-        "ticker": "IPG",
-        "byma": null,
-        "nombre": "Interpublic Group Of Cos Inc",
-        "valor": 3713956,
-        "peso": 0.002078404580372662,
-        "argentino": false,
-        "pesoAntes": 0.002091990539422287,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "38500T200",
-        "ticker": "GTE",
-        "byma": null,
-        "nombre": "Gran Tierra Energy Inc",
-        "valor": 3320103,
-        "peso": 0.001857996508980994,
-        "argentino": false,
-        "pesoAntes": 0.0018701417210940446,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "29670G102",
-        "ticker": "WTRG",
-        "byma": null,
-        "nombre": "Essential Utilities Inc",
-        "valor": 2328125,
-        "peso": 0.0013028656407561383,
-        "argentino": false,
-        "pesoAntes": 0.0013113821150795841,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "834203309",
-        "ticker": "SLNOEUR",
-        "byma": null,
-        "nombre": "Soleno Therapeutics Inc",
-        "valor": 504702,
-        "peso": 0.00028244140440092543,
-        "argentino": false,
-        "pesoAntes": 0.00028428764617230445,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "07725L102",
-        "ticker": "ONC",
-        "byma": null,
-        "nombre": "Beone Medicines Ltd-Adr",
-        "valor": 290276,
-        "peso": 0.00016244429604773318,
-        "argentino": false,
-        "pesoAntes": 0.00016350614972857617,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       },
-       {
-        "cusip": "436440101",
-        "ticker": "HO1",
-        "byma": null,
-        "nombre": "Hologic Inc",
-        "valor": 267463,
-        "peso": 0.00014967768177119313,
-        "argentino": false,
-        "pesoAntes": 0.00015065608360613405,
-        "pesoAhora": 0,
-        "cambioAcciones": null
-       }
-      ]
-     }
+     "movimientos": null
     }
    ]
   },
@@ -42745,6 +41479,1682 @@
        }
       ]
      }
+    }
+   ]
+  },
+  {
+   "slug": "gemsstock",
+   "nombre": "Gemsstock",
+   "cik": 1724140,
+   "grupo": "argentina",
+   "automatico": true,
+   "ciudad": "Londres",
+   "trimestres": [
+    {
+     "periodo": "2026-09-30",
+     "presentado": "2026-11-13",
+     "url": "https://www.sec.gov/Archives/edgar/data/1724140/000172414026000015/0001724140-26-000015-index.htm",
+     "total": 376834241,
+     "cantidad": 9,
+     "argentina": 66983691,
+     "posiciones": [
+      {
+       "cusip": "464287234",
+       "ticker": "EEM",
+       "byma": null,
+       "nombre": "Ishares Msci Emerging Market",
+       "valor": 176098514,
+       "peso": 0.4673102782079721,
+       "argentino": false
+      },
+      {
+       "cusip": "92189F106",
+       "ticker": "GDX",
+       "byma": null,
+       "nombre": "Vaneck Gold Miners Etf",
+       "valor": 104683940,
+       "peso": 0.27779837554623915,
+       "argentino": false
+      },
+      {
+       "cusip": "92837L109",
+       "ticker": "VIST",
+       "byma": "VIST",
+       "nombre": "Vista Energy",
+       "valor": 32866149,
+       "peso": 0.08721646130878005,
+       "argentino": true
+      },
+      {
+       "cusip": "984245100",
+       "ticker": "YPF",
+       "byma": "YPFD",
+       "nombre": "YPF",
+       "valor": 15028924,
+       "peso": 0.039882055197844934,
+       "argentino": true
+      },
+      {
+       "cusip": "05961W105",
+       "ticker": "BMA",
+       "byma": "BMA",
+       "nombre": "Banco Macro",
+       "valor": 11243838,
+       "peso": 0.02983762295634913,
+       "argentino": true
+      },
+      {
+       "cusip": "48581R205",
+       "ticker": "KSPI",
+       "byma": null,
+       "nombre": "Jsc Kaspi.Kz Adr",
+       "valor": 10045326,
+       "peso": 0.026657147644924335,
+       "argentino": false
+      },
+      {
+       "cusip": "71654V408",
+       "ticker": "PBR",
+       "byma": null,
+       "nombre": "Petroleo Brasileiro-Spon Adr",
+       "valor": 9844379,
+       "peso": 0.02612389727078968,
+       "argentino": false
+      },
+      {
+       "cusip": "465562106",
+       "ticker": "ITUB",
+       "byma": null,
+       "nombre": "Itau Unibanco H-Spon Prf Adr",
+       "valor": 9178391,
+       "peso": 0.02435657379659403,
+       "argentino": false
+      },
+      {
+       "cusip": "L1995B107",
+       "ticker": "CAAP",
+       "byma": null,
+       "nombre": "Corporación América Airports",
+       "valor": 7844780,
+       "peso": 0.020817588070506574,
+       "argentino": true
+      }
+     ],
+     "posicionesArgentinas": [
+      {
+       "cusip": "92837L109",
+       "ticker": "VIST",
+       "byma": "VIST",
+       "nombre": "Vista Energy",
+       "valor": 32866149,
+       "peso": 0.08721646130878005,
+       "argentino": true
+      },
+      {
+       "cusip": "984245100",
+       "ticker": "YPF",
+       "byma": "YPFD",
+       "nombre": "YPF",
+       "valor": 15028924,
+       "peso": 0.039882055197844934,
+       "argentino": true
+      },
+      {
+       "cusip": "05961W105",
+       "ticker": "BMA",
+       "byma": "BMA",
+       "nombre": "Banco Macro",
+       "valor": 11243838,
+       "peso": 0.02983762295634913,
+       "argentino": true
+      },
+      {
+       "cusip": "L1995B107",
+       "ticker": "CAAP",
+       "byma": null,
+       "nombre": "Corporación América Airports",
+       "valor": 7844780,
+       "peso": 0.020817588070506574,
+       "argentino": true
+      }
+     ],
+     "resto": {
+      "valor": 0,
+      "cantidad": 0
+     },
+     "movimientos": {
+      "nueva": [
+       {
+        "cusip": "464287234",
+        "ticker": "EEM",
+        "byma": null,
+        "nombre": "Ishares Msci Emerging Market",
+        "valor": 176098514,
+        "peso": 0.4673102782079721,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.4673102782079721,
+        "cambioAcciones": null
+       }
+      ],
+      "aumento": [
+       {
+        "cusip": "92189F106",
+        "ticker": "GDX",
+        "byma": null,
+        "nombre": "Vaneck Gold Miners Etf",
+        "valor": 104683940,
+        "peso": 0.27779837554623915,
+        "argentino": false,
+        "pesoAntes": 0.18825063131198963,
+        "pesoAhora": 0.27779837554623915,
+        "cambioAcciones": 0.5542953982531613
+       }
+      ],
+      "reduccion": [
+       {
+        "cusip": "92837L109",
+        "ticker": "VIST",
+        "byma": "VIST",
+        "nombre": "Vista Energy",
+        "valor": 32866149,
+        "peso": 0.08721646130878005,
+        "argentino": true,
+        "pesoAntes": 0.14795779741944812,
+        "pesoAhora": 0.08721646130878005,
+        "cambioAcciones": -0.2946393007612861
+       },
+       {
+        "cusip": "48581R205",
+        "ticker": "KSPI",
+        "byma": null,
+        "nombre": "Jsc Kaspi.Kz Adr",
+        "valor": 10045326,
+        "peso": 0.026657147644924335,
+        "argentino": false,
+        "pesoAntes": 0.11116824628940562,
+        "pesoAhora": 0.026657147644924335,
+        "cambioAcciones": -0.7292789949580598
+       },
+       {
+        "cusip": "05961W105",
+        "ticker": "BMA",
+        "byma": "BMA",
+        "nombre": "Banco Macro",
+        "valor": 11243838,
+        "peso": 0.02983762295634913,
+        "argentino": true,
+        "pesoAntes": 0.07166542325663898,
+        "pesoAhora": 0.02983762295634913,
+        "cambioAcciones": -0.29405090579024995
+       },
+       {
+        "cusip": "465562106",
+        "ticker": "ITUB",
+        "byma": null,
+        "nombre": "Itau Unibanco H-Spon Prf Adr",
+        "valor": 9178391,
+        "peso": 0.02435657379659403,
+        "argentino": false,
+        "pesoAntes": 0.06155764658396519,
+        "pesoAhora": 0.02435657379659403,
+        "cambioAcciones": -0.5355031463238065
+       },
+       {
+        "cusip": "71654V408",
+        "ticker": "PBR",
+        "byma": null,
+        "nombre": "Petroleo Brasileiro-Spon Adr",
+        "valor": 9844379,
+        "peso": 0.02612389727078968,
+        "argentino": false,
+        "pesoAntes": 0.049292037548948904,
+        "pesoAhora": 0.02612389727078968,
+        "cambioAcciones": -0.4970142887609298
+       },
+       {
+        "cusip": "984245100",
+        "ticker": "YPF",
+        "byma": "YPFD",
+        "nombre": "YPF",
+        "valor": 15028924,
+        "peso": 0.039882055197844934,
+        "argentino": true,
+        "pesoAntes": 0.0469857356152543,
+        "pesoAhora": 0.039882055197844934,
+        "cambioAcciones": -0.05634263878702794
+       }
+      ],
+      "salida": [
+       {
+        "cusip": "402635502",
+        "ticker": "GPOR",
+        "byma": null,
+        "nombre": "Gulfport Energy Corp",
+        "valor": 23740861,
+        "peso": 0.06300080623512129,
+        "argentino": false,
+        "pesoAntes": 0.07721855666747257,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "G6683N103",
+        "ticker": "NU",
+        "byma": null,
+        "nombre": "Nu Holdings Ltd/Cayman Isl-A",
+        "valor": 19795471,
+        "peso": 0.0525309774065887,
+        "argentino": false,
+        "pesoAntes": 0.06438594199143871,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "29446Y502",
+        "ticker": "EQX",
+        "byma": null,
+        "nombre": "Equinox Gold Corp",
+        "valor": 18468001,
+        "peso": 0.04900828797030682,
+        "argentino": false,
+        "pesoAntes": 0.06006826718514716,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "58733R102",
+        "ticker": "MELI",
+        "byma": null,
+        "nombre": "Mercadolibre Inc",
+        "valor": 18382734,
+        "peso": 0.04878201606950044,
+        "argentino": false,
+        "pesoAntes": 0.059790931216945946,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "284902509",
+        "ticker": "EGO",
+        "byma": null,
+        "nombre": "Eldorado Gold Corp",
+        "valor": 11192400,
+        "peso": 0.02970112262170995,
+        "argentino": false,
+        "pesoAntes": 0.036403943970061574,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       }
+      ]
+     }
+    },
+    {
+     "periodo": "2026-06-30",
+     "presentado": "2026-08-14",
+     "url": "https://www.sec.gov/Archives/edgar/data/1724140/000172414026000014/0001724140-26-000014-index.htm",
+     "total": 307450204,
+     "cantidad": 13,
+     "argentina": 89733584,
+     "posiciones": [
+      {
+       "cusip": "92189F106",
+       "ticker": "GDX",
+       "byma": null,
+       "nombre": "Vaneck Gold Miners Etf",
+       "valor": 57877695,
+       "peso": 0.18825063131198963,
+       "argentino": false
+      },
+      {
+       "cusip": "92837L109",
+       "ticker": "VIST",
+       "byma": "VIST",
+       "nombre": "Vista Energy",
+       "valor": 45489655,
+       "peso": 0.14795779741944812,
+       "argentino": true
+      },
+      {
+       "cusip": "48581R205",
+       "ticker": "KSPI",
+       "byma": null,
+       "nombre": "Jsc Kaspi.Kz Adr",
+       "valor": 34178700,
+       "peso": 0.11116824628940562,
+       "argentino": false
+      },
+      {
+       "cusip": "402635502",
+       "ticker": "GPOR",
+       "byma": null,
+       "nombre": "Gulfport Energy Corp",
+       "valor": 23740861,
+       "peso": 0.07721855666747257,
+       "argentino": false
+      },
+      {
+       "cusip": "05961W105",
+       "ticker": "BMA",
+       "byma": "BMA",
+       "nombre": "Banco Macro",
+       "valor": 22033549,
+       "peso": 0.07166542325663898,
+       "argentino": true
+      },
+      {
+       "cusip": "G6683N103",
+       "ticker": "NU",
+       "byma": null,
+       "nombre": "Nu Holdings Ltd/Cayman Isl-A",
+       "valor": 19795471,
+       "peso": 0.06438594199143871,
+       "argentino": false
+      },
+      {
+       "cusip": "465562106",
+       "ticker": "ITUB",
+       "byma": null,
+       "nombre": "Itau Unibanco H-Spon Prf Adr",
+       "valor": 18925911,
+       "peso": 0.06155764658396519,
+       "argentino": false
+      },
+      {
+       "cusip": "29446Y502",
+       "ticker": "EQX",
+       "byma": null,
+       "nombre": "Equinox Gold Corp",
+       "valor": 18468001,
+       "peso": 0.06006826718514716,
+       "argentino": false
+      },
+      {
+       "cusip": "58733R102",
+       "ticker": "MELI",
+       "byma": null,
+       "nombre": "Mercadolibre Inc",
+       "valor": 18382734,
+       "peso": 0.059790931216945946,
+       "argentino": false
+      },
+      {
+       "cusip": "71654V408",
+       "ticker": "PBR",
+       "byma": null,
+       "nombre": "Petroleo Brasileiro-Spon Adr",
+       "valor": 15154847,
+       "peso": 0.049292037548948904,
+       "argentino": false
+      },
+      {
+       "cusip": "984245100",
+       "ticker": "YPF",
+       "byma": "YPFD",
+       "nombre": "YPF",
+       "valor": 14445774,
+       "peso": 0.0469857356152543,
+       "argentino": true
+      },
+      {
+       "cusip": "284902509",
+       "ticker": "EGO",
+       "byma": null,
+       "nombre": "Eldorado Gold Corp",
+       "valor": 11192400,
+       "peso": 0.036403943970061574,
+       "argentino": false
+      },
+      {
+       "cusip": "L1995B107",
+       "ticker": "CAAP",
+       "byma": null,
+       "nombre": "Corporación América Airports",
+       "valor": 7764606,
+       "peso": 0.02525484094328329,
+       "argentino": true
+      }
+     ],
+     "posicionesArgentinas": [
+      {
+       "cusip": "92837L109",
+       "ticker": "VIST",
+       "byma": "VIST",
+       "nombre": "Vista Energy",
+       "valor": 45489655,
+       "peso": 0.14795779741944812,
+       "argentino": true
+      },
+      {
+       "cusip": "05961W105",
+       "ticker": "BMA",
+       "byma": "BMA",
+       "nombre": "Banco Macro",
+       "valor": 22033549,
+       "peso": 0.07166542325663898,
+       "argentino": true
+      },
+      {
+       "cusip": "984245100",
+       "ticker": "YPF",
+       "byma": "YPFD",
+       "nombre": "YPF",
+       "valor": 14445774,
+       "peso": 0.0469857356152543,
+       "argentino": true
+      },
+      {
+       "cusip": "L1995B107",
+       "ticker": "CAAP",
+       "byma": null,
+       "nombre": "Corporación América Airports",
+       "valor": 7764606,
+       "peso": 0.02525484094328329,
+       "argentino": true
+      }
+     ],
+     "resto": {
+      "valor": 0,
+      "cantidad": 0
+     },
+     "movimientos": {
+      "nueva": [
+       {
+        "cusip": "05961W105",
+        "ticker": "BMA",
+        "byma": "BMA",
+        "nombre": "Banco Macro",
+        "valor": 22033549,
+        "peso": 0.07166542325663898,
+        "argentino": true,
+        "pesoAntes": 0,
+        "pesoAhora": 0.07166542325663898,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "71654V408",
+        "ticker": "PBR",
+        "byma": null,
+        "nombre": "Petroleo Brasileiro-Spon Adr",
+        "valor": 15154847,
+        "peso": 0.049292037548948904,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.049292037548948904,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "984245100",
+        "ticker": "YPF",
+        "byma": "YPFD",
+        "nombre": "YPF",
+        "valor": 14445774,
+        "peso": 0.0469857356152543,
+        "argentino": true,
+        "pesoAntes": 0,
+        "pesoAhora": 0.0469857356152543,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "L1995B107",
+        "ticker": "CAAP",
+        "byma": null,
+        "nombre": "Corporación América Airports",
+        "valor": 7764606,
+        "peso": 0.02525484094328329,
+        "argentino": true,
+        "pesoAntes": 0,
+        "pesoAhora": 0.02525484094328329,
+        "cambioAcciones": null
+       }
+      ],
+      "aumento": [
+       {
+        "cusip": "92189F106",
+        "ticker": "GDX",
+        "byma": null,
+        "nombre": "Vaneck Gold Miners Etf",
+        "valor": 57877695,
+        "peso": 0.18825063131198963,
+        "argentino": false,
+        "pesoAntes": 0.01974105583397616,
+        "pesoAhora": 0.18825063131198963,
+        "cambioAcciones": 2.758451739343459
+       },
+       {
+        "cusip": "92837L109",
+        "ticker": "VIST",
+        "byma": "VIST",
+        "nombre": "Vista Energy",
+        "valor": 45489655,
+        "peso": 0.14795779741944812,
+        "argentino": true,
+        "pesoAntes": 0.05331556527778851,
+        "pesoAhora": 0.14795779741944812,
+        "cambioAcciones": 0.06374846145238888
+       },
+       {
+        "cusip": "G6683N103",
+        "ticker": "NU",
+        "byma": null,
+        "nombre": "Nu Holdings Ltd/Cayman Isl-A",
+        "valor": 19795471,
+        "peso": 0.06438594199143871,
+        "argentino": false,
+        "pesoAntes": 0.019743982697822765,
+        "pesoAhora": 0.06438594199143871,
+        "cambioAcciones": 0.1366010519928722
+       },
+       {
+        "cusip": "284902509",
+        "ticker": "EGO",
+        "byma": null,
+        "nombre": "Eldorado Gold Corp",
+        "valor": 11192400,
+        "peso": 0.036403943970061574,
+        "argentino": false,
+        "pesoAntes": 0.011402530347467622,
+        "pesoAhora": 0.036403943970061574,
+        "cambioAcciones": 0.1423566818346249
+       }
+      ],
+      "reduccion": [
+       {
+        "cusip": "29446Y502",
+        "ticker": "EQX",
+        "byma": null,
+        "nombre": "Equinox Gold Corp",
+        "valor": 18468001,
+        "peso": 0.06006826718514716,
+        "argentino": false,
+        "pesoAntes": 0.12622217644917735,
+        "pesoAhora": 0.06006826718514716,
+        "cambioAcciones": -0.770589723264798
+       },
+       {
+        "cusip": "402635502",
+        "ticker": "GPOR",
+        "byma": null,
+        "nombre": "Gulfport Energy Corp",
+        "valor": 23740861,
+        "peso": 0.07721855666747257,
+        "argentino": false,
+        "pesoAntes": 0.11332609288136923,
+        "pesoAhora": 0.07721855666747257,
+        "cambioAcciones": -0.7247258552940968
+       },
+       {
+        "cusip": "48581R205",
+        "ticker": "KSPI",
+        "byma": null,
+        "nombre": "Jsc Kaspi.Kz Adr",
+        "valor": 34178700,
+        "peso": 0.11116824628940562,
+        "argentino": false,
+        "pesoAntes": 0.039747715339828536,
+        "pesoAhora": 0.11116824628940562,
+        "cambioAcciones": -0.22519233148776285
+       },
+       {
+        "cusip": "465562106",
+        "ticker": "ITUB",
+        "byma": null,
+        "nombre": "Itau Unibanco H-Spon Prf Adr",
+        "valor": 18925911,
+        "peso": 0.06155764658396519,
+        "argentino": false,
+        "pesoAntes": 0.021269022101293805,
+        "pesoAhora": 0.06155764658396519,
+        "cambioAcciones": -0.03803808209996795
+       }
+      ],
+      "salida": [
+       {
+        "cusip": "023135106",
+        "ticker": "AMZN",
+        "byma": null,
+        "nombre": "Amazon.Com Inc",
+        "valor": 60252511,
+        "peso": 0.19597486102172174,
+        "argentino": false,
+        "pesoAntes": 0.06350410374979172,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "06849F108",
+        "ticker": "B",
+        "byma": null,
+        "nombre": "Barrick Mining Corp",
+        "valor": 55608355,
+        "peso": 0.18086946854001762,
+        "argentino": false,
+        "pesoAntes": 0.05860932078457692,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "165167735",
+        "ticker": "EXE",
+        "byma": null,
+        "nombre": "Expand Energy Corp",
+        "valor": 48072662,
+        "peso": 0.1563591806886555,
+        "argentino": false,
+        "pesoAntes": 0.05066695585809976,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "26884L109",
+        "ticker": "EQT",
+        "byma": null,
+        "nombre": "Eqt Corp",
+        "valor": 46836940,
+        "peso": 0.1523399216869604,
+        "argentino": false,
+        "pesoAntes": 0.04936454676690188,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "03674X106",
+        "ticker": "AR",
+        "byma": null,
+        "nombre": "Antero Resources Corp",
+        "valor": 42115504,
+        "peso": 0.13698317142765662,
+        "argentino": false,
+        "pesoAntes": 0.04438831330184344,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "651639106",
+        "ticker": "NEM",
+        "byma": null,
+        "nombre": "Newmont Corp",
+        "valor": 40411350,
+        "peso": 0.13144030959888386,
+        "argentino": false,
+        "pesoAntes": 0.04259219276469898,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "02079K107",
+        "ticker": "GOOG",
+        "byma": null,
+        "nombre": "Alphabet Inc-Cl C",
+        "valor": 37584397,
+        "peso": 0.12224547751479131,
+        "argentino": false,
+        "pesoAntes": 0.03961268014973452,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "H42097107",
+        "ticker": "UBS",
+        "byma": null,
+        "nombre": "Ubs Group Ag-Reg",
+        "valor": 24240459,
+        "peso": 0.0788435287556355,
+        "argentino": false,
+        "pesoAntes": 0.025548621920148232,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "399909100",
+        "ticker": "GGAL",
+        "byma": "GGAL",
+        "nombre": "Grupo Financiero Galicia",
+        "valor": 22114756,
+        "peso": 0.07192955383435036,
+        "argentino": true,
+        "pesoAntes": 0.023308203029502438,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "878742204",
+        "ticker": "TECK",
+        "byma": null,
+        "nombre": "Teck Resources Ltd-Cls B",
+        "valor": 21562672,
+        "peso": 0.07013386792223433,
+        "argentino": false,
+        "pesoAntes": 0.022726325211753065,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "D18190898",
+        "ticker": "DB",
+        "byma": null,
+        "nombre": "Deutsche Bank Ag-Registered",
+        "valor": 20662965,
+        "peso": 0.0672075176115349,
+        "argentino": false,
+        "pesoAntes": 0.021778064538062407,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "91912E105",
+        "ticker": "VALE",
+        "byma": null,
+        "nombre": "Vale Sa-Sp Adr",
+        "valor": 20256882,
+        "peso": 0.0658867086001348,
+        "argentino": false,
+        "pesoAntes": 0.02135006682419075,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "67066G104",
+        "ticker": "NVDA",
+        "byma": null,
+        "nombre": "Nvidia Corp",
+        "valor": 19184000,
+        "peso": 0.0623970963440961,
+        "argentino": false,
+        "pesoAntes": 0.0202192855719491,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       }
+      ]
+     }
+    },
+    {
+     "periodo": "2026-03-31",
+     "presentado": "2026-05-14",
+     "url": "https://www.sec.gov/Archives/edgar/data/1724140/000172414026000005/0001724140-26-000005-index.htm",
+     "total": 948797124,
+     "cantidad": 28,
+     "argentina": 72700411,
+     "posiciones": [
+      {
+       "cusip": "29446Y502",
+       "ticker": "EQX",
+       "byma": null,
+       "nombre": "Equinox Gold Corp",
+       "valor": 119759238,
+       "peso": 0.12622217644917735,
+       "argentino": false
+      },
+      {
+       "cusip": "402635502",
+       "ticker": "GPOR",
+       "byma": null,
+       "nombre": "Gulfport Energy Corp",
+       "valor": 107523471,
+       "peso": 0.11332609288136923,
+       "argentino": false
+      },
+      {
+       "cusip": "023135106",
+       "ticker": "AMZN",
+       "byma": null,
+       "nombre": "Amazon.Com Inc",
+       "valor": 60252511,
+       "peso": 0.06350410374979172,
+       "argentino": false
+      },
+      {
+       "cusip": "06849F108",
+       "ticker": "B",
+       "byma": null,
+       "nombre": "Barrick Mining Corp",
+       "valor": 55608355,
+       "peso": 0.05860932078457692,
+       "argentino": false
+      },
+      {
+       "cusip": "92837L109",
+       "ticker": "VIST",
+       "byma": "VIST",
+       "nombre": "Vista Energy",
+       "valor": 50585655,
+       "peso": 0.05331556527778851,
+       "argentino": true
+      },
+      {
+       "cusip": "165167735",
+       "ticker": "EXE",
+       "byma": null,
+       "nombre": "Expand Energy Corp",
+       "valor": 48072662,
+       "peso": 0.05066695585809976,
+       "argentino": false
+      },
+      {
+       "cusip": "26884L109",
+       "ticker": "EQT",
+       "byma": null,
+       "nombre": "Eqt Corp",
+       "valor": 46836940,
+       "peso": 0.04936454676690188,
+       "argentino": false
+      },
+      {
+       "cusip": "03674X106",
+       "ticker": "AR",
+       "byma": null,
+       "nombre": "Antero Resources Corp",
+       "valor": 42115504,
+       "peso": 0.04438831330184344,
+       "argentino": false
+      },
+      {
+       "cusip": "651639106",
+       "ticker": "NEM",
+       "byma": null,
+       "nombre": "Newmont Corp",
+       "valor": 40411350,
+       "peso": 0.04259219276469898,
+       "argentino": false
+      },
+      {
+       "cusip": "48581R205",
+       "ticker": "KSPI",
+       "byma": null,
+       "nombre": "Jsc Kaspi.Kz Adr",
+       "valor": 37712518,
+       "peso": 0.039747715339828536,
+       "argentino": false
+      },
+      {
+       "cusip": "02079K107",
+       "ticker": "GOOG",
+       "byma": null,
+       "nombre": "Alphabet Inc-Cl C",
+       "valor": 37584397,
+       "peso": 0.03961268014973452,
+       "argentino": false
+      },
+      {
+       "cusip": "H42097107",
+       "ticker": "UBS",
+       "byma": null,
+       "nombre": "Ubs Group Ag-Reg",
+       "valor": 24240459,
+       "peso": 0.025548621920148232,
+       "argentino": false
+      },
+      {
+       "cusip": "399909100",
+       "ticker": "GGAL",
+       "byma": "GGAL",
+       "nombre": "Grupo Financiero Galicia",
+       "valor": 22114756,
+       "peso": 0.023308203029502438,
+       "argentino": true
+      },
+      {
+       "cusip": "878742204",
+       "ticker": "TECK",
+       "byma": null,
+       "nombre": "Teck Resources Ltd-Cls B",
+       "valor": 21562672,
+       "peso": 0.022726325211753065,
+       "argentino": false
+      },
+      {
+       "cusip": "D18190898",
+       "ticker": "DB",
+       "byma": null,
+       "nombre": "Deutsche Bank Ag-Registered",
+       "valor": 20662965,
+       "peso": 0.021778064538062407,
+       "argentino": false
+      },
+      {
+       "cusip": "91912E105",
+       "ticker": "VALE",
+       "byma": null,
+       "nombre": "Vale Sa-Sp Adr",
+       "valor": 20256882,
+       "peso": 0.02135006682419075,
+       "argentino": false
+      },
+      {
+       "cusip": "465562106",
+       "ticker": "ITUB",
+       "byma": null,
+       "nombre": "Itau Unibanco H-Spon Prf Adr",
+       "valor": 20179987,
+       "peso": 0.021269022101293805,
+       "argentino": false
+      },
+      {
+       "cusip": "67066G104",
+       "ticker": "NVDA",
+       "byma": null,
+       "nombre": "Nvidia Corp",
+       "valor": 19184000,
+       "peso": 0.0202192855719491,
+       "argentino": false
+      },
+      {
+       "cusip": "79466L302",
+       "ticker": "CRM",
+       "byma": null,
+       "nombre": "Salesforce Inc",
+       "valor": 18760335,
+       "peso": 0.019772757026190142,
+       "argentino": false
+      },
+      {
+       "cusip": "G6683N103",
+       "ticker": "NU",
+       "byma": null,
+       "nombre": "Nu Holdings Ltd/Cayman Isl-A",
+       "valor": 18733034,
+       "peso": 0.019743982697822765,
+       "argentino": false
+      },
+      {
+       "cusip": "92189F106",
+       "ticker": "GDX",
+       "byma": null,
+       "nombre": "Vaneck Gold Miners Etf",
+       "valor": 18730257,
+       "peso": 0.01974105583397616,
+       "argentino": false
+      },
+      {
+       "cusip": "58733R102",
+       "ticker": "MELI",
+       "byma": null,
+       "nombre": "Mercadolibre Inc",
+       "valor": 18725287,
+       "peso": 0.019735817622482592,
+       "argentino": false
+      },
+      {
+       "cusip": "46625H100",
+       "ticker": "JPM",
+       "byma": null,
+       "nombre": "Jpmorgan Chase & Co",
+       "valor": 18649744,
+       "peso": 0.01965619786174647,
+       "argentino": false
+      },
+      {
+       "cusip": "37954Y830",
+       "ticker": "COPX",
+       "byma": null,
+       "nombre": "Global X Copper Miners Etf",
+       "valor": 18415619,
+       "peso": 0.01940943804968785,
+       "argentino": false
+      },
+      {
+       "cusip": "205768302",
+       "ticker": "CRK",
+       "byma": null,
+       "nombre": "Comstock Resources Inc",
+       "valor": 17157793,
+       "peso": 0.01808373209191979,
+       "argentino": false
+      }
+     ],
+     "posicionesArgentinas": [
+      {
+       "cusip": "92837L109",
+       "ticker": "VIST",
+       "byma": "VIST",
+       "nombre": "Vista Energy",
+       "valor": 50585655,
+       "peso": 0.05331556527778851,
+       "argentino": true
+      },
+      {
+       "cusip": "399909100",
+       "ticker": "GGAL",
+       "byma": "GGAL",
+       "nombre": "Grupo Financiero Galicia",
+       "valor": 22114756,
+       "peso": 0.023308203029502438,
+       "argentino": true
+      }
+     ],
+     "resto": {
+      "valor": 24960733,
+      "cantidad": 3
+     },
+     "movimientos": {
+      "nueva": [
+       {
+        "cusip": "02079K107",
+        "ticker": "GOOG",
+        "byma": null,
+        "nombre": "Alphabet Inc-Cl C",
+        "valor": 37584397,
+        "peso": 0.03961268014973452,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.03961268014973452,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "H42097107",
+        "ticker": "UBS",
+        "byma": null,
+        "nombre": "Ubs Group Ag-Reg",
+        "valor": 24240459,
+        "peso": 0.025548621920148232,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.025548621920148232,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "399909100",
+        "ticker": "GGAL",
+        "byma": "GGAL",
+        "nombre": "Grupo Financiero Galicia",
+        "valor": 22114756,
+        "peso": 0.023308203029502438,
+        "argentino": true,
+        "pesoAntes": 0,
+        "pesoAhora": 0.023308203029502438,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "D18190898",
+        "ticker": "DB",
+        "byma": null,
+        "nombre": "Deutsche Bank Ag-Registered",
+        "valor": 20662965,
+        "peso": 0.021778064538062407,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.021778064538062407,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "91912E105",
+        "ticker": "VALE",
+        "byma": null,
+        "nombre": "Vale Sa-Sp Adr",
+        "valor": 20256882,
+        "peso": 0.02135006682419075,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.02135006682419075,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "67066G104",
+        "ticker": "NVDA",
+        "byma": null,
+        "nombre": "Nvidia Corp",
+        "valor": 19184000,
+        "peso": 0.0202192855719491,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.0202192855719491,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "79466L302",
+        "ticker": "CRM",
+        "byma": null,
+        "nombre": "Salesforce Inc",
+        "valor": 18760335,
+        "peso": 0.019772757026190142,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.019772757026190142,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "G6683N103",
+        "ticker": "NU",
+        "byma": null,
+        "nombre": "Nu Holdings Ltd/Cayman Isl-A",
+        "valor": 18733034,
+        "peso": 0.019743982697822765,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.019743982697822765,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "92189F106",
+        "ticker": "GDX",
+        "byma": null,
+        "nombre": "Vaneck Gold Miners Etf",
+        "valor": 18730257,
+        "peso": 0.01974105583397616,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.01974105583397616,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "37954Y830",
+        "ticker": "COPX",
+        "byma": null,
+        "nombre": "Global X Copper Miners Etf",
+        "valor": 18415619,
+        "peso": 0.01940943804968785,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.01940943804968785,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "46428Q109",
+        "ticker": "SLV",
+        "byma": null,
+        "nombre": "Ishares Silver Trust",
+        "valor": 13628000,
+        "peso": 0.014363449946545159,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.014363449946545159,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "284902509",
+        "ticker": "EGO",
+        "byma": null,
+        "nombre": "Eldorado Gold Corp",
+        "valor": 10818688,
+        "peso": 0.011402530347467622,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.011402530347467622,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "464286715",
+        "ticker": "TUR",
+        "byma": null,
+        "nombre": "Ishares Msci Turkey Etf",
+        "valor": 514045,
+        "peso": 0.0005417860014508223,
+        "argentino": false,
+        "pesoAntes": 0,
+        "pesoAhora": 0.0005417860014508223,
+        "cambioAcciones": null
+       }
+      ],
+      "aumento": [
+       {
+        "cusip": "29446Y502",
+        "ticker": "EQX",
+        "byma": null,
+        "nombre": "Equinox Gold Corp",
+        "valor": 119759238,
+        "peso": 0.12622217644917735,
+        "argentino": false,
+        "pesoAntes": 0.09232825952609221,
+        "pesoAhora": 0.12622217644917735,
+        "cambioAcciones": 0.587468663608691
+       },
+       {
+        "cusip": "402635502",
+        "ticker": "GPOR",
+        "byma": null,
+        "nombre": "Gulfport Energy Corp",
+        "valor": 107523471,
+        "peso": 0.11332609288136923,
+        "argentino": false,
+        "pesoAntes": 0.08844104297348776,
+        "pesoAhora": 0.11332609288136923,
+        "cambioAcciones": 0.5065021683775557
+       },
+       {
+        "cusip": "06849F108",
+        "ticker": "B",
+        "byma": null,
+        "nombre": "Barrick Mining Corp",
+        "valor": 55608355,
+        "peso": 0.05860932078457692,
+        "argentino": false,
+        "pesoAntes": 0.06355832363608759,
+        "pesoAhora": 0.05860932078457692,
+        "cambioAcciones": 0.177427127866304
+       },
+       {
+        "cusip": "165167735",
+        "ticker": "EXE",
+        "byma": null,
+        "nombre": "Expand Energy Corp",
+        "valor": 48072662,
+        "peso": 0.05066695585809976,
+        "argentino": false,
+        "pesoAntes": 0.05571167073208909,
+        "pesoAhora": 0.05066695585809976,
+        "cambioAcciones": 0.0933832709113609
+       },
+       {
+        "cusip": "92837L109",
+        "ticker": "VIST",
+        "byma": "VIST",
+        "nombre": "Vista Energy",
+        "valor": 50585655,
+        "peso": 0.05331556527778851,
+        "argentino": true,
+        "pesoAntes": 0.03759902561354019,
+        "pesoAhora": 0.05331556527778851,
+        "cambioAcciones": 0.09340360870905706
+       },
+       {
+        "cusip": "26884L109",
+        "ticker": "EQT",
+        "byma": null,
+        "nombre": "Eqt Corp",
+        "valor": 46836940,
+        "peso": 0.04936454676690188,
+        "argentino": false,
+        "pesoAntes": 0.04582379383520322,
+        "pesoAhora": 0.04936454676690188,
+        "cambioAcciones": 0.08508574183532192
+       },
+       {
+        "cusip": "03674X106",
+        "ticker": "AR",
+        "byma": null,
+        "nombre": "Antero Resources Corp",
+        "valor": 42115504,
+        "peso": 0.04438831330184344,
+        "argentino": false,
+        "pesoAntes": 0.041253269787439595,
+        "pesoAhora": 0.04438831330184344,
+        "cambioAcciones": 0.04485372001591981
+       },
+       {
+        "cusip": "651639106",
+        "ticker": "NEM",
+        "byma": null,
+        "nombre": "Newmont Corp",
+        "valor": 40411350,
+        "peso": 0.04259219276469898,
+        "argentino": false,
+        "pesoAntes": 0.039068140635584545,
+        "pesoAhora": 0.04259219276469898,
+        "cambioAcciones": 0.20263196044005616
+       },
+       {
+        "cusip": "48581R205",
+        "ticker": "KSPI",
+        "byma": null,
+        "nombre": "Jsc Kaspi.Kz Adr",
+        "valor": 37712518,
+        "peso": 0.039747715339828536,
+        "argentino": false,
+        "pesoAntes": 0.018540116598270203,
+        "pesoAhora": 0.039747715339828536,
+        "cambioAcciones": 1.7044597422740648
+       },
+       {
+        "cusip": "878742204",
+        "ticker": "TECK",
+        "byma": null,
+        "nombre": "Teck Resources Ltd-Cls B",
+        "valor": 21562672,
+        "peso": 0.022726325211753065,
+        "argentino": false,
+        "pesoAntes": 0.01655598804355955,
+        "pesoAhora": 0.022726325211753065,
+        "cambioAcciones": 0.5191964122944543
+       },
+       {
+        "cusip": "46625H100",
+        "ticker": "JPM",
+        "byma": null,
+        "nombre": "Jpmorgan Chase & Co",
+        "valor": 18649744,
+        "peso": 0.01965619786174647,
+        "argentino": false,
+        "pesoAntes": 0.02209445856586434,
+        "pesoAhora": 0.01965619786174647,
+        "cambioAcciones": 0.1654411764705883
+       },
+       {
+        "cusip": "58733R102",
+        "ticker": "MELI",
+        "byma": null,
+        "nombre": "Mercadolibre Inc",
+        "valor": 18725287,
+        "peso": 0.019735817622482592,
+        "argentino": false,
+        "pesoAntes": 0.02158074457614261,
+        "pesoAhora": 0.019735817622482592,
+        "cambioAcciones": 0.2741176470588236
+       },
+       {
+        "cusip": "465562106",
+        "ticker": "ITUB",
+        "byma": null,
+        "nombre": "Itau Unibanco H-Spon Prf Adr",
+        "valor": 20179987,
+        "peso": 0.021269022101293805,
+        "argentino": false,
+        "pesoAntes": 0.020548132290073535,
+        "pesoAhora": 0.021269022101293805,
+        "cambioAcciones": 0.05766832849250236
+       }
+      ],
+      "reduccion": [],
+      "salida": [
+       {
+        "cusip": "464287523",
+        "ticker": "SOXX",
+        "byma": null,
+        "nombre": "Ishares Semiconductor Etf",
+        "valor": 54151991,
+        "peso": 0.05707436250618315,
+        "argentino": false,
+        "pesoAntes": 0.06825687472208877,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "46090E103",
+        "ticker": "QQQ",
+        "byma": null,
+        "nombre": "Invesco Qqq Trust Series 1",
+        "valor": 52465819,
+        "peso": 0.0552971943873641,
+        "argentino": false,
+        "pesoAntes": 0.06613150815959444,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "464286772",
+        "ticker": "EWY",
+        "byma": null,
+        "nombre": "Ishares Msci South Korea Etf",
+        "valor": 48075290,
+        "peso": 0.050669725680998166,
+        "argentino": false,
+        "pesoAntes": 0.06059738499288211,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "464287234",
+        "ticker": "EEM",
+        "byma": null,
+        "nombre": "Ishares Msci Emerging Market",
+        "valor": 38649965,
+        "peso": 0.040735752693955254,
+        "argentino": false,
+        "pesoAntes": 0.04871706044969087,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "92189F676",
+        "ticker": "SMH",
+        "byma": null,
+        "nombre": "Vaneck Semiconductor Etf",
+        "valor": 35940974,
+        "peso": 0.037880568027522814,
+        "argentino": false,
+        "pesoAntes": 0.04530246283479863,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "594918104",
+        "ticker": "MSFT",
+        "byma": null,
+        "nombre": "Microsoft Corp",
+        "valor": 32375941,
+        "peso": 0.03412314411695034,
+        "argentino": false,
+        "pesoAntes": 0.04080885130976509,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       },
+       {
+        "cusip": "92189F791",
+        "ticker": "GDXJ",
+        "byma": null,
+        "nombre": "Vaneck Junior Gold Miners",
+        "valor": 15196229,
+        "peso": 0.016016310142187993,
+        "argentino": false,
+        "pesoAntes": 0.019154366809914197,
+        "pesoAhora": 0,
+        "cambioAcciones": null
+       }
+      ]
+     }
+    },
+    {
+     "periodo": "2025-12-31",
+     "presentado": "2026-02-13",
+     "url": "https://www.sec.gov/Archives/edgar/data/1724140/000172414026000003/0001724140-26-000003-index.htm",
+     "total": 793355852,
+     "cantidad": 22,
+     "argentina": 29829407,
+     "posiciones": [
+      {
+       "cusip": "29446Y502",
+       "ticker": "EQX",
+       "byma": null,
+       "nombre": "Equinox Gold Corp",
+       "valor": 73249165,
+       "peso": 0.09232825952609221,
+       "argentino": false
+      },
+      {
+       "cusip": "402635502",
+       "ticker": "GPOR",
+       "byma": null,
+       "nombre": "Gulfport Energy Corp",
+       "valor": 70165219,
+       "peso": 0.08844104297348776,
+       "argentino": false
+      },
+      {
+       "cusip": "464287523",
+       "ticker": "SOXX",
+       "byma": null,
+       "nombre": "Ishares Semiconductor Etf",
+       "valor": 54151991,
+       "peso": 0.06825687472208877,
+       "argentino": false
+      },
+      {
+       "cusip": "46090E103",
+       "ticker": "QQQ",
+       "byma": null,
+       "nombre": "Invesco Qqq Trust Series 1",
+       "valor": 52465819,
+       "peso": 0.06613150815959444,
+       "argentino": false
+      },
+      {
+       "cusip": "023135106",
+       "ticker": "AMZN",
+       "byma": null,
+       "nombre": "Amazon.Com Inc",
+       "valor": 50572662,
+       "peso": 0.06374524354047369,
+       "argentino": false
+      },
+      {
+       "cusip": "06849F108",
+       "ticker": "B",
+       "byma": null,
+       "nombre": "Barrick Mining Corp",
+       "valor": 50424368,
+       "peso": 0.06355832363608759,
+       "argentino": false
+      },
+      {
+       "cusip": "464286772",
+       "ticker": "EWY",
+       "byma": null,
+       "nombre": "Ishares Msci South Korea Etf",
+       "valor": 48075290,
+       "peso": 0.06059738499288211,
+       "argentino": false
+      },
+      {
+       "cusip": "165167735",
+       "ticker": "EXE",
+       "byma": null,
+       "nombre": "Expand Energy Corp",
+       "valor": 44199180,
+       "peso": 0.05571167073208909,
+       "argentino": false
+      },
+      {
+       "cusip": "464287234",
+       "ticker": "EEM",
+       "byma": null,
+       "nombre": "Ishares Msci Emerging Market",
+       "valor": 38649965,
+       "peso": 0.04871706044969087,
+       "argentino": false
+      },
+      {
+       "cusip": "26884L109",
+       "ticker": "EQT",
+       "byma": null,
+       "nombre": "Eqt Corp",
+       "valor": 36354575,
+       "peso": 0.04582379383520322,
+       "argentino": false
+      },
+      {
+       "cusip": "92189F676",
+       "ticker": "SMH",
+       "byma": null,
+       "nombre": "Vaneck Semiconductor Etf",
+       "valor": 35940974,
+       "peso": 0.04530246283479863,
+       "argentino": false
+      },
+      {
+       "cusip": "03674X106",
+       "ticker": "AR",
+       "byma": null,
+       "nombre": "Antero Resources Corp",
+       "valor": 32728523,
+       "peso": 0.041253269787439595,
+       "argentino": false
+      },
+      {
+       "cusip": "594918104",
+       "ticker": "MSFT",
+       "byma": null,
+       "nombre": "Microsoft Corp",
+       "valor": 32375941,
+       "peso": 0.04080885130976509,
+       "argentino": false
+      },
+      {
+       "cusip": "651639106",
+       "ticker": "NEM",
+       "byma": null,
+       "nombre": "Newmont Corp",
+       "valor": 30994938,
+       "peso": 0.039068140635584545,
+       "argentino": false
+      },
+      {
+       "cusip": "92837L109",
+       "ticker": "VIST",
+       "byma": "VIST",
+       "nombre": "Vista Energy",
+       "valor": 29829407,
+       "peso": 0.03759902561354019,
+       "argentino": true
+      },
+      {
+       "cusip": "205768302",
+       "ticker": "CRK",
+       "byma": null,
+       "nombre": "Comstock Resources Inc",
+       "valor": 19185947,
+       "peso": 0.024183280367357774,
+       "argentino": false
+      },
+      {
+       "cusip": "46625H100",
+       "ticker": "JPM",
+       "byma": null,
+       "nombre": "Jpmorgan Chase & Co",
+       "valor": 17528768,
+       "peso": 0.02209445856586434,
+       "argentino": false
+      },
+      {
+       "cusip": "58733R102",
+       "ticker": "MELI",
+       "byma": null,
+       "nombre": "Mercadolibre Inc",
+       "valor": 17121210,
+       "peso": 0.02158074457614261,
+       "argentino": false
+      },
+      {
+       "cusip": "465562106",
+       "ticker": "ITUB",
+       "byma": null,
+       "nombre": "Itau Unibanco H-Spon Prf Adr",
+       "valor": 16301981,
+       "peso": 0.020548132290073535,
+       "argentino": false
+      },
+      {
+       "cusip": "92189F791",
+       "ticker": "GDXJ",
+       "byma": null,
+       "nombre": "Vaneck Junior Gold Miners",
+       "valor": 15196229,
+       "peso": 0.019154366809914197,
+       "argentino": false
+      },
+      {
+       "cusip": "48581R205",
+       "ticker": "KSPI",
+       "byma": null,
+       "nombre": "Jsc Kaspi.Kz Adr",
+       "valor": 14708910,
+       "peso": 0.018540116598270203,
+       "argentino": false
+      },
+      {
+       "cusip": "878742204",
+       "ticker": "TECK",
+       "byma": null,
+       "nombre": "Teck Resources Ltd-Cls B",
+       "valor": 13134790,
+       "peso": 0.01655598804355955,
+       "argentino": false
+      }
+     ],
+     "posicionesArgentinas": [
+      {
+       "cusip": "92837L109",
+       "ticker": "VIST",
+       "byma": "VIST",
+       "nombre": "Vista Energy",
+       "valor": 29829407,
+       "peso": 0.03759902561354019,
+       "argentino": true
+      }
+     ],
+     "resto": {
+      "valor": 0,
+      "cantidad": 0
+     },
+     "movimientos": null
     }
    ]
   },

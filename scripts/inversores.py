@@ -9,7 +9,8 @@ Qué hace:
    (con las enmiendas aplicadas), arma la cartera de cada trimestre y los movimientos contra el anterior.
 3. Pasa cada CUSIP a ticker con OpenFIGI (gratis, sin cuenta) y guarda la traducción en data/inversores/cusips.json.
 4. Baja el logo de los tickers que todavía no tienen (Financial Modeling Prep, el mismo de scripts/logos_extra.py).
-5. Escribe data/inversores/carteras.json, que lee la página /mercados/inversores.
+5. Escribe data/inversores/carteras.json, que lee la página /mercados/inversores. Un fondo que falla queda con lo de la
+   vez anterior; un informe que EDGAR ya no tiene (lo sigue listando, pero da 404) se saltea.
 
 Uso: python scripts/inversores.py            (todo)
      python scripts/inversores.py --sin-zip  (no busca un data set nuevo: usa los descubiertos de la última vez)
@@ -276,16 +277,34 @@ def cartera_por_periodo(cik: int, lista: list[dict]) -> list[dict]:
     for per in periodos:
         del_periodo = sorted([f for f in lista if f["periodo"] == per], key=lambda f: f["presentado"])
         originales = [f for f in del_periodo if f["form"] == "13F-HR"]
-        base = originales[-1] if originales else None
         pos: dict[str, dict] = {}
         usado = None
-        if base:
-            pos = tabla_informe(cik, base["acc"], archivos(cik, base["acc"]))
-            usado = base
+        base = None
+        # El original más nuevo que todavía exista. EDGAR a veces saca un informe (el fondo lo reemplaza por una
+        # enmienda) y lo sigue listando: pedirlo da 404 (Gemsstock, agosto de 2026).
+        for o in reversed(originales):
+            try:
+                pos = tabla_informe(cik, o["acc"], archivos(cik, o["acc"]))
+            except urllib.error.HTTPError as err:
+                if err.code != 404:
+                    raise
+                print(f"    {o['acc']} ya no está en EDGAR: se saltea")
+                continue
+            base = usado = o
+            break
+        # Si los originales se borraron, una enmienda que solo agrega posiciones dejaría la cartera a medias: el
+        # trimestre vale solo si alguna enmienda lo reemplaza entero.
+        completo = base is not None or not originales
         for e in [f for f in del_periodo if f["form"] == "13F-HR/A" and (not base or f["presentado"] >= base["presentado"])]:
-            nombres = archivos(cik, e["acc"])
-            tipo = tipo_enmienda(cik, e["acc"], nombres)
-            nuevas = tabla_informe(cik, e["acc"], nombres)
+            try:
+                nombres = archivos(cik, e["acc"])
+                tipo = tipo_enmienda(cik, e["acc"], nombres)
+                nuevas = tabla_informe(cik, e["acc"], nombres)
+            except urllib.error.HTTPError as err:
+                if err.code != 404:
+                    raise
+                print(f"    {e['acc']} ya no está en EDGAR: se saltea")
+                continue
             if not nuevas:
                 continue
             if "NEW" in tipo:
@@ -295,8 +314,9 @@ def cartera_por_periodo(cik: int, lista: list[dict]) -> list[dict]:
                     q["acciones"] += p["acciones"]
             else:
                 pos = nuevas
+                completo = True
             usado = e
-        if pos and usado:
+        if pos and usado and completo:
             corregir_miles(pos)
             salida.append({"periodo": per, "presentado": usado["presentado"], "acc": usado["acc"], "posiciones": pos})
     return salida
@@ -461,6 +481,17 @@ def main() -> None:
             lista.append({"slug": slug(nombre), "nombre": nombre, "cik": f["cik"], "grupo": "argentina", "automatico": True})
             ciks.add(f["cik"])
 
+    # Un fondo que falla esta vez (EDGAR caído, un informe que no se puede leer) queda con lo de la vez anterior en vez de
+    # desaparecer de la página y de dejar su link roto. Sale solo si deja de estar en la lista (curados o descubiertos).
+    previas = {i["cik"]: i for i in leer_json(DATOS / "carteras.json", {}).get("inversores", [])}
+    conservados = []
+
+    def conservar(inv: dict) -> None:
+        previa = previas.get(inv["cik"])
+        if previa:
+            print("    queda lo de la vez anterior")
+            conservados.append({**previa, **{k: v for k, v in inv.items() if k != "_nota" and v is not None}, "trimestres": previa["trimestres"]})
+
     crudos = []
     for inv in lista:
         try:
@@ -468,9 +499,11 @@ def main() -> None:
             periodos = cartera_por_periodo(inv["cik"], filings)
         except Exception as e:  # noqa: BLE001 (un fondo que falla no frena al resto)
             print("  x", inv["nombre"], e)
+            conservar(inv)
             continue
         if not periodos:
             print("  x", inv["nombre"], "sin informes")
+            conservar(inv)
             continue
         if not inv.get("ciudad"):
             inv["ciudad"] = _ciudades.get(inv["cik"])
@@ -492,6 +525,8 @@ def main() -> None:
     traducir({f["cusip"] for f in filas_de(borrador) if not f["argentino"]}, cusips)
     escribir_json(DATOS / "cusips.json", dict(sorted(cusips.items())))
     salida = [armar(inv, periodos, cusips, argentinos) for inv, periodos in crudos]
+    orden = {inv["cik"]: i for i, inv in enumerate(lista)}
+    salida = sorted(salida + conservados, key=lambda i: orden[i["cik"]])
     tickers = {f["ticker"] for f in filas_de(salida) if f["ticker"] and not f["argentino"]}
     if "--sin-logos" not in sys.argv:
         logos_faltantes(tickers)

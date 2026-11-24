@@ -4,7 +4,7 @@ import { FUENTES } from "@/lib/data/types";
 import { Wordmark } from "./wordmark";
 
 /** Las fuentes de datos, en un solo lugar (desde el 18/11/2026 no se escriben en cada pantalla). */
-const FUENTES_PIE = [FUENTES.dolarapi, FUENTES.argentinadatos, FUENTES.bcra, FUENTES.cnv, FUENTES.data912, FUENTES.criptoya, FUENTES.binance, FUENTES.sec, FUENTES.yahoo, FUENTES.nasdaq, FUENTES.indec, FUENTES.fed].map((f) => ({ nombre: f.name, url: f.url }));
+const FUENTES_PIE = [FUENTES.dolarapi, FUENTES.argentinadatos, FUENTES.bcra, FUENTES.cnv, FUENTES.data912, FUENTES.criptoya, FUENTES.comparadolar, FUENTES.binance, FUENTES.sec, FUENTES.yahoo, FUENTES.nasdaq, FUENTES.indec, FUENTES.fed].map((f) => ({ nombre: f.name, url: f.url }));
 
 /** Footer con el disclaimer siempre visible y las fuentes de los datos. */
 export function Footer() {

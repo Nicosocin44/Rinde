@@ -12,6 +12,7 @@ const FUENTES_TABLA = [
   { f: FUENTES.argentinadatos, que: "Histórico del dólar, plazo fijo por banco, billeteras y cuentas, fondos (ComparaTasas de la CNV), caución, letras, bonos CER, inflación, riesgo país, REM y feriados", frec: "Cada 1 a 24 horas" },
   { f: FUENTES.data912, que: "Precios de BYMA con demora: LECAPs, BONCAPs, bonos, ONs, CEDEARs, acciones, MEP y CCL implícitos, históricos diarios", frec: "Cada 1 a 15 minutos" },
   { f: FUENTES.criptoya, que: "Dólar por banco y casa de cambio; USDT, USDC, BTC y ETH por exchange, con comisiones", frec: "Cada minuto" },
+  { f: FUENTES.comparadolar, que: "Dólar oficial por banco, billetera y casa de cambio (las que CriptoYa no tiene o tiene desactualizadas)", frec: "Cada 1 a 5 minutos" },
   { f: FUENTES.bcra, que: "Estadísticas monetarias v4.0 (reservas, BADLAR, TAMAR, CER, UVA)", frec: "Cada 6 horas" },
   { f: { name: "Binance", url: "https://www.binance.com" }, que: "Histórico semanal de BTC y ETH en dólares (para valuar carteras)", frec: "Diario" },
 ];
@@ -245,7 +246,12 @@ Brecha = tipo de cambio / oficial − 1`}</Formula>
         <ul>
           <li>Excluimos cotizaciones de bancos con más de {pais.frescura.proveedorMaxHoras} horas y de exchanges con más de {pais.frescura.criptoMaxMin} minutos.</li>
           <li>Excluimos precios que se alejan más de {pais.bandas.desvioDolar * 100} % de la mediana, puntas cruzadas y spreads absurdos.</li>
-          <li>Los precios P2P y el MEP vía broker se muestran aparte, como “condiciones especiales”.</li>
+          <li>
+            El dólar oficial por entidad junta dos fuentes: CriptoYa y ComparaDolar. Si las dos tienen la misma entidad, queda la de CriptoYa mientras esté al día; si no, la de
+            ComparaDolar. No sumamos entidades que solo muestran su precio dentro de su app (Galicia, Santander, BBVA, Macro y Mercado Pago, en noviembre de 2026): no hay una fuente
+            pública que las tenga al día.
+          </li>
+          <li>Los precios P2P, el MEP vía broker y los que son solo para algunos clientes se muestran aparte, como “condiciones especiales”.</li>
           <li>La normativa cambiaria cambia seguido: verificala antes de operar (revisión: {pais.normativa.revisado.split("-").reverse().join("/")}).</li>
         </ul>
       </>

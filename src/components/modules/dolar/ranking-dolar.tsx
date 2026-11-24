@@ -192,7 +192,7 @@ export function RankingDolar({ rankings }: { rankings: Record<ActivoDolar, Carga
                   { etiqueta: "Cantidad", valor: `${unidad} 1.000` },
                 ]}
                 resultado={pesos(resumen.mejor.costoMil)}
-                fuente="CriptoYa"
+                fuente={activo === "USD" ? "CriptoYa y ComparaDolar" : "CriptoYa"}
                 ancla="/metodologia#dolar"
               />
             )}

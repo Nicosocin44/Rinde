@@ -2,6 +2,7 @@ import { pais } from "@/config/countries/ar";
 import { resolverProveedor } from "@data/ar/proveedores";
 import { brecha, spread } from "@/lib/calculos";
 import * as ad from "../adapters/argentinadatos";
+import * as comparadolar from "../adapters/comparadolar";
 import * as criptoya from "../adapters/criptoya";
 import * as dolarapi from "../adapters/dolarapi";
 import { conRespaldo } from "../cache";
@@ -9,7 +10,7 @@ import { estadoEnVivo, peorEstado } from "../freshness";
 import { FUENTES, type ActivoDolar, type CotizacionDolar, type Excluido, type ProveedorDolar, type PuntoSerie, type RankingDolar, type TipoDolar } from "../types";
 import { mediana } from "../validacion";
 import type { z } from "zod";
-import type { criptoyaExchangesSchema, dolarApiSchema } from "../schemas";
+import type { comparaDolarSchema, criptoyaExchangesSchema, dolarApiSchema } from "../schemas";
 
 const CASAS: Record<string, { id: TipoDolar; nombre: string; descripcion: string; historico: string }> = {
   oficial: { id: "oficial", nombre: "Oficial", descripcion: "En el banco, para cualquier persona", historico: "oficial" },
@@ -108,13 +109,78 @@ const TIPOS_BANCARIOS = new Set(["banco", "casa_de_cambio", "billetera"]);
  */
 const SIN_DONDE_COMPRAR = new Set(["bytelime"]);
 
+/** Ids de ComparaDolar → los nuestros (data/ar/proveedores.ts). Los que no están acá no se suman. */
+const IDS_COMPARADOLAR: Record<string, string> = {
+  balanz: "balanz",
+  "banco-bica": "bica",
+  "banco-ciudad": "ciudad",
+  "banco-columbia": "columbia",
+  "banco-hipotecario": "hipotecario",
+  "banco-nacion": "bna",
+  "banco-provincia": "bapro",
+  "banco-santa-cruz": "santacruz",
+  "banco-supervielle": "supervielle",
+  bancor: "bancor",
+  "brubank-ultra": "brubank",
+  // Cocos Bank (ex Banco Voii): el dólar se compra en la app de Cocos.
+  "cocos-bank": "cocos",
+  icbc: "icbc",
+  plus: "pluscambio",
+  reba: "reba",
+  tiendadolar: "tiendadolar",
+  uala: "uala",
+};
+
+type FilaComparaDolar = z.infer<typeof comparaDolarSchema>[number];
+
+/**
+ * Pasa el dólar oficial de ComparaDolar al formato de CriptoYa, para validarlo con las mismas reglas. Sin comisiones
+ * aparte: el precio publicado es el final. Se descartan las entidades que ComparaDolar marca como desactualizadas y
+ * las que no reconocemos. Las que tienen condiciones ("Solo para clientes Ultra") se devuelven aparte.
+ */
+export function oficialDeComparaDolar(filas: FilaComparaDolar[]): { cotizaciones: Exchanges; condiciones: Record<string, string> } {
+  const cotizaciones: Exchanges = {};
+  const condiciones: Record<string, string> = {};
+  for (const f of filas) {
+    const id = IDS_COMPARADOLAR[f.slug];
+    if (!id || f.usdType.toLowerCase() !== "oficial" || f.stale) continue;
+    if (!(f.ask && f.ask > 0) || !(f.bid && f.bid > 0)) continue;
+    const time = Date.parse(f.lastSeenAt) / 1000;
+    if (!Number.isFinite(time)) continue;
+    cotizaciones[id] = { ask: f.ask, totalAsk: f.ask, bid: f.bid, totalBid: f.bid, time };
+    if (f.conditions?.trim()) condiciones[id] = f.conditions.trim();
+  }
+  return { cotizaciones, condiciones };
+}
+
+/**
+ * Junta dos fuentes del mismo dólar: por cada entidad queda la de CriptoYa si está al día y, si no (no la tiene o hace
+ * más de `maxEdadSeg` que no la actualiza), la de la segunda fuente.
+ */
+export function combinarCotizaciones(principal: Exchanges, segunda: Exchanges, ahora: Date, maxEdadSeg: number): Exchanges {
+  const ahoraSeg = ahora.getTime() / 1000;
+  const salida: Exchanges = { ...principal };
+  for (const [id, c] of Object.entries(segunda)) {
+    const actual = salida[id];
+    if (!actual || ahoraSeg - actual.time > maxEdadSeg || !(actual.totalAsk > 0)) salida[id] = c;
+  }
+  return salida;
+}
+
 /**
  * Normaliza las cotizaciones de CriptoYa en un ranking comparable:
  *  - excluye los que no tienen dónde comprar (SIN_DONDE_COMPRAR);
  *  - excluye cotizaciones viejas, puntas en cero, puntas cruzadas y precios atípicos (> 25 % de la mediana);
- *  - separa los P2P (precio de un aviso, depende de la contraparte) como "condiciones especiales".
+ *  - separa los P2P (precio de un aviso, depende de la contraparte) como "condiciones especiales";
+ *  - separa también los que tienen `condiciones` (por ejemplo, solo para un tipo de cliente).
  */
-export function normalizarRanking(activo: ActivoDolar, cotizaciones: Exchanges, ahora: Date, extrasEspeciales: RankingDolar["especiales"] = []): { ranking: RankingDolar; excluidos: Excluido[] } {
+export function normalizarRanking(
+  activo: ActivoDolar,
+  cotizaciones: Exchanges,
+  ahora: Date,
+  extrasEspeciales: RankingDolar["especiales"] = [],
+  condiciones: Record<string, string> = {},
+): { ranking: RankingDolar; excluidos: Excluido[] } {
   const excluidos: Excluido[] = [];
   const maxEdadSeg = activo === "USD" ? pais.frescura.proveedorMaxHoras * 3600 : pais.frescura.criptoMaxMin * 60;
   const ahoraSeg = ahora.getTime() / 1000;
@@ -172,6 +238,7 @@ export function normalizarRanking(activo: ActivoDolar, cotizaciones: Exchanges, 
     }
     vistos.add(c.id);
     if (c.tipo === "p2p") especiales.push({ ...c, condicion: "Precio del mejor aviso P2P: depende de la contraparte y del medio de pago" });
+    else if (condiciones[c.id]) especiales.push({ ...c, condicion: condiciones[c.id]! });
     else comparables.push(c);
   }
   const promedioCostoMil = comparables.length ? comparables.reduce((acc, p) => acc + p.costoMil, 0) / comparables.length : 0;
@@ -179,14 +246,22 @@ export function normalizarRanking(activo: ActivoDolar, cotizaciones: Exchanges, 
 }
 
 export async function cargarRanking(activo: ActivoDolar) {
-  const fuentes = [FUENTES.criptoya, ...(activo === "USD" ? [FUENTES.dolarapi] : [])];
+  const fuentes = [FUENTES.criptoya, ...(activo === "USD" ? [FUENTES.comparadolar, FUENTES.dolarapi] : [])];
   return conRespaldo<RankingDolar>(`dolar:ranking:${activo}`, fuentes, async () => {
     const ahora = new Date();
     let extras: RankingDolar["especiales"] = [];
+    let condiciones: Record<string, string> = {};
     let cotizaciones: Exchanges;
     if (activo === "USD") {
-      const [bancos, dolares] = await Promise.all([criptoya.bancos(), dolarapi.dolaresActuales().catch(() => [])]);
-      cotizaciones = bancos;
+      // Si una de las dos fuentes de bancos falla, el ranking sale con la otra.
+      const [bancos, compara, dolares] = await Promise.all([
+        criptoya.bancos().catch(() => ({}) as Exchanges),
+        comparadolar.dolares().catch(() => []),
+        dolarapi.dolaresActuales().catch(() => []),
+      ]);
+      const segunda = oficialDeComparaDolar(compara);
+      cotizaciones = combinarCotizaciones(bancos, segunda.cotizaciones, ahora, pais.frescura.proveedorMaxHoras * 3600);
+      condiciones = segunda.condiciones;
       const mep = dolares.find((d) => d.casa === "bolsa");
       if (mep && mep.compra) {
         extras = [
@@ -210,7 +285,7 @@ export async function cargarRanking(activo: ActivoDolar) {
     } else {
       cotizaciones = await criptoya.exchanges(activo === "USDT" ? "usdt" : "usdc", "ars", 1);
     }
-    const { ranking, excluidos } = normalizarRanking(activo, cotizaciones, ahora, extras);
+    const { ranking, excluidos } = normalizarRanking(activo, cotizaciones, ahora, extras, condiciones);
     if (ranking.proveedores.length === 0) throw new Error("Ningún proveedor pasó la validación");
     const asOf = ranking.proveedores.map((p) => p.asOf).sort().at(-1)!;
     const status = activo === "USD" ? peorEstado([estadoEnVivo(asOf)]) : estadoEnVivo(asOf, ahora, true);

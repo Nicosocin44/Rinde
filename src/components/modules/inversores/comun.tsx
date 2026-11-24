@@ -3,27 +3,28 @@ import { ProviderMark } from "@/components/ui/provider-mark";
 import { iniciales, tickerLogo, type Inversor, type Posicion } from "@/lib/inversores/datos";
 export { etiquetaTrimestre } from "@/lib/inversores/datos";
 import { fechaCorta, pesosCompacto } from "@/lib/format";
-import { FOTOS_INVERSORES } from "@/config/fotos-inversores";
+import { FOTOS_INVERSORES, LOGOS_INVERSORES } from "@/config/fotos-inversores";
 import { cn } from "@/lib/cn";
 
 /**
- * La foto del inversor si es una persona con foto libre (config/fotos-inversores.ts); si no, un monograma: las iniciales
- * de la persona ("RC" de Rob Citrone) o, si es solo un fondo, las de la firma. Decorativo: el nombre va siempre al lado.
+ * La foto del inversor si es una persona con foto libre; si no, el logo del fondo (los dos en config/fotos-inversores.ts);
+ * si tampoco hay, un monograma: las iniciales de la persona ("RC" de Rob Citrone) o, si es solo un fondo, las de la
+ * firma. Decorativo: el nombre va siempre al lado.
  */
 export function MarcaInversor({ inversor, tamano = 40, className }: { inversor: Inversor; tamano?: number; className?: string }) {
-  const foto = FOTOS_INVERSORES[inversor.slug];
-  if (foto) {
+  const imagen = FOTOS_INVERSORES[inversor.slug] ?? LOGOS_INVERSORES[inversor.slug];
+  if (imagen) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element -- fotos de 192 px ya optimizadas (webp, ~7 KB)
+      // eslint-disable-next-line @next/next/no-img-element -- imágenes de 192 px ya optimizadas (webp, 1 a 8 KB)
       <img
-        src={foto.src}
+        src={imagen.src}
         alt=""
         aria-hidden
         width={tamano}
         height={tamano}
         loading="lazy"
         decoding="async"
-        className={cn("shrink-0 rounded-full bg-surface-2 object-cover", className)}
+        className={cn("shrink-0 rounded-full border border-border bg-white object-cover", className)}
         style={{ width: tamano, height: tamano }}
       />
     );

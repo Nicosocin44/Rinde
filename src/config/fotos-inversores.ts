@@ -79,3 +79,28 @@ export const FOTOS_INVERSORES: Record<string, FotoInversor> = {
     fuente: commons("Peter Thiel by Gage Skidmore.jpg"),
   },
 };
+
+/**
+ * Logos de los fondos que no tienen una persona con foto: el de su propia web, recortado en un cuadrado de 192 × 192
+ * (webp) con margen para que entre en el círculo, en public/inversores. Se usan solo para identificar al fondo, como
+ * los logos de bancos y empresas del resto del sitio.
+ *
+ * Sin logo (noviembre de 2026): Aquamarine Financial, VR Advisory, Ping Capital, MAK Capital One, PointState,
+ * Discovery Capital y Route One. No tienen web propia (o el dominio está estacionado), y Zach Schreiber y Rob Citrone
+ * no tienen foto libre: siguen con sus iniciales.
+ */
+export type LogoInversor = { src: string; /** Web de donde salió el logo. */ fuente: string };
+
+export const LOGOS_INVERSORES: Record<string, LogoInversor> = {
+  "north-of-south": { src: "/inversores/north-of-south.webp", fuente: "https://www.northofsouth.com" },
+  fundamenta: { src: "/inversores/fundamenta.webp", fuente: "https://fundamentacapital.com" },
+  helikon: { src: "/inversores/helikon.webp", fuente: "https://www.helikoninvestments.com" },
+  "westwood-global": { src: "/inversores/westwood-global.webp", fuente: "https://westwoodglobal.com" },
+  "abu-dhabi-investment-council": { src: "/inversores/abu-dhabi-investment-council.webp", fuente: "https://www.adic.ae" },
+  // RWC Asset Management hoy se llama Redwheel.
+  "rwc-asset-management": { src: "/inversores/rwc-asset-management.webp", fuente: "https://www.redwheel.com" },
+  gemsstock: { src: "/inversores/gemsstock.webp", fuente: "https://www.gemsstock.com" },
+  "cape-ann-asset-management": { src: "/inversores/cape-ann-asset-management.webp", fuente: "https://capeannam.com" },
+  "sagil-capital": { src: "/inversores/sagil-capital.webp", fuente: "https://www.sagilcap.com" },
+  "equinox-partners-investment-management": { src: "/inversores/equinox-partners-investment-management.webp", fuente: "https://equinoxpartners.com" },
+};

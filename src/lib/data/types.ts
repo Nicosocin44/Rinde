@@ -30,6 +30,7 @@ export const FUENTES = {
   bcra: { id: "bcra", name: "BCRA", url: "https://www.bcra.gob.ar" },
   data912: { id: "data912", name: "data912", url: "https://data912.com" },
   criptoya: { id: "criptoya", name: "CriptoYa", url: "https://criptoya.com" },
+  comparadolar: { id: "comparadolar", name: "ComparaDolar", url: "https://comparadolar.ar" },
   cnv: { id: "cnv", name: "CNV", url: "https://www.argentina.gob.ar/cnv" },
   wikipedia: { id: "wikipedia", name: "Wikipedia", url: "https://es.wikipedia.org" },
   binance: { id: "binance", name: "Binance", url: "https://www.binance.com" },

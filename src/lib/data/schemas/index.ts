@@ -163,6 +163,25 @@ export const wikipediaResumenSchema = z.object({
   content_urls: z.object({ desktop: z.object({ page: z.string() }) }).optional(),
 });
 
+// ───────── ComparaDolar ─────────
+/**
+ * Dólar por entidad (api.comparadolar.ar/usd). Verificado el 24/11/2026: un array con `slug`, `ask` (lo que pagás),
+ * `bid` (lo que te dan), `usdType` ("Oficial", "MEP", "CCL", "Cripto"), `conditions` (texto o null), `lastSeenAt` (la
+ * última vez que leyeron el precio, ISO) y `stale` (true si la entidad dejó de publicar).
+ */
+export const comparaDolarSchema = z.array(
+  z.object({
+    slug: z.string(),
+    prettyName: z.string().optional(),
+    ask: numNulo,
+    bid: numNulo,
+    usdType: z.string(),
+    conditions: z.string().nullable().optional(),
+    lastSeenAt: z.string(),
+    stale: z.boolean().optional(),
+  }),
+);
+
 // ───────── CriptoYa ─────────
 const punta = z.object({ ask: num, totalAsk: num, bid: num, totalBid: num, time: num });
 export const criptoyaExchangesSchema = z.record(z.string(), punta);

@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: lunes 23/11/2026, cuánto subió o bajó entre dos fechas en el gráfico (rama `grafico-tramo`) y el interruptor de las alertas (rama `alertas-interruptor`).
+> Escrito para los fundadores. Última actualización: martes 24/11/2026, cuentas de usuario para la cartera (rama `cuenta-cartera`).
 
 ## Cómo verlo
 
@@ -9,6 +9,36 @@
 3. Abrir **http://localhost:3000**.
 
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
+
+---
+
+## Cuentas de usuario: la cartera en cualquier dispositivo (rama `cuenta-cartera`, 24/11/2026)
+
+> Pedido de Nico: que el usuario pueda iniciar sesión con su mail para ver su cartera desde cualquier lado, y que se inicie sesión dentro de Mi cartera.
+
+- **Es opcional.** Sin cuenta, todo sigue como antes: la cartera se guarda en el navegador y no hace falta registrarse.
+- **Cómo se entra:** en Mi cartera aparece "Guardala en tu cuenta" → "Entrar con mi mail". El usuario pone su mail, le llega un **código** y lo escribe ahí mismo. No hay contraseña. Si es la primera vez, la cuenta se crea sola.
+  - Se eligió código y no link: en el celular, el link se abre en el navegador de la app de correo y no donde estaba el usuario.
+- **Al entrar, lo cargado en el navegador se suma a la cuenta** (no la pisa: los movimientos que la cuenta ya tiene no se repiten y, si un activo ya está, manda la cuenta). Recién cuando se subió, se borra del navegador. Aviso: "Sumamos a tu cuenta los N movimientos…".
+- **Con sesión:** la cartera se lee y se guarda en la cuenta, abajo de las acciones dice "Guardada en tu cuenta (mail) · Cerrar sesión", y no hay cartera de ejemplo. Las alertas de vencimiento leen la cartera de la cuenta.
+- **Al cerrar sesión:** en ese navegador no queda nada; vuelve la cartera de ejemplo.
+- **Base de datos:** Supabase (plan gratis, en San Pablo), conectado desde el Marketplace de Vercel, que carga solas las claves. Tablas en `supabase/migrations/0001_cartera.sql`; se aplican con `pnpm db:migrar`.
+- **Seguridad (probado contra la base real con dos usuarios de prueba, que después se borraron):** sin sesión no se lee ni se escribe nada; cada usuario ve solo lo suyo y no puede leer, escribir, modificar ni borrar lo de otro. Lo controla la base (Row Level Security), no solo la web.
+- **Probado de punta a punta en el navegador** (1440 px oscuro y 375 px claro): entrar con código, código equivocado, subida de lo del navegador, recargar y seguir con sesión, cerrar sesión.
+- **Textos:** la política de privacidad (/legal) explica qué se guarda con cuenta y dónde; /metodologia y el formulario dicen dónde se guarda según haya sesión o no.
+- **Solo la cartera, por ahora.** Metas, alertas y seguidos siguen en el navegador.
+- Tests: `tests/cartera-fusion.test.ts` (qué se sube al entrar) y `tests/cuenta-errores.test.ts` (mensajes de error).
+
+### Para hacer antes de abrirlo al público
+1. **Plantillas de mail en Supabase** (para que llegue el código, en castellano): `supabase/plantillas/codigo.html`, con el paso a paso adentro.
+2. **Un servicio de mails propio (SMTP).** El de Supabase es para probar: manda muy pocos mails por hora y Supabase avisa que no es para producción. Hace falta uno propio (por ejemplo, Resend) con el dominio.
+3. **Un mail de contacto real.** `site.contacto` todavía es `hola@rinde.example`; la política de privacidad dice que pueden pedirnos ver o borrar sus datos.
+4. **Ley 25.326:** con cuentas guardamos datos personales. Conviene que un abogado revise la política y la inscripción de la base ante la AAIP.
+
+### Para revisar
+1. **El código tiene 8 números** (lo que trae Supabase hoy). Se puede bajar a 6 en Supabase → Authentication → Sign In / Providers → Email → "Email OTP Length".
+2. **Al entrar, la cartera pasa del navegador a la cuenta** (no queda copia en el navegador). Así, al cerrar sesión en una compu compartida no queda nada a la vista.
+3. **Borrar la cuenta** todavía se pide por mail; falta un botón.
 
 ---
 

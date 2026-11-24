@@ -55,10 +55,14 @@ const secciones: Seccion[] = [
     contenido: (
       <>
         <p>
-          <strong>Tu cartera y tus alertas se guardan solo en tu navegador</strong> (IndexedDB). No las enviamos a ningún servidor. Para valuar tu cartera pedimos al servidor solo los precios de los instrumentos (por ejemplo,
-          “AAPL”), nunca las cantidades ni los montos.
+          <strong>Sin cuenta, tu cartera, tus metas y tus alertas se guardan solo en tu navegador</strong> (IndexedDB). No las enviamos a ningún servidor. Para valuar tu cartera pedimos al servidor solo los precios de los
+          instrumentos (por ejemplo, “AAPL”), nunca las cantidades ni los montos. Si borrás los datos del navegador, se borran: exportalas antes.
         </p>
-        <p>Si borrás los datos del navegador, se borran tu cartera y tus alertas: exportalas antes. Cuando haya cuentas de usuario, esta política se va a actualizar según la Ley 25.326 de Protección de Datos Personales.</p>
+        <p>
+          <strong>Si entrás con tu mail (es opcional),</strong> guardamos tu mail y tu cartera para que la veas desde cualquier dispositivo. Se guardan en Supabase, nuestro proveedor de base de datos, en servidores de San Pablo
+          (Brasil). Cada cuenta ve solo su cartera: lo controla la base de datos, no solo la web. No la compartimos con nadie, no la vendemos y no la usamos para otra cosa.
+        </p>
+        <p>Podés pedirnos ver, corregir o borrar tus datos cuando quieras, según la Ley 25.326 de Protección de Datos Personales.</p>
       </>
     ),
   },

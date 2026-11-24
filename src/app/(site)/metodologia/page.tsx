@@ -396,7 +396,7 @@ Rendimiento del flujo libre = flujo de caja libre de 12 meses / capitalización`
     titulo: "Tu cartera",
     contenido: (
       <>
-        <p>Las posiciones se derivan de tus movimientos, con costo promedio ponderado. Se guardan solo en tu navegador.</p>
+        <p>Las posiciones se derivan de tus movimientos, con costo promedio ponderado. Se guardan en tu navegador o, si entrás con tu mail, en tu cuenta.</p>
         <Formula>{`TWR = Π (V_t / (V_{t−1} + aportes_t)) − 1          (rendimiento sin el efecto de tus aportes)
 XIRR: resolver Σ flujo_i / (1 + r)^((d_i − d_0) / 365) = 0   (rendimiento de tu plata)`}</Formula>
         <ul>

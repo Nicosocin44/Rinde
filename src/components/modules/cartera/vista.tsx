@@ -2,7 +2,7 @@
 
 import { Download, Plus, Upload } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { pais } from "@/config/countries/ar";
 import { PriceChart } from "@/components/charts/price-chart";
 import { Button } from "@/components/ui/button";
@@ -11,10 +11,11 @@ import { EstadoDiscreto } from "@/components/ui/estado-dato";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { repositorioLocal, movimientosACsv, validarImportacion } from "@/lib/cartera/repositorio";
+import { movimientosACsv, validarImportacion } from "@/lib/cartera/repositorio";
 import type { PosicionValuada } from "@/lib/calculos";
 import { generarIdeas } from "@/lib/insights/reglas";
 import { dinero, fechaCorta, numero } from "@/lib/format";
+import { CuentaCartera } from "./cuenta";
 import { Comparacion, Distribucion, HeroCartera, Ideas, Posiciones, type Unidad } from "./partes";
 import { FormMovimiento } from "./form-movimiento";
 import { useCartera } from "./use-cartera";
@@ -24,12 +25,18 @@ const MOV: Record<string, string> = { compra: "Compra", venta: "Venta", deposito
 export function CarteraVista() {
   const params = useSearchParams();
   const forzado = params.get("estado");
-  const { datos, estado, precios, errorPrecios, analisis, recargar, guardar } = useCartera();
+  const { datos, estado, precios, errorPrecios, analisis, recargar, guardar, repo, sesion, subidos } = useCartera();
   const [unidad, setUnidad] = useState<Unidad>("ARS");
   const [cargar, setCargar] = useState(params.get("cargar") === "1");
   const [detalle, setDetalle] = useState<PosicionValuada | null>(null);
   const archivo = useRef<HTMLInputElement>(null);
   const toast = useToast();
+  const conCuenta = sesion.estado === "con";
+
+  // Al iniciar sesión, lo que había en este navegador se suma a la cuenta.
+  useEffect(() => {
+    if (subidos) toast(subidos.cantidad === 1 ? "Sumamos a tu cuenta el movimiento que tenías en este navegador" : `Sumamos a tu cuenta los ${subidos.cantidad} movimientos que tenías en este navegador`);
+  }, [subidos, toast]);
 
   const ideas = useMemo(() => {
     if (!analisis || !precios) return [];
@@ -64,7 +71,7 @@ export function CarteraVista() {
     try {
       const r = validarImportacion(JSON.parse(await f.text()));
       if (!r.ok) return toast(r.error);
-      await repositorioLocal.reemplazar(r.datos);
+      await repo.reemplazar(r.datos);
       await recargar();
       toast(`Importamos ${r.datos.movimientos.length} movimientos`);
     } catch {
@@ -73,14 +80,14 @@ export function CarteraVista() {
   };
 
   const borrar = async (id: string) => {
-    await repositorioLocal.borrarMovimiento(id);
+    await repo.borrarMovimiento(id);
     await recargar();
     setDetalle(null);
     toast("Movimiento borrado");
   };
 
   const empezarVacia = async () => {
-    await repositorioLocal.guardarAjustes({ id: "ajustes", demoDescartada: true });
+    await repo.guardarAjustes({ id: "ajustes", demoDescartada: true });
     await recargar();
   };
 
@@ -114,6 +121,7 @@ export function CarteraVista() {
     <Sheet abierto={cargar} onCambio={setCargar} titulo="Cargar movimiento" descripcion={estado === "demo" ? "Al guardar, empieza tu cartera y se oculta la de ejemplo." : undefined}>
       <FormMovimiento
         precios={precios}
+        conCuenta={conCuenta}
         activosExistentes={estado === "propia" ? (datos?.activos ?? []) : []}
         onGuardar={async (a, m) => {
           await guardar(a, m);
@@ -128,19 +136,24 @@ export function CarteraVista() {
 
   if (estado === "vacia" || forzado === "vacio") {
     return (
-      <>
+      <div className="flex flex-col gap-10">
+        <CuentaCartera sesion={sesion} />
         <EmptyState
           titulo="Todavía no cargaste nada."
           ayuda="Cargá lo que tenés (billetera, plazo fijo, CEDEARs, bonos, cripto o dólares) y te mostramos cuánto rinde todo junto, en pesos, en dólares y contra la inflación."
           accion={acciones}
         />
         {formulario}
-      </>
+      </div>
     );
   }
 
+  if (estado === "error") {
+    return <ErrorState titulo="No pudimos traer tu cartera de tu cuenta." detalle="Tus movimientos están guardados. Revisá la conexión y probá de nuevo en un minuto." />;
+  }
+
   if (forzado === "error" || (errorPrecios && !analisis)) {
-    return <ErrorState titulo="No pudimos traer los precios para valuar tu cartera." detalle="Tus movimientos están guardados en este navegador. Probá de nuevo en un minuto." />;
+    return <ErrorState titulo="No pudimos traer los precios para valuar tu cartera." detalle={`Tus movimientos están guardados ${conCuenta ? "en tu cuenta" : "en este navegador"}. Probá de nuevo en un minuto.`} />;
   }
 
   if (!analisis) return <EsqueletoCartera />;
@@ -150,6 +163,11 @@ export function CarteraVista() {
 
   return (
     <div className="flex flex-col gap-16 lg:gap-20">
+      {!conCuenta && (
+        <div className={estado === "demo" ? "-mb-10 lg:-mb-14" : undefined}>
+          <CuentaCartera sesion={sesion} />
+        </div>
+      )}
       {estado === "demo" && (
         <div role="status" className="-mb-6 flex flex-col gap-3 border-l-2 border-warn pl-4 sm:flex-row sm:items-center sm:justify-between lg:-mb-10">
           <div>
@@ -190,7 +208,10 @@ export function CarteraVista() {
         )}
         <div className="flex flex-wrap items-center justify-between gap-4">
           {acciones}
-          {precios && estado !== "demo" && <EstadoDiscreto estado="delayed" asOf={precios.asOf} />}
+          <div className="flex flex-col gap-1 sm:items-end">
+            {precios && estado !== "demo" && <EstadoDiscreto estado="delayed" asOf={precios.asOf} />}
+            {conCuenta && <CuentaCartera sesion={sesion} />}
+          </div>
         </div>
       </section>
 

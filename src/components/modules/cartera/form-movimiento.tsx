@@ -45,7 +45,7 @@ const monedaDe = (t: TipoActivo) => (t === "bono" || t === "cripto" || t === "ef
  * Carga manual de un movimiento. Las posiciones se derivan de los movimientos (no hay "editar posición").
  * Para cuentas se pide el monto; para instrumentos, cantidad y precio (sugerido con el precio de hoy).
  */
-export function FormMovimiento({ precios, onGuardar, activosExistentes }: { precios: PreciosCartera | null; onGuardar: (a: Activo, m: Movimiento) => Promise<void>; activosExistentes: Activo[] }) {
+export function FormMovimiento({ precios, onGuardar, activosExistentes, conCuenta = false }: { precios: PreciosCartera | null; onGuardar: (a: Activo, m: Movimiento) => Promise<void>; activosExistentes: Activo[]; conCuenta?: boolean }) {
   const id = useId();
   const [tipo, setTipo] = useState<TipoActivo>("cedear");
   const [ticker, setTicker] = useState("AAPL");
@@ -232,7 +232,7 @@ export function FormMovimiento({ precios, onGuardar, activosExistentes }: { prec
       <Button variante="primario" tamano="lg" onClick={guardar} disabled={guardando} data-testid="guardar-movimiento">
         {guardando ? "Guardando…" : "Guardar movimiento"}
       </Button>
-      <p className="text-micro">Se guarda solo en este navegador. Podés exportarlo cuando quieras.</p>
+      <p className="text-micro">{conCuenta ? "Se guarda en tu cuenta." : "Se guarda solo en este navegador."} Podés exportarlo cuando quieras.</p>
     </div>
   );
 }

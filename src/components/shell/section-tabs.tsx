@@ -3,11 +3,21 @@
 import { LayoutGroup, m } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { useEsconderAlBajar } from "@/lib/use-esconder-al-bajar";
 
 export type Solapa = { href: string; label: string };
+
+/**
+ * Si las solapas ya quedaron pegadas arriba: la marca (un div vacío justo antes) pasó la altura a la que quedan fijas.
+ * La marca no se mueve con la animación de esconderse, así que la cuenta no depende de ella.
+ */
+function estanPegadas(barraEl: HTMLElement | null, marcaEl: HTMLElement | null): boolean {
+  if (!barraEl || !marcaEl) return false;
+  const estilo = getComputedStyle(barraEl);
+  return marcaEl.getBoundingClientRect().top + parseFloat(estilo.marginTop) <= parseFloat(estilo.top) + 1;
+}
 
 /**
  * Solapas de sección: control segmentado tipo Apple, pegajoso debajo de la nav, con indicador que se desliza.
@@ -25,15 +35,20 @@ export function SectionTabs({ solapas, etiqueta, sinSolapa = [] }: { solapas: So
   const primera = useRef(true);
   const barra = useRef<HTMLDivElement>(null);
   const marca = useRef<HTMLDivElement>(null);
-  // Se pueden esconder recién cuando quedaron pegadas: la marca (justo antes de las solapas) ya pasó la altura a la que
-  // quedan fijas. La marca no se mueve con la animación de esconderse, así que la cuenta no depende de ella.
-  const oculta = useEsconderAlBajar(barra, () => {
-    const barraEl = barra.current;
-    const marcaEl = marca.current;
-    if (!barraEl || !marcaEl) return false;
-    const estilo = getComputedStyle(barraEl);
-    return marcaEl.getBoundingClientRect().top + parseFloat(estilo.marginTop) <= parseFloat(estilo.top) + 1;
-  });
+  // Se pueden esconder recién cuando quedaron pegadas.
+  const oculta = useEsconderAlBajar(barra, () => estanPegadas(barra.current, marca.current));
+  // Pegadas, llevan detrás una franja de fondo (de la barra de arriba para abajo, a todo el ancho): el contenido que pasa
+  // por debajo desaparece prolijo en vez de verse encimado alrededor de las píldoras.
+  const [pegadas, setPegadas] = useState(false);
+  useEffect(() => {
+    const revisar = () => setPegadas(estanPegadas(barra.current, marca.current));
+    window.addEventListener("scroll", revisar, { passive: true });
+    window.addEventListener("resize", revisar);
+    return () => {
+      window.removeEventListener("scroll", revisar);
+      window.removeEventListener("resize", revisar);
+    };
+  }, []);
 
   // En mobile, la solapa activa siempre queda a la vista (centrada) dentro del carrusel. Se mueve solo el carrusel, no
   // la página; al cargar, sin animación (un scroll suave al cargar se corta y la última solapa quedaba fuera de la vista).
@@ -53,8 +68,12 @@ export function SectionTabs({ solapas, etiqueta, sinSolapa = [] }: { solapas: So
       <div
         ref={barra}
         data-oculta={oculta || undefined}
+        data-pegadas={pegadas || undefined}
         className={cn(
           "sticky top-[76px] z-30 -mx-4 mt-8 px-4 py-1 transition-[translate,opacity] duration-(--duration-short) ease-(--ease-standard) motion-reduce:transition-none md:-mx-10 md:px-10 lg:top-[92px] lg:mx-0 lg:mt-10 lg:px-0",
+          // La franja: desde arriba de todo (cubre también el espacio entre las dos barras) hasta debajo de las solapas.
+          pegadas &&
+            "before:pointer-events-none before:absolute before:bottom-[-6px] before:left-1/2 before:-z-10 before:h-[calc(100%+82px)] before:w-screen before:-translate-x-1/2 before:border-b before:border-border before:bg-bg/85 before:backdrop-blur-md lg:before:h-[calc(100%+98px)]",
           // Escondidas: suben fuera de la pantalla (por detrás de la barra superior, z-40) y no se pueden tocar.
           oculta && "pointer-events-none -translate-y-[calc(100%+76px)] opacity-0 lg:-translate-y-[calc(100%+92px)]",
         )}

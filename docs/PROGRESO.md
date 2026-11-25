@@ -17,12 +17,13 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 > Benja: "cuando vas bajando, las secciones siguen ahí". Quedaban dos barras fijas (la de arriba y la de solapas) que ocupaban casi un cuarto de la pantalla y tapaban el contenido. Después pidió lo mismo para la barra de arriba, en todas las secciones.
 
 - **Mientras se baja leyendo,** la barra de arriba (en todas las páginas) y las solapas de la sección (Dólar, Pesos, Mercados, Calculadoras) suben y se esconden juntas.
-- **Vuelven apenas se scrollea para arriba,** como en Safari o Instagram. También vuelven si se llega con el teclado (Tab) y al cambiar de página.
+- **Vuelven apenas se scrollea para arriba,** como en Safari o Instagram. También vuelven si se llega con el teclado (Tab) y al cambiar de página. Solo el foco de teclado (`:focus-visible`) las retiene: en Chrome, un clic con el mouse también deja el foco en la solapa, y entonces las solapas quedaban a la vista mientras la barra de arriba se escondía (lo vio Benja en la vista previa).
 - **Arriba de todo se ven siempre:** la barra de arriba se puede esconder recién pasado el doble de su alto, y las solapas, recién cuando quedaron pegadas.
 - **La barra de abajo del celular no se mueve:** queda siempre, como en las apps.
 - **No se mueven por un temblor del dedo:** hace falta scrollear más de 12 px. Con menos de eso fallaba: al empezar a bajar, la barra de arriba se achica 8 px (de 64 a 56 en la compu) y el navegador corrige el scroll esos 8 px para atrás, lo que contaba como "subir".
 - **Escondidas no se pueden tocar,** y con "movimiento reducido" aparecen y desaparecen sin animación.
 - **Con las solapas pegadas y a la vista, va una franja de fondo detrás:** desde arriba de todo hasta debajo de las solapas, a todo el ancho, del color del fondo y apenas translúcida. Antes, el contenido que pasaba por debajo se veía encimado alrededor de las píldoras; Benja lo vio en el Simulador, con el título grande pasando por detrás de las dos barras.
+- **Sin encabezados pegados:** el encabezado de las tablas (Opción, Tipo, Liquidez…) y el de cada día en Noticias ya no quedan fijos al bajar. Con las barras escondidas flotaban solos y se encimaban con las filas (pedido de Benja, "de todas"). Se sacó `topSticky` de `DataTable`. El de la tabla de pagos de los bonos queda fijo, porque va dentro de su propia caja con scroll. Ahora lo único fijo arriba son las dos barras.
 - **Cómo está hecho:** `useEsconderAlBajar` (`src/lib/use-esconder-al-bajar.ts`), usado por `top-nav.tsx` y `section-tabs.tsx`. Las dos escuchan el mismo scroll con el mismo umbral, así que se mueven juntas.
 - **Probado** a 1440 × 900 (Dólar, Metas y la portada, con su scroll suave) y a 375 × 812 (Pesos y Mercados), bajando, subiendo y volviendo arriba. Escondidas quedan del todo fuera de la pantalla; visibles, las solapas vuelven justo debajo de la barra de arriba.
 

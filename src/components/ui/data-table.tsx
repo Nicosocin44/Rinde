@@ -42,7 +42,6 @@ export function DataTable<T>({
   resaltada,
   onResaltar,
   className,
-  topSticky = "top-[132px] lg:top-[148px]",
 }: {
   filas: T[];
   columnas: Columna<T>[];
@@ -64,7 +63,6 @@ export function DataTable<T>({
   resaltada?: string | null;
   onResaltar?: (clave: string | null) => void;
   className?: string;
-  topSticky?: string;
 }) {
   const router = useRouter();
   const [ordenLocal, setOrdenLocal] = useState(ordenPorDefecto ?? null);
@@ -104,7 +102,9 @@ export function DataTable<T>({
     <div className={className}>
       {/* Desktop / tablet: tabla */}
       <table className={cn("w-full border-collapse text-[15px]", filaMovil && "hidden md:table")} aria-label={etiqueta}>
-        <thead className={cn("sticky z-20 bg-bg", topSticky)}>
+        {/* El encabezado no queda fijo al bajar: con las barras de arriba escondidas flotaba solo y se encimaba con las
+            filas (pedido de Benja, 25/11/2026). */}
+        <thead className="bg-bg">
           <tr className="shadow-[inset_0_-1px_0_var(--c-border)]">
             {columnas.map((c) => {
               const activa = orden?.columna === c.id;

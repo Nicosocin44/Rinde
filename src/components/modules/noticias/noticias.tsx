@@ -135,7 +135,7 @@ export function ListaNoticias({ noticias, medios, horas, dias }: { noticias: Not
           <div className="flex flex-col gap-10">
             {porDia.map((g) => (
               <section key={g.dia} aria-label={g.dia} className="flex flex-col">
-                <h2 className="sticky top-[60px] z-10 bg-bg/90 py-2 font-display text-[19px] font-bold tracking-[-0.02em] backdrop-blur-sm lg:top-[92px]">{g.dia}</h2>
+                <h2 className="py-2 font-display text-[19px] font-bold tracking-[-0.02em]">{g.dia}</h2>
                 <ol>
                   {g.items.map((n) => (
                     <li key={n.id} className="grid grid-cols-[minmax(0,1fr)] gap-2 border-t border-border py-5 md:grid-cols-[64px_minmax(0,1fr)] md:gap-6">

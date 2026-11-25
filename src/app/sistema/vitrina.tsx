@@ -173,7 +173,6 @@ function Interactivos() {
           clave={(f) => f.id}
           esMejor={(_, i) => i === 0}
           ordenPorDefecto={{ columna: "tna", direccion: "desc" }}
-          topSticky="top-[64px]"
         />
       </Bloque>
 

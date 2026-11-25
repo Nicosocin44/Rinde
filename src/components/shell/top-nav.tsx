@@ -4,11 +4,12 @@ import { Search } from "lucide-react";
 import { LayoutGroup, m } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { navPrincipal } from "@/config/site";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { rutaActiva } from "@/lib/rutas";
+import { useEsconderAlBajar } from "@/lib/use-esconder-al-bajar";
 import { useEsDesktop } from "@/lib/use-media";
 import { ToggleModo, ToggleTema } from "./preferencias-controles";
 import { useShell } from "./shell-context";
@@ -17,6 +18,7 @@ import { Wordmark } from "./wordmark";
 /**
  * Barra superior: una cápsula flotante y translúcida, separada de los bordes. La sección activa tiene una
  * píldora de fondo que se desliza entre ítems. Al scrollear, la cápsula se compacta y gana sombra.
+ * Mientras se baja leyendo se esconde (junto con las solapas de la sección) y vuelve apenas se scrollea para arriba.
  */
 export function TopNav() {
   const pathname = usePathname();
@@ -24,6 +26,9 @@ export function TopNav() {
   // En mobile no montamos la nav de escritorio ni sus controles: ahorra mediciones de layout en celulares.
   const esDesktop = useEsDesktop();
   const [scrolleado, setScrolleado] = useState(false);
+  const cabecera = useRef<HTMLElement>(null);
+  // Se esconde recién pasado el doble de su alto: arriba de todo, siempre a la vista.
+  const oculta = useEsconderAlBajar(cabecera, () => window.scrollY > (cabecera.current?.offsetHeight ?? 80) * 2);
 
   useEffect(() => {
     const alScrollear = () => setScrolleado(window.scrollY > 8);
@@ -33,7 +38,16 @@ export function TopNav() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 px-3 pt-3 lg:px-6 lg:pt-4" style={{ viewTransitionName: "barra-superior" }}>
+    <header
+      ref={cabecera}
+      data-oculta={oculta || undefined}
+      className={cn(
+        "sticky top-0 z-40 px-3 pt-3 transition-[translate] duration-(--duration-short) ease-(--ease-standard) motion-reduce:transition-none lg:px-6 lg:pt-4",
+        // Escondida: sube fuera de la pantalla (con margen para la sombra) y no se puede tocar.
+        oculta && "pointer-events-none -translate-y-[calc(100%+24px)]",
+      )}
+      style={{ viewTransitionName: "barra-superior" }}
+    >
       <div
         className={cn(
           "vidrio mx-auto flex max-w-[1240px] items-center justify-between gap-4 rounded-full border border-border pr-2 pl-5 transition-[height,box-shadow,background-color] duration-(--duration-base) ease-(--ease-standard)",

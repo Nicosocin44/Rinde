@@ -127,7 +127,7 @@ export function RankingBrokers({ clase: claseFija, dias: diasFijos, titulo, comp
         columnas={columnas}
         clave={(f) => f.tarifario.proveedorId}
         esMejor={(_, i) => i === 0}
-        topSticky="top-[76px] lg:top-[92px]"
+       
         filaMovil={(f, i) => (
           <span className="flex items-center gap-3">
             <span className={cn("tabular w-4 text-chico", i === 0 ? "font-semibold text-accent" : "text-text-3")}>{i + 1}</span>

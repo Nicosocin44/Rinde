@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: martes 24/11/2026, los ETFs con el logo de su gestora (rama `etfs-gestoras`).
+> Escrito para los fundadores. Última actualización: miércoles 25/11/2026, la barra de arriba y las solapas se esconden al bajar (rama `solapas-se-esconden`).
 
 ## Cómo verlo
 
@@ -11,6 +11,19 @@
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
 
 ---
+
+## La barra de arriba y las solapas se esconden al bajar (rama `solapas-se-esconden`, 25/11/2026)
+
+> Benja: "cuando vas bajando, las secciones siguen ahí". Quedaban dos barras fijas (la de arriba y la de solapas) que ocupaban casi un cuarto de la pantalla y tapaban el contenido. Después pidió lo mismo para la barra de arriba, en todas las secciones.
+
+- **Mientras se baja leyendo,** la barra de arriba (en todas las páginas) y las solapas de la sección (Dólar, Pesos, Mercados, Calculadoras) suben y se esconden juntas.
+- **Vuelven apenas se scrollea para arriba,** como en Safari o Instagram. También vuelven si se llega con el teclado (Tab) y al cambiar de página.
+- **Arriba de todo se ven siempre:** la barra de arriba se puede esconder recién pasado el doble de su alto, y las solapas, recién cuando quedaron pegadas.
+- **La barra de abajo del celular no se mueve:** queda siempre, como en las apps.
+- **No se mueven por un temblor del dedo:** hace falta scrollear más de 12 px. Con menos de eso fallaba: al empezar a bajar, la barra de arriba se achica 8 px (de 64 a 56 en la compu) y el navegador corrige el scroll esos 8 px para atrás, lo que contaba como "subir".
+- **Escondidas no se pueden tocar,** y con "movimiento reducido" aparecen y desaparecen sin animación.
+- **Cómo está hecho:** `useEsconderAlBajar` (`src/lib/use-esconder-al-bajar.ts`), usado por `top-nav.tsx` y `section-tabs.tsx`. Las dos escuchan el mismo scroll con el mismo umbral, así que se mueven juntas.
+- **Probado** a 1440 × 900 (Dólar, Metas y la portada, con su scroll suave) y a 375 × 812 (Pesos y Mercados), bajando, subiendo y volviendo arriba. Escondidas quedan del todo fuera de la pantalla; visibles, las solapas vuelven justo debajo de la barra de arriba.
 
 ## Los ETFs con el logo de su gestora (rama `etfs-gestoras`, 24/11/2026)
 

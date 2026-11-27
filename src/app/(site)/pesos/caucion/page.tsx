@@ -13,7 +13,7 @@ export const metadata: Metadata = { title: "Caución: tasas por plazo", descript
 export default async function CaucionPage() {
   const r = await obtenerPesos();
   if (!r.ok) return <ErrorState titulo="No pudimos traer las cauciones." detalle={r.error} />;
-  const { lista, vigente, ultimaRueda } = r.data.cauciones;
+  const { lista, vigente, ultimaRueda, fuente } = r.data.cauciones;
   const a7 = lista.reduce<(typeof lista)[number] | null>((m, c) => (!m || Math.abs(c.plazoDias - 7) < Math.abs(m.plazoDias - 7) ? c : m), null);
   if (lista.length === 0) return <ErrorState titulo="No hay tasas de caución disponibles." detalle="La fuente no informó operaciones recientes." />;
   return (
@@ -33,7 +33,7 @@ export default async function CaucionPage() {
         contexto="La caución colocadora se opera desde un broker: le prestás plata a otro inversor que deja títulos en garantía, y el mercado garantiza la devolución. Los plazos van de 1 día a unos meses."
       />
       <TablaCauciones cauciones={lista} />
-      <SourceNote className="mt-6" fuentes={[FUENTES.argentinadatos]} actualizado={ultimaRueda} estado={vigente ? "close" : "stale"} metodologia="/metodologia#caucion" />
+      <SourceNote className="mt-6" fuentes={[FUENTES[fuente ?? "argentinadatos"]]} actualizado={ultimaRueda} estado={vigente ? "close" : "stale"} metodologia="/metodologia#caucion" />
     </>
   );
 }

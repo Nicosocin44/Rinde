@@ -12,6 +12,28 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Caución desde BYMA Data, con ArgentinaDatos de respaldo (rama `caucion-byma`, 27/11/2026)
+
+> Benja: "para caución buscá otras fuentes". ArgentinaDatos seguía trayendo la rueda del 17/11: actualiza la consulta todos los días, pero su origen dejó de mandar ruedas nuevas. La página mostraba "Datos desactualizados" y la caución había salido del comparador.
+
+- **Fuente nueva: BYMA Data** (`open.bymadata.com.ar`, la web pública de BYMA), que es de donde salen las cauciones. Gratis y sin clave. Trae todas las cauciones del día (pesos, MEP y cable) con la tasa de la última operación, el promedio del día, el monto y la hora. Se usan solo las de pesos.
+- **Cómo se lee:**
+  - Para cada plazo que operó en la rueda, la tasa promedio del día ponderada por monto (si falta, la última) y el monto operado.
+  - Antes de que abra el mercado, el cierre de la rueda anterior, sin monto: la tabla muestra "—" en Monto operado.
+  - La fila no trae la fecha: la rueda es el vencimiento menos los días que informa BYMA. Si eso cae en fin de semana o feriado, vale el hábil anterior, y el plazo se cuenta siempre desde la rueda.
+  - BYMA mezcla escalas según el campo (0,215 y 21,5): un valor mayor a 3 se toma como porcentaje.
+- **Respaldo:** se consultan las dos fuentes a la vez y vale la rueda más reciente; si empatan, BYMA. Si BYMA no responde o cambia de forma, la caución sale de ArgentinaDatos como antes.
+- **Con el dato al día, la caución vuelve al comparador** ("Caución a 7 días" y "a 31 días", en el filtro Letras) y deja de verse el aviso de datos desactualizados.
+- **No es una API documentada:** es lo que usa la web de BYMA por detrás (la oficial es paga). Desde octubre pide el encabezado `Options: renta-fija`. Se consulta por POST; Next solo cachea un POST si se le pide (`cache: "force-cache"`), así que `traerJson` (`src/lib/data/http.ts`) ahora acepta `cuerpoPost`.
+- **Cómo está hecho:** el adaptador `src/lib/data/adapters/bymadata.ts`, el schema `bymaCaucionesSchema`, y en `src/lib/data/servicios/pesos.ts` las funciones `normalizarCaucionesByma` y `elegirCauciones`. La fuente se guarda en `cauciones.fuente` y en el `fuenteId` de las opciones (el "¿De dónde sale?" del comparador dice "BYMA Data"). BYMA Data se suma a la tabla de fuentes de Metodología y al pie.
+- **Tests:** `tests/caucion-byma.test.ts`, con filas reales del 27/11 en `tests/fixtures/byma-cauciones.json`. Cubren la rueda del día, el cierre anterior antes de abrir, un sábado, la escala en porcentaje y la elección entre las dos fuentes.
+- **Probado** en local: `/pesos/caucion` con las tasas del 27/11 (de 3 a 38 días) y "Cierre del 27 nov", y las dos cauciones en el comparador.
+
+### Para revisar
+
+- **Que BYMA responda desde Vercel:** se probó desde Argentina. Los servidores de la web están en EE.UU.; si BYMA no les responde, queda ArgentinaDatos (y se nota porque vuelve el aviso de desactualizado). Se ve en la vista previa.
+- **Las condiciones de uso de BYMA Data** antes de abrir la web al público.
+
 ## La barra de arriba y las solapas se esconden al bajar (rama `solapas-se-esconden`, 25/11/2026)
 
 > Benja: "cuando vas bajando, las secciones siguen ahí". Quedaban dos barras fijas (la de arriba y la de solapas) que ocupaban casi un cuarto de la pantalla y tapaban el contenido. Después pidió lo mismo para la barra de arriba, en todas las secciones.

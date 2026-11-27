@@ -22,6 +22,8 @@ type Opciones = {
   headers?: Record<string, string>;
   /** Sin la caché de fetch (respuestas de más de 2 MB, que Next no guarda): quien llama cachea el resultado. */
   sinCache?: boolean;
+  /** POST con este cuerpo (BYMA Data solo responde así). Next cachea un POST solo si se le pide con force-cache. */
+  cuerpoPost?: string;
 };
 
 /**
@@ -29,14 +31,15 @@ type Opciones = {
  * Si la respuesta no cumple el schema, falla: preferimos no mostrar nada a mostrar algo mal.
  */
 export async function traerJson<S extends z.ZodType>(url: string, schema: S, opciones: Opciones): Promise<z.infer<S>> {
-  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1, headers = {}, sinCache = false } = opciones;
+  const { fuente, revalidate, timeoutMs = 9000, reintentos = 1, headers = {}, sinCache = false, cuerpoPost } = opciones;
   let ultimoError: unknown;
   for (let intento = 0; intento <= reintentos; intento++) {
     try {
       const respuesta = await fetch(url, {
         headers: { accept: "application/json", ...headers },
         signal: AbortSignal.timeout(timeoutMs),
-        ...(sinCache ? { cache: "no-store" as const } : { next: { revalidate } }),
+        ...(cuerpoPost !== undefined ? { method: "POST", body: cuerpoPost } : {}),
+        ...(sinCache ? { cache: "no-store" as const } : cuerpoPost !== undefined ? { cache: "force-cache" as const, next: { revalidate } } : { next: { revalidate } }),
       });
       if (!respuesta.ok) throw new ErrorDeFuente(fuente, url, `respondió ${respuesta.status}`);
       const json: unknown = await respuesta.json();

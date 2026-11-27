@@ -3,6 +3,7 @@
 import { Download, Plus, Upload } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { TARIFARIOS_BROKERS } from "@data/ar/comisiones-brokers";
 import { pais } from "@/config/countries/ar";
 import { PriceChart } from "@/components/charts/price-chart";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { SegmentedControl } from "@/components/ui/segmented";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { movimientosACsv } from "@/lib/cartera/repositorio";
+import { cobros, comisionesPagadas } from "@/lib/cartera/resumenes";
 import type { PosicionValuada } from "@/lib/calculos";
 import { generarIdeas } from "@/lib/insights/reglas";
 import { dinero, fechaCorta, numero } from "@/lib/format";
@@ -19,6 +21,7 @@ import { CuentaCartera } from "./cuenta";
 import { ImportarCartera } from "./importar";
 import { Comparacion, Distribucion, HeroCartera, Ideas, Posiciones, type Unidad } from "./partes";
 import { FormMovimiento } from "./form-movimiento";
+import { CobrosCartera, ComisionesCartera, idsParaNoticias, NoticiasCartera } from "./resumenes";
 import { useCartera } from "./use-cartera";
 
 const MOV: Record<string, string> = { compra: "Compra", venta: "Venta", deposito: "Depósito", retiro: "Retiro", cupon: "Cupón", dividendo: "Dividendo", interes: "Interés" };
@@ -56,6 +59,16 @@ export function CarteraVista() {
       objetivoPesos: datos?.ajustes?.objetivoPesos ? datos.ajustes.objetivoPesos / 100 : null,
     });
   }, [analisis, precios, datos]);
+
+  // La columna de al lado de las posiciones: comisiones, cobros y noticias.
+  const resumenes = useMemo(() => {
+    if (!analisis || !datos) return null;
+    return {
+      comisiones: comisionesPagadas(datos.movimientos, datos.activos, TARIFARIOS_BROKERS, analisis.hoy),
+      cobros: cobros(datos.movimientos, datos.activos, analisis.hoy, analisis.mep),
+      noticias: idsParaNoticias(analisis.posiciones),
+    };
+  }, [analisis, datos]);
 
   const exportar = async (formato: "json" | "csv") => {
     if (!datos) return;
@@ -164,7 +177,8 @@ export function CarteraVista() {
 
   return (
     <div className="flex flex-col gap-16 lg:gap-20">
-      {!conCuenta && (
+      {/* Solo si hay algo que mostrar (sin sesión): vacío, el bloque sumaba igual la separación entre bloques (80 px de aire). */}
+      {sesion.estado === "sin" && (
         <div className={estado === "demo" ? "-mb-10 lg:-mb-14" : undefined}>
           <CuentaCartera sesion={sesion} />
         </div>
@@ -218,9 +232,39 @@ export function CarteraVista() {
 
       <Comparacion a={analisis} />
       <Ideas ideas={ideas} />
-      <div className="grid gap-16 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
-        <Distribucion a={analisis} />
-        <Posiciones posiciones={analisis.posiciones} total={analisis.totalArs} onElegir={setDetalle} />
+      {/*
+        Dos columnas en la compu (izquierda: distribución, comisiones y cobros; derecha: posiciones) y abajo, a todo el
+        ancho, las noticias. En el celular, una sola: las columnas se disuelven (`contents`) y `order` pone las posiciones
+        justo después de la distribución.
+      */}
+      <div className="flex flex-col gap-16 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:gap-16">
+        <div className="contents lg:flex lg:flex-col lg:gap-16">
+          <div className="order-1">
+            <Distribucion a={analisis} />
+          </div>
+          {resumenes && (
+            <>
+              {resumenes.comisiones && (
+                <div className="order-4">
+                  <ComisionesCartera resumen={resumenes.comisiones} />
+                </div>
+              )}
+              <div className="order-5">
+                <CobrosCartera resumen={resumenes.cobros} />
+              </div>
+            </>
+          )}
+        </div>
+        <div className="contents lg:flex lg:flex-col lg:gap-16">
+          <div className="order-2">
+            <Posiciones posiciones={analisis.posiciones} total={analisis.totalArs} onElegir={setDetalle} />
+          </div>
+        </div>
+        {resumenes && resumenes.noticias.length > 0 && (
+          <div className="order-6 lg:col-span-2">
+            <NoticiasCartera ids={resumenes.noticias} />
+          </div>
+        )}
       </div>
       {analisis.sinPrecio.length > 0 && <p className="text-micro">Sin precio de mercado hoy: {analisis.sinPrecio.join(", ")}. Los valuamos al costo.</p>}
       <p className="text-micro">

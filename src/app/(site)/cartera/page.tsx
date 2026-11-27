@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function Cartera() {
   return (
     <>
-      <PageHeader titulo="Mi cartera" bajada="Todo lo que tenés, junto: en pesos, en dólares y contra la inflación." className="mb-10 lg:mb-14" />
+      <PageHeader titulo="Mi cartera" bajada="Todo lo que tenés, junto: en pesos, en dólares y contra la inflación." className="mb-6 lg:mb-8" />
       <Suspense fallback={null}>
         <CarteraVista />
       </Suspense>

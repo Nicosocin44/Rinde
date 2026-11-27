@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: jueves 27/11/2026, caución desde BYMA Data (rama `caucion-byma`).
+> Escrito para los fundadores. Última actualización: jueves 27/11/2026, caución desde BYMA Data (rama `caucion-byma`) y Mi cartera con comisiones, cobros y noticias (rama `cartera-espacio`).
 
 ## Cómo verlo
 
@@ -11,6 +11,36 @@
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
 
 ---
+
+## Mi cartera: comisiones, cobros y noticias al lado de las posiciones (rama `cartera-espacio`, 27/11/2026)
+
+> Benja, con una captura: "hay mucho lugar acá" (al lado de la lista de posiciones, debajo de Distribución, la columna quedaba vacía). De cinco ideas eligió cuatro: lo que más subió y bajó, comisiones, dividendos y cupones, y noticias de lo que tenés. Al verlo, sacó "lo que más subió y bajó" (repetía lo que ya muestra la lista de posiciones).
+
+- **Comisiones:**
+  - Lo pagado en comisiones y derechos en las compras y ventas en pesos (CEDEARs, acciones y letras) que tienen la comisión cargada, cuántas operaciones son, qué % de lo operado y cuánto en el año.
+  - Cuánto habrías pagado con el broker más barato para esas mismas operaciones: su tarifa de entrada con IVA, más los mismos derechos de mercado (0,05 % + IVA en acciones y CEDEARs, 0,001 % en letras). Las letras con tarifa anual se prorratean por los días que les quedaban. Solo se comparan los brokers que operan todas las clases usadas, y solo aparece si ahorrás.
+  - Sin comisiones cargadas, explica que importando los movimientos del broker se ve. Link a las comisiones de los brokers.
+- **Dividendos y cupones:** lo cobrado este año y desde el principio, en pesos y en dólares por separado (los CEDEARs cobran en pesos; los bonos, en dólares), y los 5 activos que más pagaron, con cuántos cobros y el último. Sin cobros, cómo cargarlos.
+- **Noticias de lo que tenés:** las de tus 4 posiciones más grandes (de nuestros medios y de Google Noticias, solo las que las nombran), hasta 2 por activo para que no se las lleve todas el que más sale, de la más nueva a la más vieja, con el ticker de cada una.
+  - Se piden a `/api/cartera/noticias` con solo los ids ("cedear:AAPL"), nunca montos, igual que los precios.
+  - Se cachean 15 minutos en Vercel.
+  - Con el estilo de la sección Noticias (Benja: "parecen escritas con letra de IA"): el medio y la hora arriba, el título en 18 px semibold y el ticker con borde, que lleva a su ficha. Sin la bajada gris ni la pastilla "En inglés".
+- **Dónde va cada cosa:** en la compu, dos columnas: a la izquierda Distribución, Comisiones y Cobros; a la derecha Posiciones. Abajo, a todo el ancho, las Noticias, en dos columnas: así las dos columnas de arriba quedan parejas (con la cartera de ejemplo, 801 y 704 px). En el celular, una sola, con las posiciones justo después de Distribución. Las columnas se disuelven con `contents` y `order` ordena los bloques.
+- **Cómo está hecho:** los cálculos en `src/lib/cartera/resumenes.ts` (`comisionesPagadas`, `cobros`), con tests en `tests/cartera-resumenes.test.ts`; los bloques en `src/components/modules/cartera/resumenes.tsx`; las noticias en `noticiasDeCartera` (`src/lib/data/servicios/noticias-activo.ts`).
+- **Probado** en local con la cartera de ejemplo, a 1440 y a 375 px: los tres bloques con datos, el orden en el celular y 8 noticias de GD35, T30J7, BTC y AAPL.
+
+### Para revisar
+
+- **Los derechos de mercado** para comparar comisiones son un promedio (0,05 % + IVA en acciones). Varían un poco según el broker que los informa.
+- **Las comisiones en dólares** (bonos) no entran en la comparación.
+
+## Mi cartera: menos aire arriba del total (rama `cartera-espacio`, 27/11/2026)
+
+> Benja, con una captura: "¿No creés que hay mucho espacio?". Entre "Todo lo que tenés, junto…" y el total quedaban 136 px vacíos en la compu.
+
+- **Era un error:** arriba del total está el aviso para guardar la cartera en la cuenta. Con la sesión iniciada (o mientras carga, o sin cuentas configuradas) no muestra nada, pero su caja vacía igual sumaba la separación entre bloques: 80 px en la compu y 64 en el celular. Ahora la caja solo está cuando hay aviso (sin sesión).
+- **Menos espacio debajo del título:** de 56 a 32 px en la compu y de 40 a 24 en el celular. El total es lo principal de la página.
+- **Resultado:** con la cartera propia, el total queda a 32 px de la bajada (antes, 136). Con la de ejemplo, el aviso "Datos de ejemplo" queda a 32 px (24 en el celular). Medido en local a 1440 y a 583 px de ancho.
 
 ## Caución desde BYMA Data, con ArgentinaDatos de respaldo (rama `caucion-byma`, 27/11/2026)
 

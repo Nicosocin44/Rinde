@@ -284,7 +284,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - **Mails (hecho el 24/11/2026):** salen de `no-reply@donderinde.com.ar` con Resend (Marketplace de Vercel, plan gratis), conectado a Supabase por SMTP. Dominio verificado en Resend (DKIM, SPF y MX cargados en el DNS de Vercel). Plantillas "Magic link or OTP" y "Confirm sign up" en castellano y con el código: `supabase/plantillas/codigo.html`. Probado: llegó el mail y se pudo entrar.
 
 ### Para hacer antes de abrirlo al público
-1. **Un mail de contacto real.** `site.contacto` todavía es `hola@rinde.example`; la política de privacidad dice que pueden pedirnos ver o borrar sus datos.
+1. ~~**Un mail de contacto real.**~~ Hecho el 27/11/2026: `info@donderinde.com.ar` (rama `mail-info`). Reenvío con ImprovMX (plan gratis) a las casillas de Nico y Benja; registros MX y TXT en el DNS de Vercel. Sale en el pie ("Contacto") y en la política de privacidad, y lo usa la SEC como contacto.
 2. **Ley 25.326:** con cuentas guardamos datos personales. Conviene que un abogado revise la política y la inscripción de la base ante la AAIP.
 
 ### Para revisar
@@ -860,7 +860,7 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 3. **Balances en pesos (ajustados por inflación):** solo se comparan ejercicios del mismo balance y no se muestran trimestres. Mezclar balances distintos daría crecimientos inflados.
 4. **Múltiplos (PER, etc.) solo en empresas de EE.UU. con balances en dólares** (10-K): en un ADR un papel puede ser varias acciones, y en pesos el precio de hoy contra un balance viejo engaña.
 5. **Se muestran los ejercicios de los dos últimos balances anuales** (unos cuatro años). Más atrás aparecían cifras de antes de reestructuraciones (Nebius cuando era Yandex) o mal cargadas en la SEC.
-6. **La SEC pide un mail de contacto** en cada consulta. Usamos el de `site.contacto` (hoy `hola@rinde.example`): **hay que poner uno real antes de publicar**.
+6. **La SEC pide un mail de contacto** en cada consulta. Usamos el de `site.contacto` (`info@donderinde.com.ar` desde el 27/11/2026).
 7. **Bancos:** no informan "ingresos" como el resto; se muestran ganancia, patrimonio y rentabilidad, sin flujo libre, EBITDA ni deuda neta.
 8. **Deuda financiera:** en US GAAP, la deuda de largo plazo con su porción corriente más los papeles comerciales; en IFRS, los préstamos y, si los informa aparte, los bonos. No incluye arrendamientos salvo que la empresa los sume en el mismo concepto (Coca-Cola).
 9. **El trimestre de cierre de ejercicio y el flujo trimestral se derivan** restando acumulados (las empresas no los informan por separado). La ganancia por acción de ese trimestre queda vacía: no es una resta exacta.

@@ -20,7 +20,7 @@ export function Footer() {
         <nav aria-label="Secciones" className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-7">
           <ListaLinks titulo="Mercado" items={navPrincipal.slice(1)} />
           <ListaLinks titulo="Tus herramientas" items={[{ href: "/calculadoras/metas", label: "Mis metas" }, ...navSecundaria.slice(0, 3)]} />
-          <ListaLinks titulo="Confianza" items={[navSecundaria[3]!, navSecundaria[4]!, { href: "/legal#afiliados", label: "Aviso de afiliados" }]} />
+          <ListaLinks titulo="Confianza" items={[navSecundaria[3]!, navSecundaria[4]!, { href: "/legal#afiliados", label: "Aviso de afiliados" }, { href: `mailto:${site.contacto}`, label: "Contacto" }]} />
         </nav>
       </div>
       <div className="contenedor flex flex-col gap-3 border-t border-border py-6 text-micro lg:flex-row lg:items-start lg:justify-between">

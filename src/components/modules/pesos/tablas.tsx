@@ -215,7 +215,7 @@ export function TablaCauciones({ cauciones }: { cauciones: Caucion[] }) {
     { id: "plazo", encabezado: "Plazo", valorOrden: (c) => c.plazoDias, ordenInicial: "asc", celda: (c) => <span className="font-medium">{c.plazoDias} días</span> },
     { id: "tna", encabezado: "TNA", alineacion: "derecha", valorOrden: (c) => c.tna, celda: (c) => <span className="font-medium">{porcentaje(c.tna, 2)}</span> },
     { id: "tea", encabezado: "TEA", alineacion: "derecha", valorOrden: (c) => c.tea, celda: (c) => <span className="text-text-2">{porcentaje(c.tea, 2)}</span> },
-    { id: "monto", encabezado: "Monto operado", alineacion: "derecha", solo: "desktop", valorOrden: (c) => c.monto, celda: (c) => <span className="text-text-2">{pesosCompacto(c.monto)}</span> },
+    { id: "monto", encabezado: "Monto operado", alineacion: "derecha", solo: "desktop", valorOrden: (c) => c.monto ?? 0, celda: (c) => <span className="text-text-2">{c.monto === null ? "—" : pesosCompacto(c.monto)}</span> },
     { id: "ganancia", encabezado: "Con $1M ganás", alineacion: "derecha", celda: (c) => <span className="text-text-2">{pesos((1_000_000 * c.tna * c.plazoDias) / 365)}</span> },
   ];
   return (

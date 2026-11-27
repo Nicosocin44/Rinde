@@ -134,3 +134,31 @@ describe("importar con el mapeo", () => {
     expect(r.filas[1]!.estado).toBe("aviso");
   });
 });
+
+describe("la planilla de Nico (títulos con errores y acciones de EE.UU. en dólares)", () => {
+  // Tal cual: "tipo_movimineto" con las letras cambiadas, "$ invertida" y montos con "USD".
+  const PLANILLA = leerCsv(
+    [
+      "Fecha;tipo_movimineto;Activo;Ticker;Tipo_activo;Moneda;Cantidad;Precio;$ invertida",
+      "25/02/2025;Compra;Microsoft;MSFT;accion;USD;5.00;$400 USD;2.000 USD",
+      "22/05/2025;Compra;Google;GOOGL;cedear;ARS;0,57;$175,98;100,3",
+    ].join("\n"),
+  );
+
+  it("adivina todas las columnas, incluida la que tiene un error de tipeo", () => {
+    const m = adivinarMapeo(PLANILLA);
+    expect(m.columnas).toMatchObject({ fecha: 0, operacion: 1, ticker: 3, tipo_activo: 4, moneda: 5, cantidad: 6, precio: 7, importe: 8 });
+    expect(camposQueFaltan(m)).toEqual([]);
+  });
+
+  it("la acción en dólares no se suma y dice por qué; el CEDEAR en pesos queda listo", () => {
+    let i = 0;
+    const r = interpretarArchivos([{ nombre: "nico.csv", filas: PLANILLA, mapeo: adivinarMapeo(PLANILLA), broker: "Otro" }], { activos: [], movimientos: [] }, "2026-11-27", () => `id${++i}`);
+    if (!r.ok) throw new Error(r.error);
+    const msft = r.filas.find((f) => f.texto.includes("MSFT"))!;
+    expect(msft.estado).toBe("error");
+    expect(msft.motivos.join(" ")).toMatch(/acciones de EE\.UU\. no las llevamos/);
+    const googl = r.filas.find((f) => f.activo?.id === "cedear:GOOGL")!;
+    expect(googl).toMatchObject({ estado: "lista", cantidad: "0.57", precio: "175.98" });
+  });
+});

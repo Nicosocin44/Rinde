@@ -50,7 +50,25 @@ const normal = (s: string) =>
     .toLowerCase()
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
-    .replace(/\s+/g, " ");
+    .replace(/[\s_]+/g, " ");
+
+/** Distancia entre dos textos: letras de más, de menos, cambiadas o dadas vuelta ("movimineto" y "movimiento" están a 1). */
+function distancia(a: string, b: string): number {
+  const m: number[][] = Array.from({ length: a.length + 1 }, (_, i) => Array.from({ length: b.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)));
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      m[i]![j] = Math.min(m[i - 1]![j]! + 1, m[i]![j - 1]! + 1, m[i - 1]![j - 1]! + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) m[i]![j] = Math.min(m[i]![j]!, m[i - 2]![j - 2]! + 1);
+    }
+  }
+  return m[a.length]![b.length]!;
+}
+
+/** ¿El título es el alias con un error de tipeo? Hasta 1 letra en alias de 5 a 8 letras y hasta 2 en los más largos. */
+const parecido = (titulo: string, alias: string) => {
+  const tope = alias.length >= 9 ? 2 : alias.length >= 5 ? 1 : 0;
+  return tope > 0 && Math.abs(titulo.length - alias.length) <= tope && distancia(titulo, alias) <= tope;
+};
 
 /** Títulos que reconocemos, del más claro al más dudoso. */
 const ALIAS: Record<Campo, string[]> = {
@@ -59,7 +77,7 @@ const ALIAS: Record<Campo, string[]> = {
   ticker: ["ticker", "simbolo", "especie", "codigo", "instrumento", "activo", "symbol"],
   cantidad: ["cantidad", "nominales", "valor nominal", "cantidad vn", "vn", "unidades", "cant"],
   precio: ["precio", "precio unitario", "cotizacion", "precio operado"],
-  importe: ["importe neto", "importe", "monto neto", "monto", "total", "neto"],
+  importe: ["importe neto", "importe", "monto neto", "monto", "total", "neto", "invertid", "inversion"],
   comision: ["comision", "comisiones", "arancel", "aranceles", "gastos"],
   tipo_activo: ["tipo de instrumento", "tipo instrumento", "tipo de activo", "tipo activo", "clase"],
   moneda: ["moneda", "divisa"],
@@ -133,12 +151,13 @@ export function adivinarMapeo(filas: string[][]): Mapeo {
   const titulos = (filas[encabezado] ?? []).map(normal);
   const columnas: Mapeo["columnas"] = {};
   const usadas = new Set<number>();
-  // Primero los títulos exactos de todos los campos, después los que contienen el alias.
-  for (const exacto of [true, false]) {
+  // Primero los títulos exactos de todos los campos, después los que contienen el alias y al final los que tienen un
+  // error de tipeo ("tipo_movimineto").
+  for (const pasada of ["exacto", "contiene", "parecido"] as const) {
     for (const campo of Object.keys(ALIAS) as Campo[]) {
       if (columnas[campo] !== undefined) continue;
       for (const alias of ALIAS[campo]) {
-        const i = titulos.findIndex((t, j) => !usadas.has(j) && (exacto ? t === alias : t.includes(alias)));
+        const i = titulos.findIndex((t, j) => !usadas.has(j) && (pasada === "exacto" ? t === alias : pasada === "contiene" ? t.includes(alias) : parecido(t, alias)));
         if (i >= 0) {
           columnas[campo] = i;
           usadas.add(i);

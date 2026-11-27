@@ -23,6 +23,9 @@ describe("numeroDe", () => {
     ["US$ 62,5", "62.5"],
     ["1234.56", "1234.56"],
     ["30%", "30"],
+    ["$400 USD", "400"],
+    ["$42,2645 USD", "42.2645"],
+    ["2.000 USD", "2000"],
   ])("%s → %s", (entrada, salida) => expect(numeroDe(entrada)).toBe(salida));
   it("no inventa números", () => {
     expect(numeroDe("abc")).toBeNull();

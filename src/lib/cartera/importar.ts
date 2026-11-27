@@ -150,7 +150,8 @@ export function leerCsv(texto: string): string[][] {
  * seguido de tres cifras ("18.500"). La vista previa muestra lo que se leyó. null si no es un número.
  */
 export function numeroDe(texto: string): string | null {
-  let s = texto.replace(/US\$|U\$S|\$|%|\s/gi, "");
+  // La moneda escrita al lado del número ("$400 USD", "2.000 ARS") no cuenta.
+  let s = texto.replace(/\b(USD|ARS|USDT|USDC|DOLARES|PESOS)\b/gi, "").replace(/US\$|U\$S|U\$D|\$|%|\s/gi, "");
   if (s === "") return null;
   if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
   // Varios puntos, o uno solo seguido de tres cifras ("18.500"), son de miles: así se escribe en la Argentina.
@@ -261,7 +262,10 @@ export function interpretarPlanilla(filas: string[][], cartera: Pick<DatosCarter
       const moneda = celda("moneda").toUpperCase().replace(/[^A-Z]/g, "");
       const esperada: Moneda = monedaDe(tipoActivo);
       if (moneda && (moneda === "USD" || moneda === "ARS" || moneda === "PESOS" || moneda === "DOLARES") && (moneda === "PESOS" ? "ARS" : moneda === "DOLARES" ? "USD" : moneda) !== esperada) {
-        errores.push(`En ${NOMBRE_TIPO[tipoActivo]} los montos van en ${esperada === "ARS" ? "pesos" : "dólares"}.`);
+        // Una acción en dólares suele ser una acción de EE.UU. (MSFT a USD 400): solo llevamos lo que se opera acá.
+        if (tipoActivo === "accion" || tipoActivo === "cedear") {
+          errores.push("Está en dólares: la cartera lleva CEDEARs y acciones argentinas, en pesos (las acciones de EE.UU. no las llevamos). Si es un CEDEAR, cargá el precio en pesos.");
+        } else errores.push(`En ${NOMBRE_TIPO[tipoActivo]} los montos van en ${esperada === "ARS" ? "pesos" : "dólares"}.`);
       }
 
       const ticker = celda("ticker").toUpperCase();

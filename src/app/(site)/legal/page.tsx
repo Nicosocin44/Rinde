@@ -62,7 +62,13 @@ const secciones: Seccion[] = [
           <strong>Si entrás con tu mail (es opcional),</strong> guardamos tu mail y tu cartera para que la veas desde cualquier dispositivo. Se guardan en Supabase, nuestro proveedor de base de datos, en servidores de San Pablo
           (Brasil). Cada cuenta ve solo su cartera: lo controla la base de datos, no solo la web. No la compartimos con nadie, no la vendemos y no la usamos para otra cosa.
         </p>
-        <p>Podés pedirnos ver, corregir o borrar tus datos cuando quieras, según la Ley 25.326 de Protección de Datos Personales.</p>
+        <p>
+          Podés pedirnos ver, corregir o borrar tus datos cuando quieras, según la Ley 25.326 de Protección de Datos Personales. Escribinos a{" "}
+          <a href={`mailto:${site.contacto}`} className="underline underline-offset-2">
+            {site.contacto}
+          </a>
+          .
+        </p>
       </>
     ),
   },

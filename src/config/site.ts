@@ -9,7 +9,7 @@ export const site = {
     "El dólar hoy y dónde conviene comprarlo, las tasas en pesos, LECAPs, bonos y CEDEARs, con tu cartera real contra la inflación.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   locale: "es-AR",
-  contacto: "hola@rinde.example",
+  contacto: "info@donderinde.com.ar",
   redes: {
     x: "",
     instagram: "",

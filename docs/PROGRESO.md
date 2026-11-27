@@ -12,6 +12,26 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Metas, dentro de Calculadoras, y las calculadoras en tres grupos (punto 30, rama `calculadoras-metas`, 26/11/2026)
+
+> Lista, punto 30: Metas era un apartado propio del menú y además aparecía en Calculadoras; que quede solo dentro de Calculadoras, y ordenar la lista (eran 9, una debajo de la otra). De las opciones que se le pasaron a Benja, va la combinación recomendada.
+
+- **Metas vive en `/calculadoras/metas`.** Arriba dice "Calculadoras" y debajo la pregunta, "¿Cuánto tengo que juntar por mes para mi meta?", como en las demás calculadoras.
+- **La dirección vieja `/metas` lleva sola a la nueva** (redirección permanente en `next.config.ts`, que conserva lo que venga después del "?"). Siguen andando los links que ya circulan y el acceso directo del celular ya instalado.
+- **Las metas guardadas no se pierden:** se guardan en el navegador (IndexedDB), que no depende de la dirección de la página.
+- **El menú de arriba queda en Inicio, Dólar, Pesos, Mercados y Calculadoras.** En el celular, Metas se encuentra en Más → Calculadoras.
+- **El pie de página ("Mis metas"), el buscador (⌘K), el acceso directo del celular y el sitemap** apuntan a la dirección nueva.
+- **La página de Calculadoras, en tres grupos de a tres:**
+  - **Para ahorrar:** Metas de ahorro, Interés compuesto, Jubilación.
+  - **Para invertir:** ¿Qué hubiera pasado si…?, Plazo fijo, Simulador de inversiones.
+  - **Cuentas rápidas:** Conversor de tasas, Inflación, Pesos a dólares.
+- **Calculadoras ya no tiene solapas** (Benja, al verlo: "sacaría todas las secciones y lo haría directo con todas"). La portada de la sección, con sus tres grupos, hace de menú, y cada calculadora tiene arriba un "← Todas las calculadoras" (`src/app/(site)/calculadoras/volver.tsx`), como la ficha de cada inversor. Pesos a dólares y el Simulador viven en Dólar y en Pesos: desde Calculadoras se llega con un link.
+- **Probado** a 1280 × 900 y a 375 × 812 (la portada, Metas y ¿Qué hubiera pasado?, con el link de vuelta), más la redirección (`/metas?x=1` → 308 → `/calculadoras/metas?x=1`).
+
+### Para revisar
+
+- Los nombres de los grupos se cambian en un minuto, si se les ocurren mejores.
+
 ## La barra de arriba y las solapas se esconden al bajar (rama `solapas-se-esconden`, 25/11/2026)
 
 > Benja: "cuando vas bajando, las secciones siguen ahí". Quedaban dos barras fijas (la de arriba y la de solapas) que ocupaban casi un cuarto de la pantalla y tapaban el contenido. Después pidió lo mismo para la barra de arriba, en todas las secciones.

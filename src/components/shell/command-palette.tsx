@@ -35,7 +35,7 @@ const BASE: ItemBusqueda[] = [
   { id: "s-noticias", titulo: "Noticias del mercado", grupo: "Secciones", href: "/noticias", claves: "diarios medios hoy ultimo" },
   { id: "s-cartera", titulo: "Mi cartera", grupo: "Secciones", href: "/cartera", claves: "portfolio rendimiento" },
   { id: "s-alertas", titulo: "Alertas", grupo: "Secciones", href: "/alertas" },
-  { id: "s-metas", titulo: "Mis metas de ahorro", detalle: "Un viaje, un auto, un depto", grupo: "Secciones", href: "/metas", claves: "objetivo ahorrar plan" },
+  { id: "s-metas", titulo: "Mis metas de ahorro", detalle: "Un viaje, un auto, un depto", grupo: "Secciones", href: "/calculadoras/metas", claves: "objetivo ahorrar plan" },
   { id: "s-aprender", titulo: "Aprender: glosario", grupo: "Secciones", href: "/aprender", claves: "tna tea tem que es" },
   { id: "s-metodologia", titulo: "Metodología y fuentes", grupo: "Secciones", href: "/metodologia" },
   { id: "c-qh", titulo: "¿Qué hubiera pasado si…?", detalle: "Dólar, plazo fijo, acciones o bitcoin hace un año", grupo: "Calculadoras", href: "/calculadoras/que-hubiera-pasado", claves: "si hubiera comprado invertido antes" },

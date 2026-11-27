@@ -32,7 +32,7 @@ const RUTAS = [
   "/calculadoras/plazo-fijo",
   "/calculadoras/tasas",
   "/calculadoras/inflacion",
-  "/metas",
+  "/calculadoras/metas",
   "/noticias",
   "/cartera",
   "/alertas",

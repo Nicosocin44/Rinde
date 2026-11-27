@@ -22,7 +22,7 @@ export default function manifest(): MetadataRoute.Manifest {
       { name: "Dólar hoy", url: "/dolar" },
       { name: "¿Dónde rinde más?", url: "/pesos" },
       { name: "Mi cartera", url: "/cartera" },
-      { name: "Mis metas", url: "/metas" },
+      { name: "Mis metas", url: "/calculadoras/metas" },
     ],
   };
 }

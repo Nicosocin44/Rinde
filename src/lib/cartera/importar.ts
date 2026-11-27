@@ -175,7 +175,8 @@ export function fechaDe(texto: string): string | null {
 
 // ───────────────────────── Interpretación ─────────────────────────
 
-export type EstadoFila = "lista" | "aviso" | "repetida" | "ejemplo" | "error";
+/** "omitida": una fila del archivo de un broker que no se suma (un depósito, un dividendo en dólares…), con el motivo. */
+export type EstadoFila = "lista" | "aviso" | "repetida" | "ejemplo" | "error" | "omitida";
 
 export type FilaImportada = {
   /** Número de fila en el archivo (la primera es 1), para que el usuario la encuentre. */
@@ -193,6 +194,8 @@ export type FilaImportada = {
   precio: string | null;
   /** Lo que dice el archivo del activo (ticker o nombre), para reconocer la fila aunque tenga errores. */
   texto: string;
+  /** El archivo de donde salió, cuando se suben varios a la vez. */
+  archivo?: string;
 };
 
 export type Importacion =

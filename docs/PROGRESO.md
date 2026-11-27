@@ -12,6 +12,51 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 
 ---
 
+## Importar la cartera desde cualquier broker argentino (punto 31.4, rama `importar-brokers`, 27/11/2026)
+
+> Benja: "quiero que se pueda importar así, con todas las opciones" (una captura de otra app: tarjetas de brokers con su logo, ayuda para exportar y una zona para arrastrar archivos). Después: "hacelo solo con brokers argentinos, sumá otros". Balanz tiene lector propio, porque tenemos sus archivos reales; para el resto, el archivo tal como lo bajás y se elige qué es cada columna.
+
+- **La pantalla de Importar,** en Cartera, empieza con "¿De dónde son tus movimientos?": 10 tarjetas con el logo de cada broker (Balanz, Cocos, IOL, PPI, Bull Market, Allaria, SBS, Adcap), "Otro broker" y "Nuestra planilla". Dos por fila en el celular, tres en la compu. Al elegir una aparecen los pasos para exportar desde ese broker y una zona para arrastrar los archivos (o tocar y elegirlos). Se pueden subir varios a la vez.
+- **Los pasos para exportar:** Cocos los publica en su ayuda (Actividad → ícono de descarga → período → CSV) y van tal cual. Balanz, por los nombres de sus archivos. Los demás no los publican: pasos generales ("buscá tus movimientos u operaciones y bajalos en Excel o CSV").
+- **Cualquier broker, eligiendo las columnas** (`src/lib/cartera/brokers/columnas.ts` y `src/components/modules/cartera/mapeo-columnas.tsx`): si el archivo no es nuestra planilla ni de Balanz, aparece "¿Qué es cada columna?".
+  - Viene adivinado por los títulos (Fecha Concertación, Especie, Símbolo, Importe neto, Monto…) y cada lista muestra un ejemplo del archivo.
+  - Las operaciones se agrupan (sin números ni el ticker, así "Boleto / 123 / COMPRA / NVDA" y "Boleto / 124 / COMPRA / AAPL" van juntos) y se elige qué es cada una: compra, venta, dividendo, renta o "no sumar". Los depósitos, retiros, impuestos y gastos arrancan en "no sumar".
+  - El tipo de activo sale de una columna, si la hay, o del ticker (acciones del panel, CEDEARs y LECAPs que conocemos). Los bonos no se adivinan: su precio en pesos o en dólares confunde. Para los tickers que no reconocemos se elige "no sumar", "son CEDEARs" o "son acciones".
+  - Sin columna de precio, sale del importe. Sin columna de comisión, sale de la diferencia entre el importe y cantidad × precio, si es chica (hasta 5 %).
+  - Lo elegido se recuerda en el navegador para los archivos con los mismos títulos: la próxima vez va directo a la vista previa. Una fila de total o un subtítulo quedan como "No parece un movimiento".
+- **Aviso de privacidad, que es cierto:** los archivos se leen en el navegador y no se suben a ningún lado; solo se guardan los movimientos que se eligen sumar.
+- **El formato se reconoce por los títulos de las columnas,** no por la tarjeta elegida: si alguien sube un Excel de Balanz con "Otro", se lee igual.
+- **Balanz, "Mis instrumentos"** (la tenencia): una compra por instrumento, por los nominales, al precio promedio de compra, con fecha = día de la tenencia (sale del nombre del archivo) menos los días promedio de tenencia. Es una aproximación y así lo dice la nota de cada compra ("Tenencia de Balanz al 25/11/2026").
+- **Balanz, "Movimientos":** compras y ventas de CEDEARs y acciones, con la comisión que sale del importe (en la compra se paga más que cantidad × precio, en la venta se cobra menos), y dividendos en pesos. La nota dice el número de boleto.
+- **Lo que no se suma queda en la vista previa, gris, con el motivo:**
+  - depósitos y retiros de la cuenta: la cartera suma lo que compraste, no el saldo en el broker;
+  - dividendos en dólares de CEDEARs: la cartera cuenta los CEDEARs en pesos;
+  - el débito en pesos que acompaña a cada dividendo;
+  - bonos, letras y fondos, que todavía no se leen para no cargar mal un precio;
+  - lo que ya está contado en una tenencia importada.
+- **Para no contar dos veces:**
+  - Si se suben la tenencia y los movimientos juntos, primero va la tenencia y los movimientos hasta su fecha se omiten. Lo mismo si la tenencia ya se había importado antes (se reconoce por la nota).
+  - Una tenencia de un activo que ya tiene movimientos en la cartera avisa que puede duplicarlos.
+  - Una venta de más de lo que hay en la cartera se marca para revisar.
+  - Subir dos veces el mismo archivo marca todo como "Ya está".
+- **Cómo está hecho:** `src/lib/cartera/brokers/balanz.ts` pasa cada Excel de Balanz a las filas de nuestra planilla, así la vista previa, los avisos y lo repetido son los mismos. `src/lib/cartera/brokers/index.ts` reconoce el formato y junta varios archivos (`interpretarArchivos`). En `importar.ts`, el estado nuevo "omitida" y el archivo de cada fila. La pantalla está en `src/components/modules/cartera/importar.tsx`.
+- **Probado:**
+  - Tests en `tests/importar-balanz.test.ts`, con archivos inventados que copian el formato real, y en `tests/importar-columnas.test.ts` (un archivo inventado de un broker cualquiera: título arriba, columnas en otro orden, venta negativa, dividendo, depósito, ticker desconocido, LECAP y fila de total).
+  - En el navegador, eligiendo columnas con un archivo de prueba de "Cocos": adivinó todas las columnas y las operaciones, la vista previa salió bien, y con un segundo archivo de las mismas columnas fue directo a la vista previa. Y la pantalla de columnas a 375 px.
+  - Con los archivos reales de Benja (sin guardarlos en el repositorio):
+    - "Movimientos": 42 compras y ventas, todas con su comisión, y 20 filas omitidas (depósitos, retiros y dividendos).
+    - "Mis instrumentos": 8 CEDEARs.
+    - Los dos juntos: la tenencia y los 62 movimientos omitidos.
+  - En el navegador a 375 px y en la compu, con un archivo de prueba: la vista previa marca la venta de más y explica las omitidas.
+
+### Para revisar
+
+- **Los nombres de los menús de Balanz** en los pasos ("Mis instrumentos", "Movimientos") salen de los nombres de los archivos: Benja, confirmá que se llaman así en la web de Balanz.
+- **La columna "Garantías"** de "Mis instrumentos" no se suma (en todos los archivos de Benja vale 0). Si alguien tiene títulos en garantía, hay que ver si "Nominales" ya los incluye.
+- **Los dividendos de CEDEARs en dólares** no se suman. Para sumarlos habría que pasarlos a pesos con el tipo de cambio de ese día.
+- **Un lector propio por broker:** con un archivo real de Cocos, IOL, PPI, Bull Market, Allaria, SBS o Adcap, se reconoce solo (sin elegir columnas) y se ajustan sus pasos para exportar. Schwab y Binance quedaron afuera (pedido de Benja: solo brokers argentinos).
+- **El mapeo se recuerda solo en ese navegador** (localStorage): en otro dispositivo se vuelve a preguntar una vez.
+
 ## La barra de arriba y las solapas se esconden al bajar (rama `solapas-se-esconden`, 25/11/2026)
 
 > Benja: "cuando vas bajando, las secciones siguen ahí". Quedaban dos barras fijas (la de arriba y la de solapas) que ocupaban casi un cuarto de la pantalla y tapaban el contenido. Después pidió lo mismo para la barra de arriba, en todas las secciones.

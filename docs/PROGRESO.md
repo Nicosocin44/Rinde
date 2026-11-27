@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: jueves 27/11/2026, caución desde BYMA Data (rama `caucion-byma`), Mi cartera con comisiones, cobros y noticias (rama `cartera-espacio`) e importar desde brokers (rama `importar-brokers`).
+> Escrito para los fundadores. Última actualización: jueves 27/11/2026, importar: títulos con errores de tipeo, montos con "USD" y aviso de acciones de EE.UU. (rama `importar-detalles`).
 
 ## Cómo verlo
 
@@ -11,6 +11,17 @@
 Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con un navegador), `pnpm shots` (capturas de todas las pantallas), `pnpm build` (versión de producción), `pnpm test:live` (prueba contra las fuentes reales).
 
 ---
+
+## Importar: títulos con errores, montos con "USD" y aviso de acciones de EE.UU. (rama `importar-detalles`, 27/11/2026)
+
+> Lo que salió de probar con la planilla de Nico ("tipo_movimineto", "$ invertida", "MSFT a $400 USD"), sumado a la pantalla de importar de Benja.
+
+- **Títulos con errores de tipeo:** al adivinar las columnas (`adivinarMapeo` en `src/lib/cartera/brokers/columnas.ts`) hay una tercera pasada, después de "exacto" y "contiene", que acepta una letra de diferencia en títulos de 5 a 8 letras y dos en los más largos ("tipo_movimineto" → Operación). Los guiones bajos cuentan como espacios.
+- **"$ invertida" o "Total invertido"** se reconocen como Importe.
+- **Números con la moneda escrita:** "$400 USD", "2.000 USD" o "US$ 62,5" se leen bien (`numeroDe`, que usan la planilla y los brokers).
+- **Acciones en dólares:** una acción o un CEDEAR cargado en dólares ya no dice solo "los montos van en pesos": explica que la cartera lleva CEDEARs y acciones argentinas en pesos, que las acciones de EE.UU. no las llevamos y que, si es un CEDEAR, se cargue el precio en pesos.
+- Tests: la planilla de Nico tal cual en `tests/importar-columnas.test.ts` (adivina las 8 columnas, MSFT en dólares queda afuera con el motivo, el CEDEAR en pesos queda listo) y los números nuevos en `tests/importar-planilla.test.ts`.
+- La rama `importar-columnas-flexibles` (de Nico, que nunca se subió) queda descartada: hacía lo mismo que la pantalla de Benja, que está más completa.
 
 ## Importar la cartera desde cualquier broker argentino (punto 31.4, rama `importar-brokers`, 27/11/2026)
 

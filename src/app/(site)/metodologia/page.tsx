@@ -10,6 +10,7 @@ export const metadata: Metadata = { title: "Metodología: fuentes, fórmulas y c
 const FUENTES_TABLA = [
   { f: FUENTES.dolarapi, que: "Cotizaciones del dólar (oficial, MEP, CCL, blue, cripto, tarjeta, mayorista)", frec: "Cada 1 a 5 minutos" },
   { f: FUENTES.argentinadatos, que: "Histórico del dólar, plazo fijo por banco, billeteras y cuentas, fondos (ComparaTasas de la CNV), caución, letras, bonos CER, inflación, riesgo país, REM y feriados", frec: "Cada 1 a 24 horas" },
+  { f: FUENTES.byma, que: "Cauciones en pesos de la rueda del día, por plazo (la web pública de BYMA; si no responde, ArgentinaDatos)", frec: "Cada hora con el mercado abierto" },
   { f: FUENTES.data912, que: "Precios de BYMA con demora: LECAPs, BONCAPs, bonos, ONs, CEDEARs, acciones, MEP y CCL implícitos, históricos diarios", frec: "Cada 1 a 15 minutos" },
   { f: FUENTES.criptoya, que: "Dólar por banco y casa de cambio; USDT, USDC, BTC y ETH por exchange, con comisiones", frec: "Cada minuto" },
   { f: FUENTES.comparadolar, que: "Dólar oficial por banco, billetera y casa de cambio (las que CriptoYa no tiene o tiene desactualizadas)", frec: "Cada 1 a 5 minutos" },
@@ -142,7 +143,7 @@ TEA = (cuotaparte hoy / cuotaparte hace n días)^(365 / n) − 1`}</Formula>
   {
     id: "caucion",
     titulo: "Caución",
-    contenido: <p>Tasa de la caución colocadora en pesos por plazo, de la última rueda informada. Si la fuente no tiene ruedas de los últimos {pais.frescura.caucionMaxHabiles} días hábiles, la marcamos como desactualizada y la sacamos del comparador.</p>,
+    contenido: <p>Tasa de la caución colocadora en pesos por plazo, de la última rueda informada. Sale de BYMA Data (la web pública de BYMA): para cada plazo que operó, la tasa promedio del día ponderada por monto; antes de que abra el mercado, el cierre de la rueda anterior. Si BYMA no responde, usamos ArgentinaDatos; de las dos, vale la rueda más reciente. Si la fuente no tiene ruedas de los últimos {pais.frescura.caucionMaxHabiles} días hábiles, la marcamos como desactualizada y la sacamos del comparador.</p>,
   },
   {
     id: "lecaps",

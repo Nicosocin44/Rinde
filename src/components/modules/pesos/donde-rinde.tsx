@@ -145,7 +145,15 @@ export function DondeRinde({ opciones, montoInicial = 1_000_000, compacto = fals
                 { etiqueta: "Días", valor: numero(dias, 0) },
               ]}
               resultado={pesos(mejor.ganancia)}
-              fuente={mejor.opcion.fuenteId === "cnv" ? "CNV vía ArgentinaDatos (variación de la cuotaparte)" : mejor.opcion.fuenteId === "data912" ? "data912 (precios de BYMA)" : "ArgentinaDatos"}
+              fuente={
+                mejor.opcion.fuenteId === "cnv"
+                  ? "CNV vía ArgentinaDatos (variación de la cuotaparte)"
+                  : mejor.opcion.fuenteId === "data912"
+                    ? "data912 (precios de BYMA)"
+                    : mejor.opcion.fuenteId === "byma"
+                      ? "BYMA Data (cauciones del día)"
+                      : "ArgentinaDatos"
+              }
               ancla="/metodologia#donde-rinde"
             />
             <p className="text-micro">Es una comparación, no una recomendación. Las tasas pueden cambiar sin aviso.</p>

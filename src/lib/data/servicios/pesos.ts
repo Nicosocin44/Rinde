@@ -3,16 +3,19 @@ import { LECAPS, PATRON_LECAP, tipoPorTicker } from "@data/ar/lecaps";
 import { resolverProveedor, type Proveedor } from "@data/ar/proveedores";
 import {
   diasEntre,
+  esHabil,
   fechaLiquidacion,
   habilesEntre,
   hoyAR,
   rendimientoLecap,
+  sumarDias,
   teaCapitalizacionDiaria,
   teaDesdeTna,
   temDesdeTea,
   valorFinalImplicito,
 } from "@/lib/calculos";
 import * as ad from "../adapters/argentinadatos";
+import * as byma from "../adapters/bymadata";
 import * as d912 from "../adapters/data912";
 import { conRespaldo } from "../cache";
 import { estadoPeriodico, mercadoAbierto, peorEstado } from "../freshness";
@@ -20,7 +23,7 @@ import { FUENTES, type Caucion, type CurvaLecaps, type Excluido, type FondoMM, t
 import { ajusteCuadratico, ajusteNelsonSiegel, deduplicar, enBanda } from "../validacion";
 import { cargarFeriados } from "./feriados";
 import type { z } from "zod";
-import type { adCaucionesSchema, adCuentasSchema, adLetrasSchema, adPlazoFijoSchema, d912PanelSchema } from "../schemas";
+import type { adCaucionesSchema, adCuentasSchema, adLetrasSchema, adPlazoFijoSchema, bymaCaucionesSchema, d912PanelSchema } from "../schemas";
 
 const banda = pais.bandas.teaPesos;
 
@@ -255,22 +258,83 @@ export function normalizarPlazosFijos(filas: z.infer<typeof adPlazoFijoSchema>):
 
 // ───────────────────────── Caución ─────────────────────────
 
-export function normalizarCauciones(filas: z.infer<typeof adCaucionesSchema>, hoy: string, feriados: ReadonlySet<string>): { cauciones: Caucion[]; vigente: boolean; ultimaRueda: string | null } {
-  const cauciones = filas
-    .filter((f) => f.tasaActual && f.tasaActual > 0)
-    .map((f) => {
-      const tna = (f.tasaActual ?? 0) / 100;
-      const t = tasas(tna, f.plazo);
-      return { plazoDias: f.plazo, tna, tea: t.tea, monto: f.montoContado ?? 0, fecha: f.fechaOperacion };
-    })
-    .filter((c) => enBanda(c.tea, banda))
-    .sort((a, b) => a.plazoDias - b.plazoDias);
-  const ultimaRueda = cauciones.map((c) => c.fecha).sort().at(-1) ?? null;
-  const vigente = ultimaRueda !== null && habilesEntre(ultimaRueda, hoy, feriados) <= pais.frescura.caucionMaxHabiles;
-  return { cauciones, vigente, ultimaRueda };
+/** Las cauciones de una fuente: una por plazo, ordenadas, con la fecha de la rueda de la que salen. */
+export type CaucionesDeFuente = { cauciones: Caucion[]; ultimaRueda: string | null };
+export type FuenteCaucion = "byma" | "argentinadatos";
+
+function ordenar(cauciones: Caucion[]): CaucionesDeFuente {
+  const lista = cauciones.filter((c) => c.plazoDias > 0 && enBanda(c.tea, banda)).sort((a, b) => a.plazoDias - b.plazoDias);
+  return { cauciones: lista, ultimaRueda: lista.map((c) => c.fecha).sort().at(-1) ?? null };
 }
 
-function opcionesCaucion(cauciones: Caucion[]): OpcionPesos[] {
+/** ArgentinaDatos: la tasa viene en porcentaje, con la fecha de la rueda. */
+export function normalizarCauciones(filas: z.infer<typeof adCaucionesSchema>): CaucionesDeFuente {
+  return ordenar(
+    filas
+      .filter((f) => f.tasaActual && f.tasaActual > 0)
+      .map((f) => {
+        const tna = (f.tasaActual ?? 0) / 100;
+        return { plazoDias: f.plazo, tna, tea: tasas(tna, f.plazo).tea, monto: f.montoContado ?? 0, fecha: f.fechaOperacion };
+      }),
+  );
+}
+
+/** BYMA mezcla escalas según el campo (0,215 o 21,5): una TNA de más de 300 % no existe, así que un valor mayor a 3 es un porcentaje. */
+const comoFraccion = (v: number) => (v > 3 ? v / 100 : v);
+
+/** El último día hábil hasta `fecha`, incluida. */
+function habilHasta(fecha: string, feriados: ReadonlySet<string>): string {
+  let f = fecha;
+  while (!esHabil(f, feriados)) f = sumarDias(f, -1);
+  return f;
+}
+
+/**
+ * BYMA Data: solo las cauciones en pesos. La fila no trae la fecha: BYMA cuenta los días al vencimiento desde la rueda,
+ * así que la rueda es el vencimiento menos esos días (si cae en un día no hábil, vale el hábil anterior). El plazo se
+ * cuenta siempre desde la rueda.
+ *
+ * - Con operaciones en la rueda: la tasa promedio del día, ponderada por monto (si falta, la última), y el monto operado.
+ * - Sin ninguna operación todavía (antes de que abra el mercado): el cierre de la rueda anterior, sin monto.
+ */
+export function normalizarCaucionesByma(filas: z.infer<typeof bymaCaucionesSchema>, feriados: ReadonlySet<string>): CaucionesDeFuente {
+  const pesos = filas.filter((f) => f.underlyingSymbol === "PESOS" && /^\d{4}-\d{2}-\d{2}/.test(f.maturityDate));
+  if (pesos.length === 0) return { cauciones: [], ultimaRueda: null };
+  const vencimiento = (f: (typeof pesos)[number]) => f.maturityDate.slice(0, 10);
+  const rueda = habilHasta(pesos.map((f) => sumarDias(vencimiento(f), -f.daysToMaturity)).sort().at(-1)!, feriados);
+  const caucion = (vto: string, tna: number, monto: number | null, fecha: string): Caucion => {
+    const plazo = diasEntre(fecha, vto);
+    return { plazoDias: plazo, tna, tea: tasas(tna, plazo).tea, monto, fecha };
+  };
+
+  const operadas = pesos.filter((f) => (f.volumeAmount ?? 0) > 0 && ((f.vwap ?? 0) > 0 || (f.trade ?? 0) > 0));
+  if (operadas.length > 0) {
+    return ordenar(operadas.map((f) => caucion(vencimiento(f), comoFraccion((f.vwap ?? 0) > 0 ? f.vwap! : f.trade!), f.volumeAmount!, rueda)));
+  }
+  const anterior = habilHasta(sumarDias(rueda, -1), feriados);
+  return ordenar(pesos.filter((f) => (f.previousSettlementPrice ?? 0) > 0).map((f) => caucion(vencimiento(f), comoFraccion(f.previousSettlementPrice!), null, anterior)));
+}
+
+/**
+ * De las fuentes que respondieron, la de la rueda más reciente (a igual rueda, la primera de la lista: BYMA). Vigente si
+ * esa rueda tiene, como mucho, `caucionMaxHabiles` días hábiles de atraso.
+ */
+export function elegirCauciones(
+  candidatas: { fuente: FuenteCaucion; datos: CaucionesDeFuente | null }[],
+  hoy: string,
+  feriados: ReadonlySet<string>,
+): (CaucionesDeFuente & { fuente: FuenteCaucion; vigente: boolean }) | null {
+  let mejor: { fuente: FuenteCaucion; datos: CaucionesDeFuente } | null = null;
+  for (const c of candidatas) {
+    if (!c.datos?.ultimaRueda || c.datos.cauciones.length === 0) continue;
+    if (!mejor || c.datos.ultimaRueda > mejor.datos.ultimaRueda!) mejor = { fuente: c.fuente, datos: c.datos };
+  }
+  if (!mejor) return null;
+  const vigente = habilesEntre(mejor.datos.ultimaRueda!, hoy, feriados) <= pais.frescura.caucionMaxHabiles;
+  return { ...mejor.datos, fuente: mejor.fuente, vigente };
+}
+
+function opcionesCaucion(cauciones: Caucion[], fuente: FuenteCaucion): OpcionPesos[] {
   // Una opción por plazo representativo: la más cercana a 7 y a 30 días.
   const elegir = (objetivo: number) => cauciones.reduce<Caucion | null>((m, c) => (!m || Math.abs(c.plazoDias - objetivo) < Math.abs(m.plazoDias - objetivo) ? c : m), null);
   const elegidas = [...new Set([elegir(7), elegir(30)].filter((c): c is Caucion => c !== null))];
@@ -291,7 +355,7 @@ function opcionesCaucion(cauciones: Caucion[]): OpcionPesos[] {
     garantia: "Garantía de mercado",
     riesgo: "muy bajo",
     asOf: c.fecha,
-    fuenteId: "argentinadatos",
+    fuenteId: fuente,
   }));
 }
 
@@ -441,21 +505,22 @@ export type DatosPesos = {
   opciones: OpcionPesos[];
   plazosFijos: PlazoFijoBanco[];
   fondos: FondoMM[];
-  cauciones: { lista: Caucion[]; vigente: boolean; ultimaRueda: string | null };
+  cauciones: { lista: Caucion[]; vigente: boolean; ultimaRueda: string | null; fuente: FuenteCaucion | null };
   curva: CurvaLecaps;
   /** Estado por bloque, para mostrar la frescura de cada tabla. */
   estados: Record<"cuentas" | "fondos" | "plazosFijos" | "cauciones" | "lecaps", { ok: boolean; asOf: string | null }>;
 };
 
 export async function cargarPesos() {
-  return conRespaldo<DatosPesos>("pesos", [FUENTES.argentinadatos, FUENTES.cnv, FUENTES.data912], async () => {
+  return conRespaldo<DatosPesos>("pesos", [FUENTES.argentinadatos, FUENTES.cnv, FUENTES.data912, FUENTES.byma], async () => {
     const hoy = hoyAR();
     const feriados = await cargarFeriados();
-    const [cuentasR, fondosR, pfR, caucionesR, notasR, bonosR, letrasR] = await Promise.allSettled([
+    const [cuentasR, fondosR, pfR, caucionesR, caucionesBymaR, notasR, bonosR, letrasR] = await Promise.allSettled([
       ad.cuentasRemuneradas(),
       cargarComparaTasas(),
       ad.plazosFijos(),
       ad.caucionesArs(),
+      byma.cauciones(),
       d912.panel("arg_notes"),
       d912.panel("arg_bonds"),
       ad.letras(),
@@ -466,7 +531,15 @@ export async function cargarPesos() {
     const cuentas = ok(cuentasR) ? normalizarCuentas(ok(cuentasR)!, hoy) : null;
     const fondos = ok(fondosR) ? normalizarFondos(ok(fondosR)!, hoy) : null;
     const pf = ok(pfR) ? normalizarPlazosFijos(ok(pfR)!) : null;
-    const cau = ok(caucionesR) ? normalizarCauciones(ok(caucionesR)!, hoy, feriados) : null;
+    // Caución: BYMA Data (la fuente original, con la rueda del día) y ArgentinaDatos de respaldo; vale la rueda más reciente.
+    const cau = elegirCauciones(
+      [
+        { fuente: "byma", datos: ok(caucionesBymaR) ? normalizarCaucionesByma(ok(caucionesBymaR)!, feriados) : null },
+        { fuente: "argentinadatos", datos: ok(caucionesR) ? normalizarCauciones(ok(caucionesR)!) : null },
+      ],
+      hoy,
+      feriados,
+    );
 
     // Precios de letras: data912 (en vivo). Si falla, el precio de cierre de ArgentinaDatos.
     const letrasAd = ok(letrasR);
@@ -482,7 +555,7 @@ export async function cargarPesos() {
       ...(cuentas?.opciones ?? []),
       ...(fondos?.opciones ?? []),
       ...(pf?.opciones ?? []),
-      ...(cau?.vigente ? opcionesCaucion(cau.cauciones) : []),
+      ...(cau?.vigente ? opcionesCaucion(cau.cauciones, cau.fuente) : []),
       ...(lecaps ? opcionesLecap(lecaps.curva) : []),
     ];
     const ultima = (fechas: (string | undefined)[]) => fechas.filter(Boolean).sort().at(-1) ?? null;
@@ -501,7 +574,7 @@ export async function cargarPesos() {
         opciones,
         plazosFijos: pf?.bancos ?? [],
         fondos: fondos?.fondos ?? [],
-        cauciones: { lista: cau?.cauciones ?? [], vigente: cau?.vigente ?? false, ultimaRueda: cau?.ultimaRueda ?? null },
+        cauciones: { lista: cau?.cauciones ?? [], vigente: cau?.vigente ?? false, ultimaRueda: cau?.ultimaRueda ?? null, fuente: cau?.fuente ?? null },
         curva: lecaps?.curva ?? { letras: [], ajuste: [], liquidacion: hoy },
         estados,
       },

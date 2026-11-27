@@ -1,4 +1,4 @@
-import { nombreLimpio } from "@/lib/activos/perfil";
+import { menciona, nombreLimpio, nombreParaBuscar } from "@/lib/activos/perfil";
 import type { Noticia } from "@/lib/noticias";
 import { juntarNoticias } from "@/lib/noticias/activo";
 import * as google from "../adapters/googlenews";
@@ -69,4 +69,32 @@ export async function noticiasDeActivo(a: ActivoParaNoticias, propias: Noticia[]
   const { directas, indirectas } = consultasDe(a);
   const [d, i] = await Promise.all([buscarTodas(directas), buscarTodas(indirectas)]);
   return juntarNoticias({ propias, directas: d, indirectas: i, propiasIndirectas });
+}
+
+/** Una noticia de la cartera, con el ticker del activo que nombra y el nombre del medio (para no mandar la lista de medios al navegador). */
+export type NoticiaDeCartera = { id: string; titulo: string; url: string; fecha: string; medioId: string; medio: string; idioma?: "es" | "en"; ticker: string };
+
+/**
+ * Las noticias de lo que tenés en la cartera: las que nombran a cada activo (de nuestros medios y de Google Noticias),
+ * sin las del mercado que lo mueve. Hasta 2 por activo (así no se las lleva todas el que más sale en las noticias),
+ * todas juntas de la más nueva a la más vieja, sin repetir.
+ */
+export async function noticiasDeCartera(activos: ActivoParaNoticias[], todas: Noticia[], nombreMedio: (n: Noticia) => string, maximo = 8): Promise<NoticiaDeCartera[]> {
+  const porActivo = await Promise.all(
+    activos.map(async (a) => {
+      const buscar = a.nombre ? nombreParaBuscar(a.nombre) : null;
+      const propias = todas.filter((n) => n.tickers.includes(a.ticker) || (buscar !== null && menciona(`${n.titulo} ${n.resumen}`, buscar)));
+      const directas = await buscarTodas(consultasDe(a).directas);
+      return juntarNoticias({ propias: propias.slice(0, 8), directas, indirectas: [] })
+        .filter((n) => !n.indirecta)
+        .slice(0, 2)
+        .map((n) => ({ id: n.id, titulo: n.titulo, url: n.url, fecha: n.fecha, medioId: n.medioId, medio: nombreMedio(n), idioma: n.idioma, ticker: a.ticker }));
+    }),
+  );
+  const vistas = new Set<string>();
+  return porActivo
+    .flat()
+    .sort((x, y) => y.fecha.localeCompare(x.fecha))
+    .filter((n) => (vistas.has(n.url) ? false : (vistas.add(n.url), true)))
+    .slice(0, maximo);
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Metas } from "@/components/modules/metas/metas";
-import { PageHeader } from "@/components/shell/page-header";
 import { SourceNote } from "@/components/ui/frescura";
 import { obtenerCotizaciones, obtenerMacro, obtenerPesos } from "@/lib/data";
 import { FUENTES } from "@/lib/data/types";
@@ -24,11 +23,7 @@ export default async function Page() {
   const mep = c.ok ? (c.data.find((x) => x.id === "mep")?.venta ?? null) : null;
   return (
     <>
-      <PageHeader
-        titulo="Tus metas"
-        bajada="Un viaje, un auto, un depto: ponele nombre a lo que querés, cuánto cuesta y para cuándo. Vas cargando cuánto ponés y dónde, y te decimos cuánto juntar por mes y cómo venís."
-        className="mb-10 lg:mb-14"
-      />
+      <h2 className="mb-8 text-h2">¿Cuánto tengo que juntar por mes para mi meta?</h2>
       <Metas
         referencia={mejor ? { nombre: mejor.nombre, tea: mejor.tea } : null}
         inflacionMensual={inflacionMensual}

@@ -4,7 +4,7 @@ import { FUENTES } from "@/lib/data/types";
 import { Wordmark } from "./wordmark";
 
 /** Las fuentes de datos, en un solo lugar (desde el 18/11/2026 no se escriben en cada pantalla). */
-const FUENTES_PIE = [FUENTES.dolarapi, FUENTES.argentinadatos, FUENTES.bcra, FUENTES.cnv, FUENTES.data912, FUENTES.criptoya, FUENTES.comparadolar, FUENTES.binance, FUENTES.sec, FUENTES.yahoo, FUENTES.nasdaq, FUENTES.indec, FUENTES.fed].map((f) => ({ nombre: f.name, url: f.url }));
+const FUENTES_PIE = [FUENTES.dolarapi, FUENTES.argentinadatos, FUENTES.bcra, FUENTES.cnv, FUENTES.byma, FUENTES.data912, FUENTES.criptoya, FUENTES.comparadolar, FUENTES.binance, FUENTES.sec, FUENTES.yahoo, FUENTES.nasdaq, FUENTES.indec, FUENTES.fed].map((f) => ({ nombre: f.name, url: f.url }));
 
 /** Footer con el disclaimer siempre visible y las fuentes de los datos. */
 export function Footer() {
@@ -18,8 +18,8 @@ export function Footer() {
           </p>
         </div>
         <nav aria-label="Secciones" className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-7">
-          <ListaLinks titulo="Mercado" items={navPrincipal.slice(1).filter((n) => n.href !== "/metas")} />
-          <ListaLinks titulo="Tus herramientas" items={[{ href: "/metas", label: "Mis metas" }, ...navSecundaria.slice(0, 3)]} />
+          <ListaLinks titulo="Mercado" items={navPrincipal.slice(1)} />
+          <ListaLinks titulo="Tus herramientas" items={[{ href: "/calculadoras/metas", label: "Mis metas" }, ...navSecundaria.slice(0, 3)]} />
           <ListaLinks titulo="Confianza" items={[navSecundaria[3]!, navSecundaria[4]!, { href: "/legal#afiliados", label: "Aviso de afiliados" }]} />
         </nav>
       </div>

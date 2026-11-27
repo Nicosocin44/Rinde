@@ -1,0 +1,92 @@
+[
+  {
+    "symbol": "PESOS-0401-U-CT-ARS",
+    "underlyingSymbol": "PESOS",
+    "maturityDate": "2027-01-04",
+    "daysToMaturity": 38,
+    "trade": 0.23,
+    "vwap": 0.23,
+    "volumeAmount": 1834835296.74,
+    "previousSettlementPrice": 0.2,
+    "tradeHour": "12:29:34",
+    "settlementPrice": 23,
+    "denominationCcy": "ARS"
+  },
+  {
+    "symbol": "PESOS-0412-U-CT-ARS",
+    "underlyingSymbol": "PESOS",
+    "maturityDate": "2026-12-04",
+    "daysToMaturity": 7,
+    "trade": 0.223,
+    "vwap": 0.22614207700000002,
+    "volumeAmount": 15423549223.09,
+    "previousSettlementPrice": 0.215,
+    "tradeHour": "12:42:42",
+    "settlementPrice": 22.3,
+    "denominationCcy": "ARS"
+  },
+  {
+    "symbol": "PESOS-2812-U-CT-ARS",
+    "underlyingSymbol": "PESOS",
+    "maturityDate": "2026-12-28",
+    "daysToMaturity": 31,
+    "trade": 0.24600000000000002,
+    "vwap": 0.23707078599999998,
+    "volumeAmount": 1657397693.88,
+    "previousSettlementPrice": 0.22,
+    "tradeHour": "12:41:25",
+    "settlementPrice": 24.6,
+    "denominationCcy": "ARS"
+  },
+  {
+    "symbol": "PESOS-3011-U-CT-ARS",
+    "underlyingSymbol": "PESOS",
+    "maturityDate": "2026-11-30",
+    "daysToMaturity": 3,
+    "trade": 0.215,
+    "vwap": 0.212866471,
+    "volumeAmount": 3310498238092.046,
+    "previousSettlementPrice": 0.2,
+    "tradeHour": "12:43:00",
+    "settlementPrice": 21.5,
+    "denominationCcy": "ARS"
+  },
+  {
+    "symbol": "PESOS-0102-U-CT-ARS",
+    "underlyingSymbol": "PESOS",
+    "maturityDate": "2027-02-01",
+    "daysToMaturity": 66,
+    "trade": 0,
+    "vwap": 0,
+    "volumeAmount": 0,
+    "previousSettlementPrice": 0.2,
+    "settlementPrice": 0,
+    "denominationCcy": "ARS"
+  },
+  {
+    "symbol": "DOLAR-0112-U-CT-USD",
+    "underlyingSymbol": "DOLAR",
+    "maturityDate": "2026-12-01",
+    "daysToMaturity": 4,
+    "trade": 0.009000000000000001,
+    "vwap": 0.009855889,
+    "volumeAmount": 71563.73,
+    "previousSettlementPrice": 0.012,
+    "tradeHour": "12:18:32",
+    "settlementPrice": 0.9,
+    "denominationCcy": "USD"
+  },
+  {
+    "symbol": "CABLE-3011-U-CT-EXT",
+    "underlyingSymbol": "CABLE",
+    "maturityDate": "2026-11-30",
+    "daysToMaturity": 3,
+    "trade": 0.045,
+    "vwap": 0.048629059,
+    "volumeAmount": 28560302.73,
+    "previousSettlementPrice": 0,
+    "tradeHour": "12:42:34",
+    "settlementPrice": 4.5,
+    "denominationCcy": "EXT"
+  }
+]

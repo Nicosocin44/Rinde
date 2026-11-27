@@ -1,23 +1,18 @@
 import { PageHeader } from "@/components/shell/page-header";
-import { SectionTabs } from "@/components/shell/section-tabs";
+import { VolverCalculadoras } from "./volver";
 
+/**
+ * Sin solapas (pedido de Benja): la portada de Calculadoras, con sus tres grupos, hace de menú, y cada calculadora tiene
+ * su "← Todas las calculadoras".
+ */
 export default function CalculadorasLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <PageHeader titulo="Calculadoras" bajada="Hacé la cuenta con tus números. Cada resultado se puede compartir y cada fórmula está a la vista." />
-      <SectionTabs
-        etiqueta="Calculadoras"
-        solapas={[
-          { href: "/calculadoras", label: "Todas" },
-          { href: "/calculadoras/que-hubiera-pasado", label: "¿Qué hubiera pasado?" },
-          { href: "/calculadoras/interes-compuesto", label: "Interés compuesto" },
-          { href: "/calculadoras/jubilacion", label: "Jubilación" },
-          { href: "/calculadoras/plazo-fijo", label: "Plazo fijo" },
-          { href: "/calculadoras/tasas", label: "Tasas" },
-          { href: "/calculadoras/inflacion", label: "Inflación" },
-        ]}
-      />
-      <div className="pt-8 lg:pt-12">{children}</div>
+      <div className="flex flex-col pt-8 lg:pt-12">
+        <VolverCalculadoras />
+        <div>{children}</div>
+      </div>
     </>
   );
 }

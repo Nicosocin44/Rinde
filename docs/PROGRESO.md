@@ -1,6 +1,6 @@
 # Progreso
 
-> Escrito para los fundadores. Última actualización: miércoles 25/11/2026, la barra de arriba y las solapas se esconden al bajar (rama `solapas-se-esconden`).
+> Escrito para los fundadores. Última actualización: jueves 27/11/2026, caución desde BYMA Data (rama `caucion-byma`) y Mi cartera con comisiones, cobros y noticias (rama `cartera-espacio`).
 
 ## Cómo verlo
 
@@ -41,6 +41,48 @@ Otros comandos: `pnpm test` (cálculos), `pnpm test:e2e` (recorre el sitio con u
 - **Era un error:** arriba del total está el aviso para guardar la cartera en la cuenta. Con la sesión iniciada (o mientras carga, o sin cuentas configuradas) no muestra nada, pero su caja vacía igual sumaba la separación entre bloques: 80 px en la compu y 64 en el celular. Ahora la caja solo está cuando hay aviso (sin sesión).
 - **Menos espacio debajo del título:** de 56 a 32 px en la compu y de 40 a 24 en el celular. El total es lo principal de la página.
 - **Resultado:** con la cartera propia, el total queda a 32 px de la bajada (antes, 136). Con la de ejemplo, el aviso "Datos de ejemplo" queda a 32 px (24 en el celular). Medido en local a 1440 y a 583 px de ancho.
+
+## Caución desde BYMA Data, con ArgentinaDatos de respaldo (rama `caucion-byma`, 27/11/2026)
+
+> Benja: "para caución buscá otras fuentes". ArgentinaDatos seguía trayendo la rueda del 17/11: actualiza la consulta todos los días, pero su origen dejó de mandar ruedas nuevas. La página mostraba "Datos desactualizados" y la caución había salido del comparador.
+
+- **Fuente nueva: BYMA Data** (`open.bymadata.com.ar`, la web pública de BYMA), que es de donde salen las cauciones. Gratis y sin clave. Trae todas las cauciones del día (pesos, MEP y cable) con la tasa de la última operación, el promedio del día, el monto y la hora. Se usan solo las de pesos.
+- **Cómo se lee:**
+  - Para cada plazo que operó en la rueda, la tasa promedio del día ponderada por monto (si falta, la última) y el monto operado.
+  - Antes de que abra el mercado, el cierre de la rueda anterior, sin monto: la tabla muestra "—" en Monto operado.
+  - La fila no trae la fecha: la rueda es el vencimiento menos los días que informa BYMA. Si eso cae en fin de semana o feriado, vale el hábil anterior, y el plazo se cuenta siempre desde la rueda.
+  - BYMA mezcla escalas según el campo (0,215 y 21,5): un valor mayor a 3 se toma como porcentaje.
+- **Respaldo:** se consultan las dos fuentes a la vez y vale la rueda más reciente; si empatan, BYMA. Si BYMA no responde o cambia de forma, la caución sale de ArgentinaDatos como antes.
+- **Con el dato al día, la caución vuelve al comparador** ("Caución a 7 días" y "a 31 días", en el filtro Letras) y deja de verse el aviso de datos desactualizados.
+- **No es una API documentada:** es lo que usa la web de BYMA por detrás (la oficial es paga). Desde octubre pide el encabezado `Options: renta-fija`. Se consulta por POST; Next solo cachea un POST si se le pide (`cache: "force-cache"`), así que `traerJson` (`src/lib/data/http.ts`) ahora acepta `cuerpoPost`.
+- **Cómo está hecho:** el adaptador `src/lib/data/adapters/bymadata.ts`, el schema `bymaCaucionesSchema`, y en `src/lib/data/servicios/pesos.ts` las funciones `normalizarCaucionesByma` y `elegirCauciones`. La fuente se guarda en `cauciones.fuente` y en el `fuenteId` de las opciones (el "¿De dónde sale?" del comparador dice "BYMA Data"). BYMA Data se suma a la tabla de fuentes de Metodología y al pie.
+- **Tests:** `tests/caucion-byma.test.ts`, con filas reales del 27/11 en `tests/fixtures/byma-cauciones.json`. Cubren la rueda del día, el cierre anterior antes de abrir, un sábado, la escala en porcentaje y la elección entre las dos fuentes.
+- **Probado** en local: `/pesos/caucion` con las tasas del 27/11 (de 3 a 38 días) y "Cierre del 27 nov", y las dos cauciones en el comparador.
+
+### Para revisar
+
+- **Que BYMA responda desde Vercel:** se probó desde Argentina. Los servidores de la web están en EE.UU.; si BYMA no les responde, queda ArgentinaDatos (y se nota porque vuelve el aviso de desactualizado). Se ve en la vista previa.
+- **Las condiciones de uso de BYMA Data** antes de abrir la web al público.
+
+## Metas, dentro de Calculadoras, y las calculadoras en tres grupos (punto 30, rama `calculadoras-metas`, 26/11/2026)
+
+> Lista, punto 30: Metas era un apartado propio del menú y además aparecía en Calculadoras; que quede solo dentro de Calculadoras, y ordenar la lista (eran 9, una debajo de la otra). De las opciones que se le pasaron a Benja, va la combinación recomendada.
+
+- **Metas vive en `/calculadoras/metas`.** Arriba dice "Calculadoras" y debajo la pregunta, "¿Cuánto tengo que juntar por mes para mi meta?", como en las demás calculadoras.
+- **La dirección vieja `/metas` lleva sola a la nueva** (redirección permanente en `next.config.ts`, que conserva lo que venga después del "?"). Siguen andando los links que ya circulan y el acceso directo del celular ya instalado.
+- **Las metas guardadas no se pierden:** se guardan en el navegador (IndexedDB), que no depende de la dirección de la página.
+- **El menú de arriba queda en Inicio, Dólar, Pesos, Mercados y Calculadoras.** En el celular, Metas se encuentra en Más → Calculadoras.
+- **El pie de página ("Mis metas"), el buscador (⌘K), el acceso directo del celular y el sitemap** apuntan a la dirección nueva.
+- **La página de Calculadoras, en tres grupos de a tres:**
+  - **Para ahorrar:** Metas de ahorro, Interés compuesto, Jubilación.
+  - **Para invertir:** ¿Qué hubiera pasado si…?, Plazo fijo, Simulador de inversiones.
+  - **Cuentas rápidas:** Conversor de tasas, Inflación, Pesos a dólares.
+- **Calculadoras ya no tiene solapas** (Benja, al verlo: "sacaría todas las secciones y lo haría directo con todas"). La portada de la sección, con sus tres grupos, hace de menú, y cada calculadora tiene arriba un "← Todas las calculadoras" (`src/app/(site)/calculadoras/volver.tsx`), como la ficha de cada inversor. Pesos a dólares y el Simulador viven en Dólar y en Pesos: desde Calculadoras se llega con un link.
+- **Probado** a 1280 × 900 y a 375 × 812 (la portada, Metas y ¿Qué hubiera pasado?, con el link de vuelta), más la redirección (`/metas?x=1` → 308 → `/calculadoras/metas?x=1`).
+
+### Para revisar
+
+- Los nombres de los grupos se cambian en un minuto, si se les ocurren mejores.
 
 ## La barra de arriba y las solapas se esconden al bajar (rama `solapas-se-esconden`, 25/11/2026)
 

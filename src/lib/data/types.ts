@@ -29,6 +29,7 @@ export const FUENTES = {
   argentinadatos: { id: "argentinadatos", name: "ArgentinaDatos", url: "https://argentinadatos.com" },
   bcra: { id: "bcra", name: "BCRA", url: "https://www.bcra.gob.ar" },
   data912: { id: "data912", name: "data912", url: "https://data912.com" },
+  byma: { id: "byma", name: "BYMA Data", url: "https://open.bymadata.com.ar" },
   criptoya: { id: "criptoya", name: "CriptoYa", url: "https://criptoya.com" },
   comparadolar: { id: "comparadolar", name: "ComparaDolar", url: "https://comparadolar.ar" },
   cnv: { id: "cnv", name: "CNV", url: "https://www.argentina.gob.ar/cnv" },
@@ -158,7 +159,8 @@ export type FondoMM = {
   patrimonio: number;
 };
 
-export type Caucion = { plazoDias: number; tna: number; tea: number; monto: number; fecha: string };
+/** `monto`: lo operado en la rueda, en pesos (null si la tasa es el cierre de la rueda anterior, que no trae monto). */
+export type Caucion = { plazoDias: number; tna: number; tea: number; monto: number | null; fecha: string };
 
 export type Lecap = {
   ticker: string;

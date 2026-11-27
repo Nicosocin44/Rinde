@@ -71,6 +71,25 @@ export const adCaucionesSchema = z.array(
   }),
 );
 
+/**
+ * Cauciones de BYMA Data (open.bymadata.com.ar, "free/cauciones"): una fila por vencimiento y por moneda (PESOS, DOLAR,
+ * CABLE). Las tasas vienen en escalas distintas según el campo: `trade`, `vwap` y `previousSettlementPrice` como
+ * fracción (0,215), `settlementPrice` en porcentaje (21,5). Los campos de la rueda faltan si el plazo no operó.
+ */
+export const bymaCaucionesSchema = z.array(
+  z.object({
+    symbol: z.string(),
+    underlyingSymbol: z.string(),
+    maturityDate: z.string(),
+    daysToMaturity: num,
+    trade: numNulo.optional(),
+    vwap: numNulo.optional(),
+    volumeAmount: numNulo.optional(),
+    previousSettlementPrice: numNulo.optional(),
+    tradeHour: z.string().nullable().optional(),
+  }),
+);
+
 export const adLetrasSchema = z.object({
   fechaActualizacion: z.string(),
   letras: z.array(
